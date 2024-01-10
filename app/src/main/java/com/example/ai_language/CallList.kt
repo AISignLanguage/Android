@@ -1,16 +1,11 @@
-﻿package com.example.ai_language
+package com.example.ai_language
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
-class MainActivity : AppCompatActivity() {
+class CallList : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-
-
-
-
+        setContentView(R.layout.activity_call_list)
     }
 }
