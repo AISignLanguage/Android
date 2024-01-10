@@ -34,8 +34,10 @@
             android:gravity="center"
             />
 
-        <ImageView
+        <ImageButton
             android:src="@drawable/call"
+            android:scaleType="centerCrop"
+            android:padding="0dp"
             android:layout_marginStart="10dp"
             android:layout_gravity="center"
             android:layout_width="40dp"
