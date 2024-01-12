@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#9999FF">
+
+    <TextView
+        android:id="@+id/appName2"
+        android:layout_width="178dp"
+        android:layout_height="39dp"
+        android:fontFamily="@font/font_bd"
+        android:text="손짓의 순간"
+        android:textColor="@color/white"
+        android:textSize="34sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.433" />
+
+    <ImageView
+        android:id="@+id/logoImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="144dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appName2"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
+
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="155dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="32dp"
+        android:text="카카오톡 로그인"
+        android:fontFamily="@font/font_eb"
+        android:backgroundTint="@color/white"
+        android:textColor="#9999FF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logoImage"
+        app:layout_constraintVertical_bias="0.173" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
