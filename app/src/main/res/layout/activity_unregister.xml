@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -63,9 +64,10 @@
     <TextView
         android:id="@+id/textView4"
         android:layout_width="355dp"
-        android:layout_height="45dp"
-        android:text="더 나은 손짓의 순간이 될 수 있게 탈퇴하시는 사유를 입력해주세요."
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
         android:fontFamily="@font/font_eb"
+        android:text="더 나은 손짓의 순간이 될 수 있게 탈퇴하시는 사유를 입력해주세요."
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,8 +78,9 @@
 
     <RadioGroup
         android:id="@+id/Survey"
-        android:layout_width="352dp"
-        android:layout_height="256dp"
+        android:layout_width="346dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"
@@ -89,36 +92,39 @@
             android:id="@+id/Question1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/font_eb"
             android:text="수화 번역의 정확도가 떨어져요."
-            android:fontFamily="@font/font_eb"/>
+            android:textSize="14sp" />
 
         <RadioButton
             android:id="@+id/Question2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/font_eb"
             android:text="어플리케이션 이용이 복잡해요."
-            android:fontFamily="@font/font_eb"/>
+            android:textSize="14sp" />
 
         <RadioButton
             android:id="@+id/Question3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/font_eb"
             android:text="콘텐츠가 부족해요."
-            android:fontFamily="@font/font_eb"/>
+            android:textSize="14sp" />
 
         <RadioButton
             android:id="@+id/Question4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="어플리케이션의 이용도가 낮아요."
-            android:fontFamily="@font/font_eb"/>
+            android:fontFamily="@font/font_eb"
+            android:text="어플리케이션의 이용도가 낮아요." />
 
         <RadioButton
             android:id="@+id/Question5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="기타"
-            android:fontFamily="@font/font_eb"/>
+            android:fontFamily="@font/font_eb"
+            android:text="기타" />
 
     </RadioGroup>
 
@@ -126,12 +132,26 @@
         android:id="@+id/unregisterButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
         android:text="탈퇴하기"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Survey"
         app:layout_constraintVertical_bias="0.709" />
+
+    <EditText
+        android:id="@+id/editTextText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/edit_square"
+        android:inputType="text"
+        android:text=""
+        app:layout_constraintBottom_toTopOf="@+id/unregisterButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Survey" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
