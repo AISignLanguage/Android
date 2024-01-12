@@ -1,33 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".MainActivity"
     android:gravity="center">
 
+    <ImageView
+        android:layout_marginTop="20dp"
+        android:layout_width="180dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/logo"
+        android:scaleType="centerCrop" />
+
     <FrameLayout
         android:layout_gravity="center"
-        android:layout_width="400dp"
+        android:layout_width="380dp"
         android:layout_height="400dp">
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewpager"
-            android:layout_gravity="center"
-            android:clipToPadding="false"
-            android:clipChildren="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:layout_marginBottom="10dp"/>
-
-        <me.relex.circleindicator.CircleIndicator3
-            android:id="@+id/indicator"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="10dp"
-            android:layout_gravity="bottom"/>
-
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/viewpager"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:scaleType="fitXY" />
     </FrameLayout>
+    <me.relex.circleindicator.CircleIndicator3
+        android:id="@+id/indicator"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="bottom"
+        app:ci_drawable_unselected="@drawable/white_radius"
+        app:ci_drawable="@drawable/sky_radius" />
+    <ImageView
+        android:layout_width="380dp"
+        android:layout_height="2dp"
+        android:background="@drawable/line"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_margin="10dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/info" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_margin="10dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/call"  />
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_margin="10dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/user"  />
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_margin="10dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/camera"
+            />
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_margin="10dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/dic"  />
+    </LinearLayout>
 
 </LinearLayout>
