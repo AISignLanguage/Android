@@ -44,6 +44,7 @@
     android:orientation="horizontal"
     android:background="#f4f4f4"
     android:layout_margin="20dp"
+    android:layout_gravity="center"
     android:paddingStart="10dp"
     >
     <TextView
