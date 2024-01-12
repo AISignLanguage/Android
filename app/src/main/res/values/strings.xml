@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">AI_Language</string>
+
+    <string name="terms_detail_1">[필수] 서비스 이용 권리에 대한 상세 내용입니다.</string>
+    <string name="terms_detail_2">[필수] 신원 정보 제공에 대한 상세 내용입니다.</string>
+    <string name="terms_detail_3">[필수] 약관 게시에 대한 상세 내용입니다.</string>
+    <string name="terms_detail_4">[필수] 약관 개정에 대한 상세 내용입니다.</string>
+    <string name="terms_detail_5">[필수] 회원정보 변경에 대한 상세 내용입니다.</string>
+    <string name="terms_detail_6">[필수] 회원정보 관리 의무에 대한 상세 내용입니다.</string>
+    <string name="terms_detail_7">[필수] 우리의 의무에 대한 상세 내용입니다.</string>
+
+
 </resources>
