@@ -19,6 +19,9 @@
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
+            android:name=".TagItem"
+            android:exported="false" />
+        <activity
             android:name=".Dic_item"
             android:exported="false" />
         <activity
