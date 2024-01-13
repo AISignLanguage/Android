@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:width="48dp" android:height="48dp">
+    <item android:width="7dp" android:height="7dp">
+        <shape android:shape="oval">
+            <stroke android:color="#9999FF" android:width="1dp" /> <!-- 테두리 색상 및 두께 설정 -->
+            <size android:width="5dp" android:height="5dp" />
+        </shape>
+    </item>
+    <item android:width="7dp" android:height="7dp">
         <shape android:shape="oval">
             <solid android:color="@android:color/transparent" />
-            <stroke
-                android:width="3dp"
-                android:color="#9999FF" />
+            <size android:width="7dp" android:height="7dp" />
         </shape>
     </item>
 </layer-list>

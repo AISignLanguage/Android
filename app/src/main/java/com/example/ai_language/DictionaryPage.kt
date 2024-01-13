@@ -1,11 +1,13 @@
 package com.example.ai_language
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -80,6 +82,15 @@ class DictionaryPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dictionary_page)
+
+
+        val home_btn = findViewById<ImageButton>(R.id.home_btn_dic)
+        home_btn.setOnClickListener{
+            val intent = Intent(this,Home::class.java)
+            startActivity(intent)
+            finish()
+        }
+
 
         val rv_dic = findViewById<RecyclerView>(R.id.recyclerGridView)
         val itemList = ArrayList<DicPic>()

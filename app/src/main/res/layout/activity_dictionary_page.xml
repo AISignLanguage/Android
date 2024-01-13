@@ -24,6 +24,7 @@
         android:textStyle="bold" />
 9
     <ImageButton
+        android:id="@+id/home_btn_dic"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_gravity="end"

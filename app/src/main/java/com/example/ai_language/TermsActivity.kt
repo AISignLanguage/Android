@@ -26,8 +26,9 @@ class TermsActivity : AppCompatActivity() {
         val submit = findViewById<Button>(R.id.submitButton)
 
         submit.setOnClickListener{
-            val intent = Intent(this, home::class.java)
+            val intent = Intent(this, Home::class.java)
             startActivity(intent)
+            finish()
         }
 
         termsAllButton = findViewById<CheckBox>(R.id.termsAllButton)

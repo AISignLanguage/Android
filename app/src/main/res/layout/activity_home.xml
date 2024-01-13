@@ -18,6 +18,7 @@
         android:scaleType="centerCrop" />
 
     <FrameLayout
+        android:id="@+id/vp_fragment"
         android:layout_gravity="center"
         android:layout_width="380dp"
         android:layout_height="400dp">
@@ -28,7 +29,6 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:background="@drawable/viewpager"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:scaleType="fitXY" />
@@ -39,8 +39,11 @@
         android:layout_height="48dp"
         android:layout_marginBottom="10dp"
         android:layout_gravity="bottom"
+        app:ci_drawable="@drawable/sky_radius"
         app:ci_drawable_unselected="@drawable/white_radius"
-        app:ci_drawable="@drawable/sky_radius" />
+        app:ci_height="7dp"
+        app:ci_width="7dp"
+        />
     <ImageView
         android:layout_width="380dp"
         android:layout_height="2dp"
