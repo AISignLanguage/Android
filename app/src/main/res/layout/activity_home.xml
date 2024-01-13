@@ -81,8 +81,8 @@
             android:layout_height="60dp"
             android:background="@drawable/camera"
             />
-        <ImageView
-            android:id="@+id/imageView8"
+        <ImageButton
+            android:id="@+id/dic_btn"
             android:layout_margin="10dp"
             android:layout_width="60dp"
             android:layout_height="60dp"
