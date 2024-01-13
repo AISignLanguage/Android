@@ -36,6 +36,10 @@
         <activity
             android:name=".CallList"
             android:exported="false" />
+        <activity android:name=".PersonalInfo"
+            android:exported="false"
+            />
+
         <activity
             android:name=".Unregister"
             android:exported="true" />

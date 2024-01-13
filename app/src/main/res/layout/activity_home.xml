@@ -58,26 +58,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/imageView4"
             android:layout_margin="10dp"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/info" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/imageView5"
             android:layout_margin="10dp"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/call"  />
-        <ImageView
-            android:id="@+id/imageView6"
+        <ImageButton
+            android:id="@+id/my_page_btn"
             android:layout_margin="10dp"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/user"  />
-        <ImageView
+        <ImageButton
             android:id="@+id/imageView7"
             android:layout_margin="10dp"
             android:layout_width="60dp"
