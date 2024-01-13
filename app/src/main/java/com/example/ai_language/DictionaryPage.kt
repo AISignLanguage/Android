@@ -10,9 +10,42 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 data class DicPic(var dicpic: Uri, var ex: String)
+data class Tagdata(var tag: String)
+
+
+
+class TagAdapter(val itemList: ArrayList<Tagdata>) :
+    RecyclerView.Adapter<TagAdapter.TagViewHolder>() {
+
+    inner class TagViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val tag_txt = itemView.findViewById<TextView>(R.id.tag)
+    }
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): TagViewHolder {
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.activity_tag_item, parent, false)
+        return TagViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: TagViewHolder, position: Int) {
+        val td = itemList[position]
+        holder.tag_txt.text = td.tag
+    }
+
+    override fun getItemCount(): Int {
+        return itemList.size
+    }
+}
+
+
+
 
 class DicAdapter(val itemList: ArrayList<DicPic>) :
     RecyclerView.Adapter<DicAdapter.DicViewHolder>() {
@@ -51,6 +84,11 @@ class DictionaryPage : AppCompatActivity() {
         val rv_dic = findViewById<RecyclerView>(R.id.recyclerGridView)
         val itemList = ArrayList<DicPic>()
 
+
+        val rv_tag = findViewById<RecyclerView>(R.id.recyclerTag)
+        val tagList = ArrayList<Tagdata>()
+
+
         // 여러 Drawable 리소스 ID를 가져와 Uri로 변환하여 itemList에 추가
         val drawableResId1 = R.drawable.recycleritem // Drawable 리소스 ID 1
         val drawableUri1 = drawableResourceIdToUri(this, drawableResId1)
@@ -67,6 +105,18 @@ class DictionaryPage : AppCompatActivity() {
         // RecyclerView에 어댑터 설정
         val adapter = DicAdapter(itemList)
         rv_dic.adapter = adapter
+
+
+        tagList.add(Tagdata("#운동"))
+        tagList.add(Tagdata("#인사"))
+
+
+        val layoutManager2 = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        rv_tag.layoutManager = layoutManager2
+
+        val adapter2 = TagAdapter(tagList)
+        rv_tag.adapter = adapter2
+
     }
 
     // Drawable 리소스 ID를 Uri로 변환하는 함수
