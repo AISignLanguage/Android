@@ -8,6 +8,8 @@
     <string name="terms_detail_5">[필수] 회원정보 변경에 대한 상세 내용입니다.</string>
     <string name="terms_detail_6">[필수] 회원정보 관리 의무에 대한 상세 내용입니다.</string>
     <string name="terms_detail_7">[필수] 우리의 의무에 대한 상세 내용입니다.</string>
+    <string name="dic_title">손짓사전</string>
+    <string name="todo">TODO</string>
 
 
 </resources>
