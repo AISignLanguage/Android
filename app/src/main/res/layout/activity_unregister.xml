@@ -20,6 +20,7 @@
         app:layout_constraintVertical_bias="0.036" />
 
     <ImageButton
+        android:background="@android:color/transparent"
         android:id="@+id/homeButton"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -133,12 +134,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
+        android:background="@drawable/text_button"
+        android:fontFamily="@font/nam"
+        android:textColor="@color/black"
+        android:textSize="15dp"
         android:text="탈퇴하기"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Survey"
         app:layout_constraintVertical_bias="0.709" />
+
 
     <EditText
         android:id="@+id/editTextText"
