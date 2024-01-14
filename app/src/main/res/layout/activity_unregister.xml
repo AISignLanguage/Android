@@ -133,9 +133,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
-        android:background="@drawable/text_button"
-        android:textColor="@color/black"
-        android:textSize="15dp"
         android:text="탈퇴하기"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -144,9 +141,10 @@
         app:layout_constraintVertical_bias="0.709" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/editTextText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/edit_square"
         android:inputType="text"
         android:text=""
