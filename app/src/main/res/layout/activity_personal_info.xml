@@ -61,35 +61,54 @@
         app:layout_constraintTop_toBottomOf="@+id/profileImage"
         app:layout_constraintVertical_bias="0.026" />
 
-    <TextView
-        android:id="@+id/textName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <EditText
+        android:id="@+id/editDate"
+        android:layout_width="302dp"
+        android:layout_height="43dp"
+        android:ems="10"
         android:fontFamily="@font/nam"
-        android:text="닉네임"
-        android:textSize="15dp"
-        android:textStyle="bold"
+        android:inputType="text"
+        android:text="2000.05.01"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.146"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.386" />
+        app:layout_constraintTop_toBottomOf="@+id/textDate"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/textDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <EditText
+        android:id="@+id/editPhone"
+        android:layout_width="302dp"
+        android:layout_height="43dp"
+        android:ems="10"
         android:fontFamily="@font/nam"
-        android:text="생년월일"
-        android:textSize="15dp"
-        android:textStyle="bold"
+        android:inputType="text"
+        android:text="010-0000-0000"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.152"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editName"
-        app:layout_constraintVertical_bias="0.067" />
+        app:layout_constraintTop_toBottomOf="@+id/textPhone"
+        app:layout_constraintVertical_bias="0.114" />
+
+    <EditText
+        android:id="@+id/editName"
+        android:layout_width="302dp"
+        android:layout_height="43dp"
+        android:drawableEnd="@drawable/pencil"
+        android:ems="10"
+        android:fontFamily="@font/nam"
+        android:inputType="text"
+        android:text="Name"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textName"
+        app:layout_constraintVertical_bias="0.002" />
 
     <TextView
         android:id="@+id/textLogin"
@@ -104,7 +123,7 @@
         app:layout_constraintHorizontal_bias="0.16"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editDate"
-        app:layout_constraintVertical_bias="0.097" />
+        app:layout_constraintVertical_bias="0.099" />
 
     <TextView
         android:id="@+id/textPhone"
@@ -119,48 +138,46 @@
         app:layout_constraintHorizontal_bias="0.16"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editLogin"
-        app:layout_constraintVertical_bias="0.127" />
+        app:layout_constraintVertical_bias="0.135" />
 
-    <EditText
-        android:id="@+id/editName"
-        android:layout_width="302dp"
-        android:layout_height="43dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Name"
+    <TextView
+        android:id="@+id/textDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/nam"
-        android:textSize="16sp"
+        android:text="생년월일"
+        android:textSize="15dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.152"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textName"
-        app:layout_constraintVertical_bias="0.002" />
+        app:layout_constraintTop_toBottomOf="@+id/editName"
+        app:layout_constraintVertical_bias="0.066" />
 
-    <EditText
-        android:id="@+id/editDate"
-        android:layout_width="302dp"
-        android:layout_height="43dp"
-        android:ems="10"
-        android:inputType="text"
+    <TextView
+        android:id="@+id/textName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/nam"
-        android:text="2000.05.01"
-        android:textSize="16sp"
+        android:text="닉네임"
+        android:textSize="15dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.146"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDate"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.41" />
 
     <EditText
         android:id="@+id/editLogin"
         android:layout_width="302dp"
         android:layout_height="43dp"
         android:ems="10"
+        android:fontFamily="@font/nam"
         android:inputType="text"
         android:text="카카오 연동"
-        android:fontFamily="@font/nam"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -168,36 +185,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textLogin"
         app:layout_constraintVertical_bias="0.0" />
-
-    <EditText
-        android:id="@+id/editPhone"
-        android:layout_width="302dp"
-        android:layout_height="43dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="010-0000-0000"
-        android:fontFamily="@font/nam"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textPhone"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:textColor="@color/white"
-        android:background="@drawable/round_square"
-        android:fontFamily="@font/nam"
-        android:textStyle="bold"
-        android:id="@+id/edit_ok"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="확인"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editPhone" />
 
     <TextView
         android:id="@+id/textView7"
