@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:background="@drawable/unregisterdialog"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="412dp"
+        android:layout_height="260dp"
+        android:fontFamily="@font/font_eb"
+        android:gravity="center"
+        android:text="그동안 손짓의 순간을\n이용해주셔서 감사합니다."
+        android:textSize="20sp" />
+
+</LinearLayout>

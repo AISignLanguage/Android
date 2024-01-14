@@ -64,7 +64,7 @@
             android:layout_toRightOf="@id/termsButton1"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="80dp"
-            android:background="@drawable/terms_button"
+            android:background="@drawable/text_button"
             android:textColor="#808080"
             android:textSize="12dp"
             android:text="내용 보기"/>
@@ -93,7 +93,7 @@
             android:layout_toRightOf="@id/termsButton2"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="95dp"
-            android:background="@drawable/terms_button"
+            android:background="@drawable/text_button"
             android:textColor="#808080"
             android:textSize="12dp"
             android:text="내용 보기"/>
@@ -121,7 +121,7 @@
             android:layout_toRightOf="@id/termsButton3"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="130dp"
-            android:background="@drawable/terms_button"
+            android:background="@drawable/text_button"
             android:textColor="#808080"
             android:textSize="12dp"
             android:text="내용 보기"/>
@@ -150,7 +150,7 @@
             android:layout_toRightOf="@id/termsButton4"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="130dp"
-            android:background="@drawable/terms_button"
+            android:background="@drawable/text_button"
             android:textColor="#808080"
             android:textSize="12dp"
             android:text="내용 보기"/>
@@ -178,7 +178,7 @@
             android:layout_marginLeft="100dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/termsButton5"
-            android:background="@drawable/terms_button"
+            android:background="@drawable/text_button"
             android:text="내용 보기"
             android:textColor="#808080"
             android:textSize="12dp" />
@@ -206,7 +206,7 @@
             android:layout_toRightOf="@id/termsButton6"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="65dp"
-            android:background="@drawable/terms_button"
+            android:background="@drawable/text_button"
             android:textColor="#808080"
             android:textSize="12dp"
             android:text="내용 보기"/>
@@ -234,7 +234,7 @@
             android:layout_toRightOf="@id/termsButton7"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="115dp"
-            android:background="@drawable/terms_button"
+            android:background="@drawable/text_button"
             android:textColor="#808080"
             android:textSize="12dp"
             android:text="내용 보기"/>
