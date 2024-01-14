@@ -30,4 +30,7 @@ class MyPage : AppCompatActivity() {
         }
 
     }
+
+    private fun signOutDialog(){
+    }
 }
