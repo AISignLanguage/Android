@@ -22,8 +22,8 @@
     <ImageButton
         android:background="@android:color/transparent"
         android:id="@+id/homeButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:padding="0dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"

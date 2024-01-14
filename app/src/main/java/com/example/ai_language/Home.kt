@@ -80,5 +80,12 @@ class Home : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val news_btn = findViewById<ImageButton>(R.id.news_btn)
+        news_btn.setOnClickListener {
+            val intent = Intent(this, NewsActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
     }
 }
