@@ -3,12 +3,21 @@ package com.example.ai_language
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Im
+import android.widget.ImageButton
 import android.widget.TextView
 
 class MyPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_page)
+
+        val home = findViewById<ImageButton>(R.id.homeButton3)
+        home.setOnClickListener{
+            val intent = Intent(this,Home::class.java)
+            startActivity(intent)
+            finish()
+        }
 
 
         val my_inform_edit = findViewById<TextView>(R.id.my_inform_edit)

@@ -32,50 +32,61 @@ class TermsActivity : AppCompatActivity() {
         }
 
         termsAllButton = findViewById<CheckBox>(R.id.termsAllButton)
-        termsButton1 = findViewById<CheckBox>(R.id.termsButton1)
-        termsButton2 = findViewById<CheckBox>(R.id.termsButton2)
-        termsButton3 = findViewById<CheckBox>(R.id.termsButton3)
-        termsButton4 = findViewById<CheckBox>(R.id.termsButton4)
-        termsButton5 = findViewById<CheckBox>(R.id.termsButton5)
-        termsButton6 = findViewById<CheckBox>(R.id.termsButton6)
-        termsButton7 = findViewById<CheckBox>(R.id.termsButton7)
-
         termsAllButton.setOnClickListener { onCheckChanged(termsAllButton) }
+
+        termsButton1 = findViewById<CheckBox>(R.id.termsButton1)
         termsButton1.setOnClickListener { onCheckChanged(termsButton1) }
+
+        termsButton2 = findViewById<CheckBox>(R.id.termsButton2)
         termsButton2.setOnClickListener { onCheckChanged(termsButton2) }
+
+        termsButton3 = findViewById<CheckBox>(R.id.termsButton3)
         termsButton3.setOnClickListener { onCheckChanged(termsButton3) }
+
+        termsButton4 = findViewById<CheckBox>(R.id.termsButton4)
         termsButton4.setOnClickListener { onCheckChanged(termsButton4) }
+
+        termsButton5 = findViewById<CheckBox>(R.id.termsButton5)
         termsButton5.setOnClickListener { onCheckChanged(termsButton5) }
+
+        termsButton6 = findViewById<CheckBox>(R.id.termsButton6)
         termsButton6.setOnClickListener { onCheckChanged(termsButton6) }
+
+        termsButton7 = findViewById<CheckBox>(R.id.termsButton7)
         termsButton7.setOnClickListener { onCheckChanged(termsButton7) }
 
 
         val termsDetail1 = findViewById<Button>(R.id.viewButton1)
-        val termsDetail2 = findViewById<Button>(R.id.viewButton2)
-        val termsDetail3 = findViewById<Button>(R.id.viewButton3)
-        val termsDetail4 = findViewById<Button>(R.id.viewButton4)
-        val termsDetail5 = findViewById<Button>(R.id.viewButton5)
-        val termsDetail6 = findViewById<Button>(R.id.viewButton6)
-        val termsDetail7 = findViewById<Button>(R.id.viewButton7)
-
         termsDetail1.setOnClickListener{
             showTermsDialog("[필수] 서비스 이용 권리", R.string.terms_detail_1)
         }
+
+        val termsDetail2 = findViewById<Button>(R.id.viewButton2)
         termsDetail2.setOnClickListener{
             showTermsDialog("[필수] 신원 정보 제공", R.string.terms_detail_1)
         }
+
+        val termsDetail3 = findViewById<Button>(R.id.viewButton3)
         termsDetail3.setOnClickListener{
             showTermsDialog("[필수] 약관 게시", R.string.terms_detail_1)
         }
+
+        val termsDetail4 = findViewById<Button>(R.id.viewButton4)
         termsDetail4.setOnClickListener{
             showTermsDialog("[필수] 약관 개정", R.string.terms_detail_1)
         }
+
+        val termsDetail5 = findViewById<Button>(R.id.viewButton5)
         termsDetail5.setOnClickListener{
             showTermsDialog("[필수] 회원정보 변경", R.string.terms_detail_1)
         }
+
+        val termsDetail6 = findViewById<Button>(R.id.viewButton6)
         termsDetail6.setOnClickListener{
             showTermsDialog("[필수] 회원정보 관리 의무", R.string.terms_detail_1)
         }
+
+        val termsDetail7 = findViewById<Button>(R.id.viewButton7)
         termsDetail7.setOnClickListener{
             showTermsDialog("[필수] 우리의 의무", R.string.terms_detail_1)
         }
@@ -121,6 +132,6 @@ class TermsActivity : AppCompatActivity() {
         }
         builder.show()
     }
-    
-    
+
+
 }

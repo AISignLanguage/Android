@@ -23,12 +23,13 @@
         android:text="마이페이지"/>
 
         <ImageButton
+            android:id="@+id/homeButton3"
             android:layout_width="45dp"
             android:layout_height="45dp"
+            android:layout_marginStart="190dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginStart="190dp"
-            android:background="@drawable/homes"/>
+            android:background="@drawable/homes" />
     </LinearLayout>
 
     <TextView
