@@ -14,7 +14,11 @@ class LoginActivity : AppCompatActivity() {
 
         loginButton.setOnClickListener {
             //최초 1회 적용 코드 추가 필요
-            val intent = Intent(this, TermsActivity::class.java)
+            //val intent = Intent(this, TermsActivity::class.java)
+            //startActivity(intent)
+            //finish()
+
+            val intent = Intent(this, NewsActivity::class.java)
             startActivity(intent)
             finish()
         }
