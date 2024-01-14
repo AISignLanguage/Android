@@ -1,7 +1,9 @@
 package com.example.ai_language
 
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
+import android.os.Handler
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +20,24 @@ class Unregister : AppCompatActivity() {
             finish()
         }
 
+        val unregisterButton = findViewById<Button>(R.id.unregisterButton)
+        unregisterButton.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        unregisterButton.setOnClickListener{
+            val unregisterDialog = unregisterDialog(this)
+            unregisterDialog.show()
+
+            Handler().postDelayed({
+                unregisterDialog.dismiss()
+                navigateToHomeActivity()
+            }, 3000)
+        }
+
+    }
+
+    private fun navigateToHomeActivity() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
 
