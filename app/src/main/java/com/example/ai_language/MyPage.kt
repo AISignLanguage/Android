@@ -35,11 +35,25 @@ class MyPage : AppCompatActivity() {
 
         val sign_out = findViewById<TextView>(R.id.sign_out)
         sign_out.setOnClickListener {
+            val dialog = SignoutDialog(this)
+            dialog.exDialog()
 
+            dialog.setOnClickedListener(object : SignoutDialog.ButtonClickListener{
+                override fun onClicked(result: String) {
+                    when(result){
+                        "ok"->{
+                            val intent = Intent(this@MyPage,LoginActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                        "no"->{
+
+                        }
+                    }
+                }
+            })
         }
 
     }
 
-    private fun signOutDialog(){
-    }
 }
