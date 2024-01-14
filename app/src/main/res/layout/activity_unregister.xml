@@ -20,6 +20,7 @@
         app:layout_constraintVertical_bias="0.036" />
 
     <ImageButton
+        android:background="@android:color/transparent"
         android:id="@+id/homeButton"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -52,7 +53,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="탈퇴 시, 모든 정보가 소멸됩니다."
-        android:fontFamily="@font/font_eb"
+        android:fontFamily="@font/nam"
+        android:textStyle="bold"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,9 +68,11 @@
         android:layout_width="355dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="100dp"
-        android:fontFamily="@font/font_eb"
+        android:fontFamily="@font/nam"
+        android:textStyle="bold"
         android:text="더 나은 손짓의 순간이 될 수 있게 탈퇴하시는 사유를 입력해주세요."
         android:textSize="16sp"
+        android:layout_marginTop="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.535"
@@ -80,7 +84,6 @@
         android:id="@+id/Survey"
         android:layout_width="346dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"
@@ -91,49 +94,53 @@
         <RadioButton
             android:id="@+id/Question1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/font_eb"
+            android:layout_height="35dp"
+            android:fontFamily="@font/nam"
             android:text="수화 번역의 정확도가 떨어져요."
             android:textSize="14sp" />
 
         <RadioButton
             android:id="@+id/Question2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/font_eb"
+            android:layout_height="35dp"
+            android:fontFamily="@font/nam"
             android:text="어플리케이션 이용이 복잡해요."
             android:textSize="14sp" />
 
         <RadioButton
             android:id="@+id/Question3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/font_eb"
+            android:layout_height="35dp"
+            android:fontFamily="@font/nam"
             android:text="콘텐츠가 부족해요."
             android:textSize="14sp" />
 
         <RadioButton
             android:id="@+id/Question4"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/font_eb"
+            android:layout_height="35dp"
+            android:fontFamily="@font/nam"
             android:text="어플리케이션의 이용도가 낮아요." />
 
         <RadioButton
             android:id="@+id/Question5"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/font_eb"
+            android:layout_height="35dp"
+            android:fontFamily="@font/nam"
             android:text="기타" />
 
     </RadioGroup>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/unregisterButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/round_square"
+        android:fontFamily="@font/nam"
+        android:textColor="@color/white"
         android:text="탈퇴하기"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -144,7 +151,7 @@
         android:id="@+id/editTextText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/edit_square"
         android:inputType="text"
         android:text=""

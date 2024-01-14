@@ -72,14 +72,12 @@ class Home : AppCompatActivity() {
         dic_btn.setOnClickListener {
             val intent = Intent(this,DictionaryPage::class.java)
             startActivity(intent)
-            finish()
         }
 
         val mypg_btn = findViewById<ImageButton>(R.id.my_page_btn)
         mypg_btn.setOnClickListener{
             val intent = Intent(this,MyPage::class.java)
             startActivity(intent)
-            finish()
         }
 
     }
