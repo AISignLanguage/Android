@@ -3,6 +3,7 @@ package com.example.ai_language
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import androidx.appcompat.app.AlertDialog
@@ -29,6 +30,9 @@ class TermsActivity : AppCompatActivity() {
             val intent = Intent(this, Home::class.java)
             startActivity(intent)
             finish()
+
+            //선택된 체크 박스 약관 번호 저장
+            isCheck();
         }
 
         termsAllButton = findViewById<CheckBox>(R.id.termsAllButton)
@@ -131,6 +135,35 @@ class TermsActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         builder.show()
+    }
+
+    private fun isCheck(){
+        val isCheckedAll: Boolean = termsAllButton.isChecked
+        val isChecked1: Boolean = termsButton1.isChecked
+        val isChecked2: Boolean = termsButton2.isChecked
+        val isChecked3: Boolean = termsButton3.isChecked
+        val isChecked4: Boolean = termsButton4.isChecked
+        val isChecked5: Boolean = termsButton5.isChecked
+        val isChecked6: Boolean = termsButton6.isChecked
+        val isChecked7: Boolean = termsButton7.isChecked
+
+        val logMessage = buildString {
+            if (isCheckedAll) append("CheckBox All checked")
+            else{
+                if (isChecked1) append("CheckBox1 is checked, ")
+                if (isChecked2) append("CheckBox2 is checked, ")
+                if (isChecked3) append("CheckBox3 is checked, ")
+                if (isChecked4) append("CheckBox4 is checked, ")
+                if (isChecked5) append("CheckBox5 is checked, ")
+                if (isChecked6) append("CheckBox6 is checked, ")
+                if (isChecked7) append("CheckBox7 is checked, ")
+            }
+
+
+            if (isNotEmpty()) delete(length - 2, length)
+        }
+
+        Log.d("CheckBoxLog", logMessage)
     }
 
 
