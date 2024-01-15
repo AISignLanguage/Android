@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.ai_language">
-
-    <uses-permission android:name="android.permission.INTERNET"/>
-
+    package="com.example.ai_language"
+    >
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -25,7 +24,7 @@
             android:name=".NewsActivity"
             android:exported="false" />
         <activity
-            android:name=".unregisterDialog"
+            android:name=".Unregister"
             android:exported="false" />
         <activity
             android:name=".TermsActivity"
@@ -54,9 +53,6 @@
         <activity
             android:name=".PersonalInfo"
             android:exported="false" />
-        <activity
-            android:name=".Unregister"
-            android:exported="true" />
         <activity
             android:name=".SplashActivity"
             android:exported="true"
