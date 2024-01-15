@@ -23,7 +23,7 @@ class Unregister : AppCompatActivity() {
         val unregisterButton = findViewById<Button>(R.id.unregisterButton)
         unregisterButton.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         unregisterButton.setOnClickListener{
-            val unregisterDialog = unregisterDialog(this)
+            val unregisterDialog = UnregisterDialog(this)
             unregisterDialog.show()
 
             Handler().postDelayed({
