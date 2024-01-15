@@ -13,7 +13,7 @@ class LoginActivity : AppCompatActivity() {
         val loginButton = findViewById<Button>(R.id.loginButton)
 
         loginButton.setOnClickListener {
-            val intent = Intent(this, Home::class.java)
+            val intent = Intent(this, KaKaoLoginActivity::class.java)
             startActivity(intent)
             finish()
         }
