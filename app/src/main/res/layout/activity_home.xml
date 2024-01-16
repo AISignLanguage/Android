@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".MainActivity"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_marginTop="20dp"
+        android:layout_width="180dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/logo"
+        android:scaleType="centerCrop" />
+
+    <FrameLayout
+        android:id="@+id/vp_fragment"
+        android:layout_gravity="center"
+        android:layout_width="380dp"
+        android:layout_height="400dp">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:scaleType="fitXY" />
+    </FrameLayout>
+    <me.relex.circleindicator.CircleIndicator3
+        android:id="@+id/indicator"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="bottom"
+        app:ci_drawable="@drawable/sky_radius"
+        app:ci_drawable_unselected="@drawable/white_radius"
+        app:ci_height="7dp"
+        app:ci_width="7dp"
+        />
+    <ImageView
+        android:layout_width="380dp"
+        android:layout_height="2dp"
+        android:background="@drawable/line"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/news_btn"
+            android:layout_margin="10dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/info" />
+
+        <ImageButton
+            android:id="@+id/callList_btn"
+            android:layout_margin="10dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/call"  />
+        <ImageButton
+            android:id="@+id/my_page_btn"
+            android:layout_margin="10dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/user"  />
+        <ImageButton
+            android:id="@+id/cameraBtn"
+            android:layout_margin="10dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/camera"
+            />
+        <ImageButton
+            android:id="@+id/dic_btn"
+            android:layout_margin="10dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/dic"  />
+    </LinearLayout>
+
+</LinearLayout>

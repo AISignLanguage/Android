@@ -13,14 +13,64 @@
         android:theme="@style/Theme.AI_Language"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".CameraPage"
+            android:exported="false" />
+        <activity
+            android:name=".VersionCheck"
+            android:exported="false" />
+        <activity
+            android:name=".FaqPage"
+            android:exported="false" />
+        <activity
+            android:name=".News_item"
+            android:exported="false" />
+        <activity
+            android:name=".NewsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".unregisterDialog"
+            android:exported="false" />
+        <activity
+            android:name=".TermsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TagItem"
+            android:exported="false" />
+        <activity
+            android:name=".Dic_item"
+            android:exported="false" />
+        <activity
+            android:name=".DictionaryPage"
+            android:exported="false" />
+        <activity
+            android:name=".MyPage"
+            android:exported="false" />
+        <activity
+            android:name=".Home"
+            android:exported="false" />
+        <activity
+            android:name=".CallListPage"
+            android:exported="false" />
+        <activity
+            android:name=".PersonalInfo"
+            android:exported="false" />
+        <activity
+            android:name=".Unregister"
+            android:exported="true" />
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>
