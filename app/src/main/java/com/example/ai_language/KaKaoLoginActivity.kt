@@ -49,33 +49,52 @@ class KaKaoLoginActivity : AppCompatActivity() {
             } else if (token != null) {
                 //TODO: 최종적으로 카카오로그인 및 유저정보 가져온 결과
                 UserApiClient.instance.me { user, error ->
-                    Log.e("결과", "카카오계정으로 로그인 성공 \n\n " +
-                            "token: ${token.accessToken} \n\n " +
-                            "me: ${user}")
+                    if (error != null) {
+                        Log.e("결과", "사용자 정보 요청 실패: ${error}")
+                    } else if (user != null) {
+                        val nickname = user.kakaoAccount?.profile?.nickname
+                        val profileImageUrl = user.kakaoAccount?.profile?.thumbnailImageUrl
+                        Log.d("결과", "닉네임: $nickname")
+                        Log.d("결과", "프로필 사진 URL: $profileImageUrl")
+
+                    }
                 }
+
             }
         }
 
         // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
-            UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
+            UserApiClient.instance.loginWithKakaoTalk(this) { token
+                                                              , error ->
                 if (error != null) {
                     Log.d("결과", "로그인 실패", error)
-
                     if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
                         return@loginWithKakaoTalk
                     }
-
-                    // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
+// 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
                     UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
                 } else if (token != null) {
                     Log.e("결과", "로그인 성공")
+                    // 사용자 정보 요청
+                    UserApiClient.instance.me { user, error ->
+                        if (error != null) {
+                            Log.e("결과", "사용자 정보 요청 실패: ${error}")
+                        } else if (user != null) {
+                            val nickname = user.kakaoAccount?.profile?.nickname
+                            val profileImageUrl = user.kakaoAccount?.profile?.thumbnailImageUrl
+                            Log.d("결과", "닉네임: $nickname")
+                            Log.d("결과", "프로필 사진 URL: $profileImageUrl")
+                        }
+                    }
+
                     val kakaoBtn = findViewById<ImageView>(R.id.kko_login_btn)
                     kakaoBtn.setBackgroundResource(R.drawable.logoutkakao)
                     val intent = Intent(ctxt,TermsActivity::class.java)
                     startActivity(intent)
                 }
             }
+
         } else {
             UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
         }
