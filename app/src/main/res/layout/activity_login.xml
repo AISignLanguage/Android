@@ -7,8 +7,9 @@
 
     <TextView
         android:id="@+id/appName2"
-        android:layout_width="178dp"
-        android:layout_height="39dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/font_bd"
         android:text="손짓의 순간"
         android:textColor="@color/white"
