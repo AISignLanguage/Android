@@ -42,13 +42,29 @@
         android:layout_marginStart="30dp"
         android:text=" 로그인 상태 유지" />
 
+    <TextView
+        android:id="@+id/sign_in_button"
+        android:layout_width="327.5dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center"
+        android:background="@drawable/round_square2"
+        android:textColor="@color/white"
+        android:fontFamily="@font/font_bd"
+        android:text="로그인"
+        android:gravity="center"
+        android:textSize="15dp"/>
+
+
     <ImageView
         android:id="@+id/kko_login_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="40dp"
         android:src="@drawable/kakao_login_large_wide" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
