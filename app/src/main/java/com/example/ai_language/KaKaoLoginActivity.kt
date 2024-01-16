@@ -25,7 +25,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
 
         val signInBtn = findViewById<TextView>(R.id.sign_in_button)
         signInBtn.setOnClickListener {
-            val intent = Intent(this,TermsActivity::class.java)
+            val intent = Intent(this, permissionActivity::class.java)
             startActivity(intent)
             finish()
         }
