@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
 data class NewsItem(
     var title: String,
@@ -40,7 +41,10 @@ class NewsAdapter(val context: Context, val newsList: List<NewsItem>) :
         val newsItem = newsList[position]
         holder.titleTextView.text = newsItem.title
         holder.contentTextView.text = newsItem.content
-        holder.imageView.setImageResource(newsItem.imageResourceId)
+        //holder.imageView.setImageResource(newsItem.imageResourceId)
+        Glide.with(holder.itemView)
+            .load(newsItem.imageResourceId)
+            .into(holder.imageView)
     }
 }
 

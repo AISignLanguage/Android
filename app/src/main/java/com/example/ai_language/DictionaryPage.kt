@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
 data class DicPic(var dicpic: Uri, var ex: String)
 data class Tagdata(var tag: String)
@@ -69,8 +70,11 @@ class DicAdapter(val itemList: ArrayList<DicPic>) :
     override fun onBindViewHolder(holder: DicViewHolder, position: Int) {
         val dicPic = itemList[position]
         val dicUri = dicPic.dicpic
-        holder.dic_img.setImageURI(dicUri)
+        //holder.dic_img.setImageURI(dicUri)
         holder.dic_ex.text = dicPic.ex
+        Glide.with(holder.itemView)
+            .load(dicUri)
+            .into(holder.dic_img)
     }
 
     override fun getItemCount(): Int {
