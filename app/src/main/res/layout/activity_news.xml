@@ -14,12 +14,12 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:background="@android:color/transparent"
             android:id="@+id/imageButton"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:layout_marginTop="3dp"
             android:layout_marginLeft="16dp"
+            android:layout_marginTop="3dp"
+            android:background="@android:color/transparent"
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/home" />
 
