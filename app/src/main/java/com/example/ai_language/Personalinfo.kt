@@ -2,16 +2,19 @@ package com.example.ai_language
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import java.io.IOException
 
 class PersonalInfo : AppCompatActivity() {
 
@@ -64,16 +67,6 @@ class PersonalInfo : AppCompatActivity() {
     }
 
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK) {
-            val selectedImageUri = data?.data
-            //gallery.setImageURI(selectedImageUri)
-            resizeAndSetImage(selectedImageUri)
-        }
-    }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -84,18 +77,4 @@ class PersonalInfo : AppCompatActivity() {
             openGallery()
         }
     }
-
-    private fun resizeAndSetImage(selectedImageUri: Uri?) {
-        selectedImageUri?.let {
-            val targetWidth = profileImage.width
-            val targetHeight = profileImage.height
-
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedImageUri)
-            val resizedBitmap = Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, true)
-
-            profileImage.setImageBitmap(resizedBitmap)
-        }
-    }
-
-
 }
