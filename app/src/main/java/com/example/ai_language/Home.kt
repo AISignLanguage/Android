@@ -82,7 +82,6 @@ class Home : AppCompatActivity() {
         news_btn.setOnClickListener {
             val intent = Intent(this, NewsActivity::class.java)
             startActivity(intent)
-            finish()
         }
 
         val callLsit_btn = findViewById<ImageButton>(R.id.callList_btn) //전화번호부 화면으로 이동
