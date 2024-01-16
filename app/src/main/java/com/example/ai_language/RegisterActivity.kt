@@ -22,9 +22,7 @@ class RegisterActivity : AppCompatActivity() {
         val profile = findViewById<ImageView>(R.id.reg_pro)
         val uriString: String? = intent.getStringExtra("profile")
             if (uriString != null) {
-
                 val profilePx = dpToPx(this, 90)
-
                 Glide.with(this)
                     .load(uriString)
                     .override(profilePx,profilePx)
@@ -35,7 +33,7 @@ class RegisterActivity : AppCompatActivity() {
 
         val regNext = findViewById<TextView>(R.id.reg_next)
         regNext.setOnClickListener {
-            val intent = Intent(this,TermsActivity::class.java)
+            val intent = Intent(this,permissionActivity::class.java)
             startActivity(intent)
             finish()
         }

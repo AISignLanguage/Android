@@ -65,6 +65,7 @@
         android:layout_marginEnd="20dp"
         android:paddingStart="15dp"
         android:hint="닉네임 5자리 입력"
+        android:gravity="center"
         />
     <TextView
         android:layout_marginTop="40dp"
@@ -84,6 +85,7 @@
         android:layout_marginEnd="20dp"
         android:paddingStart="15dp"
         android:hint="생년월일 8자리 입력"
+        android:gravity="center"
         />
     <TextView
         android:layout_marginTop="40dp"
@@ -103,6 +105,7 @@
         android:layout_marginEnd="20dp"
         android:paddingStart="15dp"
         android:hint="휴대폰 번호 11자리 입력"
+        android:gravity="center"
         />
     <TextView
         android:id="@+id/reg_next"

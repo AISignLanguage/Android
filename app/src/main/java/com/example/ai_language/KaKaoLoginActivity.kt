@@ -13,6 +13,7 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import kotlin.random.Random
 
 class KaKaoLoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,8 +23,11 @@ class KaKaoLoginActivity : AppCompatActivity() {
 
         val signInBtn = findViewById<TextView>(R.id.sign_in_button)
         signInBtn.setOnClickListener {
-            val intent = Intent(this, TermsActivity::class.java)
-            val intent = Intent(this, permissionActivity::class.java)
+            val intent = Intent(this, RegisterActivity::class.java)
+            //권한 동의 했으면 Home으로
+            //처음 접속하는 거면 register로
+            intent.putExtra("nick", "사용자${ Random.nextInt(10000)}")
+            intent.putExtra("profile", "https://cdn-icons-png.flaticon.com/128/149/149071.png")
             startActivity(intent)
             finish()
         }
