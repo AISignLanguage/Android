@@ -1,5 +1,6 @@
 package com.example.ai_language
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 class CallListAdapter (val itemList: ArrayList<CallListItem>) :
     RecyclerView.Adapter<CallListAdapter.CallListViewHolder>() {
 
+    //클릭 이벤트
     var itemClickListener : OnItemClickListener? = null
     interface OnItemClickListener {
         fun onItemClick(position: Int) {}
@@ -38,6 +40,9 @@ class CallListAdapter (val itemList: ArrayList<CallListItem>) :
         init {
             callBtn.setOnClickListener{
                 itemClickListener?.onItemClick(adapterPosition)
+                //페이지 이동
+                //val intent = Intent(itemView.context, FaqPage::class.java)
+                //itemView.context.startActivity(intent)
             }
         }
     }
