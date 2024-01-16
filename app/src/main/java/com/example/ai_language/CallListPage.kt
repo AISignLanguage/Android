@@ -16,12 +16,21 @@ class CallListPage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_call_list)
 
+        //RecyclerView - 앱 사용 O
         val rv_call = findViewById<RecyclerView>(R.id.rv_call)
-        val rv_invite = findViewById<RecyclerView>(R.id.rv_invite)
         val CallList = ArrayList<CallListItem>()
-        val InviteList = ArrayList<InviteListItem>()
         val CallListAdapter = CallListAdapter(CallList)
+        rv_call.adapter = CallListAdapter
+        rv_call.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        CallListAdapter.notifyDataSetChanged()
+
+        //RecyclerView - 앱 사용 X
+        val rv_invite = findViewById<RecyclerView>(R.id.rv_invite)
+        val InviteList = ArrayList<InviteListItem>()
         val InviteListAdapter = InviteListAdapter(InviteList)
+        rv_invite.adapter = InviteListAdapter
+        rv_invite.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        InviteListAdapter.notifyDataSetChanged()
 
         CallList.add(CallListItem("박지원", "010-1234-5678"))
         CallList.add(CallListItem("임다솔", "010-5322-1345"))
@@ -32,18 +41,18 @@ class CallListPage : AppCompatActivity() {
         InviteList.add(InviteListItem("김모모", "010-8884-1821"))
         InviteList.add(InviteListItem("임멍멍", "010-1523-8445"))
 
-        CallListAdapter.notifyDataSetChanged()
-        InviteListAdapter.notifyDataSetChanged()
-
-        rv_call.adapter = CallListAdapter
-        rv_invite.adapter = InviteListAdapter
-        rv_call.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        rv_invite.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-
+        //전화버튼 클릭
         CallListAdapter.itemClickListener = object : CallListAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
                 val item = CallList[position]
-                Toast.makeText(applicationContext, "클릭함", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "전화하기", Toast.LENGTH_SHORT).show()
+            }
+        }
+        //초대버튼 클릭
+        InviteListAdapter.itemClickListener = object : InviteListAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                val item = InviteList[position]
+                Toast.makeText(applicationContext, "초대하기", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -51,7 +60,6 @@ class CallListPage : AppCompatActivity() {
         homeButton.setOnClickListener{
             val intent = Intent(this,Home::class.java)
             startActivity(intent)
-            finish()
         }
     }
 }
