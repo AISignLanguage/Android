@@ -1,68 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".CallListPage">
 
     <TextView
+        android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/font_bd"
         android:text="영상통화"
         android:textSize="30dp"
-        android:fontFamily="@font/font_bd" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/homeButton"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/transparent"
+        android:padding="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView8"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/home" />
 
     <TextView
+        android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="80dp"
+        android:fontFamily="@font/font_bd"
         android:text="영상통화 걸기"
         android:textSize="20dp"
-        android:fontFamily="@font/font_bd" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:orientation="horizontal">
-        <ImageView
-            android:src="@drawable/profile"
-            android:layout_margin="5dp"
-            android:layout_width="60dp"
-            android:layout_height="60dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="박지원"
-            android:gravity="center"
-            android:textSize="20dp"
-            android:fontFamily="@font/nam"
-            android:layout_margin="5dp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="010 - 9941 - 0785"
-            android:textSize="20dp"
-            android:fontFamily="@font/nam"
-            android:layout_margin="5dp"
-            android:gravity="center"
-            />
+        android:layout_marginTop="32dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10">
 
-        <ImageButton
-            android:src="@drawable/calling"
-            android:background="@android:color/transparent"
-            android:scaleType="centerCrop"
-            android:padding="0dp"
-            android:layout_marginStart="10dp"
-            android:layout_gravity="center"
-            android:layout_width="40dp"
-            android:layout_height="40dp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_call"
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            tools:listitem="@layout/call_item" />
+
+        <View
+            android:layout_width="350dp"
+            android:layout_height="1dp"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/black" />
     </LinearLayout>
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/font_bd"
+        android:text="손짓의 순간과 함께 해줄래요?"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/font_bd"
+        android:text="초대메시지 보내기"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView12">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_invite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/invite_item" />
+
+        <View
+            android:layout_width="350dp"
+            android:layout_height="1dp"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/black" />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
