@@ -34,6 +34,7 @@
         android:gravity="center" />
 
     <ImageButton
+        android:id="@+id/callBtn"
         android:src="@drawable/calling"
         android:background="@android:color/transparent"
         android:scaleType="centerCrop"

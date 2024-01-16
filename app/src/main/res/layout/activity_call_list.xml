@@ -60,7 +60,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_call"
             android:layout_width="match_parent"
-            android:layout_height="230dp"
+            android:layout_height="320dp"
             tools:listitem="@layout/call_item" />
 
         <View
@@ -111,13 +111,6 @@
             android:layout_height="wrap_content"
             tools:listitem="@layout/invite_item" />
 
-        <View
-            android:layout_width="350dp"
-            android:layout_height="1dp"
-            android:layout_centerInParent="true"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="20dp"
-            android:background="@color/black" />
     </LinearLayout>
 
 

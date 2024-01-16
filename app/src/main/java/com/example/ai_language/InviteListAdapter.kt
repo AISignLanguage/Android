@@ -6,11 +6,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class InviteListAdapter (val itemList: ArrayList<CallListItem>) :
+class InviteListAdapter (val itemList: ArrayList<InviteListItem>) :
     RecyclerView.Adapter<InviteListAdapter.InviteListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InviteListViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.call_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.invite_item, parent, false)
         return InviteListViewHolder(view)
     }
 
