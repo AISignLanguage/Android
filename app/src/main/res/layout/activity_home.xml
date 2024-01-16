@@ -66,7 +66,7 @@
             android:background="@drawable/info" />
 
         <ImageButton
-            android:id="@+id/imageView5"
+            android:id="@+id/callList_btn"
             android:layout_margin="10dp"
             android:layout_width="60dp"
             android:layout_height="60dp"
@@ -78,7 +78,7 @@
             android:layout_height="60dp"
             android:background="@drawable/user"  />
         <ImageButton
-            android:id="@+id/imageView7"
+            android:id="@+id/cameraBtn"
             android:layout_margin="10dp"
             android:layout_width="60dp"
             android:layout_height="60dp"

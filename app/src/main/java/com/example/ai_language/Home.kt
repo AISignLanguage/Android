@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.recyclerview.widget.RecyclerView.Adapter
-import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import me.relex.circleindicator.CircleIndicator3
@@ -87,5 +85,15 @@ class Home : AppCompatActivity() {
             finish()
         }
 
+        val callLsit_btn = findViewById<ImageButton>(R.id.callList_btn) //전화번호부 화면으로 이동
+        callLsit_btn.setOnClickListener {
+            val intent = Intent(this, CallListPage::class.java)
+            startActivity(intent)
+        }
+        val camera_btn = findViewById<ImageButton>(R.id.cameraBtn) //카메라(동영상) 화면으로 이동
+        camera_btn.setOnClickListener{
+            val intent = Intent(this, CameraPage::class.java)
+            startActivity(intent)
+        }
     }
 }

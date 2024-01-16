@@ -31,6 +31,15 @@
             android:name=".KaKaoLoginActivity"
             android:exported="false" />
         <activity
+            android:name=".CameraPage"
+            android:exported="false" />
+        <activity
+            android:name=".VersionCheck"
+            android:exported="false" />
+        <activity
+            android:name=".FaqPage"
+            android:exported="false" />
+        <activity
             android:name=".News_item"
             android:exported="false" />
         <activity
@@ -61,7 +70,7 @@
             android:name=".Home"
             android:exported="false" />
         <activity
-            android:name=".CallList"
+            android:name=".CallListPage"
             android:exported="false" />
         <activity
             android:name=".PersonalInfo"
