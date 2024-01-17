@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -94,7 +95,7 @@ class Home : AppCompatActivity() {
             val intent = Intent(this, CallListPage::class.java)
             startActivity(intent)
         }
-        val camera_btn = findViewById<ImageButton>(R.id.cameraBtn) //카메라(동영상) 화면으로 이동
+        val camera_btn = findViewById<ImageButton>(R.id.CameraBtn) //카메라(동영상) 화면으로 이동
         camera_btn.setOnClickListener{
             val cameraPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
             if (cameraPermission != PackageManager.PERMISSION_GRANTED) {

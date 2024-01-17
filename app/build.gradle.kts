@@ -56,4 +56,12 @@ dependencies {
     implementation ("com.kakao.sdk:v2-navi:2.19.0") // 카카오내비
     implementation ("com.kakao.sdk:v2-cert:2.19.0") // 카카오 인증서비스
     implementation("androidx.core:core-splashscreen:1.0.1")
+
+    var camerax_version = ("1.1.0-beta01") //JetPack CameraX API
+    implementation ("androidx.camera:camera-core:${camerax_version}")
+    implementation ("androidx.camera:camera-camera2:${camerax_version}")
+    implementation ("androidx.camera:camera-lifecycle:${camerax_version}")
+    implementation ("androidx.camera:camera-video:${camerax_version}")
+    implementation ("androidx.camera:camera-view:${camerax_version}")
+    implementation ("androidx.camera:camera-extensions:${camerax_version}")
 }
