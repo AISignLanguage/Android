@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="20dp"
+    android:layout_margin="10dp"
     tools:context=".Dic_item">
 
     <ImageView
         android:id="@+id/dic_item"
-        android:layout_margin="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@drawable/recycleritem"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,17 +23,16 @@
         android:id="@+id/ex_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|bottom"
-        android:layout_margin="30dp"
+        android:text="엄청 신기해"
         android:background="@color/black"
+        android:textColor="@color/white"
         android:fontFamily="@font/nam"
         android:paddingStart="20dp"
-        android:paddingTop="5dp"
         android:paddingEnd="20dp"
+        android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:text="엄청 신기해"
-        android:textColor="@color/white"
-        android:textSize="22dp" />
-
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="10dp"
+        android:textSize="22dp"/>
 
 </FrameLayout>
