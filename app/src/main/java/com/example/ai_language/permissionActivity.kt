@@ -12,7 +12,7 @@ class permissionActivity : AppCompatActivity() {
 
         val checkButton = findViewById<ImageButton>(R.id.checkButton)
         checkButton.setOnClickListener {
-            val intent = Intent(this, Home::class.java)
+            val intent = Intent(this, TermsActivity::class.java)
             startActivity(intent)
             finish()
         }

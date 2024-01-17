@@ -20,7 +20,7 @@
         />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/reg_pro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:srcCompat="@tools:sample/avatars" />
@@ -36,12 +36,14 @@
         android:text="이름"
         />
     <EditText
+        android:id="@+id/reg_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:paddingStart="15dp"
         android:text="임다솔"
+        android:gravity="center"
         android:editable="false"
         />
     <TextView
@@ -56,12 +58,14 @@
         android:text="닉네임"
         />
     <EditText
+        android:id="@+id/reg_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:paddingStart="15dp"
         android:hint="닉네임 5자리 입력"
+        android:gravity="center"
         />
     <TextView
         android:layout_marginTop="40dp"
@@ -81,6 +85,7 @@
         android:layout_marginEnd="20dp"
         android:paddingStart="15dp"
         android:hint="생년월일 8자리 입력"
+        android:gravity="center"
         />
     <TextView
         android:layout_marginTop="40dp"
@@ -100,9 +105,10 @@
         android:layout_marginEnd="20dp"
         android:paddingStart="15dp"
         android:hint="휴대폰 번호 11자리 입력"
+        android:gravity="center"
         />
     <TextView
-        android:id="@+id/tag"
+        android:id="@+id/reg_next"
         android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:gravity="center"
