@@ -77,7 +77,7 @@
             android:layout_height="60dp"
             android:background="@drawable/user"  />
         <ImageButton
-            android:id="@+id/cameraBtn"
+            android:id="@+id/CameraBtn"
             android:layout_margin="10dp"
             android:layout_width="60dp"
             android:layout_height="60dp"

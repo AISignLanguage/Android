@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.ImageButton
 import android.Manifest
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.MediaStore
@@ -22,23 +23,22 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.core.Preview
 import androidx.camera.core.CameraSelector
 import android.util.Log
-import androidx.camera.core.Camera
-import androidx.camera.core.ImageAnalysis
+import android.widget.Button
 import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.ImageProxy
 import androidx.camera.video.FallbackStrategy
 import androidx.camera.video.MediaStoreOutputOptions
 import androidx.camera.video.Quality
 import androidx.camera.video.QualitySelector
 import androidx.camera.video.VideoRecordEvent
+import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.core.content.PermissionChecker
-import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class CameraPage : AppCompatActivity() {
 
+    private var imageCapture: ImageCapture? = null
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
     private lateinit var cameraExecutor: ExecutorService
@@ -54,7 +54,6 @@ class CameraPage : AppCompatActivity() {
             finish()
         }
 
-        val cameraBtn = findViewById<ImageButton>(R.id.cameraBtn)
         // Request camera permissions (카메라 권한 요청)
         if (allPermissionsGranted()) {
             startCamera()
@@ -63,18 +62,69 @@ class CameraPage : AppCompatActivity() {
                 this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
 
-        // Set up the listeners for take photo and video capture buttons
-        cameraBtn.setOnClickListener { captureVideo() }
+        val VideoBtn = findViewById<ImageButton>(R.id.CameraBtn)
+        val btn = findViewById<Button>(R.id.button2)
+
+        btn.setOnClickListener{ takePhoto() }
+        VideoBtn.setOnClickListener{ captureVideo(VideoBtn) }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
+
     }
-    private fun captureVideo() {
+
+    private fun takePhoto() {
+        // Get a stable reference of the modifiable image capture use case
+        val imageCapture = imageCapture ?: return
+
+        // Create time stamped name and MediaStore entry. (MediaStore 콘텐츠 값 생성)
+        val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
+            .format(System.currentTimeMillis())
+
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            // Android Q 이상- > RELATIVE_PATH 사용해서 저장 경로 지정.
+            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
+            }
+        }
+
+        // Create output options object which contains file + metadata (이미지 저장 옵션 설정)
+        // 이 객체에서 원하는 출력 방법 지정 가능
+        val outputOptions = ImageCapture.OutputFileOptions
+            .Builder(contentResolver,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                contentValues)
+            .build()
+
+        // Set up image capture listener, which is triggered after photo has been taken
+        // takePicture() 호출, 이미지 캡처 및 저장
+        // outputOptions, 실행자, 이미지 저장될 때 콜백 전달
+        imageCapture.takePicture(
+            outputOptions,
+            ContextCompat.getMainExecutor(this),
+            object : ImageCapture.OnImageSavedCallback {
+                override fun onError(exc: ImageCaptureException) {
+                    Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
+                }
+
+                // 캡쳐 성공 -> 사진을 저장
+                override fun onImageSaved(output: ImageCapture.OutputFileResults){
+                    Log.d(TAG, "Photo capture succeeded: ${output.savedUri}")
+                }
+            }
+        )
+    }
+
+    // Implements VideoCapture use case, including start and stop capturing.
+    private fun captureVideo(VideoBtn: ImageButton) {
         val videoCapture = this.videoCapture ?: return
-        val videoCaptureButton = findViewById<ImageButton>(R.id.cameraBtn)
 
-        videoCaptureButton.isEnabled = false //중복 녹화 방지
+        //중복 녹화 방지
+        VideoBtn.isEnabled = false
 
-        val curRecording = recording // 진행 중인 활성 녹화 세션이 있으면 중지하고 현재 recording 자원을 해제한다.
+        val curRecording = recording
+        // 진행 중인 활성 녹화 세션 중지
         if (curRecording != null) {
             // Stop the current recording session.
             curRecording.stop()
@@ -86,7 +136,7 @@ class CameraPage : AppCompatActivity() {
         val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
             .format(System.currentTimeMillis())
 
-        // 비디오 파일 메타데이터 설정
+        // 비디오 파일의 메타데이터 설정
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, name)
             put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4")
@@ -95,35 +145,35 @@ class CameraPage : AppCompatActivity() {
             }
         }
 
-        // 콘텐츠 외부 저장 위치를 옵션으로 설정
+        // 콘텐츠의 외부 저장 위치를 옵션으로 설정하기 위해
+        // 빌더를 만들고 인스턴스를 빌드
         val mediaStoreOutputOptions = MediaStoreOutputOptions
             .Builder(contentResolver, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
             .setContentValues(contentValues)
             .build()
 
 
-        // 비디오 캡처 출력 옵션을 설정하고 녹화 영상 출력을 위한 세션을 만든다.
+        // 비디오 캡처 출력 옵션을 설정하고 녹화 영상 출력을 위한 세션 생성
         recording = videoCapture.output
             .prepareRecording(this, mediaStoreOutputOptions)
             .apply {
-                // 오디오를 사용 설정
+                // 오디오 사용 설정
                 if (PermissionChecker.checkSelfPermission(this@CameraPage,
-                        Manifest.permission.RECORD_AUDIO) == PermissionChecker.PERMISSION_GRANTED)
+                        Manifest.permission.RECORD_AUDIO) ==
+                    PermissionChecker.PERMISSION_GRANTED)
                 {
                     withAudioEnabled()
                 }
             }
             .start(ContextCompat.getMainExecutor(this)) { recordEvent ->
-                // 새 녹음을 시작하고 리스너를 등록
+                // 새 녹음 시작, 리스너 등록
                 when(recordEvent) {
-                    // 요청 녹화를 시작하면 텍스트 전환
                     is VideoRecordEvent.Start -> {
-                        videoCaptureButton.apply {
-                            text = getString(R.string.stop_capture)
+                        VideoBtn.apply {
                             isEnabled = true
                         }
                     }
-                    // 녹화가 완료되면 메시지를 등록하고 다시 텍스트 전환
+                    // 녹화 완료
                     is VideoRecordEvent.Finalize -> {
                         if (!recordEvent.hasError()) {
                             val msg = "Video capture succeeded: " +
@@ -131,14 +181,15 @@ class CameraPage : AppCompatActivity() {
                             Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT)
                                 .show()
                             Log.d(TAG, msg)
-                        } else {
+                        }
+                        // 녹화 실패
+                        else {
                             recording?.close()
                             recording = null
                             Log.e(TAG, "Video capture ends with error: " +
                                     "${recordEvent.error}")
                         }
-                        videoCaptureButton.apply {
-                            text = getString(R.string.start_capture)
+                        VideoBtn.apply {
                             isEnabled = true
                         }
                     }
@@ -148,26 +199,38 @@ class CameraPage : AppCompatActivity() {
 
     private fun startCamera() {
         val viewFinder = findViewById<PreviewView>(R.id.viewFinder)
-        // ProcessCameraProvider를 인스턴스를 비동기적으로 가져오기 위한 리스너를 받아온다.
-        // CameraX가 수명 주기를 인식 -> 카메라를 열고 닫는 작업 X
+
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
-        // cameraProviderFuture에 리스너  추가
+        // Runnable 추가, 기본 스레드에서 실행되는 Executor 넣음
         cameraProviderFuture.addListener(Runnable {
             // Used to bind the lifecycle of cameras to the lifecycle owner
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-            // Preview 객체를 초기화 하고 뷰파인더에서 노출 영역 제공자를 가져온 다음 Preview에서 설정
+            // Preview 객체를 초기화 하고 viewFinder에서 setSurfaceProvider 가져온 다음 Preview에서 설정
             val preview = Preview.Builder()
                 .build()
                 .also {
                     it.setSurfaceProvider(viewFinder.surfaceProvider)
                 }
 
+            // imageCaputre 인스턴스를 빌드
+            imageCapture = ImageCapture.Builder().build()
+
+            // VideoCapture UseCase 생성
+            val recorder = Recorder.Builder()
+                .setQualitySelector(
+                    QualitySelector.from(
+                        Quality.HIGHEST,
+                    FallbackStrategy.higherQualityOrLowerThan(Quality.SD)))
+                .build()
+            videoCapture = VideoCapture.withOutput(recorder)
+
+
             // Select back camera as a default
-            // 후면 카메라를 선택하는 객체를 생성
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
+            // cameraProvider에 바인딩된 항목 제거 한 뒤,
             // 위에서 생성한 객체들을 cameraProvider에 바인딩
             try {
                 // Unbind use cases before rebinding
@@ -175,7 +238,7 @@ class CameraPage : AppCompatActivity() {
 
                 // Bind use cases to camera
                 cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview)
+                    this, cameraSelector, preview, imageCapture, videoCapture)
 
             } catch(exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
@@ -217,13 +280,12 @@ class CameraPage : AppCompatActivity() {
             if (allPermissionsGranted()) {
                 startCamera()
             } else {
-                Toast.makeText(
-                    this,
+                Toast.makeText(this,
                     "Permissions not granted by the user.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                    Toast.LENGTH_SHORT).show()
                 finish()
             }
         }
     }
+
 }

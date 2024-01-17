@@ -7,10 +7,9 @@
     android:layout_height="match_parent"
     tools:context=".CameraPage">
 
-    <!--dd-->
 
     <ImageButton
-        android:id="@+id/cameraBtn"
+        android:id="@+id/CameraBtn"
         android:layout_width="70dp"
         android:layout_height="30dp"
         android:layout_marginBottom="25dp"
@@ -46,9 +45,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/cameraBtn"
+        app:layout_constraintBottom_toTopOf="@+id/CameraBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:visibility="gone"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
