@@ -1,263 +1,256 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".TermsActivity">
 
+    <TextView
+        android:id="@+id/textTerms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin20"
+        android:layout_marginTop="@dimen/margin20"
+        android:text="손짓의순간 이용약관"
+        android:textSize="@dimen/text_size" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:paddingTop="10dp">
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/termsAllButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin30"
+            android:text="전체 동의"
+            android:textSize="20dp"/>
+
+    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textTerms"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:text="손짓의순간 이용약관"
-            android:textSize="24sp" />
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:paddingTop="10dp">
-
-            <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@+id/termsAllButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:text="전체 동의"
-                android:textSize="20dp"/>
-
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@color/black">
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="23dp">
-
-            <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@+id/termsButton1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-
-                android:text="[필수] 서비스 이용 권리"
-                android:textSize="16dp"/>
-
-            <Button
-                android:id="@+id/viewButton1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/termsButton1"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="80dp"
-                android:background="@drawable/text_button"
-                android:textColor="#808080"
-                android:textSize="12dp"
-                android:text="내용 보기"/>
-
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="23dp">
-
-            <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@+id/termsButton2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:text="[필수] 신원 정보 제공"
-                android:textSize="16dp"/>
-
-            <Button
-                android:id="@+id/viewButton2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/termsButton2"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="95dp"
-                android:background="@drawable/text_button"
-                android:textColor="#808080"
-                android:textSize="12dp"
-                android:text="내용 보기"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="23dp">
-
-            <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@+id/termsButton3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:text="[필수] 약관 게시"
-                android:textSize="16dp"/>
-
-            <Button
-                android:id="@+id/viewButton3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/termsButton3"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="130dp"
-                android:background="@drawable/text_button"
-                android:textColor="#808080"
-                android:textSize="12dp"
-                android:text="내용 보기"/>
-
-        </RelativeLayout>
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="23dp">
-
-            <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@+id/termsButton4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:text="[필수] 약관 개정"
-                android:textSize="16dp"/>
-
-            <Button
-                android:id="@+id/viewButton4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/termsButton4"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="130dp"
-                android:background="@drawable/text_button"
-                android:textColor="#808080"
-                android:textSize="12dp"
-                android:text="내용 보기"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="23dp">
-
-            <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@+id/termsButton5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:text="[필수] 회원정보 변경"
-                android:textSize="16dp"/>
-
-            <Button
-                android:id="@+id/viewButton5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="100dp"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@id/termsButton5"
-                android:background="@drawable/text_button"
-                android:text="내용 보기"
-                android:textColor="#808080"
-                android:textSize="12dp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="23dp">
-
-            <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@+id/termsButton6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:text="[필수] 회원정보 관리 의무"
-                android:textSize="16dp"/>
-
-            <Button
-                android:id="@+id/viewButton6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/termsButton6"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="65dp"
-                android:background="@drawable/text_button"
-                android:textColor="#808080"
-                android:textSize="12dp"
-                android:text="내용 보기"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="23dp">
-
-            <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@+id/termsButton7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:text="[필수] 우리의 의무"
-                android:textSize="16dp"/>
-
-            <Button
-                android:id="@+id/viewButton7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/termsButton7"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="115dp"
-                android:background="@drawable/text_button"
-                android:textColor="#808080"
-                android:textSize="12dp"
-                android:text="내용 보기"/>
-
-        </RelativeLayout>
-
-
-        <Button
-            android:id="@+id/submitButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="50dp"
-            android:background="@drawable/button"
-            android:text="확인"
-            android:textColor="@color/black" />
+        android:layout_height="2dp"
+        android:layout_marginTop="@dimen/margin5"
+        android:layout_marginLeft="@dimen/margin20"
+        android:layout_marginRight="@dimen/margin20"
+        android:background="@color/black">
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/padding23">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/termsButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin10"
+            android:layout_marginLeft="@dimen/margin20"
+
+            android:text="[필수] 서비스 이용 권리"
+            android:textSize="16dp"/>
+
+        <Button
+            android:id="@+id/viewButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/termsButton1"
+            android:layout_marginTop="@dimen/margin10"
+            android:layout_marginLeft="@dimen/margin80"
+            android:background="@drawable/text_button"
+            android:textColor="#808080"
+            android:textSize="12dp"
+            android:text="내용 보기"/>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/padding23">
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/termsButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin10"
+            android:layout_marginLeft="@dimen/margin20"
+            android:text="[필수] 신원 정보 제공"
+            android:textSize="16dp"/>
+
+        <Button
+            android:id="@+id/viewButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/termsButton2"
+            android:layout_marginTop="@dimen/margin10"
+            android:layout_marginLeft="@dimen/margin95"
+            android:background="@drawable/text_button"
+            android:textColor="#808080"
+            android:textSize="12dp"
+            android:text="내용 보기"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/padding23">
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/termsButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin10"
+            android:layout_marginLeft="@dimen/margin20"
+            android:text="[필수] 약관 게시"
+            android:textSize="16dp"/>
+
+        <Button
+            android:id="@+id/viewButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/termsButton3"
+            android:layout_marginTop="@dimen/margin10"
+            android:layout_marginLeft="@dimen/margin130"
+            android:background="@drawable/text_button"
+            android:textColor="#808080"
+            android:textSize="12dp"
+            android:text="내용 보기"/>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/padding23">
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/termsButton4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin10"
+            android:layout_marginLeft="@dimen/margin20"
+            android:text="[필수] 약관 개정"
+            android:textSize="16dp"/>
+
+        <Button
+            android:id="@+id/viewButton4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/termsButton4"
+            android:layout_marginTop="@dimen/margin10"
+            android:layout_marginLeft="@dimen/margin130"
+            android:background="@drawable/text_button"
+            android:textColor="#808080"
+            android:textSize="12dp"
+            android:text="내용 보기"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/padding23">
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/termsButton5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin10"
+            android:layout_marginLeft="@dimen/margin20"
+            android:text="[필수] 회원정보 변경"
+            android:textSize="16dp"/>
+
+        <Button
+            android:id="@+id/viewButton5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin100"
+            android:layout_marginTop="@dimen/margin10"
+            android:layout_toRightOf="@id/termsButton5"
+            android:background="@drawable/text_button"
+            android:text="내용 보기"
+            android:textColor="#808080"
+            android:textSize="12dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/padding23">
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/termsButton6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin10"
+            android:layout_marginLeft="@dimen/margin20"
+            android:text="[필수] 회원정보 관리 의무"
+            android:textSize="16dp"/>
+
+        <Button
+            android:id="@+id/viewButton6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/termsButton6"
+            android:layout_marginTop="@dimen/margin10"
+            android:layout_marginLeft="@dimen/margin65"
+            android:background="@drawable/text_button"
+            android:textColor="#808080"
+            android:textSize="12dp"
+            android:text="내용 보기"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/padding23">
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/termsButton7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin10"
+            android:layout_marginLeft="@dimen/margin20"
+            android:text="[필수] 우리의 의무"
+            android:textSize="16dp"/>
+
+        <Button
+            android:id="@+id/viewButton7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/termsButton7"
+            android:layout_marginTop="@dimen/margin10"
+            android:layout_marginLeft="@dimen/margin115"
+            android:background="@drawable/text_button"
+            android:textColor="#808080"
+            android:textSize="12dp"
+            android:text="내용 보기"/>
+
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/margin50"
+        android:background="@drawable/button"
+        android:text="확인"
+        android:textColor="@color/black" />
+
+
+</LinearLayout>
