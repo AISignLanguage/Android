@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
+    android:layout_height="250dp"
     >
     <FrameLayout
         android:layout_width="match_parent"
@@ -14,21 +14,23 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
-        <Button
-            android:layout_margin="30dp"
-            android:id="@+id/sign_out_ok"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:fontFamily="@font/nam"
-            android:textStyle="bold"
-            android:textSize="20dp"
-            android:textColor="@color/black"
-            android:text="@string/yes" />
 
-        <Button
+            <Button
+                android:id="@+id/sign_out_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/nam"
+                android:text="@string/yes"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <Button
             android:id="@+id/sign_out_no"
-            android:layout_margin="30dp"
+            android:layout_marginStart="10dp" android:layout_marginEnd="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"

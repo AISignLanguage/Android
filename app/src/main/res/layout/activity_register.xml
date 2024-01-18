@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|top"
+        android:background="@color/white"
+        android:orientation="vertical"
+        tools:context=".RegisterActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="회원가입"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="25dp"
+        android:layout_marginTop="10dp"/>
+
+    <ImageView
+        android:layout_marginTop="20dp"
+        android:id="@+id/reg_pro"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        tools:srcCompat="@drawable/profile" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:textSize="20dp"
+        android:fontFamily="@font/font_bd"
+        android:textStyle="bold"
+        android:text="이름"
+
+        />
+
+    <EditText
+        android:background="#EFF4FF"
+        android:id="@+id/reg_name"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:paddingStart="15dp"
+        android:gravity="start|center_vertical"
+        android:hint="이름 입력"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:textSize="20dp"
+        android:fontFamily="@font/font_bd"
+        android:textStyle="bold"
+        android:text="이메일"
+        />
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <EditText
+            android:background="#EFF4FF"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:paddingStart="15dp"
+            android:layout_weight="2"
+            android:gravity="start|center_vertical"
+            android:hint="example@email.com"
+            />
+        <androidx.appcompat.widget.AppCompatButton
+            android:contentDescription="중복확인 버튼"
+            android:background="@drawable/btn_skyblue"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_gravity="bottom"
+            android:fontFamily="@font/font_eb"
+            android:text="중복확인"
+            android:padding="1dp"
+            android:textSize="15dp"
+            android:textColor="@color/white"
+            />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:textSize="20dp"
+        android:fontFamily="@font/font_bd"
+        android:textStyle="bold"
+        android:text="비밀번호"
+        />
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:background="#EFF4FF"
+            android:layout_margin="20dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="45dp"
+            android:paddingStart="15dp"
+            android:gravity="start|center_vertical"
+            android:hint="영문, 숫자 조합 최대 8자 입력"
+            />
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:textSize="20dp"
+        android:fontFamily="@font/font_bd"
+        android:textStyle="bold"
+        android:text="닉네임"
+        />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <EditText
+            android:background="#EFF4FF"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:paddingStart="15dp"
+            android:layout_weight="2"
+            android:gravity="start|center_vertical"
+            android:hint="닉네임 최대 5자"
+            />
+        <androidx.appcompat.widget.AppCompatButton
+            android:background="@drawable/btn_skyblue"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_gravity="bottom"
+            android:fontFamily="@font/font_eb"
+            android:text="중복확인"
+            android:padding="1dp"
+            android:textSize="15dp"
+            android:textColor="@color/white"
+            />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:textSize="20dp"
+        android:fontFamily="@font/font_bd"
+        android:textStyle="bold"
+        android:text="생년월일"
+        />
+
+    <EditText
+        android:background="#EFF4FF"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:paddingStart="15dp"
+        android:gravity="start|center_vertical"
+        android:hint="이름 입력"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:textSize="20dp"
+        android:fontFamily="@font/font_bd"
+        android:textStyle="bold"
+        android:text="휴대폰 번호"
+        />
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <EditText
+            android:background="#EFF4FF"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:paddingStart="15dp"
+            android:layout_weight="2"
+            android:gravity="start|center_vertical"
+            android:hint="휴대폰 번호 8자리"
+            />
+        <androidx.appcompat.widget.AppCompatButton
+            android:background="@drawable/btn_skyblue"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_gravity="bottom"
+            android:fontFamily="@font/font_eb"
+            android:padding="10dp"
+            android:text="인증문자 전송"
+            android:textSize="15dp"
+            android:textColor="@color/white"
+            />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <EditText
+            android:background="#EFF4FF"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:paddingStart="15dp"
+            android:layout_weight="2"
+            android:gravity="start|center_vertical"
+            android:hint="인증번호 입력"
+            />
+        <androidx.appcompat.widget.AppCompatButton
+            android:background="@drawable/btn_skyblue"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_width="60dp"
+            android:layout_height="45dp"
+            android:layout_gravity="bottom"
+            android:fontFamily="@font/font_eb"
+            android:text="인증"
+            android:padding="5dp"
+            android:textSize="15dp"
+            android:textColor="@color/white"
+            />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <TextView
+        android:id="@+id/reg_next"
+        android:layout_margin="20dp"
+        android:layout_width="80dp"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:layout_height="40dp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/font_bd"
+        android:textStyle="bold"
+        android:text="확인"
+        android:background="@drawable/round_square"/>
+    <!--비밀번호 힌트 영문 숫자조합 11자리 미만-->
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</ScrollView>
