@@ -58,6 +58,18 @@
         android:gravity="center"
         android:textSize="15dp"/>
 
+    <TextView
+        android:id="@+id/sign_up_button"
+        android:layout_width="327.5dp"
+        android:layout_height="50dp"
+        android:background="@drawable/round_square2"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/font_bd"
+        android:text="회원 가입"
+        android:gravity="center"
+        android:textSize="15dp"/>
+
 
     <ImageView
         android:id="@+id/kko_login_btn"
