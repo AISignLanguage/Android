@@ -222,7 +222,7 @@ class CameraPage : AppCompatActivity() {
                 .setQualitySelector(
                     QualitySelector.from(
                         Quality.HIGHEST,
-                    FallbackStrategy.higherQualityOrLowerThan(Quality.SD)))
+                        FallbackStrategy.higherQualityOrLowerThan(Quality.SD)))
                 .build()
             videoCapture = VideoCapture.withOutput(recorder)
 
