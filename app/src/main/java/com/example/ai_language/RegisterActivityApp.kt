@@ -7,12 +7,13 @@ import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 
-class RegisterActivity : AppCompatActivity() {
+class RegisterActivityApp : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
+        setContentView(R.layout.activity_register_app)
 
         val nick = intent.getStringExtra("nick")
 
@@ -35,6 +36,7 @@ class RegisterActivity : AppCompatActivity() {
         regNext.setOnClickListener {
             val intent = Intent(this,permissionActivity::class.java)
             startActivity(intent)
+            Toast.makeText(this, "회원가입에 성공하셨습니다!", Toast.LENGTH_SHORT).show()
             finish()
         }
     }
