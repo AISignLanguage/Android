@@ -128,40 +128,24 @@
         android:textSize="20dp"
         android:fontFamily="@font/font_bd"
         android:textStyle="bold"
-        android:text="휴대폰 번호"
+        android:text="카카오 인증"
         />
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <EditText
-            android:background="#EFF4FF"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:paddingStart="15dp"
-            android:layout_weight="2"
-            android:gravity="start|center_vertical"
-            android:hint="휴대폰 번호 8자리"
-            />
+
         <androidx.appcompat.widget.AppCompatButton
-            android:background="@drawable/btn_skyblue"
+            android:background="@drawable/round_square2"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
-            android:layout_width="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_gravity="bottom"
             android:fontFamily="@font/font_eb"
             android:padding="10dp"
-            android:text="인증문자 전송"
+            android:text="KAKAO TALK 인증하기"
             android:textSize="15dp"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             />
-    </androidx.appcompat.widget.LinearLayoutCompat>
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
