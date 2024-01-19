@@ -114,7 +114,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
                 val profileImageUrl = user.kakaoAccount?.profile?.thumbnailImageUrl
                 Log.d("결과", "닉네임: $nickname, 프로필 사진 URL: $profileImageUrl")
 
-                val intent = Intent(ctxt, RegisterActivity::class.java).apply {
+                val intent = Intent(ctxt, RegisterActivityApp::class.java).apply {
                     putExtra("nick", nickname)
                     putExtra("profile", profileImageUrl)
                 }
