@@ -36,10 +36,16 @@ class CallListPage : AppCompatActivity() {
         CallList.add(CallListItem("임다솔", "010-5322-1345"))
         CallList.add(CallListItem("신정인", "010-1209-0084"))
         CallList.add(CallListItem("신정인", "010-1209-0084"))
+        CallList.add(CallListItem("신정인", "010-1209-0084"))
+        CallList.add(CallListItem("신정인", "010-1209-0084"))
 
         InviteList.add(InviteListItem("방경원", "010-8219-5021"))
         InviteList.add(InviteListItem("김모모", "010-8884-1821"))
         InviteList.add(InviteListItem("임멍멍", "010-1523-8445"))
+        InviteList.add(InviteListItem("임멍멍", "010-1523-8445"))
+        InviteList.add(InviteListItem("임멍멍", "010-1523-8445"))
+        InviteList.add(InviteListItem("임멍멍", "010-1523-8445"))
+
 
         //전화버튼 클릭
         CallListAdapter.itemClickListener = object : CallListAdapter.OnItemClickListener {

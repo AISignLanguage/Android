@@ -12,35 +12,34 @@
     <ImageView
         android:src="@drawable/heart"
         android:layout_margin="5dp"
-        android:layout_width="50dp"
-        android:layout_height="50dp"/>
+        android:layout_width="40dp"
+        android:layout_height="40dp"/>
+
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:text="김모모"
         android:gravity="center"
-        android:textSize="20dp"
-        android:fontFamily="@font/nam"
-        android:layout_margin="5dp" />
+        android:textSize="18dp"
+        android:fontFamily="@font/nam" />
+
     <TextView
         android:id="@+id/phoneNumber"
-        android:layout_width="wrap_content"
+        android:layout_width="170dp"
         android:layout_height="match_parent"
         android:text="010 - 1234 - 5678"
-        android:textSize="20dp"
+        android:textSize="18dp"
         android:fontFamily="@font/nam"
-        android:layout_margin="5dp"
         android:gravity="center" />
 
     <ImageButton
         android:id="@+id/inviteBtn"
-        android:src="@drawable/invite_message"
+        android:layout_width="40dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+
         android:background="@android:color/transparent"
         android:scaleType="centerCrop"
-        android:padding="0dp"
-        android:layout_marginStart="10dp"
-        android:layout_gravity="center"
-        android:layout_width="50dp"
-        android:layout_height="40dp"/>
+        android:src="@drawable/invite_message" />
 </LinearLayout>

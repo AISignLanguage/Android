@@ -23,7 +23,9 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.core.Preview
 import androidx.camera.core.CameraSelector
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.video.FallbackStrategy
 import androidx.camera.video.MediaStoreOutputOptions
@@ -119,6 +121,7 @@ class CameraPage : AppCompatActivity() {
     // Implements VideoCapture use case, including start and stop capturing.
     private fun captureVideo(VideoBtn: ImageButton) {
         val videoCapture = this.videoCapture ?: return
+        val recImg = findViewById<ImageView>(R.id.recImg)
 
         //중복 녹화 방지
         VideoBtn.isEnabled = false
@@ -172,6 +175,8 @@ class CameraPage : AppCompatActivity() {
                         VideoBtn.apply {
                             isEnabled = true
                         }
+                        // 비디오 녹화가 시작되면 recImg를 VISIBLE로 설정
+                        recImg.visibility = View.VISIBLE
                     }
                     // 녹화 완료
                     is VideoRecordEvent.Finalize -> {
@@ -192,6 +197,8 @@ class CameraPage : AppCompatActivity() {
                         VideoBtn.apply {
                             isEnabled = true
                         }
+                        // 비디오 녹화가 완료되면 recImg를 INVISIBLE로 설정
+                        recImg.visibility = View.INVISIBLE
                     }
                 }
             }
