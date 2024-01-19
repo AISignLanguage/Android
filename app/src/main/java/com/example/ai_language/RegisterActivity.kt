@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -71,6 +72,7 @@ class RegisterActivity : AppCompatActivity() {
         regNext.setOnClickListener {
             val intent = Intent(this,permissionActivity::class.java)
             startActivity(intent)
+            Toast.makeText(this, "회원가입에 성공하셨습니다!", Toast.LENGTH_SHORT).show()
             finish()
         }
     }
