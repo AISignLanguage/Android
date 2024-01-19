@@ -63,7 +63,7 @@
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
@@ -130,14 +130,15 @@
 
     </RadioGroup>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/unregisterButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
         android:layout_marginTop="80dp"
-        android:background="@drawable/text_button"
-        android:fontFamily="@font/nam"
-        android:textColor="@color/black"
+        android:background="@drawable/round_square"
+        android:fontFamily="@font/font_eb"
+        android:textColor="@color/white"
+        android:textAlignment="center"
         android:textSize="15dp"
         android:text="탈퇴하기"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -154,7 +155,6 @@
         android:layout_marginBottom="5dp"
         android:background="@drawable/edit_square"
         android:inputType="text"
-        android:text=""
         app:layout_constraintBottom_toTopOf="@+id/unregisterButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
