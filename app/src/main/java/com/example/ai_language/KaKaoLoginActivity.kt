@@ -32,6 +32,13 @@ class KaKaoLoginActivity : AppCompatActivity() {
             finish()
         }
 
+        val sinUpBtn = findViewById<TextView>(R.id.sign_up_button)
+        sinUpBtn.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
 
         val kakaoBtn = findViewById<ImageView>(R.id.kko_login_btn)
         kakaoBtn.setOnClickListener {

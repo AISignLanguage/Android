@@ -1,2 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <dimen name="text_size">12sp</dimen>
+    <dimen name="padding23">12dp</dimen>
+    <dimen name="margin5">3dp</dimen>
+    <dimen name="margin10">5dp</dimen>
+    <dimen name="margin30">15dp</dimen>
+    <dimen name="margin20">10dp</dimen>
+    <dimen name="margin50">25dp</dimen>
+    <dimen name="margin65">33dp</dimen>
+    <dimen name="margin80">40dp</dimen>
+    <dimen name="margin95">48dp</dimen>
+    <dimen name="margin100">50dp</dimen>
+    <dimen name="margin115">58dp</dimen>
+    <dimen name="margin130">65dp</dimen>
+
+</resources>
