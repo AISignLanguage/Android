@@ -21,11 +21,17 @@ class KaKaoLoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_ka_kao_login)
 
 
+        //로그인 버튼 -> 아이디 비번 확인만 없으면 없다고 메세지 (DB확인)
+        //카카오 버튼, 회원가입 버튼 -> 회원가입 버튼은 바로, 카카오 버튼은 DB확인 후 사용자가 처음접속이면 회원가입으로, 아니면 바로 HOME
+
         val signInBtn = findViewById<TextView>(R.id.sign_in_button)
         signInBtn.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
+
             //권한 동의 했으면 Home으로
             //처음 접속하는 거면 register로
+
+            //if(DB탐색 해서 사용자가 있으면)
+            val intent = Intent(this, RegisterActivity::class.java)
             intent.putExtra("nick", "사용자${ Random.nextInt(10000)}")
             intent.putExtra("profile", "https://cdn-icons-png.flaticon.com/128/149/149071.png")
             startActivity(intent)
@@ -35,6 +41,8 @@ class KaKaoLoginActivity : AppCompatActivity() {
         val sinUpBtn = findViewById<TextView>(R.id.sign_up_button)
         sinUpBtn.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
+            intent.putExtra("nick", "사용자${ Random.nextInt(10000)}")
+            intent.putExtra("profile", "https://cdn-icons-png.flaticon.com/128/149/149071.png")
             startActivity(intent)
             finish()
         }
@@ -106,7 +114,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
                 val profileImageUrl = user.kakaoAccount?.profile?.thumbnailImageUrl
                 Log.d("결과", "닉네임: $nickname, 프로필 사진 URL: $profileImageUrl")
 
-                val intent = Intent(ctxt, RegisterActivity::class.java).apply {
+                val intent = Intent(ctxt, RegisterActivityApp::class.java).apply {
                     putExtra("nick", nickname)
                     putExtra("profile", profileImageUrl)
                 }

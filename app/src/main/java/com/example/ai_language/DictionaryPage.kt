@@ -156,7 +156,7 @@ class DictionaryPage : AppCompatActivity(),DicAdapter.OnItemClickListener {
         setContentView(R.layout.activity_dictionary_page)
 
 
-        dicViewModel = ViewModelProvider(this).get(DictionaryViewModel::class.java)
+        dicViewModel = ViewModelProvider(this)[DictionaryViewModel::class.java]
 
         val home_btn = findViewById<ImageButton>(R.id.home_btn_dic)
         home_btn.setOnClickListener{
@@ -174,11 +174,12 @@ class DictionaryPage : AppCompatActivity(),DicAdapter.OnItemClickListener {
         // 여러 Drawable 리소스 ID를 가져와 Uri로 변환하여 itemList에 추가
         val drawableResId1 = R.drawable.recycleritem // Drawable 리소스 ID 1
         val drawableUri1 = drawableResourceIdToUri(this, drawableResId1)
-        dicViewModel.dic_data.value?.add(DicPic(drawableUri1, "설명 1")) // 설명 텍스트 1
+        dicViewModel.dicAddData(DicPic(drawableUri1, "설명 1"))
 
         val drawableResId2 = R.drawable.recycleritem // Drawable 리소스 ID 2
         val drawableUri2 = drawableResourceIdToUri(this, drawableResId2)
-        dicViewModel.dic_data.value?.add(DicPic(drawableUri2, "설명 2")) // 설명 텍스트 1
+        dicViewModel.dicAddData(DicPic(drawableUri2, "설명 2"))
+
 
         // GridLayoutManager를 사용하여 2열 그리드로 설정
         val layoutManager = GridLayoutManager(this, 2)
@@ -189,9 +190,7 @@ class DictionaryPage : AppCompatActivity(),DicAdapter.OnItemClickListener {
         val adapter = dicViewModel.dic_data.value?.let { DicAdapter(it, this) }
         rv_dic.adapter = adapter
 
-
-
-        dicViewModel.tag_data.value?.add(Tagdata("전체"))
+        dicViewModel.tagAddData(Tagdata("전체"))
 
 
         val layoutManager2 = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
@@ -199,6 +198,7 @@ class DictionaryPage : AppCompatActivity(),DicAdapter.OnItemClickListener {
 
         val adapter2 = dicViewModel.tag_data.value?.let { TagAdapter(it) }
         rv_tag.adapter = adapter2
+
 
 
 
