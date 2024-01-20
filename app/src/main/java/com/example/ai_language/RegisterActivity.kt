@@ -37,9 +37,9 @@ class RegisterActivity : AppCompatActivity() {
 
     private val STORAGE_PERMISSION_CODE = 1
     private val SMS_PERMISSION_CODE = 2
-    private val ACCOUNT_SID = R.string.SID
-    private val AUTH_TOKEN = R.string.TK
-    private val MESSAGIING_SERVICE = R.string.MS
+    private val ACCOUNT_SID = "${R.string.SID}"
+    private val AUTH_TOKEN = "${R.string.TK}"
+    private val MESSAGIING_SERVICE = "${R.string.MS}"
 
     lateinit var profile: ImageView
     private val galleryLauncher: ActivityResultLauncher<Intent> =
