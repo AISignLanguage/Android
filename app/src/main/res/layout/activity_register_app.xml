@@ -132,6 +132,7 @@
         />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/kakao_ok"
             android:background="@drawable/round_square2"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
@@ -152,6 +153,7 @@
         android:orientation="horizontal"
         >
         <EditText
+            android:id="@+id/kakao_con_et"
             android:background="#EFF4FF"
             android:layout_marginStart="20dp"
             android:layout_marginBottom="20dp"
@@ -164,6 +166,7 @@
             android:hint="인증번호 입력"
             />
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/kakao_con"
             android:background="@drawable/btn_skyblue"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"

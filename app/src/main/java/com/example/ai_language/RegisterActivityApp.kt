@@ -1,8 +1,12 @@
 package com.example.ai_language
+
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -17,10 +21,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
+import com.kakao.sdk.talk.TalkApiClient
+import android.widget.Button as B
+import kotlin.random.Random
 
 class RegisterActivityApp : AppCompatActivity() {
     private val STORAGE_PERMISSION_CODE = 1
-
+    var randomSixDigitNumber = "000000"
     lateinit var profile: ImageView
     private val galleryLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -30,11 +37,77 @@ class RegisterActivityApp : AppCompatActivity() {
                 profile.setImageURI(selectedImageUri)
             }
         }
+
+    private fun sendSMS(message: String) {
+        // 텍스트 메시지 생성
+        val templateId = 103256L // 카카오 개발자 콘솔에서 확인한 템플릿 ID
+
+// User Argument에 해당하는 값을 전달하는 Map 생성
+        val templateArgs = mapOf(
+            "randomSixDigitNumber" to message // 동적으로 변경할 상품 설명
+        )
+
+        TalkApiClient.instance.sendCustomMemo(templateId, templateArgs) { error ->
+            if (error != null) {
+                Log.e(TAG, "메시지 보내기 실패", error)
+            } else {
+                Log.i(TAG, "메시지 보내기 성공")
+            }
+        }
+    }
+
+        private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_app)
 
+
         val nick = intent.getStringExtra("nick")
+
+
+
+        val kakao_ok = findViewById<B>(R.id.kakao_ok)
+        val kakaoConET = findViewById<EditText>(R.id.kakao_con_et)
+        val kakaoKon = findViewById<B>(R.id.kakao_con)
+        kakaoConET.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                // 사용자가 EditText에 다시 입력을 시작할 때
+                kakaoConET.setTextColor(Color.BLACK) // 텍스트 색상을 검은색으로 변경
+                kakaoConET.text.clear() // EditText의 텍스트를 지웁니다.
+            }
+        }
+        kakaoConET.setOnClickListener {
+            kakaoConET.setTextColor(Color.BLACK) // 텍스트 색상을 검은색으로 변경
+            kakaoConET.text.clear() // EditText의 텍스트를 지웁니다.
+        }
+        kakao_ok.setOnClickListener {
+            val random = Random.Default
+            randomSixDigitNumber = random.nextInt(100000, 999999).toString() // 범위를 100000부터 999999까지로 지정하여 6자리 랜덤 숫자 생성
+            sendSMS("인증번호는 $randomSixDigitNumber 입니다.")
+        }
+        kakaoKon.setOnClickListener {
+            if(kakaoConET.text.toString() == randomSixDigitNumber){
+                kakaoConET.setTextColor(Color.GREEN)
+                kakaoConET.setText("인증되었습니다!")
+                kakaoConET.isEnabled = false
+                Log.d("번호",randomSixDigitNumber  )
+                Log.d("번호",randomSixDigitNumber  )
+                kakaoKon.isEnabled = false
+            }
+            else if(kakaoConET.text.toString() == "000000"){
+                kakaoConET.setTextColor(Color.RED)
+                kakaoConET.setText("인증 실패!")
+                Log.d("번호",randomSixDigitNumber)
+            }
+            else{
+                kakaoConET.setTextColor(Color.RED)
+                kakaoConET.setText("인증 실패!")
+                Log.d("번호",randomSixDigitNumber)
+            }
+        }
 
         val regName = findViewById<EditText>(R.id.reg_name)
         regName.setText(nick)
