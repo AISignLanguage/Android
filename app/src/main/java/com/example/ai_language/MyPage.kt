@@ -42,6 +42,12 @@ class MyPage : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val term = findViewById<TextView>(R.id.terms)
+        term.setOnClickListener {
+            val intent = Intent(this, TermsActivity::class.java)
+            startActivity(intent)
+        }
+
         val sign_out = findViewById<TextView>(R.id.sign_out)
         sign_out.setOnClickListener {
             val dialog = SignoutDialog(this)

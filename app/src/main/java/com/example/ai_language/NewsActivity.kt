@@ -1,6 +1,5 @@
 package com.example.ai_language
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,17 +9,13 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-data class NewsItem(
-    var title: String,
-    var content: String,
-    var imageResourceId: Int
-)
 
-class NewsAdapter(val context: Context, val newsList: List<NewsItem>) :
+class NewsAdapter(private val viewModel: NewsViewModel) :
     RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
     inner class NewsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -34,43 +29,45 @@ class NewsAdapter(val context: Context, val newsList: List<NewsItem>) :
     }
 
     override fun getItemCount(): Int {
-        return newsList.size
+        return viewModel.newsList.value?.size ?: 0
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        val newsItem = newsList[position]
-        holder.titleTextView.text = newsItem.title
-        holder.contentTextView.text = newsItem.content
-        //holder.imageView.setImageResource(newsItem.imageResourceId)
-        Glide.with(holder.itemView)
-            .load(newsItem.imageResourceId)
-            .into(holder.imageView)
+        val newsItem = viewModel.newsList.value?.get(position)
+        newsItem?.let {
+            holder.titleTextView.text = it.title
+            holder.contentTextView.text = it.content
+            Glide.with(holder.itemView)
+                .load(it.imageResourceId)
+                .into(holder.imageView)
+        }
     }
 }
 
 class NewsActivity : AppCompatActivity() {
+
+    private lateinit var viewModel: NewsViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_news)
+        setContentView(R.layout.activity_news) // 이 부분을 주석 해제하여 레이아웃을 설정합니다.
 
-        val newsList = listOf(
-            NewsItem("News Title 1", "Content 1", R.drawable.newitem),
-            NewsItem("News Title 2", "Content 2", R.drawable.newitem),
-            NewsItem("News Title 3", "Content 3", R.drawable.newitem)
-        )
+        viewModel = ViewModelProvider(this)[NewsViewModel::class.java]
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerViewNews)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        val adapter = NewsAdapter(this, newsList)
+        val adapter = NewsAdapter(viewModel)
         recyclerView.adapter = adapter
 
         val homeButton = findViewById<ImageButton>(R.id.imageButton)
         homeButton.setOnClickListener{
-            val intent = Intent(this,Home::class.java)
+            val intent = Intent(this, Home::class.java)
             startActivity(intent)
             finish()
         }
 
+        viewModel.newsList.observe(this, { newsList ->
+            adapter.notifyDataSetChanged()
+        })
 
     }
 }

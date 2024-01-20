@@ -1,74 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".TermsActivity">
+    tools:context=".TermsActivity"
+    android:background="@color/white">
 
-    <TextView
-        android:id="@+id/textTerms"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:text="손짓의순간 이용약관"
-        android:textSize="24sp" />
-
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        android:paddingTop="10dp">
-
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/termsAllButton"
+        <TextView
+            android:id="@+id/textTerms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:text="전체 동의"
-            android:textSize="20dp"/>
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="80dp"
+            android:text="손짓의순간 이용약관"
+            android:textStyle="bold"
+            android:textSize="24sp" />
 
-    </RelativeLayout>
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/text_button"
+            android:text="닫기"
+            android:textStyle="bold"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:layout_marginLeft="40dp"
+        android:text="서비스 이용약관 및 개인정보 처리방침" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:background="@color/black">
+        android:background="#808080">
 
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="23dp">
+        android:paddingLeft="23dp"
+        android:paddingTop="15dp">
 
-        <androidx.appcompat.widget.AppCompatCheckBox
+        <TextView
+            android:id="@+id/termsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:text="0. 서비스 이용 약관"
+            android:textStyle="bold"
+            android:textSize="16dp"/>
+
+        <Button
+            android:id="@+id/viewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/text_button"
+            android:textColor="#808080"
+            android:textSize="12dp"
+            android:text="내용 보기"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="23dp"
+        android:paddingTop="15dp">
+
+        <TextView
             android:id="@+id/termsButton1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-
-            android:text="[필수] 서비스 이용 권리"
+            android:layout_marginLeft="15dp"
+            android:text="1. 서비스 이용 권리"
+            android:textStyle="bold"
             android:textSize="16dp"/>
 
         <Button
             android:id="@+id/viewButton1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/termsButton1"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="80dp"
+            android:layout_alignParentRight="true"
             android:background="@drawable/text_button"
             android:textColor="#808080"
             android:textSize="12dp"
@@ -80,24 +116,24 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="23dp">
+        android:paddingLeft="23dp"
+        android:paddingTop="15dp">
 
-        <androidx.appcompat.widget.AppCompatCheckBox
+        <TextView
             android:id="@+id/termsButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:text="[필수] 신원 정보 제공"
+            android:layout_marginLeft="15dp"
+            android:text="2. 신원 정보 제공"
+            android:textStyle="bold"
             android:textSize="16dp"/>
 
         <Button
             android:id="@+id/viewButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/termsButton2"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="95dp"
+            android:layout_alignParentRight="true"
             android:background="@drawable/text_button"
             android:textColor="#808080"
             android:textSize="12dp"
@@ -108,24 +144,24 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="23dp">
+        android:paddingLeft="23dp"
+        android:paddingTop="15dp">
 
-        <androidx.appcompat.widget.AppCompatCheckBox
+        <TextView
             android:id="@+id/termsButton3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:text="[필수] 약관 게시"
+            android:layout_marginLeft="15dp"
+            android:text="3. 약관 게시"
+            android:textStyle="bold"
             android:textSize="16dp"/>
 
         <Button
             android:id="@+id/viewButton3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/termsButton3"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="130dp"
+            android:layout_alignParentRight="true"
             android:background="@drawable/text_button"
             android:textColor="#808080"
             android:textSize="12dp"
@@ -137,24 +173,24 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="23dp">
+        android:paddingLeft="23dp"
+        android:paddingTop="15dp">
 
-        <androidx.appcompat.widget.AppCompatCheckBox
+        <TextView
             android:id="@+id/termsButton4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:text="[필수] 약관 개정"
+            android:layout_marginLeft="15dp"
+            android:text="4. 약관 개정"
+            android:textStyle="bold"
             android:textSize="16dp"/>
 
         <Button
             android:id="@+id/viewButton4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/termsButton4"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="130dp"
+            android:layout_alignParentRight="true"
             android:background="@drawable/text_button"
             android:textColor="#808080"
             android:textSize="12dp"
@@ -165,24 +201,24 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="23dp">
+        android:paddingLeft="23dp"
+        android:paddingTop="15dp">
 
-        <androidx.appcompat.widget.AppCompatCheckBox
+        <TextView
             android:id="@+id/termsButton5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:text="[필수] 회원정보 변경"
+            android:layout_marginLeft="15dp"
+            android:text="5. 회원정보 변경"
+            android:textStyle="bold"
             android:textSize="16dp"/>
 
         <Button
             android:id="@+id/viewButton5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:layout_marginTop="10dp"
-            android:layout_toRightOf="@id/termsButton5"
+            android:layout_alignParentRight="true"
             android:background="@drawable/text_button"
             android:text="내용 보기"
             android:textColor="#808080"
@@ -193,24 +229,24 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="23dp">
+        android:paddingLeft="23dp"
+        android:paddingTop="15dp">
 
-        <androidx.appcompat.widget.AppCompatCheckBox
+        <TextView
             android:id="@+id/termsButton6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:text="[필수] 회원정보 관리 의무"
+            android:layout_marginLeft="15dp"
+            android:text="6. 회원정보 관리 의무"
+            android:textStyle="bold"
             android:textSize="16dp"/>
 
         <Button
             android:id="@+id/viewButton6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/termsButton6"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="65dp"
+            android:layout_alignParentRight="true"
             android:background="@drawable/text_button"
             android:textColor="#808080"
             android:textSize="12dp"
@@ -218,45 +254,33 @@
 
     </RelativeLayout>
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="23dp">
+        android:paddingLeft="23dp"
+        android:paddingTop="15dp">
 
-        <androidx.appcompat.widget.AppCompatCheckBox
+        <TextView
             android:id="@+id/termsButton7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:text="[필수] 우리의 의무"
-            android:textSize="16dp"/>
+            android:text="7. 우리의 의무"
+            android:textStyle="bold"
+            android:textSize="16dp" />
 
         <Button
             android:id="@+id/viewButton7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/termsButton7"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="115dp"
+            android:layout_alignParentRight="true"
             android:background="@drawable/text_button"
+            android:text="내용 보기"
             android:textColor="#808080"
-            android:textSize="12dp"
-            android:text="내용 보기"/>
+            android:textSize="12dp" />
 
     </RelativeLayout>
 
-
-    <Button
-        android:id="@+id/submitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/button"
-        android:text="확인"
-        android:textColor="@color/black" />
-
-
 </LinearLayout>
-</ScrollView>
