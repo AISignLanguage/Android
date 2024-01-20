@@ -6,6 +6,7 @@ plugins {
 android {
     namespace = "com.example.ai_language"
     compileSdk = 34
+
     defaultConfig {
         applicationId = "com.example.ai_language"
         minSdk = 29
@@ -55,9 +56,8 @@ dependencies {
     implementation ("com.kakao.sdk:v2-navi:2.19.0") // 카카오내비
     implementation ("com.kakao.sdk:v2-cert:2.19.0") // 카카오 인증서비스
     implementation("androidx.core:core-splashscreen:1.0.1")
-    dependencies {
-        implementation("com.twilio.sdk:twilio:8.32.0") // Twilio 라이브러리 버전에 따라 변경 가능
-    }
+    implementation ("com.squareup.okhttp3:okhttp:4.9.2")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     var camerax_version = ("1.1.0-beta01") //JetPack CameraX API
     implementation ("androidx.camera:camera-core:${camerax_version}")
     implementation ("androidx.camera:camera-camera2:${camerax_version}")

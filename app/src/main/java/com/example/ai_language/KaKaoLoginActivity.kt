@@ -35,7 +35,6 @@ class KaKaoLoginActivity : AppCompatActivity() {
             intent.putExtra("nick", "사용자${ Random.nextInt(10000)}")
             intent.putExtra("profile", "https://cdn-icons-png.flaticon.com/128/149/149071.png")
             startActivity(intent)
-            finish()
         }
 
         val sinUpBtn = findViewById<TextView>(R.id.sign_up_button)
@@ -56,7 +55,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
 
 
     private fun kakaoLogin(ctxt: Context) {
-        val intent = Intent(ctxt, RegisterActivity::class.java)
+        val intent = Intent(ctxt, RegisterActivityApp::class.java)
         // 카카오계정으로 로그인 공통 callback 구성
         // 카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->

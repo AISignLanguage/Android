@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.telephony.SmsManager
+
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -22,10 +23,23 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import kotlin.random.Random
 import android.Manifest
+import android.util.Base64
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.FormBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.IOException
+
 class RegisterActivity : AppCompatActivity() {
 
     private val STORAGE_PERMISSION_CODE = 1
     private val SMS_PERMISSION_CODE = 2
+    private val ACCOUNT_SID = R.string.SID
+    private val AUTH_TOKEN = R.string.TK
+    private val MESSAGIING_SERVICE = R.string.MS
 
     lateinit var profile: ImageView
     private val galleryLauncher: ActivityResultLauncher<Intent> =
@@ -37,8 +51,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
-    // SMS를 보내는 함수
-    fun sendSMS(phoneNumber: String, message: String) {
+    fun sendSMS2(phoneNumber: String, message: String) {
         val smsManager = SmsManager.getDefault()
         val sentIntent = PendingIntent.getBroadcast(
             applicationContext,
@@ -50,6 +63,40 @@ class RegisterActivity : AppCompatActivity() {
         smsManager.sendTextMessage(phoneNumber, null, message, sentIntent, null)
     }
 
+    // SMS를 보내는 함수
+
+    private fun sendSMS(to: String, sms: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val client = OkHttpClient()
+                // 업데이트된 URI
+                val url = "https://api.twilio.com/2010-04-01/Accounts/$ACCOUNT_SID/Messages"
+                val base64EncodedCredentials = "Basic " + Base64.encodeToString("$ACCOUNT_SID:$AUTH_TOKEN".toByteArray(), Base64.NO_WRAP)
+
+                val body = FormBody.Builder()
+                    .add("From", MESSAGIING_SERVICE) // 메시징 서비스 ID
+                    .add("To", to)
+                    .add("Body", sms)
+                    .build()
+
+                val request = Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .header("Authorization", base64EncodedCredentials)
+                    .build()
+
+                val response = client.newCall(request).execute()
+                withContext(Dispatchers.Main) {
+                    Log.d("RegisterActivity", "sendSMS: " + response.body?.string())
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    Log.d("Error", "sendSMS: " + e.message)
+                }
+            }
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -71,10 +118,13 @@ class RegisterActivity : AppCompatActivity() {
             else {
                 val random = Random.Default
                 val randomSixDigitNumber: Int = random.nextInt(100000, 999999) // 범위를 100000부터 999999까지로 지정하여 6자리 랜덤 숫자 생성
-                val num = convertPhoneNumber(phNum)
+                val num = convertPhoneNumber(phNum) // 폰넘버
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
-                    sendSMS(num, "[손짓의 순간] 인증번호는 ${randomSixDigitNumber} 입니다.")
-                    Log.d("ㅇ", num,)
+                    //sendSMS(num,"[손짓의 순간] 인증번호는 ${randomSixDigitNumber} 입니다.") -> 실제비용청구되므로 연습할땐 아래코드로
+                    sendSMS2(num,"[손짓의 순간] 인증번호는 ${randomSixDigitNumber} 입니다.")
+
+
+                    Log.d("왔",num)
                 }
                 else {
                     ActivityCompat.requestPermissions(
