@@ -61,11 +61,20 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation ("com.squareup.okhttp3:okhttp:4.9.2")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
-    var camerax_version = ("1.1.0-beta01") //JetPack CameraX API
+
+    //JetPack CameraX API
+    var camerax_version = ("1.1.0-beta01")
     implementation ("androidx.camera:camera-core:${camerax_version}")
     implementation ("androidx.camera:camera-camera2:${camerax_version}")
     implementation ("androidx.camera:camera-lifecycle:${camerax_version}")
     implementation ("androidx.camera:camera-video:${camerax_version}")
     implementation ("androidx.camera:camera-view:${camerax_version}")
     implementation ("androidx.camera:camera-extensions:${camerax_version}")
+
+    // ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
+    // LiveData
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
+    //KTX
+    implementation ("androidx.fragment:fragment-ktx:1.3.3")
 }
