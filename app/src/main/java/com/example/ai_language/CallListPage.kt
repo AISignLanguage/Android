@@ -41,7 +41,7 @@ class CallListPage : AppCompatActivity() {
             callListAdapter.notifyDataSetChanged()
         })
 
-        //RecyclerView 초기화 및 어댑터 설정 - 앱 비사용자
+        //RecyclerView 초기화 및 어댑터 설정 - 앱 비 사용자
         val rv_invite = findViewById<RecyclerView>(R.id.rv_invite)
         val InviteListAdapter = InviteListAdapter(inviteViewModel)
         rv_invite.adapter = InviteListAdapter
