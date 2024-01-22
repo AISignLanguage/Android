@@ -12,15 +12,23 @@ data class NewsViewModelItem(
 
 class NewsViewModel : ViewModel() {
     private val _newsList = MutableLiveData<List<NewsViewModelItem>>()
-
-    val newsList: LiveData<List<NewsViewModelItem>>get() = _newsList
+    val newsList: LiveData<List<NewsViewModelItem>> get() = _newsList
 
     init {
-        _newsList.value = listOf(
-            NewsViewModelItem("뉴스 제목 1", "컨텐츠 1", R.drawable.newitem),
-            NewsViewModelItem("뉴스 제목 2", "컨텐츠 2", R.drawable.newitem),
-            NewsViewModelItem("뉴스 제목 3", "컨텐츠 3", R.drawable.newitem),
-            NewsViewModelItem("뉴스 제목 4", "컨텐츠 4", R.drawable.newitem)
+        _newsList.postValue(
+            listOf(
+                NewsViewModelItem("뉴스 제목 1", "컨텐츠 1", R.drawable.newitem),
+                NewsViewModelItem("뉴스 제목 2", "컨텐츠 2", R.drawable.newitem),
+                NewsViewModelItem("뉴스 제목 3", "컨텐츠 3", R.drawable.newitem),
+                NewsViewModelItem("뉴스 제목 4", "컨텐츠 4", R.drawable.newitem)
+            )
         )
     }
+
+    fun addNews(newsItem: NewsViewModelItem) {
+        val currentList = _newsList.value?.toMutableList() ?: mutableListOf()
+        currentList.add(newsItem)
+        _newsList.postValue(currentList)
+    }
 }
+

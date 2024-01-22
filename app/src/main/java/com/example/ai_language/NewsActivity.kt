@@ -47,19 +47,22 @@ class NewsAdapter(private val viewModel: NewsViewModel) :
 class NewsActivity : AppCompatActivity() {
 
     private lateinit var viewModel: NewsViewModel
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var homeButton: ImageButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_news) // 이 부분을 주석 해제하여 레이아웃을 설정합니다.
+        setContentView(R.layout.activity_news)
 
         viewModel = ViewModelProvider(this)[NewsViewModel::class.java]
 
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerViewNews)
+        recyclerView = findViewById(R.id.recyclerViewNews)
         recyclerView.layoutManager = LinearLayoutManager(this)
         val adapter = NewsAdapter(viewModel)
         recyclerView.adapter = adapter
 
-        val homeButton = findViewById<ImageButton>(R.id.imageButton)
-        homeButton.setOnClickListener{
+        homeButton = findViewById(R.id.imageButton)
+        homeButton.setOnClickListener {
             val intent = Intent(this, Home::class.java)
             startActivity(intent)
             finish()
@@ -68,6 +71,5 @@ class NewsActivity : AppCompatActivity() {
         viewModel.newsList.observe(this, { newsList ->
             adapter.notifyDataSetChanged()
         })
-
     }
 }
