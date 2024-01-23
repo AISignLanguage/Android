@@ -77,4 +77,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
     //KTX
     implementation ("androidx.fragment:fragment-ktx:1.3.3")
+    //WebRtc - 영상통화
+    implementation ("io.getstream:stream-webrtc-android:1.1.1")
 }
