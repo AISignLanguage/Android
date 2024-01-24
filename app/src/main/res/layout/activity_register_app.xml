@@ -141,9 +141,10 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_gravity="bottom"
-            android:fontFamily="@font/font_eb"
+            android:fontFamily="@font/nam"
+            android:textStyle="bold"
             android:padding="10dp"
-            android:text="KAKAO TALK 인증하기"
+            android:text="카카오톡 인증하기"
             android:textSize="15dp"
             android:textColor="@color/black"
             />
