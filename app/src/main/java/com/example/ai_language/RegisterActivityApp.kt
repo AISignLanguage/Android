@@ -26,10 +26,13 @@ import com.kakao.sdk.talk.TalkApiClient
 import android.widget.Button as B
 import kotlin.random.Random
 import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+
 class RegisterActivityApp : AppCompatActivity() {
     companion object {
         private const val STORAGE_PERMISSION_CODE = 1
-        private const val REQUEST_CODE_POST_NOTIFICATIONS = 1001 // 이 부분을 추가하세요
     }
     var randomSixDigitNumber = "000000"
     lateinit var profile: ImageView
@@ -67,17 +70,19 @@ class RegisterActivityApp : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_app)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE_POST_NOTIFICATIONS)
-            }
-        }
-
-
-
         val nick = intent.getStringExtra("nick")
 
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "채널 이름"
+            val descriptionText = "채널 설명"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel("1", name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
 
         val kakao_ok = findViewById<B>(R.id.kakao_ok)
         val kakaoConET = findViewById<EditText>(R.id.kakao_con_et)
@@ -97,7 +102,7 @@ class RegisterActivityApp : AppCompatActivity() {
             val random = Random.Default
             randomSixDigitNumber = random.nextInt(100000, 999999).toString() // 범위를 100000부터 999999까지로 지정하여 6자리 랜덤 숫자 생성
             sendSMS("인증번호는 $randomSixDigitNumber 입니다.")
-            /*sendNotification(this, "인증번호가 발송되었습니다.\n 카카오톡 -> 나와의 채팅에서 확인하실 수 있습니다.") // 알림 전송 호출*/
+            sendNotification(this, "카카오톡 -> 나와의 채팅에서 확인하실 수 있습니다.")
         }
         kakaoKon.setOnClickListener {
             if(kakaoConET.text.toString() == randomSixDigitNumber){
@@ -146,7 +151,6 @@ class RegisterActivityApp : AppCompatActivity() {
             else{
                 openGallery()
             }
-
         }
         val regNext = findViewById<TextView>(R.id.reg_next)
         regNext.setOnClickListener {
@@ -174,34 +178,22 @@ class RegisterActivityApp : AppCompatActivity() {
         if (requestCode == STORAGE_PERMISSION_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             openGallery()
         }
-        if (requestCode == REQUEST_CODE_POST_NOTIFICATIONS && grantResults.isNotEmpty()) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // 권한이 승인된 경우, 알림을 보낼 수 있습니다.
-            } else {
-                // 권한이 거부된 경우, 사용자에게 알림을 보낼 수 없음을 알려야 합니다.
-            }
-        }
     }
 
 
-
-    /*private fun sendNotification(context: Context, message: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "MyChannelName"
-            val descriptionText = "MyChannelDescription"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel("MY_CHANNEL_ID", name, importance).apply {
-                description = descriptionText
-            }
-            val notificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        val builder = NotificationCompat.Builder(context, "MY_CHANNEL_ID")
-            .setContentTitle("[손짓의 순간 인증번호가 도착하였습니다.]")
+    private fun sendNotification(context: Context, message: String) {
+        val launchIntent = context.packageManager.getLaunchIntentForPackage("com.kakao.talk")
+        val notificationId = Random.nextInt()
+        val pendingIntent = PendingIntent.getActivity(context, 0, launchIntent, PendingIntent.FLAG_IMMUTABLE)
+        val notificationBuilder = NotificationCompat.Builder(context, "1")
+            .setSmallIcon(R.drawable.invite_message) // 알림 아이콘으로 교체하세요
+            .setContentTitle("인증번호가 도착하였습니다!")
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent) // 여기에 추가
+            .setAutoCancel(true)
 
+        val notificationManager = NotificationManagerCompat.from(context)
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.POST_NOTIFICATIONS
@@ -216,9 +208,7 @@ class RegisterActivityApp : AppCompatActivity() {
             // for ActivityCompat#requestPermissions for more details.
             return
         }
-        NotificationManagerCompat.from(this).notify(0, builder.build())
+        notificationManager.notify(notificationId, notificationBuilder.build())
     }
-
-*/
 
 }
