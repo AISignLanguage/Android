@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AI_Language</string>
+    <string name="app_name">[손짓의 순간]</string>
 
     <string name="terms_detail_1">[필수] 서비스 이용 권리에 대한 상세 내용입니다.</string>
     <string name="terms_detail_2">[필수] 신원 정보 제공에 대한 상세 내용입니다.</string>
