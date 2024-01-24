@@ -18,6 +18,7 @@ class CallListViewModel : ViewModel() {
             CallListItem("임다솔", "010-5322-1345"),
             CallListItem("신정인", "010-1209-0084"),
         )
+        Log.d("로그", "뷰 모델 초기화 됨")
     }
 
     fun addListItem(item: CallListItem) {

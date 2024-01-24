@@ -59,6 +59,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
             if (error != null) {
                 Log.e("결과", "카카오계정으로 로그인 실패 : ${error}")
             } else if (token != null) {
+
                 requestUserInfoAndStartRegisterActivity(ctxt)
             }
         }
@@ -69,6 +70,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
                     Log.d("결과", "카카오톡 로그인 실패", error)
                     // 사용자에게 카카오 계정 로그인 옵션 제공
                 } else if (token != null) {
+
                     requestUserInfoAndStartRegisterActivity(ctxt)
                 }
             }
