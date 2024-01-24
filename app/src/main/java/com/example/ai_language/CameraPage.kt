@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.ImageButton
 import android.Manifest
 import android.content.ContentValues
-import android.content.ContentValues.TAG
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.MediaStore
@@ -32,7 +31,6 @@ import androidx.camera.video.MediaStoreOutputOptions
 import androidx.camera.video.Quality
 import androidx.camera.video.QualitySelector
 import androidx.camera.video.VideoRecordEvent
-import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.core.content.PermissionChecker
 import java.text.SimpleDateFormat
@@ -44,6 +42,7 @@ class CameraPage : AppCompatActivity() {
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
     private lateinit var cameraExecutor: ExecutorService
+    private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA // Select back camera as a default
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,14 +63,24 @@ class CameraPage : AppCompatActivity() {
                 this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
 
-        val VideoBtn = findViewById<ImageButton>(R.id.CameraBtn)
+        val videoBtn = findViewById<ImageButton>(R.id.CameraBtn)
         val btn = findViewById<Button>(R.id.button2)
 
         btn.setOnClickListener{ takePhoto() }
-        VideoBtn.setOnClickListener{ captureVideo(VideoBtn) }
+        videoBtn.setOnClickListener{ captureVideo(videoBtn) }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
 
+    }
+
+    private fun changeCamera() : CameraSelector {
+        var currentCameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+        return if (currentCameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
+            CameraSelector.DEFAULT_FRONT_CAMERA
+        } else {
+            CameraSelector.DEFAULT_BACK_CAMERA
+        }
     }
 
     private fun takePhoto() {
@@ -233,12 +242,22 @@ class CameraPage : AppCompatActivity() {
                 .build()
             videoCapture = VideoCapture.withOutput(recorder)
 
-
-            // Select back camera as a default
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            //카메라 전면/후면 전환
+            val changeBtn = findViewById<ImageButton>(R.id.changeBtn)
+            changeBtn.setOnClickListener {
+                // CameraSelector 업데이트
+                if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
+                    cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+                    startCamera() //바뀐 카메라 화면으로 카메라 재실행
+                } else {
+                    cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+                    startCamera() //바뀐 카메라 화면으로 카메라 재실행
+                }
+            }
 
             // cameraProvider에 바인딩된 항목 제거 한 뒤,
             // 위에서 생성한 객체들을 cameraProvider에 바인딩
+
             try {
                 // Unbind use cases before rebinding
                 cameraProvider.unbindAll()
