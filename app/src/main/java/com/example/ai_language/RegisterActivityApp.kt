@@ -1,5 +1,4 @@
 package com.example.ai_language
-
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
@@ -19,14 +18,19 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.kakao.sdk.talk.TalkApiClient
 import android.widget.Button as B
 import kotlin.random.Random
-
+import android.Manifest
 class RegisterActivityApp : AppCompatActivity() {
-    private val STORAGE_PERMISSION_CODE = 1
+    companion object {
+        private const val STORAGE_PERMISSION_CODE = 1
+        private const val REQUEST_CODE_POST_NOTIFICATIONS = 1001 // 이 부분을 추가하세요
+    }
     var randomSixDigitNumber = "000000"
     lateinit var profile: ImageView
     private val galleryLauncher: ActivityResultLauncher<Intent> =
@@ -51,11 +55,10 @@ class RegisterActivityApp : AppCompatActivity() {
             if (error != null) {
                 Log.e(TAG, "메시지 보내기 실패", error)
             } else {
-                Log.i(TAG, "메시지 보내기 성공")
+                Log.d("메세지","message + $templateId $templateArgs")
             }
         }
     }
-
         private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
@@ -63,6 +66,13 @@ class RegisterActivityApp : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_app)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE_POST_NOTIFICATIONS)
+            }
+        }
+
 
 
         val nick = intent.getStringExtra("nick")
@@ -87,6 +97,7 @@ class RegisterActivityApp : AppCompatActivity() {
             val random = Random.Default
             randomSixDigitNumber = random.nextInt(100000, 999999).toString() // 범위를 100000부터 999999까지로 지정하여 6자리 랜덤 숫자 생성
             sendSMS("인증번호는 $randomSixDigitNumber 입니다.")
+            /*sendNotification(this, "인증번호가 발송되었습니다.\n 카카오톡 -> 나와의 채팅에서 확인하실 수 있습니다.") // 알림 전송 호출*/
         }
         kakaoKon.setOnClickListener {
             if(kakaoConET.text.toString() == randomSixDigitNumber){
@@ -163,5 +174,51 @@ class RegisterActivityApp : AppCompatActivity() {
         if (requestCode == STORAGE_PERMISSION_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             openGallery()
         }
+        if (requestCode == REQUEST_CODE_POST_NOTIFICATIONS && grantResults.isNotEmpty()) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 권한이 승인된 경우, 알림을 보낼 수 있습니다.
+            } else {
+                // 권한이 거부된 경우, 사용자에게 알림을 보낼 수 없음을 알려야 합니다.
+            }
+        }
     }
+
+
+
+    /*private fun sendNotification(context: Context, message: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "MyChannelName"
+            val descriptionText = "MyChannelDescription"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel("MY_CHANNEL_ID", name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val builder = NotificationCompat.Builder(context, "MY_CHANNEL_ID")
+            .setContentTitle("[손짓의 순간 인증번호가 도착하였습니다.]")
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        NotificationManagerCompat.from(this).notify(0, builder.build())
+    }
+
+*/
+
 }
