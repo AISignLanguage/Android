@@ -82,6 +82,8 @@ dependencies {
     implementation ("androidx.fragment:fragment-ktx:1.3.3")
     //WebRtc - 영상통화
     implementation(files("libs/autobanh.jar"))
+    //Agora SDK
+    implementation ("io.agora.rtc:voice-sdk:4.2.6")
     //  MultiDex Libarary
     api ("androidx.multidex:multidex:2.0.1")
 }
