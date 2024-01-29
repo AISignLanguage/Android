@@ -12,7 +12,7 @@ class RetrofitClient private constructor() {
         @Volatile
         private var instance: RetrofitClient? = null
         private lateinit var userRetrofitInterface: Service
-        private const val baseUrl = "http://192.168.1.121:8080/"
+        private val baseUrl = R.string.DNS.toString()
 
         fun getInstance(): RetrofitClient {
             return instance ?: synchronized(this) {
