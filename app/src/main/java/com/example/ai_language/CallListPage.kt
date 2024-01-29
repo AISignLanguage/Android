@@ -1,16 +1,13 @@
 package com.example.ai_language
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -32,6 +29,8 @@ class CallListPage : AppCompatActivity() {
             override fun onItemClick(view: View, position: Int) {
                 Toast.makeText(applicationContext, "전화하기", Toast.LENGTH_SHORT).show()
                 callViewModel.addListItem(CallListItem("신정인", "010-1113-0088"))
+                val intent = Intent(applicationContext, CallActivity::class.java)
+                startActivity(intent)
             }
         })
 

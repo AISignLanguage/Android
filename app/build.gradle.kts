@@ -15,6 +15,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -45,7 +47,7 @@ dependencies {
     implementation ("me.relex:circleindicator:2.1.6")
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     implementation("com.google.android.gms:play-services-wearable:18.1.0")
-    implementation(files("libs\\autobanh.jar"))
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -79,5 +81,7 @@ dependencies {
     //KTX
     implementation ("androidx.fragment:fragment-ktx:1.3.3")
     //WebRtc - 영상통화
-    implementation ("io.getstream:stream-webrtc-android:1.1.1")
+    implementation(files("libs/autobanh.jar"))
+    //  MultiDex Libarary
+    api ("androidx.multidex:multidex:2.0.1")
 }
