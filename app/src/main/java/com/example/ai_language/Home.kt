@@ -66,7 +66,9 @@ class Home : AppCompatActivity() {
             }
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                indicator.animatePageSelected(position % page)
+                val thispage = position % page;
+                indicator.animatePageSelected(thispage)
+
             }
 
 

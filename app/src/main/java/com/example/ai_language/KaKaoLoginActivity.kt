@@ -26,11 +26,6 @@ class KaKaoLoginActivity : AppCompatActivity() {
 
         val signInBtn = findViewById<TextView>(R.id.sign_in_button)
         signInBtn.setOnClickListener {
-
-            //권한 동의 했으면 Home으로
-            //처음 접속하는 거면 register로
-
-            //if(DB탐색 해서 사용자가 있으면)
             val intent = Intent(this, RegisterActivity::class.java)
             intent.putExtra("nick", "사용자${ Random.nextInt(10000)}")
             intent.putExtra("profile", "https://cdn-icons-png.flaticon.com/128/149/149071.png")
@@ -52,28 +47,30 @@ class KaKaoLoginActivity : AppCompatActivity() {
             kakaoLogin(this)
         }
     }
-
+    private var isLoggingIn = false
 
     private fun kakaoLogin(ctxt: Context) {
-        val intent = Intent(ctxt, RegisterActivityApp::class.java)
-        // 카카오계정으로 로그인 공통 callback 구성
-        // 카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
+
+        if (isLoggingIn) return // 중복 로그인 방지
+
+        isLoggingIn = true
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+            isLoggingIn = false
             if (error != null) {
                 Log.e("결과", "카카오계정으로 로그인 실패 : ${error}")
-
             } else if (token != null) {
+
                 requestUserInfoAndStartRegisterActivity(ctxt)
             }
         }
 
-        // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
             UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
                 if (error != null) {
                     Log.d("결과", "카카오톡 로그인 실패", error)
-                    UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
+                    // 사용자에게 카카오 계정 로그인 옵션 제공
                 } else if (token != null) {
+
                     requestUserInfoAndStartRegisterActivity(ctxt)
                 }
             }
@@ -81,6 +78,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
             UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
         }
     }
+
 
     private fun kakaoLogout() {
         // 로그아웃
