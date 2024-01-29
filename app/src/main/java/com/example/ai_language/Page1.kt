@@ -1,5 +1,6 @@
 package com.example.ai_language
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,10 +13,12 @@ class Page1 : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
-        return inflater.inflate(
-            R.layout.fragment_page1, container, false
-        ) as ViewGroup
+    ): View {
+        val view = inflater.inflate(R.layout.fragment_page1, container, false)
+        view.setOnClickListener {
+            val intent = Intent(activity, Poster::class.java)
+            startActivity(intent)
+        }
+        return view
     }
 }

@@ -147,6 +147,7 @@
         android:orientation="horizontal"
         >
         <EditText
+            android:id="@+id/reg_nick"
             android:background="#EFF4FF"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
