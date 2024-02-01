@@ -95,7 +95,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginLeft="60dp"
                     android:layout_marginRight="50dp"
-                    android:text="이용약관 상세 내용\n이용약관 상세 내용"
+                    android:text="@string/terms_detail_0"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -136,7 +136,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginLeft="60dp"
                     android:layout_marginRight="50dp"
-                    android:text="이용약관 상세 내용\n이용약관 상세 내용"
+                    android:text="@string/terms_detail_1"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -177,7 +177,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginLeft="60dp"
                     android:layout_marginRight="50dp"
-                    android:text="이용약관 상세 내용\n이용약관 상세 내용"
+                    android:text="@string/terms_detail_2"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -218,7 +218,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginLeft="60dp"
                     android:layout_marginRight="50dp"
-                    android:text="이용약관 상세 내용\n이용약관 상세 내용"
+                    android:text="@string/terms_detail_3"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -259,7 +259,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginLeft="60dp"
                     android:layout_marginRight="50dp"
-                    android:text="이용약관 상세 내용\n이용약관 상세 내용"
+                    android:text="@string/terms_detail_4"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -300,7 +300,7 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="60dp"
                     android:layout_marginRight="50dp"
-                    android:text="이용약관 상세 내용\n이용약관 상세 내용"
+                    android:text="@string/terms_detail_5"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -341,7 +341,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginLeft="60dp"
                     android:layout_marginRight="50dp"
-                    android:text="이용약관 상세 내용\n이용약관 상세 내용"
+                    android:text="@string/terms_detail_6"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -383,7 +383,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginLeft="60dp"
                     android:layout_marginRight="50dp"
-                    android:text="이용약관 상세 내용\n이용약관 상세 내용"
+                    android:text="@string/terms_detail_7"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -395,8 +395,27 @@
             android:background="@color/white">
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/termsService"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="50dp"
+                android:text="@string/terms_service"
+                android:textSize="10sp" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
+
+
 
 
 </ScrollView>
