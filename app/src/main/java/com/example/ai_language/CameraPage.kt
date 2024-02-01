@@ -74,8 +74,7 @@ class CameraPage : AppCompatActivity() {
     }
 
     private fun changeCamera() : CameraSelector {
-        var currentCameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
+        val currentCameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
         return if (currentCameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
             CameraSelector.DEFAULT_FRONT_CAMERA
         } else {
@@ -95,9 +94,7 @@ class CameraPage : AppCompatActivity() {
             put(MediaStore.MediaColumns.DISPLAY_NAME, name)
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
             // Android Q 이상- > RELATIVE_PATH 사용해서 저장 경로 지정.
-            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
-            }
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
         }
 
         // Create output options object which contains file + metadata (이미지 저장 옵션 설정)
@@ -152,9 +149,7 @@ class CameraPage : AppCompatActivity() {
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, name)
             put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4")
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                put(MediaStore.Video.Media.RELATIVE_PATH, "Movies/CameraX-Video")
-            }
+            put(MediaStore.Video.Media.RELATIVE_PATH, "Movies/CameraX-Video")
         }
 
         // 콘텐츠의 외부 저장 위치를 옵션으로 설정하기 위해
@@ -292,9 +287,6 @@ class CameraPage : AppCompatActivity() {
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO
             ).apply {
-                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                }
             }.toTypedArray()
     }
 
