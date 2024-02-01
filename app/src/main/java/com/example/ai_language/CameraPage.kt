@@ -126,15 +126,12 @@ class CameraPage : AppCompatActivity() {
             }
         )
     }
-
     // Implements VideoCapture use case, including start and stop capturing.
     private fun captureVideo(VideoBtn: ImageButton) {
         val videoCapture = this.videoCapture ?: return
         val recImg = findViewById<ImageView>(R.id.recImg)
-
         //중복 녹화 방지
         VideoBtn.isEnabled = false
-
         val curRecording = recording
         // 진행 중인 활성 녹화 세션 중지
         if (curRecording != null) {
