@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import android.view.SurfaceView;
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.FrameLayout
 import androidx.core.app.ActivityCompat
 
@@ -24,8 +26,8 @@ class CallActivity : AppCompatActivity() {
 
     private var isJoined = false
     private var aqoraEngine : RtcEngine? = null
-    private var localSurFaceView : SurfaceView? = null
-    private var remoteSurFaceView : SurfaceView? = null
+    private var localSurfaceView : SurfaceView? = null
+    private var remoteSurfaceView : SurfaceView? = null
 
 
     private val PERISSION_ID = 12
@@ -95,11 +97,29 @@ class CallActivity : AppCompatActivity() {
     }
 
     private fun joinCall() {
-
+        if (checkSelfPerrmission()) {
+            val option = ChannelMediaOptions()
+            option.channelProfile = Constants.CHANNEL_PROFILE_COMMUNICATION
+            option.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
+            setupLocalVideo()
+            localSurfaceView!!.visibility = VISIBLE
+            aqoraEngine!!.startPreview()
+            aqoraEngine!!.joinChannel(token, channelName, uid, option)
+        } else {
+            Toast.makeText(this, "permission not grant", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun leaveCall() {
 
+        if (!isJoined) {
+            showMessage("Join a channel first")
+        } else {
+            aqoraEngine!!.leaveChannel()
+            showMessage("you left in channel")
+            if (remoteSurfaceView != null) remoteSurfaceView!!.visibility = GONE
+            if (localSurfaceView != null) localSurfaceView!!.visibility = GONE
+        }
     }
 
     private val mRtcEventHandler : IRtcEngineEventHandler =
@@ -118,31 +138,37 @@ class CallActivity : AppCompatActivity() {
 
             override fun onUserOffline(uid: Int, reason: Int) {
                 showMessage("user offline")
+
+                runOnUiThread {
+                    remoteSurfaceView!!.visibility = GONE
+                }
             }
         }
 
     private fun setupRemoteVideo(uid: Int) {
         val remoteUser = findViewById<FrameLayout>(R.id.remote_user)
-        remoteSurFaceView = SurfaceView(baseContext)
-        remoteSurFaceView!!.setZOrderMediaOverlay(true)
-        remoteUser.addView(remoteSurFaceView)
+        remoteSurfaceView = SurfaceView(baseContext)
+        remoteSurfaceView!!.setZOrderMediaOverlay(true)
+        remoteUser.addView(remoteSurfaceView)
 
         aqoraEngine!!.setupRemoteVideo(
             VideoCanvas(
-                remoteSurFaceView,
+                remoteSurfaceView,
                 VideoCanvas.RENDER_MODE_FIT,
                 uid
             )
         )
     }
 
-    private fun setupLocalVideo(uid: Int) {
-        val remoteUser = findViewById<FrameLayout>(R.id.remote_user)
-        localSurFaceView = SurfaceView(baseContext)
+    private fun setupLocalVideo() {
+        val localUser = findViewById<FrameLayout>(R.id.local_user)
+        localSurfaceView = SurfaceView(baseContext)
+        localUser.addView((localSurfaceView))
+
 
         aqoraEngine!!.setupLocalVideo(
             VideoCanvas(
-                localSurFaceView,
+                localSurfaceView,
                 VideoCanvas.RENDER_MODE_FIT,
                 0
             )
