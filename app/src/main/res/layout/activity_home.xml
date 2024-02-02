@@ -19,7 +19,7 @@
     <FrameLayout
         android:id="@+id/vp_fragment"
         android:layout_gravity="center"
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
+            android:layout_margin="@dimen/margin10"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:scaleType="fitXY" />
@@ -45,15 +45,13 @@
         app:ci_width="7dp"
         />
     <ImageView
-        android:layout_width="380dp"
+        android:layout_width="@dimen/line"
         android:layout_height="2dp"
         android:background="@drawable/line"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin10"
-        android:layout_marginEnd="@dimen/margin10"
 
         >
 
@@ -73,13 +71,12 @@
                 android:layout_height="60dp"
                 android:layout_margin="@dimen/margin10"
                 android:background="@mipmap/news_btn" />
-
             <ImageButton
-                android:id="@+id/callList_btn"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:id="@+id/callList_btn"
                 android:layout_margin="@dimen/margin10"
-                android:background="@mipmap/call" />
+                android:background="@mipmap/call"/>
 
             <ImageButton
                 android:id="@+id/my_page_btn"
