@@ -143,18 +143,18 @@ class Home : AppCompatActivity() {
 //            height = 100;
 //        }
         callLsit_btn.setOnClickListener {
-            val callPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS)
-            if(callPermission != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(android.Manifest.permission.READ_CONTACTS),
-                    READ_CONTACTS_PERMISSION_REQUEST
-                )
-            }
-            else{
+//            val callPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS)
+//            if(callPermission != PackageManager.PERMISSION_GRANTED) {
+//                ActivityCompat.requestPermissions(
+//                    this,
+//                    arrayOf(android.Manifest.permission.READ_CONTACTS),
+//                    READ_CONTACTS_PERMISSION_REQUEST
+//                )
+//            }
+//            else{
                 val intent = Intent(this, CallListPage::class.java)
                 startActivity(intent)
-            }
+            //}
         }
 
         val camera_btn = findViewById<ImageButton>(R.id.CameraBtn) //카메라(동영상) 화면으로 이동

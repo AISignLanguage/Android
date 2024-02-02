@@ -1,34 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- tools:ignore is needed because lint thinks this can be replaced with a merge. Replacing this
-     with a merge causes the fullscreen SurfaceView not to be centered. -->
-<FrameLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:ignore="MergeRootFrame">
+    tools:context=".CallListPage">
 
-    <org.webrtc.SurfaceViewRenderer
-        android:id="@+id/fullscreen_video_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
-
-    <org.webrtc.SurfaceViewRenderer
-        android:id="@+id/pip_video_view"
-        android:layout_height="144dp"
-        android:layout_width="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"/>
-
-    <FrameLayout
-        android:id="@+id/call_fragment_container"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-    <FrameLayout
-        android:id="@+id/hud_fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content">
 
-</FrameLayout>
+        <FrameLayout
+            android:id="@+id/local_user"
+            android:layout_width="300dp"
+            android:layout_height="220dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="6dp"
+            android:background="#c1c1c1" />
+
+        <FrameLayout
+            android:id="@+id/remote_user"
+            android:layout_width="300dp"
+            android:layout_height="220dp"
+            android:layout_below="@id/local_user"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="6dp"
+            android:background="#c1c1c1" />
+
+        <Button
+            android:id="@+id/joinButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:layout_below="@+id/remote_user"
+            android:layout_alignStart="@+id/remote_user"
+            android:layout_marginTop="36dp"
+            android:text="Join Call" />
+
+        <Button
+            android:id="@+id/leaveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:layout_below="@+id/remote_user"
+            android:layout_alignEnd="@+id/remote_user"
+            android:layout_marginTop="36dp"
+            android:text="Leave Call" />
+
+    </RelativeLayout>
+
+</ScrollView>
