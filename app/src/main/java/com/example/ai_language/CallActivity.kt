@@ -35,11 +35,6 @@ import io.agora.rtc2.video.VideoCanvas
 
 class CallActivity : AppCompatActivity() {
 
-    private lateinit var textureView: TextureView      // 카메라 미리보기를 위한 TextureView
-    private lateinit var cameraDevice : CameraDevice    // 카메라 디바이스를 참조하기 위한 객체
-    private lateinit var captureRequestBuilder: CaptureRequest.Builder  // 캡처 요청을 만들기 위한 Builder
-    private lateinit var cameraCaptureSession: CameraCaptureSession      // 카메라 캡처 세션
-
     private val appId = "353bae93c92b4275bf34d1301ea06e42"
     private val channelName = "test"
     private val token = "007eJxTYJiZdkc6MvxkdZE9q2zCM4mFF3Y84Y0Til32sS0svG7tuxcKDMamxkmJqZbGyZZGSSZG5qZJacYmKYbGBoapiQZmqSZG8zx3pzYEMjJ4XBBgZmSAQBCfhaEktbiEgQEAOLwfLA=="
@@ -68,7 +63,6 @@ class CallActivity : AppCompatActivity() {
                     REQUESTED_PERMISSIONS[1]
                 ) != PackageManager.PERMISSION_GRANTED)
     }
-
 
     private fun showMessage(message : String) {
         runOnUiThread {

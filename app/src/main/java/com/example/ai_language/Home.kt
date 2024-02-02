@@ -138,23 +138,23 @@ class Home : AppCompatActivity() {
         }
 
         val callLsit_btn = findViewById<ImageButton>(R.id.callList_btn) //전화번호부 화면으로 이동
-//        callLsit_btn.updateLayoutParams{
-//            width = 100;
-//            height = 100;
-//        }
+        callLsit_btn.updateLayoutParams{
+            width = 100;
+            height = 100;
+        }
         callLsit_btn.setOnClickListener {
-//            val callPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS)
-//            if(callPermission != PackageManager.PERMISSION_GRANTED) {
-//                ActivityCompat.requestPermissions(
-//                    this,
-//                    arrayOf(android.Manifest.permission.READ_CONTACTS),
-//                    READ_CONTACTS_PERMISSION_REQUEST
-//                )
-//            }
-//            else{
+            val callPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS)
+            if(callPermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(android.Manifest.permission.READ_CONTACTS),
+                    READ_CONTACTS_PERMISSION_REQUEST
+                )
+            }
+            else{
                 val intent = Intent(this, CallListPage::class.java)
                 startActivity(intent)
-            //}
+            }
         }
 
         val camera_btn = findViewById<ImageButton>(R.id.CameraBtn) //카메라(동영상) 화면으로 이동
