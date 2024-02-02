@@ -12,6 +12,19 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import android.content.Context
+import android.graphics.SurfaceTexture
+import android.hardware.camera2.CameraAccessException
+import android.hardware.camera2.CameraCaptureSession
+import android.hardware.camera2.CameraDevice
+import android.hardware.camera2.CameraManager
+import android.hardware.camera2.CaptureRequest
+import android.os.Handler
+import android.os.HandlerThread
+import android.view.Surface
+import android.view.TextureView
+import java.util.Collections
+
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
@@ -20,6 +33,11 @@ import io.agora.rtc2.RtcEngineConfig
 import io.agora.rtc2.video.VideoCanvas
 
 class CallActivity : AppCompatActivity() {
+
+    private lateinit var textureView: TextureView      // 카메라 미리보기를 위한 TextureView
+    private lateinit var cameraDevice : CameraDevice    // 카메라 디바이스를 참조하기 위한 객체
+    private lateinit var captureRequestBuilder: CaptureRequest.Builder  // 캡처 요청을 만들기 위한 Builder
+    private lateinit var cameraCaptureSession: CameraCaptureSession      // 카메라 캡처 세션
 
     private val appId = "353bae93c92b4275bf34d1301ea06e42"
     private val channelName = "test"
@@ -174,5 +192,97 @@ class CallActivity : AppCompatActivity() {
                 runOnUiThread { remoteSurfaceView!!.visibility = View.GONE }
             }
         }
+
+
+    private val REQUEST_CAMERA_PERMISSION = 200
+    private val textureListener = object : TextureView.SurfaceTextureListener {
+        override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
+            openCamera()
+        }
+
+        override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {}
+
+        override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
+            return false
+        }
+
+        override fun onSurfaceTextureUpdated(surface: SurfaceTexture) { }
+    }
+
+    private val stateCallback = object : CameraDevice.StateCallback() {
+        override fun onOpened(camera: CameraDevice) {
+            cameraDevice = camera
+            createCameraPreview()
+        }
+
+        override fun onDisconnected(camera: CameraDevice) {
+            cameraDevice.close()
+        }
+
+        override fun onError(camera: CameraDevice, error: Int) {
+            cameraDevice.close()
+            //cameraDevice = null
+        }
+    }
+
+    private fun createCameraPreview() {
+        try {
+            val texture = textureView.surfaceTexture
+            texture!!.setDefaultBufferSize(1920, 1080)
+            val surface = Surface(texture)
+            captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+            captureRequestBuilder.addTarget(surface)
+
+            cameraDevice.createCaptureSession(listOf(surface), object : CameraCaptureSession.StateCallback() {
+                override fun onConfigured(session: CameraCaptureSession) {
+                    if (cameraDevice == null) {
+                        return
+                    }
+                    cameraCaptureSession = session
+                    updatePreview()
+                }
+
+                override fun onConfigureFailed(session: CameraCaptureSession) {
+                    Toast.makeText(this@CallActivity, "Configuration change", Toast.LENGTH_SHORT).show()
+                }
+            }, null)
+        } catch (e: CameraAccessException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun openCamera() {
+        val manager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        try {
+            val cameraId = manager.cameraIdList[0]
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
+                return
+            }
+            manager.openCamera(cameraId, stateCallback, null)
+        } catch (e: CameraAccessException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun updatePreview() {
+        if (cameraDevice == null) {
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+            return
+        }
+        captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_AUTO)
+        try {
+            cameraCaptureSession.setRepeatingRequest(captureRequestBuilder.build(), null, null)
+        } catch (e: CameraAccessException) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (cameraDevice != null) {
+            cameraDevice.close()
+        }
+    }
 }
 

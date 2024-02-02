@@ -28,7 +28,6 @@ class CallListPage : AppCompatActivity() {
         callListAdapter.setOnItemClickListener (object : CallListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 Toast.makeText(applicationContext, "전화하기", Toast.LENGTH_SHORT).show()
-                callViewModel.addListItem(CallListItem("신정인", "010-1113-0088"))
                 val intent = Intent(applicationContext, CallActivity::class.java)
                 startActivity(intent)
             }
@@ -49,7 +48,6 @@ class CallListPage : AppCompatActivity() {
         InviteListAdapter.setOnItemClickListener(object : InviteListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 Toast.makeText(applicationContext, "초대하기", Toast.LENGTH_SHORT).show()
-                inviteViewModel.addListItem(InviteListItem("신정인", "011-1266-8923"))
             }
         })
 
