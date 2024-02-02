@@ -49,45 +49,53 @@
         android:layout_height="2dp"
         android:background="@drawable/line"/>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:gravity="bottom|center"
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <ImageButton
-            android:id="@+id/news_btn"
-            android:layout_margin="10dp"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/news_btn" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="bottom|center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <ImageButton
-            android:id="@+id/callList_btn"
-            android:layout_margin="10dp"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/call"  />
-        <ImageButton
-            android:id="@+id/my_page_btn"
-            android:layout_margin="10dp"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/user"  />
-        <ImageButton
-            android:id="@+id/CameraBtn"
-            android:layout_margin="10dp"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/camera"
-            />
-        <ImageButton
-            android:id="@+id/dic_btn"
-            android:layout_margin="10dp"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/dic"  />
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/news_btn"
+                android:layout_margin="10dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/news_btn" />
+
+            <ImageButton
+                android:id="@+id/callList_btn"
+                android:layout_margin="10dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/call"  />
+            <ImageButton
+                android:id="@+id/my_page_btn"
+                android:layout_margin="10dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/user"  />
+            <ImageButton
+                android:id="@+id/CameraBtn"
+                android:layout_margin="10dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/camera"
+                />
+            <ImageButton
+                android:id="@+id/dic_btn"
+                android:layout_margin="10dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/dic"  />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </LinearLayout>
