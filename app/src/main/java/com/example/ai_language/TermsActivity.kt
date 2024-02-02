@@ -121,6 +121,12 @@ class TermsActivity : AppCompatActivity() {
                 imageView7.setImageResource(R.drawable.toggle2)
             }
         }
+
+        val submitButton = findViewById<Button>(R.id.submitButton)
+        submitButton.setOnClickListener {
+            val intent = Intent(this, MyPage::class.java)
+            startActivity(intent)
+        }
     }
 
 }
