@@ -46,17 +46,18 @@
         />
     <ImageView
         android:layout_width="@dimen/line"
+        android:layout_margin="@dimen/margin10"
         android:layout_height="2dp"
         android:background="@drawable/line"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         >
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="bottom|center"
             android:orientation="horizontal"
@@ -65,40 +66,60 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageButton
-                android:id="@+id/news_btn"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="@dimen/margin10"
-                android:background="@mipmap/news_btn" />
-            <ImageButton
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:id="@+id/callList_btn"
-                android:layout_margin="@dimen/margin10"
-                android:background="@mipmap/call"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageButton
-                android:id="@+id/my_page_btn"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="@dimen/margin10"
-                android:background="@mipmap/user" />
+        <ImageButton
+            android:id="@+id/dic_btn"
+            android:layout_width="@dimen/height"
+            android:layout_height="@dimen/width"
+            android:layout_margin="@dimen/margin10"
+            android:background="@mipmap/dic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageButton
-                android:id="@+id/CameraBtn"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="@dimen/margin10"
-                android:background="@mipmap/camera" />
+        <ImageButton
+            android:id="@+id/CameraBtn"
+            android:layout_width="@dimen/height"
+            android:layout_height="@dimen/width"
+            android:layout_margin="@dimen/margin10"
+            android:background="@mipmap/camera"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/dic_btn"
+            app:layout_constraintStart_toEndOf="@+id/my_page_btn"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageButton
-                android:id="@+id/dic_btn"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="@dimen/margin10"
-                android:background="@mipmap/dic" />
-        </LinearLayout>
+        <ImageButton
+            android:id="@+id/my_page_btn"
+            android:layout_width="@dimen/height"
+            android:layout_height="@dimen/width"
+            android:layout_margin="@dimen/margin10"
+            android:background="@mipmap/user"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/callList_btn"
+            android:layout_width="@dimen/height"
+            android:layout_height="@dimen/width"
+            android:layout_margin="@dimen/margin10"
+            android:background="@mipmap/call"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/news_btn"
+            android:layout_width="@dimen/height"
+            android:layout_height="@dimen/width"
+            android:layout_margin="@dimen/margin10"
+            android:background="@mipmap/news_btn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/my_page_btn"
+            app:layout_constraintStart_toEndOf="@+id/callList_btn"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
