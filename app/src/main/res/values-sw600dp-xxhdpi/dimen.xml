@@ -4,5 +4,7 @@
 
     <dimen name="margin10">8.8dp</dimen>
     <dimen name="line">293dp</dimen>
+    <dimen name="width">53dp</dimen>
+    <dimen name="height">53dp</dimen>
 
 </resources>
