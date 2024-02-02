@@ -2,6 +2,7 @@ package com.example.ai_language
 
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.SurfaceView
 import android.view.View
 import android.view.View.VISIBLE
@@ -12,19 +13,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import android.content.Context
-import android.graphics.SurfaceTexture
-import android.hardware.camera2.CameraAccessException
-import android.hardware.camera2.CameraCaptureSession
-import android.hardware.camera2.CameraDevice
-import android.hardware.camera2.CameraManager
-import android.hardware.camera2.CaptureRequest
-import android.os.Handler
-import android.os.HandlerThread
-import android.view.Surface
-import android.view.SurfaceHolder
-import android.view.TextureView
-import java.util.Collections
 
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
@@ -36,8 +24,8 @@ import io.agora.rtc2.video.VideoCanvas
 class CallActivity : AppCompatActivity() {
 
     private val appId = "353bae93c92b4275bf34d1301ea06e42"
-    private val channelName = "test"
-    private val token = "007eJxTYJiZdkc6MvxkdZE9q2zCM4mFF3Y84Y0Til32sS0svG7tuxcKDMamxkmJqZbGyZZGSSZG5qZJacYmKYbGBoapiQZmqSZG8zx3pzYEMjJ4XBBgZmSAQBCfhaEktbiEgQEAOLwfLA=="
+    private val channelName = "ta"
+    private val token = "007eJxTYIhgy7vTzVkkLHig+NUCj/yvqdoh78yq3O98md8ucmNlsa4Cg7GpcVJiqqVxsqVRkomRuWlSmrFJiqGxgWFqooFZqonRgoV7UhsCGRlYtiYzMEIhiM/EUJLIwAAA06Ed7Q=="
 
     private val uid = 0
     private var isJoined = false
@@ -46,22 +34,23 @@ class CallActivity : AppCompatActivity() {
     private var localSurfaceView : SurfaceView? = null
     private var remoteSurfaceView : SurfaceView? = null
 
-
-    private val PERMISSION_ID = 12
-    private val REQUESTED_PERMISSIONS = arrayOf<String>(
+    companion object {
+        protected const val PERMISSION_REQ_ID = 22
+        protected val REQUESTED_PERMISSIONS = arrayOf(
             android.Manifest.permission.RECORD_AUDIO,
             android.Manifest.permission.CAMERA
         )
+    }
 
     private fun checkSelfPermission(): Boolean {
-        return !(ContextCompat.checkSelfPermission(
+        return (ContextCompat.checkSelfPermission(
             this,
             REQUESTED_PERMISSIONS[0]
-        ) != PackageManager.PERMISSION_GRANTED ||
+        ) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(
                     this,
                     REQUESTED_PERMISSIONS[1]
-                ) != PackageManager.PERMISSION_GRANTED)
+                ) == PackageManager.PERMISSION_GRANTED)
     }
 
     private fun showMessage(message : String) {
@@ -90,9 +79,8 @@ class CallActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) //통화하는 동안 화면 꺼지지 않게 유지
 
         if (!checkSelfPermission()) {
-            ActivityCompat.requestPermissions(this, REQUESTED_PERMISSIONS, PERMISSION_ID);
+            ActivityCompat.requestPermissions(this, REQUESTED_PERMISSIONS, PERMISSION_REQ_ID);
         }
-        //setUpVideoSdkEngine()
 
         val joinButton = findViewById<Button>(R.id.joinButton).setOnClickListener{
             setUpVideoSdkEngine()
@@ -138,7 +126,7 @@ class CallActivity : AppCompatActivity() {
         agoraEngine!!.setupLocalVideo(
             VideoCanvas(
                 localSurfaceView,
-                VideoCanvas.RENDER_MODE_HIDDEN,
+                VideoCanvas.RENDER_MODE_FIT,
                 0
             )
         )
@@ -173,7 +161,8 @@ class CallActivity : AppCompatActivity() {
     private val mRtcEventHandler : IRtcEngineEventHandler = object : IRtcEngineEventHandler() {
             override fun onUserJoined(uid: Int, elapsed: Int) {
                 showMessage("Reomte User Joined $uid")
-                runOnUiThread { setupRemoteVideo(uid) }
+                runOnUiThread { setupRemoteVideo(uid)
+                Log.d("로그", "ㅇㅇ")}
             }
 
             override fun onJoinChannelSuccess(channel: String, uid: Int, elapsed: Int) {
