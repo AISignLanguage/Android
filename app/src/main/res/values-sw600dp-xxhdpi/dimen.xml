@@ -2,7 +2,7 @@
 <resources>
 
 
-    <dimen name="margin10">10dp</dimen>
-    <dimen name="line">340dp</dimen>
+    <dimen name="margin10">8.8dp</dimen>
+    <dimen name="line">293dp</dimen>
 
 </resources>
