@@ -22,6 +22,7 @@ import android.hardware.camera2.CaptureRequest
 import android.os.Handler
 import android.os.HandlerThread
 import android.view.Surface
+import android.view.SurfaceHolder
 import android.view.TextureView
 import java.util.Collections
 
@@ -93,7 +94,6 @@ class CallActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_call)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) //통화하는 동안 화면 꺼지지 않게 유지
-
 
         if (!checkSelfPermission()) {
             ActivityCompat.requestPermissions(this, REQUESTED_PERMISSIONS, PERMISSION_ID);
@@ -192,97 +192,5 @@ class CallActivity : AppCompatActivity() {
                 runOnUiThread { remoteSurfaceView!!.visibility = View.GONE }
             }
         }
-
-
-    private val REQUEST_CAMERA_PERMISSION = 200
-    private val textureListener = object : TextureView.SurfaceTextureListener {
-        override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
-            openCamera()
-        }
-
-        override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {}
-
-        override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
-            return false
-        }
-
-        override fun onSurfaceTextureUpdated(surface: SurfaceTexture) { }
-    }
-
-    private val stateCallback = object : CameraDevice.StateCallback() {
-        override fun onOpened(camera: CameraDevice) {
-            cameraDevice = camera
-            createCameraPreview()
-        }
-
-        override fun onDisconnected(camera: CameraDevice) {
-            cameraDevice.close()
-        }
-
-        override fun onError(camera: CameraDevice, error: Int) {
-            cameraDevice.close()
-            //cameraDevice = null
-        }
-    }
-
-    private fun createCameraPreview() {
-        try {
-            val texture = textureView.surfaceTexture
-            texture!!.setDefaultBufferSize(1920, 1080)
-            val surface = Surface(texture)
-            captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-            captureRequestBuilder.addTarget(surface)
-
-            cameraDevice.createCaptureSession(listOf(surface), object : CameraCaptureSession.StateCallback() {
-                override fun onConfigured(session: CameraCaptureSession) {
-                    if (cameraDevice == null) {
-                        return
-                    }
-                    cameraCaptureSession = session
-                    updatePreview()
-                }
-
-                override fun onConfigureFailed(session: CameraCaptureSession) {
-                    Toast.makeText(this@CallActivity, "Configuration change", Toast.LENGTH_SHORT).show()
-                }
-            }, null)
-        } catch (e: CameraAccessException) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun openCamera() {
-        val manager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
-        try {
-            val cameraId = manager.cameraIdList[0]
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
-                return
-            }
-            manager.openCamera(cameraId, stateCallback, null)
-        } catch (e: CameraAccessException) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun updatePreview() {
-        if (cameraDevice == null) {
-            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
-            return
-        }
-        captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_AUTO)
-        try {
-            cameraCaptureSession.setRepeatingRequest(captureRequestBuilder.build(), null, null)
-        } catch (e: CameraAccessException) {
-            e.printStackTrace()
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        if (cameraDevice != null) {
-            cameraDevice.close()
-        }
-    }
 }
 
