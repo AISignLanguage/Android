@@ -23,7 +23,11 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import kotlin.random.Random
 import android.Manifest
+import android.content.ContentValues.TAG
 import android.util.Base64
+import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
+import com.kakao.sdk.user.model.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,10 +35,30 @@ import kotlinx.coroutines.withContext
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 import java.io.IOException
 
-class RegisterActivity : AppCompatActivity() {
+data class UserDTO(
+    @SerializedName("username")
+    val username: String,
 
+    @SerializedName("usernick")
+    val usernick: String
+)
+
+data class ResponseDTO(
+    @SerializedName("logIn_ok")
+    val response: Boolean
+)
+
+
+
+class RegisterActivity : AppCompatActivity() {
+    lateinit var call : Call<ResponseDTO>
+    lateinit var service: Service
     private val STORAGE_PERMISSION_CODE = 1
     private val SMS_PERMISSION_CODE = 2
     private val ACCOUNT_SID = "${R.string.SID}"
@@ -101,13 +125,10 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-
         val send_certification_et = findViewById<EditText>(R.id.send_certification_et)
         val send_certification_btn = findViewById<Button>(R.id.send_certification_btn)
         val certification_et= findViewById<EditText>(R.id.certification_et)
         val certification_btn = findViewById<Button>(R.id.certification_btn)
-
-
 
         send_certification_btn.setOnClickListener {
             val phNum = send_certification_et.text.toString()
@@ -136,7 +157,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
         val nick = intent.getStringExtra("nick")
-
+        val regNick = findViewById<EditText>(R.id.reg_nick)
         val regName = findViewById<EditText>(R.id.reg_name)
         regName.setText(nick)
 
@@ -166,11 +187,44 @@ class RegisterActivity : AppCompatActivity() {
 
         }
 
+        RetrofitClient.getInstance()
+        service = RetrofitClient.getUserRetrofitInterface()
+
+
+
         val regNext = findViewById<TextView>(R.id.reg_next)
         regNext.setOnClickListener {
-            val intent = Intent(this,permissionActivity::class.java)
-            startActivity(intent)
-            Toast.makeText(this, "회원가입에 성공하셨습니다!", Toast.LENGTH_SHORT).show()
+
+
+            val userDTO = UserDTO(regName.text.toString(),regNick.text.toString())
+            val gson = Gson()
+            val userInfo = gson.toJson(userDTO)
+            Log.e("JSON", userInfo);
+
+
+            call = service.sendData(userDTO)
+            Log.d("콜","${userDTO}")
+
+            call.clone().enqueue(object : Callback<ResponseDTO> {
+                override fun onResponse(call: Call<ResponseDTO>, response: Response<ResponseDTO>) {
+                    if (response.isSuccessful) {
+                        Log.d("서버로부터 받은 요청","${response.body()?.response}")
+                        Toast.makeText(this@RegisterActivity, "회원가입에 성공하셨습니다!", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@RegisterActivity,permissionActivity::class.java)
+                        startActivity(intent)
+                    }
+                    else{
+                        Log.d(TAG,"실패ㅅ")
+                    }
+                }
+                override fun onFailure(call: Call<ResponseDTO>, t: Throwable) {
+
+                    Log.e("retrofit 연동", "실패", t)
+                }
+
+            }
+            )
+
             finish()
         }
     }

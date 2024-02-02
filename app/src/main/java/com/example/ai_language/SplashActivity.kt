@@ -18,7 +18,7 @@ class SplashActivity : AppCompatActivity() {
         KakaoSdk.init(this, "ddef2e841959182411eab6098da996e5")
 
         val keyHash = Utility.getKeyHash(this)
-        Log.d("Hash", keyHash)
+        Log.d("해시키", keyHash)
 
         Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(this, LoginActivity::class.java)

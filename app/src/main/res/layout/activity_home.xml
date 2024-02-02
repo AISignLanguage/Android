@@ -62,7 +62,7 @@
             android:layout_margin="10dp"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@drawable/info" />
+            android:background="@drawable/news_btn" />
 
         <ImageButton
             android:id="@+id/callList_btn"
