@@ -14,8 +14,6 @@
         android:layout_height="80dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:layout_marginStart="@dimen/margin10"
-        android:layout_marginEnd="@dimen/margin10"
         android:background="@mipmap/logo" />
 
     <FrameLayout
@@ -23,7 +21,6 @@
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="@dimen/margin10"
         android:layout_weight="1">
 
         <androidx.viewpager2.widget.ViewPager2
@@ -40,7 +37,7 @@
         android:id="@+id/indicator"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginBottom="@dimen/margin10"
+        android:layout_marginBottom="10dp"
         android:layout_gravity="bottom"
         app:ci_drawable="@drawable/sky_radius"
         app:ci_drawable_unselected="@drawable/white_radius"
@@ -48,16 +45,13 @@
         app:ci_width="7dp"
         />
     <ImageView
-        android:layout_width="380dp"
+        android:layout_width="@dimen/line"
         android:layout_height="2dp"
-        android:layout_margin="@dimen/margin10"
         android:background="@drawable/line"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin10"
-        android:layout_marginEnd="@dimen/margin10"
 
         >
 
@@ -73,41 +67,35 @@
 
             <ImageButton
                 android:id="@+id/news_btn"
-                android:layout_gravity="center_vertical"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_margin="@dimen/margin10"
                 android:background="@mipmap/news_btn" />
-
             <ImageButton
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:id="@+id/callList_btn"
-                android:layout_gravity="center_vertical"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
                 android:layout_margin="@dimen/margin10"
-                android:background="@mipmap/call" />
+                android:background="@mipmap/call"/>
 
             <ImageButton
                 android:id="@+id/my_page_btn"
-                android:layout_gravity="center_vertical"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_margin="@dimen/margin10"
                 android:background="@mipmap/user" />
 
             <ImageButton
                 android:id="@+id/CameraBtn"
-                android:layout_gravity="center_vertical"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_margin="@dimen/margin10"
                 android:background="@mipmap/camera" />
 
             <ImageButton
                 android:id="@+id/dic_btn"
-                android:layout_gravity="center_vertical"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_margin="@dimen/margin10"
                 android:background="@mipmap/dic" />
         </LinearLayout>

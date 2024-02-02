@@ -2,6 +2,5 @@
 <resources>
 
     <dimen name="margin10">5dp</dimen>
-
     <dimen name="line">150dp</dimen>
 </resources>
