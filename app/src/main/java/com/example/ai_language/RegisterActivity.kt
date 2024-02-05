@@ -41,21 +41,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import java.io.IOException
 
-data class UserDTO(
-    @SerializedName("username")
-    val username: String,
-
-    @SerializedName("usernick")
-    val usernick: String
-)
-
-data class ResponseDTO(
-    @SerializedName("logIn_ok")
-    val response: Boolean
-)
-
-
-
 class RegisterActivity : AppCompatActivity() {
     lateinit var call : Call<ResponseDTO>
     lateinit var service: Service
