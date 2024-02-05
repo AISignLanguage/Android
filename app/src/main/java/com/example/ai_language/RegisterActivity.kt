@@ -181,7 +181,7 @@ class RegisterActivity : AppCompatActivity() {
         regNext.setOnClickListener {
 
 
-            val userDTO = UserDTO(regName.text.toString(),regNick.text.toString())
+            val userDTO = UserDTO(regName.text.toString(),regNick.text.toString(), "1", "1", "1","1")
             val gson = Gson()
             val userInfo = gson.toJson(userDTO)
             Log.e("JSON", userInfo);
