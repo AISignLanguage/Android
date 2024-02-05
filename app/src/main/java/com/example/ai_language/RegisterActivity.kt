@@ -42,7 +42,7 @@ import retrofit2.Retrofit
 import java.io.IOException
 
 class RegisterActivity : AppCompatActivity() {
-    lateinit var call : Call<ResponseDTO>
+    lateinit var call : Call<LoginCheckDTO>
     lateinit var service: Service
     private val STORAGE_PERMISSION_CODE = 1
     private val SMS_PERMISSION_CODE = 2
@@ -142,8 +142,14 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
         val nick = intent.getStringExtra("nick")
-        val regNick = findViewById<EditText>(R.id.reg_nick)
+
         val regName = findViewById<EditText>(R.id.reg_name)
+        val regEmail = findViewById<EditText>(R.id.reg_email)
+        val regPwd = findViewById<EditText>(R.id.reg_pwd)
+        val regBirthdate = findViewById<EditText>(R.id.reg_birthdate)
+        val regNick = findViewById<EditText>(R.id.reg_nick)
+        val regPhone = findViewById<EditText>(R.id.send_certification_et)
+
         regName.setText(nick)
 
         profile = findViewById<ImageView>(R.id.reg_pro)
@@ -181,8 +187,8 @@ class RegisterActivity : AppCompatActivity() {
         regNext.setOnClickListener {
 
 
-            val userDTO = UserDTO(regName.text.toString(),regNick.text.toString())
-            //val userDTO = UserDTO(regName.text.toString(),regNick.text.toString(), "1", "1", "1","1")
+            val userDTO = UserDTO(regName.text.toString(), regEmail.text.toString(), regPwd.text.toString(),
+                regBirthdate.text.toString(), regNick.text.toString(), regPhone.text.toString())
             val gson = Gson()
             val userInfo = gson.toJson(userDTO)
             Log.e("JSON", userInfo);
@@ -191,10 +197,10 @@ class RegisterActivity : AppCompatActivity() {
             call = service.sendData(userDTO)
             Log.d("콜","${userDTO}")
 
-            call.clone().enqueue(object : Callback<ResponseDTO> {
-                override fun onResponse(call: Call<ResponseDTO>, response: Response<ResponseDTO>) {
+            call.clone().enqueue(object : Callback<LoginCheckDTO> {
+                override fun onResponse(call: Call<LoginCheckDTO>, response: Response<LoginCheckDTO>) {
                     if (response.isSuccessful) {
-                        Log.d("서버로부터 받은 요청","${response.body()?.response}")
+                        Log.d("서버로부터 받은 요청","${response.body()?.loginCheck}")
                         Toast.makeText(this@RegisterActivity, "회원가입에 성공하셨습니다!", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@RegisterActivity,permissionActivity::class.java)
                         startActivity(intent)
@@ -203,7 +209,7 @@ class RegisterActivity : AppCompatActivity() {
                         Log.d(TAG,"실패ㅅ")
                     }
                 }
-                override fun onFailure(call: Call<ResponseDTO>, t: Throwable) {
+                override fun onFailure(call: Call<LoginCheckDTO>, t: Throwable) {
 
                     Log.e("retrofit 연동", "실패", t)
                 }
