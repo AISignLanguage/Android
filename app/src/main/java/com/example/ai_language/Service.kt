@@ -14,5 +14,5 @@ interface Service {
     fun saveUser(@Body jsonUser: UserDTO?): Call<ResponseBody?>?
 
     @POST("send-data") // 서버의 엔드포인트
-    fun sendData(@Body data: UserDTO): Call<ResponseDTO> // 전송할 데이터와 응답 타입
+    fun sendData(@Body data: UserDTO): Call<LoginCheckDTO> // 전송할 데이터와 응답 타입
 }
