@@ -201,6 +201,7 @@ class RegisterActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<LoginCheckDTO>, response: Response<LoginCheckDTO>) {
                     if (response.isSuccessful) {
                         Log.d("서버로부터 받은 요청","${response.body()?.loginCheck}")
+                        Log.d("서버로부터 받은 요청","${response.body()?.pwdCheck}")
                         Toast.makeText(this@RegisterActivity, "회원가입에 성공하셨습니다!", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@RegisterActivity,permissionActivity::class.java)
                         startActivity(intent)
