@@ -10,8 +10,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CallListPage : AppCompatActivity() {
+    lateinit var call: Call<CallListDTO>
+    lateinit var service: Service
     private val callViewModel: CallListViewModel by viewModels()
     private val inviteViewModel: InviteViewModel by viewModels()
 
@@ -24,6 +29,8 @@ class CallListPage : AppCompatActivity() {
         val callListAdapter = CallListAdapter(callViewModel)
         rv_call.adapter = callListAdapter
         rv_call.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+        //val call = service.getCallData(uri, installCheck)
 
         callListAdapter.setOnItemClickListener (object : CallListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
@@ -61,5 +68,32 @@ class CallListPage : AppCompatActivity() {
             val intent = Intent(this,Home::class.java)
             startActivity(intent)
         }
+    }
+
+    // 서버에서 데이터를 가져오는 함수
+    private fun fetchDataFromServer() {
+        val uri = "http://hello.com" // 서버에서 가져올 이미지 URI
+        val installCheck = true // 서버에서 가져올 앱 설치 여부 T/F
+
+        RetrofitClient.getInstance()
+        service = RetrofitClient.getUserRetrofitInterface()
+        val callListDto = CallListDTO(uri, installCheck)
+        //call = service.getCallData(callListDto)
+
+        call.clone().enqueue(object : Callback<CallListDTO> {
+            override fun onResponse(call: Call<CallListDTO>, response: Response<CallListDTO>) {
+                if (response.isSuccessful) {
+                    val callListDto = response.body()
+                    // 받아온 데이터를 처리
+                    // 뷰 모델에 연동하여 UI 업데이트 등 수행
+                } else {
+                    // 요청 실패 처리
+                }
+            }
+
+            override fun onFailure(call: Call<CallListDTO>, t: Throwable) {
+                // 통신 실패 처리
+            }
+        })
     }
 }

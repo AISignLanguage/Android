@@ -20,13 +20,13 @@ data class LoginCheckDTO(
 
 //CallListPage
 data class CallListDTO(
-    @SerializedName("uri") val pwdCheck: Boolean, //이미지 uri
+    @SerializedName("uri") val uri: String, //이미지 uri
     @SerializedName("installCheck") val installCheck: Boolean //앱 다운 여부
 )
 
 //Personalinfo
 data class UpdateDTO(
-    @SerializedName("uri") val uri: Boolean,            //이미지 uri
+    @SerializedName("uri") val uri: String,            //이미지 uri
     @SerializedName("nickName") val nickName: String,   //닉네임
     @SerializedName("loginInfo") val loginInfo: String, //로그인 정보 (앱/카톡)
     @SerializedName("password") val password: String    //비밀번호

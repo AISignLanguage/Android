@@ -1,25 +1,22 @@
 package com.example.ai_language
 
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
-import android.view.WindowInsets
-import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import me.relex.circleindicator.CircleIndicator3
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class PagerAdapter(fa: FragmentActivity, private val mCount: Int) : FragmentStateAdapter(fa) {
@@ -48,7 +45,8 @@ class Home : AppCompatActivity() {
     private val CAMERA_PERMISSION_CODE = 1000
     private val READ_CONTACTS_PERMISSION_REQUEST = 1
 
-
+    lateinit var call: Call<CallListDTO>
+    lateinit var service: Service
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,8 +113,31 @@ class Home : AppCompatActivity() {
                 )
             }
             else{
-                val intent = Intent(this, CallListPage::class.java)
-                startActivity(intent)
+                //DB에서 callListDTO 가져와서 callListPage로 접속할 때 서버에 보냄
+                val uri = "http://hello.com" //DB에서 가져올 이미지 uri
+                val installCheck = true //DB에서 가져올 앱 설치 여부 T/F
+
+                RetrofitClient.getInstance()
+                service = RetrofitClient.getUserRetrofitInterface()
+                val callListDto = CallListDTO(uri, installCheck)
+                call = service.sendCallData(callListDto)
+
+                call.clone().enqueue(object : Callback<CallListDTO> {
+                    override fun onResponse(call: Call<CallListDTO>, response: Response<CallListDTO>) {
+                        if(response.isSuccessful) {
+                            Toast.makeText(this@Home, "callList 전송 성공", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(applicationContext, CallListPage::class.java)
+                            startActivity(intent)
+                        } else { Log.d("로그","callList 전송 실패") }
+                    }
+
+                    override fun onFailure(call: Call<CallListDTO>, t: Throwable) {
+                        Log.d("로그", "Retrofit 연동 실패")
+                    }
+                })
+
+                //val intent = Intent(this, CallListPage::class.java)
+                //startActivity(intent)
             }
         }
 
