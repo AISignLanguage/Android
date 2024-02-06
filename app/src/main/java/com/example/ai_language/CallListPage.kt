@@ -78,12 +78,12 @@ class CallListPage : AppCompatActivity() {
         RetrofitClient.getInstance()
         service = RetrofitClient.getUserRetrofitInterface()
         val callListDto = CallListDTO(uri, installCheck)
-        //call = service.getCallData(callListDto)
+        call = service.getCallData()
 
         call.clone().enqueue(object : Callback<CallListDTO> {
             override fun onResponse(call: Call<CallListDTO>, response: Response<CallListDTO>) {
                 if (response.isSuccessful) {
-                    val callListDto = response.body()
+                    //val callListDto = response.body()
                     // 받아온 데이터를 처리
                     // 뷰 모델에 연동하여 UI 업데이트 등 수행
                 } else {
