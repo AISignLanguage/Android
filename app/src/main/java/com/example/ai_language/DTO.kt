@@ -23,6 +23,12 @@ data class CallListDTO(
     @SerializedName("uri") val uri: String, //이미지 uri
     @SerializedName("installCheck") val installCheck: Boolean //앱 다운 여부
 )
+//NewsPage
+data class NewsDTO(
+    @SerializedName("uri") val image: String,       //뉴스 썸네일 uri
+    @SerializedName("title") val title: String,     //제목
+    @SerializedName("content") val content: String  //내용
+)
 
 //Personalinfo
 data class UpdateDTO(
