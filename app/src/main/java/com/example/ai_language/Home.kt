@@ -97,8 +97,29 @@ class Home : AppCompatActivity() {
 
         val news_btn = findViewById<ImageButton>(R.id.news_btn)
         news_btn.setOnClickListener {
-            val intent = Intent(this, NewsActivity::class.java)
-            startActivity(intent)
+            val newsData = NewsDTO("title", "image", "content")
+            service = RetrofitClient.getUserRetrofitInterface()
+            val call = service.sendNewsData(newsData)
+
+            call.enqueue(object : Callback<NewsDTO> {
+                override fun onResponse(call: Call<NewsDTO>, response: Response<NewsDTO>) {
+                    if (response.isSuccessful) {
+                        //val responseData = response.body()
+                        //Toast.makeText(this@Home, "callList 전송 성공", Toast.LENGTH_SHORT).show()
+                        Log.e("로그", "newsList 전송 성공")
+                    }
+                    else {
+                        Log.e("로그", "newsList 전송 실패")
+                    }
+                }
+
+                override fun onFailure(call: Call<NewsDTO>, t: Throwable) {
+                    Log.d("로그", "Retrofit 연동 실패")
+                }
+            })
+
+            //val intent = Intent(this, NewsActivity::class.java)
+            //startActivity(intent)
         }
 
         val callLsit_btn = findViewById<ImageButton>(R.id.callList_btn) //전화번호부 화면으로 이동

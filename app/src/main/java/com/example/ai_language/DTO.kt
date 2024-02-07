@@ -25,8 +25,8 @@ data class CallListDTO(
 )
 //NewsPage
 data class NewsDTO(
+    @SerializedName("title") val title: String,      //제목
     @SerializedName("uri") val image: String,       //뉴스 썸네일 uri
-    @SerializedName("title") val title: String,     //제목
     @SerializedName("content") val content: String  //내용
 )
 
