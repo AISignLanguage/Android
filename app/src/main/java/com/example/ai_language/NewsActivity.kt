@@ -54,9 +54,6 @@ class NewsActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var homeButton: ImageButton
 
-    lateinit var service: Service
-    lateinit var call : Call<List<NewsDTO>>
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_news)
@@ -79,26 +76,6 @@ class NewsActivity : AppCompatActivity() {
             adapter.notifyDataSetChanged()
         })
 
-        service = RetrofitClient.getUserRetrofitInterface()
-        call = service.getNews()
-
-        call.enqueue(object : Callback<List<NewsDTO>> {
-            override fun onResponse(call: Call<List<NewsDTO>>, response: Response<List<NewsDTO>>) {
-                if (response.isSuccessful) {
-                    val newsList = response.body()
-                    newsList?.let {
-                        //viewModel.newsList.value = it
-                        Log.d("로그", "newsList 전송 성공")
-                    }
-                } else {
-                    Log.e("로그", "newsList 전송 실패")
-                }
-            }
-
-            override fun onFailure(call: Call<List<NewsDTO>>, t: Throwable) {
-                Log.d("로그", "Retrofit 연동 실패")
-            }
-        })
 
     }
 }

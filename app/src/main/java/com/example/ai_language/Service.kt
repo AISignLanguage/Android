@@ -22,6 +22,9 @@ interface Service {
     @GET("get-callList") //모든 사용자들의 정보 조회 -> 가져옴 -> 뷰모델에 연결
     fun getCallData(): Call<CallListDTO>
 
+    @POST("send-news")
+    fun sendNewsData(@Body data: NewsDTO): Call<NewsDTO>
+
     @GET("get-news") //뉴스 정보 가져옴
     fun getNews(): Call<List<NewsDTO>>
 
