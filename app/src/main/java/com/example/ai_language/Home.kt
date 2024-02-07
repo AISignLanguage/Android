@@ -128,7 +128,9 @@ class Home : AppCompatActivity() {
                             Toast.makeText(this@Home, "callList 전송 성공", Toast.LENGTH_SHORT).show()
                             val intent = Intent(applicationContext, CallListPage::class.java)
                             startActivity(intent)
-                        } else { Log.d("로그","callList 전송 실패") }
+                        } else {
+                            Log.d("로그", "callList 전송 실패. 응답 코드: ${response.code()}, 오류 메시지: ${response.errorBody()?.string()}")
+                             }
                     }
 
                     override fun onFailure(call: Call<CallListDTO>, t: Throwable) {

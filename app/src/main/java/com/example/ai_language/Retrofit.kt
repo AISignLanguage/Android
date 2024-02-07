@@ -12,7 +12,7 @@ class RetrofitClient private constructor() {
         @Volatile
         private var instance: RetrofitClient? = null
         private lateinit var userRetrofitInterface: Service
-        private val baseUrl = "https://89df-2001-e60-9169-9e66-98e3-cfe-9fea-d5bc.ngrok-free.app/"
+        private val baseUrl = "https://52b-2001-e60-9169-9e66-98e3-cfe-9fea-d5bc.ngrok-free.app/"
 
         fun getInstance(): RetrofitClient {
             return instance ?: synchronized(this) {
