@@ -2,6 +2,7 @@ package com.example.ai_language
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
@@ -68,31 +69,38 @@ class CallListPage : AppCompatActivity() {
             val intent = Intent(this,Home::class.java)
             startActivity(intent)
         }
+
+        fetchDataFromServer() //서버에서 데이터 갱신
     }
 
     // 서버에서 데이터를 가져오는 함수
+    // fetchDataFromServer 함수 내에 수정된 코드
     private fun fetchDataFromServer() {
-        val uri = "http://hello.com" // 서버에서 가져올 이미지 URI
-        val installCheck = true // 서버에서 가져올 앱 설치 여부 T/F
-
+        // Retrofit 인스턴스 생성
         RetrofitClient.getInstance()
         service = RetrofitClient.getUserRetrofitInterface()
-        val callListDto = CallListDTO(uri, installCheck)
         call = service.getCallData()
 
-        call.clone().enqueue(object : Callback<CallListDTO> {
+        // 서버로부터 데이터를 가져오는 요청 보내기
+        call.enqueue(object : Callback<CallListDTO> {
             override fun onResponse(call: Call<CallListDTO>, response: Response<CallListDTO>) {
                 if (response.isSuccessful) {
-                    //val callListDto = response.body()
+                    val callListDto = response.body() // 서버에서 받은 데이터
+                    Log.d("로그", "onCreate 응답 성공")
+                    Log.d("로그", "uri: ${callListDto?.uri.toString()} " +
+                            " installCheck:${callListDto?.installCheck.toString()}")
                     // 받아온 데이터를 처리
-                    // 뷰 모델에 연동하여 UI 업데이트 등 수행
+                    // 예: 뷰 모델에 연동하여 UI 업데이트 등 수행
                 } else {
                     // 요청 실패 처리
+                    Log.d("로그", "데이터 요청 실패. 응답 코드: ${response.code()}, "
+                            + "오류 메시지: ${response.errorBody()?.string()}")
                 }
             }
 
             override fun onFailure(call: Call<CallListDTO>, t: Throwable) {
                 // 통신 실패 처리
+                Log.d("로그", "통신 실패: ${t.message}")
             }
         })
     }

@@ -41,16 +41,3 @@ data class UpdateDTO(
 data class DeleteDTO(
     @SerializedName("id") val id: String,
 )
-
-//data class UserDTO(
-//    @SerializedName("username")
-//    val username: String,
-//
-//    @SerializedName("usernick")
-//    val usernick: String
-//)
-//
-//data class ResponseDTO(
-//    @SerializedName("logIn_ok")
-//    val response: Boolean
-//)

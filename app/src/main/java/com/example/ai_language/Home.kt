@@ -113,33 +113,8 @@ class Home : AppCompatActivity() {
                 )
             }
             else{
-                //DB에서 callListDTO 가져와서 callListPage로 접속할 때 서버에 보냄
-                val uri = "http://hello.com" //DB에서 가져올 이미지 uri
-                val installCheck = true //DB에서 가져올 앱 설치 여부 T/F
-
-                RetrofitClient.getInstance()
-                service = RetrofitClient.getUserRetrofitInterface()
-                val callListDto = CallListDTO(uri, installCheck)
-                call = service.sendCallData(callListDto)
-
-                call.clone().enqueue(object : Callback<CallListDTO> {
-                    override fun onResponse(call: Call<CallListDTO>, response: Response<CallListDTO>) {
-                        if(response.isSuccessful) {
-                            Toast.makeText(this@Home, "callList 전송 성공", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(applicationContext, CallListPage::class.java)
-                            startActivity(intent)
-                        } else {
-                            Log.d("로그", "callList 전송 실패. 응답 코드: ${response.code()}, 오류 메시지: ${response.errorBody()?.string()}")
-                             }
-                    }
-
-                    override fun onFailure(call: Call<CallListDTO>, t: Throwable) {
-                        Log.d("로그", "Retrofit 연동 실패")
-                    }
-                })
-
-                //val intent = Intent(this, CallListPage::class.java)
-                //startActivity(intent)
+                val intent = Intent(this, CallListPage::class.java)
+                startActivity(intent)
             }
         }
 
