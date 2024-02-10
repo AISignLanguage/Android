@@ -50,8 +50,8 @@ class CallListPage : AppCompatActivity() {
         }
 
         callListRecyclerView()
+        inviteRecyclerView()
         getContacts()
-        //inviteRecyclerView()
         //fetchDataFromServer() //서버에서 데이터 갱신
     }
 
@@ -95,7 +95,6 @@ class CallListPage : AppCompatActivity() {
         rv_call.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         callListAdapter = CallListAdapter(callViewModel)
         rv_call.adapter = callListAdapter
-
 
         callListAdapter.setOnItemClickListener (object : CallListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {

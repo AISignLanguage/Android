@@ -12,15 +12,6 @@ class CallListViewModel : ViewModel() {
     val callDataList : LiveData<List<CallListItem>>
         get() = _callDataList
 
-//    init {
-//        _callDataList.value = listOf(
-//            CallListItem("박지원", "010-1234-5678"),
-//            CallListItem("임다솔", "010-5322-1345"),
-//            CallListItem("신정인", "010-1209-0084"),
-//        )
-//        Log.d("로그", "뷰 모델 초기화 됨")
-//    }
-
     fun addListItem(item: CallListItem) {
         //liveData가 비었으면 빈 mutableList 생성후 넣음, 아니면 그냥 넣음
         val currentList = callDataList.value?.toMutableList() ?: mutableListOf()
