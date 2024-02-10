@@ -22,6 +22,7 @@ class CallListAdapter (private val viewModel: CallListViewModel) : RecyclerView.
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CallListViewHolder {
+        Log.d("로그1", "onCreateViewHolder")
         val view = LayoutInflater.from(parent.context).inflate(R.layout.call_item, parent, false)
         return CallListViewHolder(view)
     }
@@ -32,6 +33,7 @@ class CallListAdapter (private val viewModel: CallListViewModel) : RecyclerView.
             holder.name.text = it.name
             holder.phoneNumber.text = it.callNumber
         }
+        Log.d("로그1", "name : " + "${holder.name}" + "name : " + "${holder.phoneNumber}")
     }
 
 //    fun setData(newData:List<CallListItem>) {
