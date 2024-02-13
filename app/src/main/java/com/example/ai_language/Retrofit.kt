@@ -12,19 +12,17 @@ class RetrofitClient private constructor() {
         @Volatile
         private var instance: RetrofitClient? = null
         private lateinit var userRetrofitInterface: Service
-            private val baseUrl = "https://d49e-2001-e60-9169-9e66-70ca-9e8b-b2be-928f.ngrok-free.app/api/mog/user"
+            private val baseUrl = "http://192.168.204.1:8080/api/mog/user"
 
         fun getInstance(): RetrofitClient {
             return instance ?: synchronized(this) {
                 instance ?: RetrofitClient().also { instance = it }
             }
         }
-
         fun getUserRetrofitInterface(): Service {
             return userRetrofitInterface
         }
     }
-
     init {
         val okHttpClient = OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS) // 연결 타임아웃 설정

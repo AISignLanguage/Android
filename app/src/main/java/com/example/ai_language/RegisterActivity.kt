@@ -49,7 +49,7 @@ class RegisterActivity : AppCompatActivity() {
     private val ACCOUNT_SID = "${R.string.SID}"
     private val AUTH_TOKEN = "${R.string.TK}"
     private val MESSAGIING_SERVICE = "${R.string.MS}"
-
+    private var url : String = ""
     lateinit var profile: ImageView
     private val galleryLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -57,6 +57,7 @@ class RegisterActivity : AppCompatActivity() {
                 val intent = result.data
                 val selectedImageUri: Uri? = intent?.data
                 profile.setImageURI(selectedImageUri)
+                url = selectedImageUri.toString()
             }
         }
 
@@ -118,7 +119,7 @@ class RegisterActivity : AppCompatActivity() {
         send_certification_btn.setOnClickListener {
             val phNum = send_certification_et.text.toString()
             if (!isValidPhoneNumber(phNum)) {
-                // 전화번호가 "010"으로 시작하지 않거나 11자리가 아닌 경우
+                // 전화번호가 "010"으로 시작하지 않거나 11자리가 아닌 경우 서버에서 false가 옴
                 Toast.makeText(this, "올바른 전화번호를 입력하세요.", Toast.LENGTH_SHORT).show()
             }
             else {
@@ -148,6 +149,7 @@ class RegisterActivity : AppCompatActivity() {
         val regPwd = findViewById<EditText>(R.id.reg_pwd)
         val regBirthdate = findViewById<EditText>(R.id.reg_birthdate)
         val regNick = findViewById<EditText>(R.id.reg_nick)
+
         val regPhone = findViewById<EditText>(R.id.send_certification_et)
 
         regName.setText(nick)
@@ -187,8 +189,8 @@ class RegisterActivity : AppCompatActivity() {
         regNext.setOnClickListener {
 
 
-            val userDTO = UserDTO(regName.text.toString(), regEmail.text.toString(), regPwd.text.toString(),
-                regBirthdate.text.toString(), regNick.text.toString(), regPhone.text.toString())
+            val userDTO = UserDTO(regName.text.toString(), regBirthdate.text.toString(), regEmail.text.toString(), regPwd.text.toString(),
+                regNick.text.toString(), regPhone.text.toString(),url)
             val gson = Gson()
             val userInfo = gson.toJson(userDTO)
             Log.e("JSON", userInfo);
@@ -207,7 +209,7 @@ class RegisterActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
                     else{
-                        Log.d(TAG,"실패ㅅ")
+                        Log.d("서버실패?","실패ㅅ")
                     }
                 }
                 override fun onFailure(call: Call<LoginCheckDTO>, t: Throwable) {
@@ -241,7 +243,6 @@ class RegisterActivity : AppCompatActivity() {
         intent.action = Intent.ACTION_PICK
         galleryLauncher.launch(intent)
     }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
