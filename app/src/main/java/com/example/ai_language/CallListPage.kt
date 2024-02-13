@@ -1,14 +1,12 @@
 package com.example.ai_language
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
-import android.widget.SimpleAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +23,9 @@ data class Phone(val id:String?, val name:String?, val phone:String?)
 
 class CallListPage : AppCompatActivity() {
 
-    lateinit var call: Call<CallListDTO>
+    val contactsList = mutableListOf<PhoneDTO>()
+
+    lateinit var call : Call<PhoneDTO>
     lateinit var service: Service
 
     private val callViewModel: CallListViewModel by viewModels()
@@ -52,7 +52,7 @@ class CallListPage : AppCompatActivity() {
         callListRecyclerView()
         inviteRecyclerView()
         getContacts()
-        //fetchDataFromServer() //서버에서 데이터 갱신
+        fetchDataFromServer() //서버에서 데이터 갱신
     }
 
     private fun getContacts() {
@@ -75,15 +75,20 @@ class CallListPage : AppCompatActivity() {
                 ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, // id 기반으로 전화번호
                 null, null)
 
+            val phoneNumbers = mutableListOf<String>()
+
             if (phoneCursor?.moveToFirst() == true) {   // 동명이인 때문에 고유 id로 검색
                 val numberColumnIndex = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
                 if (numberColumnIndex != -1) {
                     val number: String? = if (numberColumnIndex != -1) phoneCursor.getString(numberColumnIndex) else null
-                    val newItem = CallListItem(name, number)
-                    callViewModel.addListItem(newItem) // 뷰모델에 추가
+                    number?.let { phoneNumbers.add(it.toString()) } // 전화번호가 null이 아닌 경우 리스트에 추가
                 }
             }
             phoneCursor?.close()
+
+            // 해당 연락처의 전화번호들을 DTO로 변환하여 리스트에 추가
+            val phoneDTO = PhoneDTO(phoneNumbers)
+            contactsList.add(phoneDTO)
         } //while 종료
         cursor?.close()
     }
@@ -130,23 +135,21 @@ class CallListPage : AppCompatActivity() {
         })
     }
 
-
-
     // 서버에서 데이터를 가져오는 함수
     private fun fetchDataFromServer() {
         // Retrofit 인스턴스 생성
         RetrofitClient.getInstance()
         service = RetrofitClient.getUserRetrofitInterface()
-        call = service.getCallData()
+        call = service.sendCallData(contactsList)
+        Log.d("로그", "${contactsList}")
 
         // 서버로부터 데이터를 가져오는 요청 보내기
-        call.enqueue(object : Callback<CallListDTO> {
-            override fun onResponse(call: Call<CallListDTO>, response: Response<CallListDTO>) {
+        call.enqueue(object : Callback<PhoneDTO> {
+            override fun onResponse(call: Call<PhoneDTO>, response: Response<PhoneDTO>) {
                 if (response.isSuccessful) {
                     val callListDto = response.body() // 서버에서 받은 데이터
                     Log.d("로그", "onCreate 응답 성공")
-                    Log.d("로그", "uri: ${callListDto?.uri.toString()} " +
-                            " installCheck:${callListDto?.installCheck.toString()}")
+                    Log.d("로그", "PhoneDTO: ")
                     // 받아온 데이터를 처리
                     // 예: 뷰 모델에 연동하여 UI 업데이트 등 수행
                 } else {
@@ -156,7 +159,7 @@ class CallListPage : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<CallListDTO>, t: Throwable) {
+            override fun onFailure(call: Call<PhoneDTO>, t: Throwable) {
                 // 통신 실패 처리
                 Log.d("로그", "통신 실패: ${t.message}")
             }

@@ -45,7 +45,6 @@ class Home : AppCompatActivity() {
     private val CAMERA_PERMISSION_CODE = 1000
     private val READ_CONTACTS_PERMISSION_REQUEST = 1
 
-    lateinit var call: Call<CallListDTO>
     lateinit var service: Service
 
     override fun onCreate(savedInstanceState: Bundle?) {
