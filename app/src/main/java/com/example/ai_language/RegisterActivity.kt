@@ -149,7 +149,6 @@ class RegisterActivity : AppCompatActivity() {
         val regPwd = findViewById<EditText>(R.id.reg_pwd)
         val regBirthdate = findViewById<EditText>(R.id.reg_birthdate)
         val regNick = findViewById<EditText>(R.id.reg_nick)
-
         val regPhone = findViewById<EditText>(R.id.send_certification_et)
 
         regName.setText(nick)
