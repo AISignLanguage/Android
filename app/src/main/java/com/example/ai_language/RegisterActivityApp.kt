@@ -29,10 +29,12 @@ import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import androidx.annotation.RequiresApi
 
 class RegisterActivityApp : AppCompatActivity() {
     companion object {
         private const val STORAGE_PERMISSION_CODE = 1
+        private const val REQUEST_CODE_POST_NOTIFICATIONS = 101
     }
     var randomSixDigitNumber = "000000"
     lateinit var profile: ImageView
@@ -72,17 +74,15 @@ class RegisterActivityApp : AppCompatActivity() {
 
         val nick = intent.getStringExtra("nick")
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "채널 이름"
-            val descriptionText = "채널 설명"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel("1", name, importance).apply {
-                description = descriptionText
-            }
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+        val name = "채널 이름"
+        val descriptionText = "채널 설명"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel("1", name, importance).apply {
+            description = descriptionText
         }
+        val notificationManager: NotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
 
         val kakao_ok = findViewById<B>(R.id.kakao_ok)
         val kakaoConET = findViewById<EditText>(R.id.kakao_con_et)
@@ -181,6 +181,7 @@ class RegisterActivityApp : AppCompatActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun sendNotification(context: Context, message: String) {
         val launchIntent = context.packageManager.getLaunchIntentForPackage("com.kakao.talk")
         val notificationId = Random.nextInt()
@@ -199,13 +200,11 @@ class RegisterActivityApp : AppCompatActivity() {
                 Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                REQUEST_CODE_POST_NOTIFICATIONS
+            )
             return
         }
         notificationManager.notify(notificationId, notificationBuilder.build())

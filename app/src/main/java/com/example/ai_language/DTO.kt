@@ -9,7 +9,8 @@ data class UserDTO(
     @SerializedName("email") val email: String,
     @SerializedName("password") val password: String,
     @SerializedName("nickName") val nickName: String,
-    @SerializedName("phoneNumber") val phoneNumber: String
+    @SerializedName("phoneNumber") val phoneNumber: String,
+    @SerializedName("profileImageUrl") val profileImageUrl: String,
 )
 
 //LoginActivity
