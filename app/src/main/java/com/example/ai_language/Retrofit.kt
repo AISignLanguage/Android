@@ -19,10 +19,12 @@ class RetrofitClient private constructor() {
                 instance ?: RetrofitClient().also { instance = it }
             }
         }
+
         fun getUserRetrofitInterface(): Service {
             return userRetrofitInterface
         }
     }
+
     init {
         val okHttpClient = OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS) // 연결 타임아웃 설정

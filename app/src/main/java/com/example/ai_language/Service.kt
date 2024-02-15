@@ -17,10 +17,7 @@ interface Service {
     fun sendData(@Body data: UserDTO): Call<LoginCheckDTO> // 전송할 데이터와 응답 타입
 
     @POST("send-callList") //CallListPage "접속할 때" 서버에 데이터 전달해줌 (페이지 들어갈 때마다 갱신되도록)
-    fun sendCallData(@Body data: CallListDTO): Call<CallListDTO>
-
-    @GET("get-callList") //모든 사용자들의 정보 조회 -> 가져옴 -> 뷰모델에 연결
-    fun getCallData(): Call<CallListDTO>
+    fun sendCallData(@Body contactsList: PhoneDTO): Call<PhoneDTO>
 
     @POST("send-news")
     fun sendNewsData(@Body data: NewsDTO): Call<NewsDTO>

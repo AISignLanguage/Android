@@ -26,9 +26,8 @@ data class LoginCheckDTO(
 )
 
 //CallListPage
-data class CallListDTO(
-    @SerializedName("uri") val uri: String, //이미지 uri
-    @SerializedName("installCheck") val installCheck: Boolean //앱 다운 여부
+data class PhoneDTO(
+    @SerializedName("phoneNumber") val phoneNumbers: List<String>
 )
 //NewsPage
 data class NewsDTO(
