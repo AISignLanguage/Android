@@ -26,9 +26,20 @@ data class LoginCheckDTO(
 )
 
 //CallListPage
-data class PhoneDTO(
+data class PhoneNumberDTO(
     @SerializedName("phoneNumber") val phoneNumbers: List<String>
 )
+
+data class PhoneDTO(
+    @SerializedName("name") val name: String?,
+    @SerializedName("phoneNumber") val phoneNumbers: String?,
+    @SerializedName("profileImageUrl") val profileImageUrl: String?
+)
+
+data class PhoneListDTO(
+    val phones: List<List<PhoneDTO>>
+)
+
 //NewsPage
 data class NewsDTO(
     @SerializedName("title") val title: String,      //제목

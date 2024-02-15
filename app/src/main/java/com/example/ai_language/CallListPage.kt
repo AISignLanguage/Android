@@ -22,16 +22,16 @@ data class Phone(val id:String?, val name:String?, val phone:String?)
 
 class CallListPage : AppCompatActivity() {
 
-    lateinit var call : Call<PhoneDTO>
+    lateinit var call : Call<PhoneListDTO>
     lateinit var service: Service
-    lateinit var phoneDTO: PhoneDTO
+    lateinit var phoneNumberDTO: PhoneNumberDTO
 
     private val callViewModel: CallListViewModel by viewModels()
     private val inviteViewModel: InviteViewModel by viewModels()
 
-    private lateinit var rv_call : RecyclerView
+    private lateinit var callRecyclerView: RecyclerView
     private lateinit var callListAdapter : CallListAdapter
-    private lateinit var rv_invite : RecyclerView
+    private lateinit var inviteRecyclerView : RecyclerView
     private lateinit var inviteListAdapter : InviteListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,10 +53,10 @@ class CallListPage : AppCompatActivity() {
     private fun callListRecyclerView() {
         //val call = service.getCallData(uri, installCheck)
 
-        rv_call = findViewById<RecyclerView>(R.id.rv_call)
-        rv_call.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        callRecyclerView = findViewById<RecyclerView>(R.id.rv_call)
+        callRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         callListAdapter = CallListAdapter(callViewModel)
-        rv_call.adapter = callListAdapter
+        callRecyclerView.adapter = callListAdapter
 
         callListAdapter.setOnItemClickListener (object : CallListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
@@ -74,10 +74,10 @@ class CallListPage : AppCompatActivity() {
 
     private fun inviteRecyclerView() {
         //RecyclerView 초기화 및 어댑터 설정 - 앱 비 사용자
-        rv_invite = findViewById<RecyclerView>(R.id.rv_invite)
+        inviteRecyclerView = findViewById<RecyclerView>(R.id.rv_invite)
         inviteListAdapter = InviteListAdapter(inviteViewModel)
-        rv_invite.adapter = inviteListAdapter
-        rv_invite.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        inviteRecyclerView.adapter = inviteListAdapter
+        inviteRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         //초대버튼 클릭
         inviteListAdapter.setOnItemClickListener(object : InviteListAdapter.OnItemClickListener {
@@ -123,7 +123,7 @@ class CallListPage : AppCompatActivity() {
             phoneCursor?.close()
 
             // 해당 연락처의 전화번호들을 DTO로 변환하여 리스트에 추가
-            phoneDTO = PhoneDTO(phoneNumbers)
+            phoneNumberDTO = PhoneNumberDTO(phoneNumbers)
 
         } //while 종료
         cursor?.close()
@@ -134,17 +134,26 @@ class CallListPage : AppCompatActivity() {
         // Retrofit 인스턴스 생성
         RetrofitClient.getInstance()
         service = RetrofitClient.getUserRetrofitInterface()
-        call = service.sendCallData(phoneDTO)
+        call = service.sendCallData(phoneNumberDTO)
 
         // 서버로부터 데이터를 가져오는 요청 보내기
-        call.enqueue(object : Callback<PhoneDTO> {
-            override fun onResponse(call: Call<PhoneDTO>, response: Response<PhoneDTO>) {
+        call.enqueue(object : Callback<PhoneListDTO> {
+            override fun onResponse(call: Call<PhoneListDTO>, response: Response<PhoneListDTO>) {
                 if (response.isSuccessful) {
-                    val callListDto = response.body() // 서버에서 받은 데이터
+                    val PhoneListDTO = response.body() // 서버에서 받은 데이터
                     Log.d("로그", "onCreate 응답 성공")
-                    Log.d("로그", "phoneDTO.phoneNumbers: ${phoneDTO.phoneNumbers}")
-                    // 받아온 데이터를 처리
-                    // 예: 뷰 모델에 연동하여 UI 업데이트 등 수행
+                    PhoneListDTO?.phones?.let { phones ->
+                        for (phoneDTOList in phones) {
+                            for (phoneDTO in phoneDTOList) {
+                                Log.d(
+                                    "로그",
+                                    "Name: ${phoneDTO.name}, PhoneNumber: ${phoneDTO.phoneNumbers}, ProfileImageUrl: ${phoneDTO.profileImageUrl}"
+                                )
+                            }
+                        }
+                        // 받아온 데이터를 처리
+                        // 예: 뷰 모델에 연동하여 UI 업데이트 등 수행
+                    }
                 } else {
                     // 요청 실패 처리
                     Log.d("로그", "데이터 요청 실패. 응답 코드: ${response.code()}, "
@@ -152,7 +161,7 @@ class CallListPage : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<PhoneDTO>, t: Throwable) {
+            override fun onFailure(call: Call<PhoneListDTO>, t: Throwable) {
                 // 통신 실패 처리
                 Log.d("로그", "통신 실패: ${t.message}")
             }
