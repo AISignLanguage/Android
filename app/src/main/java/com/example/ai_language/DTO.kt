@@ -8,15 +8,21 @@ data class UserDTO(
     @SerializedName("birthdate") val birthdate: String,
     @SerializedName("email") val email: String,
     @SerializedName("password") val password: String,
-    @SerializedName("nickName") val nickName: String,
-    @SerializedName("phoneNumber") val phoneNumber: String,
-    @SerializedName("profileImageUrl") val profileImageUrl: String,
+    @SerializedName("nickname") val nickName: String,
+    @SerializedName("phone_number") val phoneNumber: String,
+    @SerializedName("profile_image_url") val profileImageUrl: String,
 )
 
 //LoginActivity
 data class LoginCheckDTO(
-    @SerializedName("id_ok") val loginCheck: Boolean, //아이디 일치 여부
-    @SerializedName("pwd_ok") val pwdCheck: Boolean   //비밀번호 일치 여부
+    @SerializedName("name") val name: String,
+    @SerializedName("birthdate") val birthdate: String,
+    @SerializedName("email") val email: String,
+    @SerializedName("password") val password: String,
+    @SerializedName("nickName") val nickName: String,
+    @SerializedName("phoneNumber") val phoneNumber: String,
+    @SerializedName("profileImageUrl") val profileImageUrl: String,
+    @SerializedName("registerdAt") val registerdAt: String,
 )
 
 //CallListPage
