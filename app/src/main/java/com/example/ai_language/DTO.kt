@@ -19,10 +19,10 @@ data class LoginCheckDTO(
     @SerializedName("birthdate") val birthdate: String,
     @SerializedName("email") val email: String,
     @SerializedName("password") val password: String,
-    @SerializedName("nickName") val nickName: String,
-    @SerializedName("phoneNumber") val phoneNumber: String,
-    @SerializedName("profileImageUrl") val profileImageUrl: String,
-    @SerializedName("registerdAt") val registerdAt: String,
+    @SerializedName("nickname") val nickName: String,
+    @SerializedName("phone_number") val phoneNumber: String,
+    @SerializedName("profile_image_url") val profileImageUrl: String,
+    @SerializedName("registerd_at") val registerdAt: String,
 )
 
 //CallListPage
