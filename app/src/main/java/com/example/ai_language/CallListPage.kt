@@ -16,17 +16,15 @@ import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 
 //전화번호 데이터 클래스
 data class Phone(val id:String?, val name:String?, val phone:String?)
 
 class CallListPage : AppCompatActivity() {
 
-    val contactsList = mutableListOf<PhoneDTO>()
-
     lateinit var call : Call<PhoneDTO>
     lateinit var service: Service
+    lateinit var phoneDTO: PhoneDTO
 
     private val callViewModel: CallListViewModel by viewModels()
     private val inviteViewModel: InviteViewModel by viewModels()
@@ -35,9 +33,6 @@ class CallListPage : AppCompatActivity() {
     private lateinit var callListAdapter : CallListAdapter
     private lateinit var rv_invite : RecyclerView
     private lateinit var inviteListAdapter : InviteListAdapter
-
-    private var dataList: ArrayList<Map<String, String>> = ArrayList()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,44 +48,6 @@ class CallListPage : AppCompatActivity() {
         inviteRecyclerView()
         getContacts()
         fetchDataFromServer() //서버에서 데이터 갱신
-    }
-
-    private fun getContacts() {
-        // 연락처 전체 정보에 대한 쿼리 수행
-        val cursor: Cursor? = contentResolver.query(
-            ContactsContract.Contacts.CONTENT_URI,
-            null, null, null, null)
-
-        while (cursor?.moveToNext() == true) {
-            val idColumnIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID) //동명이인 때문에 ID 필요
-            val id: String? = if (idColumnIndex != -1) cursor.getString(idColumnIndex) else null
-
-            val nameColumnIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
-            val name: String? = if (nameColumnIndex != -1) cursor.getString(nameColumnIndex) else null
-
-
-            val phoneCursor: Cursor? = contentResolver.query(
-                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                null,
-                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, // id 기반으로 전화번호
-                null, null)
-
-            val phoneNumbers = mutableListOf<String>()
-
-            if (phoneCursor?.moveToFirst() == true) {   // 동명이인 때문에 고유 id로 검색
-                val numberColumnIndex = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
-                if (numberColumnIndex != -1) {
-                    val number: String? = if (numberColumnIndex != -1) phoneCursor.getString(numberColumnIndex) else null
-                    number?.let { phoneNumbers.add(it.toString()) } // 전화번호가 null이 아닌 경우 리스트에 추가
-                }
-            }
-            phoneCursor?.close()
-
-            // 해당 연락처의 전화번호들을 DTO로 변환하여 리스트에 추가
-            val phoneDTO = PhoneDTO(phoneNumbers)
-            contactsList.add(phoneDTO)
-        } //while 종료
-        cursor?.close()
     }
 
     private fun callListRecyclerView() {
@@ -135,13 +92,49 @@ class CallListPage : AppCompatActivity() {
         })
     }
 
+    private fun getContacts() {
+        // 연락처 전체 정보에 대한 쿼리 수행
+        val cursor: Cursor? = contentResolver.query(
+            ContactsContract.Contacts.CONTENT_URI,
+            null, null, null, null)
+
+        val phoneNumbers = mutableListOf<String>()
+
+        while (cursor?.moveToNext() == true) {
+            val idColumnIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID) //동명이인 때문에 ID 필요
+            val id: String? = if (idColumnIndex != -1) cursor.getString(idColumnIndex) else null
+
+            val nameColumnIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
+            val name: String? = if (nameColumnIndex != -1) cursor.getString(nameColumnIndex) else null
+
+            val phoneCursor: Cursor? = contentResolver.query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                null,
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, // id 기반으로 전화번호
+                null, null)
+
+            if (phoneCursor?.moveToFirst() == true) {   // 동명이인 때문에 고유 id로 검색
+                val numberColumnIndex = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                if (numberColumnIndex != -1) {
+                    val number: String? = if (numberColumnIndex != -1) phoneCursor.getString(numberColumnIndex) else null
+                    number?.let { phoneNumbers.add(it) } // 전화번호가 null이 아닌 경우 리스트에 추가
+                }
+            }
+            phoneCursor?.close()
+
+            // 해당 연락처의 전화번호들을 DTO로 변환하여 리스트에 추가
+            phoneDTO = PhoneDTO(phoneNumbers)
+
+        } //while 종료
+        cursor?.close()
+    }
+
     // 서버에서 데이터를 가져오는 함수
     private fun fetchDataFromServer() {
         // Retrofit 인스턴스 생성
         RetrofitClient.getInstance()
         service = RetrofitClient.getUserRetrofitInterface()
-        call = service.sendCallData(contactsList)
-        Log.d("로그", "${contactsList}")
+        call = service.sendCallData(phoneDTO)
 
         // 서버로부터 데이터를 가져오는 요청 보내기
         call.enqueue(object : Callback<PhoneDTO> {
@@ -149,7 +142,7 @@ class CallListPage : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val callListDto = response.body() // 서버에서 받은 데이터
                     Log.d("로그", "onCreate 응답 성공")
-                    Log.d("로그", "PhoneDTO: ")
+                    Log.d("로그", "phoneDTO.phoneNumbers: ${phoneDTO.phoneNumbers}")
                     // 받아온 데이터를 처리
                     // 예: 뷰 모델에 연동하여 UI 업데이트 등 수행
                 } else {
