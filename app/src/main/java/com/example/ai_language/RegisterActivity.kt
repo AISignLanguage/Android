@@ -1,15 +1,18 @@
 package com.example.ai_language
 
+import android.Manifest
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.telephony.SmsManager
-
+import android.util.Base64
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -19,18 +22,17 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import kotlin.random.Random
-import android.Manifest
-import android.content.ContentValues.TAG
-import android.os.Build
-import android.util.Base64
-import androidx.annotation.RequiresApi
-import com.google.gson.Gson
-import com.google.gson.annotations.SerializedName
-import com.kakao.sdk.user.model.User
+import com.google.auth.oauth2.GoogleCredentials
+import com.google.cloud.storage.Acl
+import com.google.cloud.storage.BlobId
+import com.google.cloud.storage.BlobInfo
+import com.google.cloud.storage.Storage
+import com.google.cloud.storage.StorageOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,8 +43,9 @@ import okhttp3.Request
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
+import java.io.ByteArrayOutputStream
 import java.io.IOException
+import kotlin.random.Random
 
 class RegisterActivity : AppCompatActivity() {
     lateinit var call: Call<LoginCheckDTO>
@@ -54,13 +57,64 @@ class RegisterActivity : AppCompatActivity() {
     private val MESSAGIING_SERVICE = "${R.string.MS}"
     private var url: String = "https://cdn-icons-png.flaticon.com/128/149/149071.png"
     lateinit var profile: ImageView
+
+    private fun getStorageService(): Storage {
+        val assetManager = this@RegisterActivity.assets
+        val inputStream = assetManager.open("savvy-nimbus-413506-83c99ad1de04.json")
+        val credentials = GoogleCredentials.fromStream(inputStream)
+        return StorageOptions.newBuilder().setCredentials(credentials).build().service
+    }
+
+
     private val galleryLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == RESULT_OK) {
                 val intent = result.data
                 val selectedImageUri: Uri? = intent?.data
                 profile.setImageURI(selectedImageUri)
-                url = selectedImageUri.toString()
+                CoroutineScope(Dispatchers.IO).launch {
+                    val storage = getStorageService()
+                    try {
+                        val blobId = BlobId.of(
+                            "ai_language",
+                            "image_path/${System.currentTimeMillis()}.png"
+                        ) // 파일 확장자를 .png로 설정
+                        val blobInfo = BlobInfo.newBuilder(blobId).setContentType("image/png")
+                            .build() // ContentType을 image/png로 설정
+
+                        val inputStream =
+                            selectedImageUri?.let { contentResolver.openInputStream(it) }
+                        val bitmap = BitmapFactory.decodeStream(inputStream) // Uri에서 Bitmap 생성
+                        val byteArrayOutputStream = ByteArrayOutputStream()
+                        bitmap.compress(
+                            Bitmap.CompressFormat.PNG,
+                            100,
+                            byteArrayOutputStream
+                        ) // Bitmap을 PNG 형식으로 압축
+                        val byteImage = byteArrayOutputStream.toByteArray()
+
+                        val blob = storage.create(blobInfo, byteImage) // PNG 형식의 바이트 배열을 업로드
+                        blob.createAcl(
+                            Acl.of(
+                                Acl.User.ofAllUsers(),
+                                Acl.Role.READER
+                            )
+                        ) // 이미지를 공개적으로 설정
+
+                        // UI 스레드로 전환하여 UI 작업 실행
+                        withContext(Dispatchers.Main) {
+                            url = blob.mediaLink // 공개 URL 가져오기
+                            // 필요한 UI 업데이트 작업
+                        }
+                    } catch (e: Exception) {
+                        // 오류 처리
+                        Log.e("RegisterActivity", "Image upload failed", e)
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(this@RegisterActivity, "이미지 업로드 실패", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
+                }
             }
         }
 
@@ -118,6 +172,7 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+
 
 
         val nick = intent.getStringExtra("nick")
@@ -195,6 +250,7 @@ class RegisterActivity : AppCompatActivity() {
 
         val regNext = findViewById<TextView>(R.id.reg_next)
         regNext.setOnClickListener {
+
 
 
 
