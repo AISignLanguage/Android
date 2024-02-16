@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-data class CallListItem(val name: String?, val callNumber: String?)
+data class CallListItem(val name: String?, val callNumber: String?, val imageUrl: String?)
 data class InviteListItem(val name: String, val callNumber: String)
 class CallListViewModel : ViewModel() {
     var _callDataList = MutableLiveData<List<CallListItem>>()
@@ -33,13 +33,6 @@ class InviteViewModel : ViewModel() {
     var _inviteDataList = MutableLiveData<List<InviteListItem>>()
     val inviteDataList : LiveData<List<InviteListItem>>
         get() = _inviteDataList
-//    init {
-//        _inviteDataList.value = listOf(
-//            InviteListItem("방경원", "010-8219-5021"),
-//            InviteListItem("임멍멍", "010-1523-8445"),
-//            InviteListItem("신정인", "010-1209-0084"),
-//        )
-//    }
     fun addListItem(item: InviteListItem) {
         //liveData가 비었으면 빈 mutableList 생성후 넣음, 아니면 그냥 넣음
         val currentList = inviteDataList.value?.toMutableList() ?: mutableListOf()

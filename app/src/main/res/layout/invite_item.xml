@@ -9,37 +9,33 @@
     android:layout_marginTop="5dp"
     android:orientation="horizontal">
 
-    <ImageView
-        android:src="@drawable/heart"
-        android:layout_margin="5dp"
-        android:layout_width="40dp"
-        android:layout_height="40dp"/>
-
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:text="김모모"
-        android:gravity="center"
-        android:textSize="18dp"
-        android:fontFamily="@font/nam" />
-
-    <TextView
-        android:id="@+id/phoneNumber"
-        android:layout_width="170dp"
-        android:layout_height="match_parent"
-        android:text="010 - 1234 - 5678"
-        android:textSize="18dp"
-        android:fontFamily="@font/nam"
-        android:gravity="center" />
-
     <ImageButton
         android:id="@+id/inviteBtn"
         android:layout_width="40dp"
         android:layout_height="30dp"
+        android:layout_margin="10dp"
         android:layout_gravity="center"
-
         android:background="@android:color/transparent"
         android:scaleType="centerCrop"
         android:src="@drawable/invite_message" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="120dp"
+        android:layout_height="match_parent"
+        android:text="김모모"
+        android:gravity="center"
+        android:textSize="17dp"
+        android:fontFamily="@font/nam" />
+
+    <TextView
+        android:id="@+id/phoneNumber"
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/nam"
+        android:gravity="center"
+        android:text="010-1234-5678"
+        android:textSize="17dp" />
+
+
 </LinearLayout>
