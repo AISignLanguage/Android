@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.Packaging
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -17,6 +19,14 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled = true
+
+        // 필요한 경우 추가적인 exclude를 여기에 추가합니다.
+        packaging {
+            resources {
+                excludes.add("META-INF/INDEX.LIST")
+            }
+        }
+
     }
 
     buildTypes {
@@ -82,4 +92,6 @@ dependencies {
     implementation ("io.agora.rtc:voice-sdk:4.2.6")
     //  MultiDex Libarary
     api ("androidx.multidex:multidex:2.0.1")
+    //Google Storage 버킷
+    implementation ("com.google.cloud:google-cloud-storage:1.113.16")
 }
