@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
 class CallListAdapter (private val viewModel: CallListViewModel) : RecyclerView.Adapter<CallListAdapter.CallListViewHolder>() {
 
@@ -31,6 +33,10 @@ class CallListAdapter (private val viewModel: CallListViewModel) : RecyclerView.
         item?.let {
             holder.name.text = it.name
             holder.phoneNumber.text = it.callNumber
+            Glide.with(holder.itemView.context)
+                .load(it.imageUrl) // 이미지의 URL을 전달하여 로드
+                //.error(R.drawable.error) // 이미지 로딩 실패 시 표시할 이미지
+                .into(holder.profileImageView) // 이미지를 설정할 ImageView
         }
     }
 
@@ -41,6 +47,7 @@ class CallListAdapter (private val viewModel: CallListViewModel) : RecyclerView.
     inner class CallListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name = itemView.findViewById<TextView>(R.id.name)
         val phoneNumber = itemView.findViewById<TextView>(R.id.phoneNumber)
+        val profileImageView = itemView.findViewById<ImageView>(R.id.profileImageView)
         val callBtn = itemView.findViewById<ImageButton>(R.id.callBtn)
 
         init {
