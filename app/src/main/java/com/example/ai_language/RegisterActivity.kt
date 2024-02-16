@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,6 +15,7 @@ import android.provider.MediaStore
 import android.telephony.SmsManager
 import android.util.Base64
 import android.util.Log
+import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -45,6 +47,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import java.util.regex.Pattern
 import kotlin.random.Random
 
 class RegisterActivity : AppCompatActivity() {
@@ -168,13 +171,30 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    fun formatDate(originalDate: String): String {
+        // 연도, 월, 일을 추출합니다.
+        val year = originalDate.substring(0, 4)
+        val month = originalDate.substring(4, 6)
+        val day = originalDate.substring(6, 8)
+
+        // 추출한 값을 '-'로 연결하여 새로운 형식으로 조합합니다.
+        return "$year-$month-$day"
+    }
+    private fun formatPhoneNumber(phoneNumber: String): String {
+        return "${phoneNumber.substring(0, 3)}-${phoneNumber.substring(3, 7)}-${phoneNumber.substring(7, 11)}"
+
+    }
+
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
 
-
+        var end = false
+        var pn = "pn"
+        var correct = 1
         val nick = intent.getStringExtra("nick")
         val regName = findViewById<EditText>(R.id.reg_name)
         val regEmail = findViewById<EditText>(R.id.reg_email)
@@ -185,15 +205,17 @@ class RegisterActivity : AppCompatActivity() {
         val send_certification_btn = findViewById<Button>(R.id.send_certification_btn)
         val certification_et = findViewById<EditText>(R.id.certification_et)
         val certification_btn = findViewById<Button>(R.id.certification_btn)
+        var randomSixDigitNumber = 0
+        var phNum = ""
 
         send_certification_btn.setOnClickListener {
-            val phNum = send_certification_et.text.toString()
+            phNum = send_certification_et.text.toString()
             if (!isValidPhoneNumber(phNum)) {
                 // 전화번호가 "010"으로 시작하지 않거나 11자리가 아닌 경우 서버에서 false가 옴
                 Toast.makeText(this, "올바른 전화번호를 입력하세요.", Toast.LENGTH_SHORT).show()
             } else {
                 val random = Random.Default
-                val randomSixDigitNumber: Int =
+                randomSixDigitNumber =
                     random.nextInt(100000, 999999) // 범위를 100000부터 999999까지로 지정하여 6자리 랜덤 숫자 생성
                 val num = convertPhoneNumber(phNum) // 폰넘버
                 if (ContextCompat.checkSelfPermission(
@@ -213,6 +235,24 @@ class RegisterActivity : AppCompatActivity() {
                 }
             }
         }
+
+        certification_btn.setOnClickListener {
+            if(randomSixDigitNumber.toString() == certification_et.text.toString()){
+                end = true
+                certification_et.setTextColor(Color.GREEN)
+                certification_et.setText("인증되었습니다!")
+                certification_et.isEnabled = false
+                pn = formatPhoneNumber(send_certification_et.text.toString())
+            }
+            else
+            {
+                correct = 5
+                certification_et.setTextColor(Color.RED)
+                certification_et.setText("인증번호가 잘못되었습니다.")
+                certification_et.setText("")
+            }
+        }
+
 
         regName.setText(nick)
 
@@ -251,51 +291,118 @@ class RegisterActivity : AppCompatActivity() {
         val regNext = findViewById<TextView>(R.id.reg_next)
         regNext.setOnClickListener {
 
+            val passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,16}$"
+            val patternPW = Pattern.compile(passwordPattern)
+            val birthday = regBirthdate.text.toString()
+            val birthdatePattern = "^\\d{8}$"
+            val patternBD = Pattern.compile(birthdatePattern)
 
 
-
-            val userDTO = UserDTO(
-                regName.text.toString(), //이름 => 공백이 아니어야함
-                regBirthdate.text.toString(), //생일 => xxxx-xx-xx 형태
-                regEmail.text.toString(), // => 이메일 xxx@xxx.xxx
-                regPwd.text.toString(), // 비밀 번호 => 최소 8자, 최대 15자
-                regNick.text.toString(), // 닉네임
-                send_certification_et.text.toString(), //핸드폰 번호 => 010-xxxx-xxxx
-                // 정규식 =>  @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "휴대폰 번호 양식에 맞지 않습니다.")
-                url //프로필 사진 url
-            )
-            call = service.sendData(userDTO)
-            call.clone().enqueue(object : Callback<LoginCheckDTO> {
-                override fun onResponse(
-                    call: Call<LoginCheckDTO>,
-                    response: Response<LoginCheckDTO>
-                ) {
-                    if (response.isSuccessful) {
-                        Log.d("서버로부터 받은 요청", "닉네임 : ${response.body()?.nickName}")
-                        Log.d("서버로부터 받은 요청", "이름 : ${response.body()?.name}")
-                        Log.d("서버로부터 받은 요청", "이메일 : ${response.body()?.email}")
-                        Log.d("서버로부터 받은 요청", "생일 : ${response.body()?.birthdate}")
-                        Log.d("서버로부터 받은 요청", "폰넘버 : ${response.body()?.phoneNumber}")
-                        Log.d("서버로부터 받은 요청", "프로필 : ${response.body()?.profileImageUrl}")
-                        Log.d("서버로부터 받은 요청", "날짜 : ${response.body()?.registerdAt}")
-                        Toast.makeText(this@RegisterActivity, "회원가입에 성공하셨습니다!", Toast.LENGTH_SHORT)
-                            .show()
-                        val intent = Intent(this@RegisterActivity, permissionActivity::class.java)
-                        startActivity(intent)
-                    } else {
-                        Log.d("서버실패?", "실패")
-                    }
-                }
-
-                override fun onFailure(call: Call<LoginCheckDTO>, t: Throwable) {
-                    Log.e("retrofit 연동", "실패", t)
-                }
-
+            var name = regName.text.toString()
+            var em = "em"
+            var nk = "nk"
+            var bd = "bd"
+            var pw = "pw"
+            if (!(Patterns.EMAIL_ADDRESS.matcher(regEmail.text.toString()).matches())) {
+                Toast.makeText(this, "잘못된 이메일 형식입니다.", Toast.LENGTH_SHORT).show()
+                regEmail.setText("")
+            } else {
+                em = regEmail.text.toString()
+                correct = 2
             }
-            )
+            if (!(patternPW.matcher(regPwd.text.toString()).matches())) {
+                Toast.makeText(
+                    this,
+                    "비밀번호는 영문,숫자가 최소 1자리 포함되어야하며, 최소8자, 최대 16자를 입력하셔야 합니다.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                regPwd.setText("")
+            } else {
+                pw = regPwd.text.toString()
+                correct = 3
+            }
+            if (regNick.text.toString().length !in 2..6) {
+                Toast.makeText(this, "닉네임은 2자 이상 6자 이하여야 합니다.", Toast.LENGTH_SHORT).show()
+                regNick.setText("")
+            }
+            /*else if(nickname == 중복){
+                Toast.makeText(this, "중복된 닉네임 입니다.", Toast.LENGTH_SHORT).show()
+            }*/
+            else {
+                nk = regNick.text.toString()
+                correct = 4
+            }
+            if (patternBD.matcher(birthday).matches()) {
+                val formattedDate = formatDate(birthday)
+                bd = formattedDate
+                correct = 5
+            } else {
+                // 생년월일 형식이 올바르지 않은 경우
+                Toast.makeText(this, "생년월일은 8자리 숫자여야 합니다.", Toast.LENGTH_SHORT).show()
+                regBirthdate.setText("")
+            }
 
-            finish()
+            if (correct == 5 && end) {
+                val userDTO = UserDTO(
+                    name, //이름 => 공백이 아니어야함
+                    bd, //생일 => xxxx-xx-xx 형태
+                    em, // => 이메일 xxx@xxx.xxx
+                    pw, // 비밀 번호 => 최소 8자, 최대 15자
+                    nk, // 닉네임
+                    pn, //핸드폰 번호 => 010-xxxx-xxxx
+                    // 정규식 =>  @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "휴대폰 번호 양식에 맞지 않습니다.")
+                    url //프로필 사진 url
+                )
+
+                call = service.sendData(userDTO)
+                call.clone().enqueue(object : Callback<LoginCheckDTO> {
+                    override fun onResponse(
+                        call: Call<LoginCheckDTO>,
+                        response: Response<LoginCheckDTO>
+                    ) {
+                        if (response.isSuccessful) {
+                            Log.d("서버로부터 받은 요청", "닉네임 : ${response.body()?.nickName}")
+                            Log.d("서버로부터 받은 요청", "이름 : ${response.body()?.name}")
+                            Log.d("서버로부터 받은 요청", "이메일 : ${response.body()?.email}")
+                            Log.d("서버로부터 받은 요청", "생일 : ${response.body()?.birthdate}")
+                            Log.d("서버로부터 받은 요청", "폰넘버 : ${response.body()?.phoneNumber}")
+                            Log.d("서버로부터 받은 요청", "프로필 : ${response.body()?.profileImageUrl}")
+                            Log.d("서버로부터 받은 요청", "날짜 : ${response.body()?.registerdAt}")
+                            Toast.makeText(
+                                this@RegisterActivity,
+                                "회원가입에 성공하셨습니다!",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                            val intent =
+                                Intent(this@RegisterActivity, permissionActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            Log.d("서버실패?", "실패")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<LoginCheckDTO>, t: Throwable) {
+                        Log.e("retrofit 연동", "실패", t)
+                    }
+
+                }
+                )
+
+                finish()
+            }
+            else{
+                Log.d("필드","${correct} ${name} ${pw} ${bd} ${nk} ${pn} ${em} " )
+                when(correct){
+                    1 ->  Toast.makeText(this, "5개의 필드오류", Toast.LENGTH_SHORT).show()
+                    2 ->  Toast.makeText(this, "4개의 필드오류", Toast.LENGTH_SHORT).show()
+                    3 ->  Toast.makeText(this, "3개의 필드오류", Toast.LENGTH_SHORT).show()
+                    4 ->  Toast.makeText(this, "2개의 필드오류", Toast.LENGTH_SHORT).show()
+                    5 ->  Toast.makeText(this, "1개의 필드오류", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
+
     }
 
     private fun dpToPx(context: Context, dp: Int): Int {
