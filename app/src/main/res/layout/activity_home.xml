@@ -14,13 +14,13 @@
         android:layout_height="80dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:background="@mipmap/logo" />
+        android:background="@drawable/logo__1_" />
 
     <FrameLayout
         android:id="@+id/vp_fragment"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="606dp"
+        android:layout_gravity="center"
         android:layout_weight="1">
 
         <androidx.viewpager2.widget.ViewPager2
@@ -75,18 +75,21 @@
             android:layout_margin="@dimen/margin10"
             android:background="@mipmap/dic"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/CameraBtn"
+            app:layout_constraintStart_toEndOf="@+id/callList_btn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.2" />
 
-        <ImageButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/CameraBtn"
             android:layout_width="@dimen/height"
-            android:layout_height="@dimen/width"
+            android:layout_height="@dimen/fwidth"
             android:layout_margin="@dimen/margin10"
-            android:background="@mipmap/camera"
+            android:foreground="@mipmap/camera"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/dic_btn"
-            app:layout_constraintStart_toEndOf="@+id/my_page_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
@@ -94,18 +97,19 @@
             android:layout_width="@dimen/height"
             android:layout_height="@dimen/width"
             android:layout_margin="@dimen/margin10"
+            android:layout_marginEnd="16dp"
             android:background="@mipmap/user"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.2" />
 
         <ImageButton
             android:id="@+id/callList_btn"
             android:layout_width="@dimen/height"
             android:layout_height="@dimen/width"
             android:layout_margin="@dimen/margin10"
-            android:background="@mipmap/call"
+            android:background="@drawable/call"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -118,8 +122,9 @@
             android:background="@mipmap/news_btn"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/my_page_btn"
-            app:layout_constraintStart_toEndOf="@+id/callList_btn"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/CameraBtn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
