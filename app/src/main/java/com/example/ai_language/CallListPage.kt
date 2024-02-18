@@ -1,6 +1,7 @@
 package com.example.ai_language
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Point
@@ -9,12 +10,15 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.DisplayMetrics
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.view.WindowInsets
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -60,16 +64,24 @@ class CallListPage : AppCompatActivity() {
         return metrics
     }
     fun getStandardSize() {
-        val ScreenSize = getScreenSize(this)
-        density = resources.displayMetrics.density
-        standardSize_X = (ScreenSize.x / density).toInt()
-        standardSize_Y = (ScreenSize.y / density).toInt()
+        val screenSize = getScreenSize(this)
+        standardSize_X = screenSize.x  // 픽셀 단위로 화면 너비를 직접 사용
+        standardSize_Y = screenSize.y  // 픽셀 단위로 화면 높이를 직접 사용
     }
+    private fun dpToPx(dp: Float, context: Context): Int {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics).toInt()
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_call_list)
         getStandardSize()
+        val layout = findViewById<ConstraintLayout>(R.id.clt_manager2)
+        val params = layout.layoutParams
+        // dp 값을 픽셀 값으로 변환하여 너비 설정
+        params.width = dpToPx(standardSize_X.toFloat(),this)
+        layout.layoutParams = params
         val homeButton = findViewById<ImageButton>(R.id.homeButton)
         homeButton.setOnClickListener{
             val intent = Intent(this,Home::class.java)

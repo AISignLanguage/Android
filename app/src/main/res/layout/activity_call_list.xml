@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/clt_manager2"
     tools:context=".CallListPage">
 
     <TextView
@@ -57,13 +58,13 @@
         app:layout_constraintTop_toBottomOf="@+id/textView10"
         tools:listitem="@layout/call_item" />
 
-    <View
+    <ImageView
         android:id="@+id/view"
-        android:layout_width="300dp"
-        android:layout_height="1dp"
+        android:layout_width="350dp"
+        android:layout_height="3dp"
         android:layout_centerInParent="true"
         android:layout_marginTop="50dp"
-        android:background="@color/black"
+        android:background="@drawable/line"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rv_call" />
