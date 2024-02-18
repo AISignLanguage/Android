@@ -1,11 +1,16 @@
 package com.example.ai_language
 
+import android.app.Activity
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.Point
+import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
+import android.view.WindowInsets
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -16,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 //전화번호 데이터 클래스
 data class Phone(val id:String?, val name:String?, val phone:String?)
@@ -35,11 +41,35 @@ class CallListPage : AppCompatActivity() {
     private lateinit var callListAdapter : CallListAdapter
     private lateinit var inviteRecyclerView : RecyclerView
     private lateinit var inviteListAdapter : InviteListAdapter
+    var density = 0.0f
+    var standardSize_X = 0
+    var standardSize_Y = 0
+    fun getScreenSize(activity: Activity): Point {
+        val metrics = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val windowMetrics = activity.windowManager.currentWindowMetrics
+            val insets = windowMetrics.windowInsets
+                .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars() or WindowInsets.Type.displayCutout())
+            val bounds = windowMetrics.bounds
+            Point(bounds.width() - insets.left - insets.right, bounds.height() - insets.top - insets.bottom)
+        } else {
+            val displayMetrics = DisplayMetrics()
+            @Suppress("DEPRECATION")
+            activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
+            Point(displayMetrics.widthPixels, displayMetrics.heightPixels)
+        }
+        return metrics
+    }
+    fun getStandardSize() {
+        val ScreenSize = getScreenSize(this)
+        density = resources.displayMetrics.density
+        standardSize_X = (ScreenSize.x / density).toInt()
+        standardSize_Y = (ScreenSize.y / density).toInt()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_call_list)
-
+        getStandardSize()
         val homeButton = findViewById<ImageButton>(R.id.homeButton)
         homeButton.setOnClickListener{
             val intent = Intent(this,Home::class.java)
