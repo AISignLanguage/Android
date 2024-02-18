@@ -48,6 +48,11 @@ class CallListPage : AppCompatActivity() {
     var density = 0.0f
     var standardSize_X = 0
     var standardSize_Y = 0
+
+    fun dpToPx(dp: Float): Int {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics).toInt()
+    }
+
     fun getScreenSize(activity: Activity): Point {
         val metrics = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val windowMetrics = activity.windowManager.currentWindowMetrics
@@ -68,7 +73,7 @@ class CallListPage : AppCompatActivity() {
         standardSize_X = screenSize.x  // 픽셀 단위로 화면 너비를 직접 사용
         standardSize_Y = screenSize.y  // 픽셀 단위로 화면 높이를 직접 사용
     }
-    private fun dpToPx(dp: Float, context: Context): Int {
+    fun dpToPx(dp: Float, context: Context): Int {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics).toInt()
     }
 
@@ -76,11 +81,14 @@ class CallListPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_call_list)
-        getStandardSize()
+        getStandardSize() // 화면 크기를 dp 단위로 계산
+
         val layout = findViewById<ConstraintLayout>(R.id.clt_manager2)
         val params = layout.layoutParams
+
         // dp 값을 픽셀 값으로 변환하여 너비 설정
-        params.width = dpToPx(standardSize_X.toFloat(),this)
+        params.width = dpToPx(standardSize_X.toFloat())
+        params.height = dpToPx(standardSize_Y.toFloat())
         layout.layoutParams = params
         val homeButton = findViewById<ImageButton>(R.id.homeButton)
         homeButton.setOnClickListener{
