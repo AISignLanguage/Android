@@ -94,4 +94,11 @@ dependencies {
     api ("androidx.multidex:multidex:2.0.1")
     //Google Storage 버킷
     implementation ("com.google.cloud:google-cloud-storage:1.113.16")
+
+    //RxJava
+    implementation ("io.reactivex.rxjava3:rxjava:3.0.0")
+    implementation ("io.reactivex.rxjava3:rxandroid:3.0.0")
+
+
+
 }

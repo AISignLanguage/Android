@@ -1,25 +1,30 @@
 package com.example.ai_language
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.ImageButton
-import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import java.io.IOException
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+
 
 class PersonalInfo : AppCompatActivity() {
 
-    private val GALLERY_REQUEST_CODE = 2000
     private val STORAGE_PERMISSION_CODE = 1
+
+    lateinit var progressBar: ProgressBar
 
     lateinit var profileImage: ImageButton
     private val galleryLauncher: ActivityResultLauncher<Intent> =
@@ -27,7 +32,8 @@ class PersonalInfo : AppCompatActivity() {
             if (result.resultCode == RESULT_OK) {
                 val intent = result.data
                 val selectedImageUri: Uri? = intent?.data
-                profileImage.setImageURI(selectedImageUri)
+                if(selectedImageUri != null)
+                    loadImage(selectedImageUri)
             }
         }
 
@@ -55,17 +61,17 @@ class PersonalInfo : AppCompatActivity() {
             else{
                 openGallery()
             }
-
         }
+        progressBar = findViewById(R.id.progressBar)
     }
 
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
         intent.action = Intent.ACTION_PICK
+        progressBar.visibility = ProgressBar.VISIBLE
         galleryLauncher.launch(intent)
     }
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -77,4 +83,35 @@ class PersonalInfo : AppCompatActivity() {
             openGallery()
         }
     }
+
+    private fun loadImage(uri: Uri){
+        Glide.with(this)
+            .load(uri)
+            .addListener(object : RequestListener<Drawable> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    progressBar.visibility = ProgressBar.GONE
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    progressBar.visibility = ProgressBar.GONE
+                    return false
+                }
+
+            })
+            .into(profileImage)
+    }
+
+
 }
