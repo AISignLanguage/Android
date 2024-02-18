@@ -38,15 +38,25 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView14"
+        android:id="@+id/ex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="26dp"
+        android:text="님, 안녕하세요!"
+        android:textSize="20dp"
+        app:layout_constraintStart_toEndOf="@+id/myName_tv"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+    <TextView
+        android:id="@+id/myName_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="206dp"
-        android:text="임다솔님, 안녕하세요!"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="박지원"
+        android:textStyle="bold"
+        android:textSize="25dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
@@ -61,7 +71,7 @@
         android:paddingStart="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView14">
+        app:layout_constraintTop_toBottomOf="@+id/myName_tv">
 
         <TextView
             android:layout_width="wrap_content"
@@ -74,13 +84,14 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/myDay_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:fontFamily="@font/nam"
             android:text="D+23일"
             android:textColor="#9999FF"
-            android:textSize="27dp"
+            android:textSize="30dp"
             android:textStyle="bold" />
     </LinearLayout>
 
