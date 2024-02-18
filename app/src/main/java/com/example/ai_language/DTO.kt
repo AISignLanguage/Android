@@ -13,6 +13,16 @@ data class UserDTO(
     @SerializedName("profile_image_url") val profileImageUrl: String,
 )
 
+//Login
+data class LoginRequestDTO(
+    @SerializedName("email") val email: String,
+    @SerializedName("password") val password: String
+)
+
+data class LoginResponseDTO(
+    @SerializedName("success") val success: Boolean
+)
+
 //LoginActivity
 data class LoginCheckDTO(
     @SerializedName("name") val name: String,
