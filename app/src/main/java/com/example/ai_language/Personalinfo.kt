@@ -18,6 +18,9 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 
 class PersonalInfo : AppCompatActivity() {
@@ -73,8 +76,14 @@ class PersonalInfo : AppCompatActivity() {
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
         intent.action = Intent.ACTION_PICK
         progressBar.visibility = ProgressBar.VISIBLE
-        galleryLauncher.launch(intent)
+
+        Observable.fromCallable {
+            galleryLauncher.launch(intent)
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe()
     }
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
