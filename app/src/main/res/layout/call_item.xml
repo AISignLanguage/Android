@@ -24,7 +24,7 @@
 
     <TextView
         android:id="@+id/name"
-        android:layout_width="70dp"
+        android:layout_width="0dp"
         android:layout_height="40dp"
         android:ellipsize="end"
         android:ems="4"
@@ -39,25 +39,26 @@
 
     <TextView
         android:id="@+id/phoneNumber"
-        android:layout_width="200dp"
+        android:layout_width="0dp"
         android:layout_height="40dp"
         android:fontFamily="@font/nam"
         android:gravity="center"
         android:text="010-9941-0785"
         android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/callBtn"
         app:layout_constraintStart_toEndOf="@+id/name"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/callBtn"
-        android:layout_width="40dp"
+        android:layout_width="0dp"
+
         android:layout_height="40dp"
         android:background="@android:color/transparent"
-        android:scaleType="centerCrop"
+        android:scaleType="fitCenter"
         android:src="@drawable/calling"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/phoneNumber"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
