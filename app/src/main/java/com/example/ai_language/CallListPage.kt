@@ -81,15 +81,7 @@ class CallListPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_call_list)
-        getStandardSize() // 화면 크기를 dp 단위로 계산
 
-        val layout = findViewById<ConstraintLayout>(R.id.clt_manager2)
-        val params = layout.layoutParams
-
-        // dp 값을 픽셀 값으로 변환하여 너비 설정
-        params.width = dpToPx(standardSize_X.toFloat())
-        params.height = dpToPx(standardSize_Y.toFloat())
-        layout.layoutParams = params
         val homeButton = findViewById<ImageButton>(R.id.homeButton)
         homeButton.setOnClickListener{
             val intent = Intent(this,Home::class.java)
