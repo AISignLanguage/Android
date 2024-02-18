@@ -122,7 +122,7 @@
             android:layout_weight="1"
             android:background="#EFF4FF"
             android:gravity="start|center_vertical"
-            android:hint="영문, 숫자 조합 최대 8자 입력"
+            android:hint="영문, 숫자 조합 최소 8자, 최대 16자 입력"
             android:paddingStart="15dp" />
 
 
@@ -159,7 +159,7 @@
             android:paddingStart="15dp"
             android:layout_weight="2"
             android:gravity="start|center_vertical"
-            android:hint="닉네임 최대 5자"
+            android:hint="닉네임 최소 2자, 최대 6자"
             />
         <androidx.appcompat.widget.AppCompatButton
             android:background="@drawable/btn_skyblue"
@@ -195,7 +195,7 @@
             android:layout_margin="20dp"
             android:background="#EFF4FF"
             android:gravity="start|center_vertical"
-            android:hint="이름 입력"
+            android:hint="생년월일 8자 ( - 제외 )"
             android:paddingStart="15dp" />
     <TextView
         android:layout_marginTop="20dp"
@@ -225,7 +225,7 @@
             android:paddingStart="15dp"
             android:layout_weight="2"
             android:gravity="start|center_vertical"
-            android:hint="휴대폰 번호 8자리 ( - 제외 )"
+            android:hint="휴대폰 번호 11자리 ( - 제외 )"
             />
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/send_certification_btn"

@@ -127,10 +127,6 @@ class CallListPage : AppCompatActivity() {
                 if (numberColumnIndex != -1) {
                     val number: String? = if (numberColumnIndex != -1) phoneCursor.getString(numberColumnIndex) else null
                     var cleanedNumber: String? = null
-                //number?.let { phoneNumbers.add(it) } // 전화번호가 null이 아닌 경우 리스트에 추가
-                // if (name != null && number != null) {
-                //contactListMap.add(Pair(name, number)) // 이름과 번호를 함께 Pair로 묶어 리스트에 추가
-                    //}
 
                     // "+"와 "82"로 시작하는 경우에는 국가 코드를 제거하고 0을 추가하여 번호 정리
                     if (number != null && (number.startsWith("+82") || number.startsWith("82"))) {
@@ -155,14 +151,13 @@ class CallListPage : AppCompatActivity() {
                             }
                         }
                     }
-
                 }
             }
             phoneCursor?.close()
 
             // 해당 연락처의 전화번호들을 DTO로 변환하여 리스트에 추가
             phoneNumberDTO = PhoneNumberDTO(phoneNumbers)
-            Log.d("로그", "phoneNumbers : ${phoneNumbers}")
+            //Log.d("로그", "phoneNumbers : ${phoneNumbers}")
 
         } //while 종료
         cursor?.close()
@@ -184,7 +179,7 @@ class CallListPage : AppCompatActivity() {
                         for (phoneDTOList in phones) {
                             for (phoneDTO in phoneDTOList) {
                                 Log.d("로그", "${phoneDTO.name}, ${phoneDTO.phoneNumbers}, Url: ${phoneDTO.profileImageUrl}")
-                                val callListItem = CallListItem(phoneDTO.name, phoneDTO.phoneNumbers)
+                                val callListItem = CallListItem(phoneDTO.name, phoneDTO.phoneNumbers, phoneDTO.profileImageUrl)
                                 callViewModel.addListItem(callListItem) // 뷰 모델에 서버에서 가져온 데이터 추가
                             }
                             // 중첩된 리스트에 대해 이중 반복문을 사용하여 phoneNumber 추출

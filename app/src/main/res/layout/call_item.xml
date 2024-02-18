@@ -7,6 +7,7 @@
     android:layout_marginEnd="10dp">
 
     <ImageView
+        android:id="@+id/profileImageView"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_margin="10dp"
@@ -15,29 +16,33 @@
 
     <TextView
         android:id="@+id/name"
-        android:layout_width="wrap_content"
+        android:layout_width="70dp"
         android:layout_height="40dp"
-        android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:fontFamily="@font/nam"
-        android:gravity="center_vertical"
-        android:text="박지원"
-        android:textSize="18dp" />
+        android:gravity="center"
+        android:text="박지원이"
+        android:textSize="17dp" />
 
     <TextView
         android:id="@+id/phoneNumber"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="40dp"
-        android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:fontFamily="@font/nam"
         android:gravity="center"
-        android:text="010 - 9941 - 0785"
-        android:textSize="18dp" />
+        android:text="010-9941-0785"
+        android:textSize="17dp" />
 
     <ImageButton
         android:id="@+id/callBtn"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="20dp"
         android:background="@android:color/transparent"
         android:scaleType="centerCrop"
         android:src="@drawable/calling" />
