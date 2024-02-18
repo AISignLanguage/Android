@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/clt_manager2"
     tools:context=".CallListPage">
 
     <TextView
@@ -38,7 +39,7 @@
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="80dp"
         android:fontFamily="@font/font_bd"
         android:text="영상통화 걸기"
@@ -57,13 +58,13 @@
         app:layout_constraintTop_toBottomOf="@+id/textView10"
         tools:listitem="@layout/call_item" />
 
-    <View
+    <ImageView
         android:id="@+id/view"
-        android:layout_width="300dp"
-        android:layout_height="1dp"
+        android:layout_width="350dp"
+        android:layout_height="3dp"
         android:layout_centerInParent="true"
-        android:layout_marginTop="16dp"
-        android:background="@color/black"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/line"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rv_call" />
@@ -72,8 +73,8 @@
         android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
         android:fontFamily="@font/font_bd"
         android:text="손짓의 순간과 함께 해줄래요?"
         android:textSize="20dp"
@@ -84,7 +85,7 @@
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
         android:fontFamily="@font/font_bd"
         android:text="초대메시지 보내기"
@@ -96,7 +97,7 @@
         android:id="@+id/rv_invite"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView12"

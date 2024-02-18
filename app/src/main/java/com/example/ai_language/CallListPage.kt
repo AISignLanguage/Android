@@ -1,21 +1,31 @@
 package com.example.ai_language
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.Point
+import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.util.DisplayMetrics
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
+import android.view.WindowInsets
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 //전화번호 데이터 클래스
 data class Phone(val id:String?, val name:String?, val phone:String?)
@@ -35,6 +45,38 @@ class CallListPage : AppCompatActivity() {
     private lateinit var callListAdapter : CallListAdapter
     private lateinit var inviteRecyclerView : RecyclerView
     private lateinit var inviteListAdapter : InviteListAdapter
+    var density = 0.0f
+    var standardSize_X = 0
+    var standardSize_Y = 0
+
+    fun dpToPx(dp: Float): Int {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics).toInt()
+    }
+
+    fun getScreenSize(activity: Activity): Point {
+        val metrics = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val windowMetrics = activity.windowManager.currentWindowMetrics
+            val insets = windowMetrics.windowInsets
+                .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars() or WindowInsets.Type.displayCutout())
+            val bounds = windowMetrics.bounds
+            Point(bounds.width() - insets.left - insets.right, bounds.height() - insets.top - insets.bottom)
+        } else {
+            val displayMetrics = DisplayMetrics()
+            @Suppress("DEPRECATION")
+            activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
+            Point(displayMetrics.widthPixels, displayMetrics.heightPixels)
+        }
+        return metrics
+    }
+    fun getStandardSize() {
+        val screenSize = getScreenSize(this)
+        standardSize_X = screenSize.x  // 픽셀 단위로 화면 너비를 직접 사용
+        standardSize_Y = screenSize.y  // 픽셀 단위로 화면 높이를 직접 사용
+    }
+    fun dpToPx(dp: Float, context: Context): Int {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics).toInt()
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
