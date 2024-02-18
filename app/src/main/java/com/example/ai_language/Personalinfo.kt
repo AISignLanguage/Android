@@ -35,6 +35,9 @@ class PersonalInfo : AppCompatActivity() {
                 if(selectedImageUri != null)
                     loadImage(selectedImageUri)
             }
+            else{
+                progressBar.visibility = ProgressBar.GONE
+            }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {

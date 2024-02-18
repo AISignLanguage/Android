@@ -25,4 +25,9 @@ interface Service {
     @GET("get-news") //뉴스 정보 가져옴
     fun getNews(): Call<List<NewsDTO>>
 
+    @POST("login")
+    fun login(@Body data: LoginRequestDTO): Call<LoginResponseDTO>
+
+
+
 }
