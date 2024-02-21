@@ -43,7 +43,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
             finish()
         }
 
-        //로그인 비동기처리
+        //로그인 비동기 처리 - retrofit
         userEmail = findViewById(R.id.userEmail)
         userPw = findViewById(R.id.userPw)
         progressBar = findViewById(R.id.progressBar)
