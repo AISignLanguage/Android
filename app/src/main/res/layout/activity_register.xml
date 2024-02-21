@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
-
     <androidx.appcompat.widget.LinearLayoutCompat
+
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:layout_height="match_parent"
+        android:background="#F8FAFF"
         android:gravity="center|top"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -21,36 +21,25 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:gravity="start"
-            android:fontFamily="@font/font_eb"
-            android:text="Create New Account"
-            android:textSize="25dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:gravity="start"
-            android:text="Please fill the form"
-            android:fontFamily="@font/font_eb"
-            android:textSize="15dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:fontFamily="@font/nam"
+            android:text="회원가입"
+            android:textSize="22dp"
             android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/reg_pro"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="20dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="15dp"
             tools:srcCompat="@drawable/user_profile" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="20dp"
             android:fontFamily="@font/font_bd"
             android:text="이름"
@@ -169,7 +158,7 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="10dp"
                 android:layout_weight="2"
                 android:background="@drawable/nicknamespace"
                 android:gravity="start|center_vertical"
@@ -282,11 +271,11 @@
 
         <TextView
             android:id="@+id/reg_next"
-            android:layout_width="250dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="7dp"
             android:background="@drawable/signup"
             android:gravity="center"
             android:textAlignment="center" />
@@ -323,3 +312,4 @@
         </LinearLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,7 +15,6 @@ class LoginActivity : AppCompatActivity() {
         loginButton.setOnClickListener {
             val intent = Intent(this, KaKaoLoginActivity::class.java)
             startActivity(intent)
-            finish()
         }
 
 

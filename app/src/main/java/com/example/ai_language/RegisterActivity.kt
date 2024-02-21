@@ -423,102 +423,113 @@ class RegisterActivity : AppCompatActivity() {
         }
 
 
+        try {
+            regNext.setOnClickListener {
+                name = regName.text.toString() // 이름
+                em = regEmail.text.toString() // 이메일
+                pw = regPwd.text.toString() //비번
+                nk = regNick.text.toString() // 닉네임
+                birthday = regBirthdate.text.toString() //생일
+                try {
+                    val formattedDate = formatDate(birthday)
+                    bd = formattedDate
+                }
+                catch (e: StringIndexOutOfBoundsException) {
+                    // 예외 발생 시 사용자에게 토스트 메시지를 보여주고 LoginActivity로 이동
+                    Toast.makeText(this, "올바르지 않은 필드가 존재합니다.", Toast.LENGTH_SHORT).show()
+                }
+                if (loginChecked.finish) {
+                    val userDTO = UserDTO(
+                        name, //이름 => 공백이 아니어야함
+                        bd, //생일 => xxxx-xx-xx 형태
+                        em, // => 이메일 xxx@xxx.xxx
+                        pw, // 비밀 번호 => 최소 8자, 최대 15자
+                        nk, // 닉네임
+                        pn, //핸드폰 번호 => 010-xxxx-xxxx
+                        // 정규식 =>  @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "휴대폰 번호 양식에 맞지 않습니다.")
+                        url //프로필 사진 url
+                    )
 
-        regNext.setOnClickListener {
-            name = regName.text.toString() // 이름
-            em = regEmail.text.toString() // 이메일
-            pw = regPwd.text.toString() //비번
-            nk = regNick.text.toString() // 닉네임
-            birthday = regBirthdate.text.toString() //생일
-            val formattedDate = formatDate(birthday)
-            bd = formattedDate
-            if (loginChecked.finish) {
-                val userDTO = UserDTO(
-                    name, //이름 => 공백이 아니어야함
-                    bd, //생일 => xxxx-xx-xx 형태
-                    em, // => 이메일 xxx@xxx.xxx
-                    pw, // 비밀 번호 => 최소 8자, 최대 15자
-                    nk, // 닉네임
-                    pn, //핸드폰 번호 => 010-xxxx-xxxx
-                    // 정규식 =>  @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "휴대폰 번호 양식에 맞지 않습니다.")
-                    url //프로필 사진 url
-                )
-
-                call = service.sendData(userDTO)
-                call.clone().enqueue(object : Callback<LoginCheckDTO> {
-                    override fun onResponse(
-                        call: Call<LoginCheckDTO>,
-                        response: Response<LoginCheckDTO>
-                    ) {
-                        if (response.isSuccessful) {
-                            Log.d("서버로부터 받은 요청", "닉네임 : ${response.body()?.nickName}")
-                            Log.d("서버로부터 받은 요청", "이름 : ${response.body()?.name}")
-                            Log.d("서버로부터 받은 요청", "이메일 : ${response.body()?.email}")
-                            Log.d("서버로부터 받은 요청", "생일 : ${response.body()?.birthdate}")
-                            Log.d("서버로부터 받은 요청", "폰넘버 : ${response.body()?.phoneNumber}")
-                            Log.d("서버로부터 받은 요청", "프로필 : ${response.body()?.profileImageUrl}")
-                            Log.d("서버로부터 받은 요청", "날짜 : ${response.body()?.registerdAt}")
-                            Toast.makeText(
-                                this@RegisterActivity,
-                                "회원가입에 성공하셨습니다!",
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
-                            val intent =
-                                Intent(this@RegisterActivity, permissionActivity::class.java)
-                            startActivity(intent)
-                        } else {
-                            Log.d("서버실패?", "실패")
+                    call = service.sendData(userDTO)
+                    call.clone().enqueue(object : Callback<LoginCheckDTO> {
+                        override fun onResponse(
+                            call: Call<LoginCheckDTO>,
+                            response: Response<LoginCheckDTO>
+                        ) {
+                            if (response.isSuccessful) {
+                                Log.d("서버로부터 받은 요청", "닉네임 : ${response.body()?.nickName}")
+                                Log.d("서버로부터 받은 요청", "이름 : ${response.body()?.name}")
+                                Log.d("서버로부터 받은 요청", "이메일 : ${response.body()?.email}")
+                                Log.d("서버로부터 받은 요청", "생일 : ${response.body()?.birthdate}")
+                                Log.d("서버로부터 받은 요청", "폰넘버 : ${response.body()?.phoneNumber}")
+                                Log.d("서버로부터 받은 요청", "프로필 : ${response.body()?.profileImageUrl}")
+                                Log.d("서버로부터 받은 요청", "날짜 : ${response.body()?.registerdAt}")
+                                Toast.makeText(
+                                    this@RegisterActivity,
+                                    "회원가입에 성공하셨습니다!",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                                val intent =
+                                    Intent(this@RegisterActivity, permissionActivity::class.java)
+                                startActivity(intent)
+                            } else {
+                                Log.d("서버실패?", "실패")
+                            }
                         }
+
+                        override fun onFailure(call: Call<LoginCheckDTO>, t: Throwable) {
+                            Log.e("retrofit 연동", "실패", t)
+                        }
+
                     }
+                    )
 
-                    override fun onFailure(call: Call<LoginCheckDTO>, t: Throwable) {
-                        Log.e("retrofit 연동", "실패", t)
-                    }
-
-                }
-                )
-
-                this@RegisterActivity.finish()
-            } else {
-
-                if (name.length <= 5) {
-                    loginChecked.nameCheck = true
-                }
-
-                if (patternPW.matcher(regPwd.text.toString()).matches()) {
-
-                    loginChecked.pwCheck = true
-                }
-
-                if (patternBD.matcher(birthday).matches()) {
-
-                    loginChecked.birthdayCheck = true
-                }
-
-                if (!loginChecked.nameCheck) {
-                    Toast.makeText(this, "이름을 확인해주세요${name}", Toast.LENGTH_SHORT).show()
-                    regName.setText("")
-                } else if (!loginChecked.idCheck) {
-                    Toast.makeText(this, "아이디 형식이나, 인증여부를 확인해주세요.${em}", Toast.LENGTH_SHORT).show()
-                    regEmail.setText("")
-                } else if (!loginChecked.pwCheck) {
-                    Toast.makeText(this, "비밀 번호 형식을 확인해주세요", Toast.LENGTH_SHORT).show()
-                    regPwd.setText("")
-                } else if (!loginChecked.nickCheck) {
-                    Toast.makeText(this, "닉네임을 확인해주세요", Toast.LENGTH_SHORT).show()
-                    regNick.setText("")
-                } else if (!loginChecked.birthdayCheck) {
-                    Toast.makeText(this, "생년월일을 확인해주세요", Toast.LENGTH_SHORT).show()
-                    regBirthdate.setText("")
-                } else if (!loginChecked.phoneCheck) {
-                    Toast.makeText(this, "휴대폰 인증을 확인해주세요", Toast.LENGTH_SHORT).show()
-                    send_certification_et.setText("")
+                    this@RegisterActivity.finish()
                 } else {
-                    loginChecked.finish = true
-                }
 
+                    if (name.length <= 5) {
+                        loginChecked.nameCheck = true
+                    }
+
+                    if (patternPW.matcher(regPwd.text.toString()).matches()) {
+
+                        loginChecked.pwCheck = true
+                    }
+
+                    if (patternBD.matcher(birthday).matches()) {
+
+                        loginChecked.birthdayCheck = true
+                    }
+
+                    if (!loginChecked.nameCheck) {
+                        Toast.makeText(this, "이름을 확인해주세요${name}", Toast.LENGTH_SHORT).show()
+                        regName.setText("")
+                    } else if (!loginChecked.idCheck) {
+                        Toast.makeText(this, "아이디 형식이나, 인증여부를 확인해주세요.${em}", Toast.LENGTH_SHORT)
+                            .show()
+                        regEmail.setText("")
+                    } else if (!loginChecked.pwCheck) {
+                        Toast.makeText(this, "비밀 번호 형식을 확인해주세요", Toast.LENGTH_SHORT).show()
+                        regPwd.setText("")
+                    } else if (!loginChecked.nickCheck) {
+                        Toast.makeText(this, "닉네임을 확인해주세요", Toast.LENGTH_SHORT).show()
+                        regNick.setText("")
+                    } else if (!loginChecked.birthdayCheck) {
+                        Toast.makeText(this, "생년월일을 확인해주세요", Toast.LENGTH_SHORT).show()
+                        regBirthdate.setText("")
+                    } else if (!loginChecked.phoneCheck) {
+                        Toast.makeText(this, "휴대폰 인증을 확인해주세요", Toast.LENGTH_SHORT).show()
+                        send_certification_et.setText("")
+                    } else {
+                        loginChecked.finish = true
+                    }
+
+                }
             }
+        }
+        catch (e: StringIndexOutOfBoundsException){
+            Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show()
         }
 
     }
