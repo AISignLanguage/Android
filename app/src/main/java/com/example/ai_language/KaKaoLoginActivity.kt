@@ -4,14 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,6 +24,14 @@ class KaKaoLoginActivity : AppCompatActivity() {
 
     private lateinit var userEmail: EditText
     private lateinit var userPw: EditText
+    private lateinit var progressBar: ProgressBar
+    private val disposables = CompositeDisposable()
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.clear()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ka_kao_login)
@@ -33,14 +44,17 @@ class KaKaoLoginActivity : AppCompatActivity() {
             finish()
         }
 
-        //로그인
+        //로그인 비동기 처리 - retrofit
         userEmail = findViewById(R.id.userEmail)
         userPw = findViewById(R.id.userPw)
+        progressBar = findViewById(R.id.progressBar)
 
         val signInBtn = findViewById<TextView>(R.id.sign_in_button)
         signInBtn.setOnClickListener {
             val inputUserEmail = userEmail.text.toString()
             val inputUserPw = userPw.text.toString()
+
+            progressBar.visibility = View.VISIBLE
 
             RetrofitClient.getInstance()
             val service = RetrofitClient.getUserRetrofitInterface()
@@ -49,6 +63,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
             val intent = Intent(this, Home::class.java)
             call.enqueue(object : Callback<LoginResponseDTO>{
                 override fun onResponse(call: Call<LoginResponseDTO>,response: Response<LoginResponseDTO>) {
+                    progressBar.visibility = View.GONE
                     if(response.isSuccessful){
                         val loginResponseDTO = response.body()
                         if(loginResponseDTO != null && loginResponseDTO.success){
@@ -66,13 +81,14 @@ class KaKaoLoginActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<LoginResponseDTO>, t: Throwable) {
+                    progressBar.visibility = View.GONE
                     Toast.makeText(applicationContext, "통신 실패", Toast.LENGTH_SHORT).show()
                 }
             })
 
-
-
         }
+
+
         //로그인 버튼 -> 아이디 비번 확인만 없으면 없다고 메세지 (DB확인)
         //카카오 버튼, 회원가입 버튼 -> 회원가입 버튼은 바로, 카카오 버튼은 DB확인 후 사용자가 처음접속이면 회원가입으로, 아니면 바로 HOME
 

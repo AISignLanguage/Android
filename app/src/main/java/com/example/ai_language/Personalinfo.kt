@@ -96,6 +96,7 @@ class PersonalInfo : AppCompatActivity() {
         }
     }
 
+    //RxJava
     private fun loadImage(uri: Uri){
         Glide.with(this)
             .load(uri)
