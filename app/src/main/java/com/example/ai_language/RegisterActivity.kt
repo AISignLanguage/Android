@@ -63,7 +63,7 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun getStorageService(): Storage {
         val assetManager = this@RegisterActivity.assets
-        val inputStream = assetManager.open("savvy-nimbus-413506-83c99ad1de04.json")
+        val inputStream = assetManager.open("goyo-415004-d79f31fe39d5.json")
         val credentials = GoogleCredentials.fromStream(inputStream)
         return StorageOptions.newBuilder().setCredentials(credentials).build().service
     }
@@ -79,8 +79,8 @@ class RegisterActivity : AppCompatActivity() {
                     val storage = getStorageService()
                     try {
                         val blobId = BlobId.of(
-                            "ai_language",
-                            "image_path/${System.currentTimeMillis()}.png"
+                            "goyo-storage",
+                            "profile/${System.currentTimeMillis()}.png"
                         ) // 파일 확장자를 .png로 설정
                         val blobInfo = BlobInfo.newBuilder(blobId).setContentType("image/png")
                             .build() // ContentType을 image/png로 설정
