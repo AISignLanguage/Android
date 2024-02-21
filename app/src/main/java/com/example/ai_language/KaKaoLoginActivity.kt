@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -53,6 +54,8 @@ class KaKaoLoginActivity : AppCompatActivity() {
             val inputUserEmail = userEmail.text.toString()
             val inputUserPw = userPw.text.toString()
 
+            progressBar.visibility = View.VISIBLE
+
             RetrofitClient.getInstance()
             val service = RetrofitClient.getUserRetrofitInterface()
 
@@ -60,6 +63,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
             val intent = Intent(this, Home::class.java)
             call.enqueue(object : Callback<LoginResponseDTO>{
                 override fun onResponse(call: Call<LoginResponseDTO>,response: Response<LoginResponseDTO>) {
+                    progressBar.visibility = View.GONE
                     if(response.isSuccessful){
                         val loginResponseDTO = response.body()
                         if(loginResponseDTO != null && loginResponseDTO.success){
@@ -77,6 +81,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<LoginResponseDTO>, t: Throwable) {
+                    progressBar.visibility = View.GONE
                     Toast.makeText(applicationContext, "통신 실패", Toast.LENGTH_SHORT).show()
                 }
             })
