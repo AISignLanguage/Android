@@ -48,8 +48,18 @@ import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.util.regex.Pattern
+import kotlin.math.log
 import kotlin.random.Random
+data class LoginChecked(
+    var nameCheck : Boolean,
+    var idCheck: Boolean,
+    var pwCheck: Boolean,
+    var nickCheck: Boolean,
+    var birthdayCheck: Boolean,
+    var phoneCheck: Boolean,
+    var finish:Boolean
 
+)
 class RegisterActivity : AppCompatActivity() {
     lateinit var call: Call<LoginCheckDTO>
     lateinit var service: Service
@@ -59,8 +69,16 @@ class RegisterActivity : AppCompatActivity() {
     private val AUTH_TOKEN = "${R.string.TK}"
     private val MESSAGIING_SERVICE = "${R.string.MS}"
     private var url: String = "https://cdn-icons-png.flaticon.com/128/149/149071.png"
-    lateinit var profile: ImageView
-
+    private lateinit var profile: ImageView
+    private val loginChecked = LoginChecked(
+        nameCheck = false,
+        idCheck = false,
+        pwCheck = false,
+        nickCheck = false,
+        birthdayCheck = false,
+        phoneCheck = false,
+        finish = false
+    )
     private fun getStorageService(): Storage {
         val assetManager = this@RegisterActivity.assets
         val inputStream = assetManager.open("goyo-415004-d79f31fe39d5.json")
@@ -238,15 +256,14 @@ class RegisterActivity : AppCompatActivity() {
 
         certification_btn.setOnClickListener {
             if(randomSixDigitNumber.toString() == certification_et.text.toString()){
-                end = true
                 certification_et.setTextColor(Color.GREEN)
                 certification_et.setText("인증되었습니다!")
                 certification_et.isEnabled = false
                 pn = formatPhoneNumber(send_certification_et.text.toString())
+                loginChecked.phoneCheck = true
             }
             else
             {
-                correct = 5
                 certification_et.setTextColor(Color.RED)
                 certification_et.setText("인증번호가 잘못되었습니다.")
                 certification_et.setText("")
@@ -288,61 +305,28 @@ class RegisterActivity : AppCompatActivity() {
         service = RetrofitClient.getUserRetrofitInterface()
 
 
+        val passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,16}$"
+        val patternPW = Pattern.compile(passwordPattern)
+        var birthday ="bd"
+        val birthdatePattern = "^\\d{8}$"
+        val patternBD = Pattern.compile(birthdatePattern)
+
+
+        var name = regName.text.toString()
+        var em = "em"
+        var nk = "nk"
+        var bd = "bd"
+        var pw = "pw"
         val regNext = findViewById<TextView>(R.id.reg_next)
         regNext.setOnClickListener {
-
-            val passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,16}$"
-            val patternPW = Pattern.compile(passwordPattern)
-            val birthday = regBirthdate.text.toString()
-            val birthdatePattern = "^\\d{8}$"
-            val patternBD = Pattern.compile(birthdatePattern)
-
-
-            var name = regName.text.toString()
-            var em = "em"
-            var nk = "nk"
-            var bd = "bd"
-            var pw = "pw"
-            if (!(Patterns.EMAIL_ADDRESS.matcher(regEmail.text.toString()).matches())) {
-                Toast.makeText(this, "잘못된 이메일 형식입니다.", Toast.LENGTH_SHORT).show()
-                regEmail.setText("")
-            } else {
-                em = regEmail.text.toString()
-                correct = 2
-            }
-            if (!(patternPW.matcher(regPwd.text.toString()).matches())) {
-                Toast.makeText(
-                    this,
-                    "비밀번호는 영문,숫자가 최소 1자리 포함되어야하며, 최소8자, 최대 16자를 입력하셔야 합니다.",
-                    Toast.LENGTH_SHORT
-                ).show()
-                regPwd.setText("")
-            } else {
-                pw = regPwd.text.toString()
-                correct = 3
-            }
-            if (regNick.text.toString().length !in 2..6) {
-                Toast.makeText(this, "닉네임은 2자 이상 6자 이하여야 합니다.", Toast.LENGTH_SHORT).show()
-                regNick.setText("")
-            }
-            /*else if(nickname == 중복){
-                Toast.makeText(this, "중복된 닉네임 입니다.", Toast.LENGTH_SHORT).show()
-            }*/
-            else {
-                nk = regNick.text.toString()
-                correct = 4
-            }
-            if (patternBD.matcher(birthday).matches()) {
-                val formattedDate = formatDate(birthday)
-                bd = formattedDate
-                correct = 5
-            } else {
-                // 생년월일 형식이 올바르지 않은 경우
-                Toast.makeText(this, "생년월일은 8자리 숫자여야 합니다.", Toast.LENGTH_SHORT).show()
-                regBirthdate.setText("")
-            }
-
-            if (correct == 5 && end) {
+            name = regName.text.toString() // 이름
+            em = regEmail.text.toString() // 이메일
+            pw = regPwd.text.toString() //비번
+            nk = regNick.text.toString() // 닉네임
+            birthday = regBirthdate.text.toString() //생일
+            val formattedDate = formatDate(birthday)
+            bd = formattedDate
+            if (loginChecked.finish) {
                 val userDTO = UserDTO(
                     name, //이름 => 공백이 아니어야함
                     bd, //생일 => xxxx-xx-xx 형태
@@ -389,17 +373,59 @@ class RegisterActivity : AppCompatActivity() {
                 }
                 )
 
-                finish()
+                this@RegisterActivity.finish()
             }
             else{
-                Log.d("필드","${correct} ${name} ${pw} ${bd} ${nk} ${pn} ${em} " )
-                when(correct){
-                    1 ->  Toast.makeText(this, "5개의 필드오류", Toast.LENGTH_SHORT).show()
-                    2 ->  Toast.makeText(this, "4개의 필드오류", Toast.LENGTH_SHORT).show()
-                    3 ->  Toast.makeText(this, "3개의 필드오류", Toast.LENGTH_SHORT).show()
-                    4 ->  Toast.makeText(this, "2개의 필드오류", Toast.LENGTH_SHORT).show()
-                    5 ->  Toast.makeText(this, "1개의 필드오류", Toast.LENGTH_SHORT).show()
+
+                if(name.length <=5){
+                    loginChecked.nameCheck = true
                 }
+                if (Patterns.EMAIL_ADDRESS.matcher(em).matches()) {
+                    loginChecked.idCheck = true
+                }
+                if (patternPW.matcher(regPwd.text.toString()).matches()) {
+
+                    loginChecked.pwCheck = true
+                }
+                if (regNick.text.toString().length in 2..6) {
+
+                    loginChecked.nickCheck = true
+                }
+                if (patternBD.matcher(birthday).matches()) {
+
+                    loginChecked.birthdayCheck = true
+                }
+
+                if(!loginChecked.nameCheck){
+                    Toast.makeText(this, "이름을 확인해주세요${name}", Toast.LENGTH_SHORT).show()
+                    regName.setText("")
+                }
+                else if(!loginChecked.idCheck){
+                    Toast.makeText(this, "아이디 형식을 확인해주세요${em}", Toast.LENGTH_SHORT).show()
+                    regEmail.setText("")
+                }
+                else if(!loginChecked.pwCheck){
+                    Toast.makeText(this, "비밀 번호 형식을 확인해주세요", Toast.LENGTH_SHORT).show()
+                    regPwd.setText("")
+                }
+
+                else if(!loginChecked.nickCheck){
+                    Toast.makeText(this, "닉네임을 확인해주세요", Toast.LENGTH_SHORT).show()
+                    regNick.setText("")
+                }
+                else if(!loginChecked.birthdayCheck){
+                    Toast.makeText(this, "생년월일을 확인해주세요", Toast.LENGTH_SHORT).show()
+                    regBirthdate.setText("")
+                }
+                else if(!loginChecked.phoneCheck){
+                    Toast.makeText(this, "휴대폰 인증을 확인해주세요", Toast.LENGTH_SHORT).show()
+                    send_certification_et.setText("")
+                }
+                else
+                {
+                    loginChecked.finish = true
+                }
+
             }
         }
 
