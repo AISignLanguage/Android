@@ -50,18 +50,21 @@ import java.io.IOException
 import java.util.regex.Pattern
 import kotlin.math.log
 import kotlin.random.Random
+
 data class LoginChecked(
-    var nameCheck : Boolean,
+    var nameCheck: Boolean,
     var idCheck: Boolean,
     var pwCheck: Boolean,
     var nickCheck: Boolean,
     var birthdayCheck: Boolean,
     var phoneCheck: Boolean,
-    var finish:Boolean
+    var finish: Boolean
 
 )
+
 class RegisterActivity : AppCompatActivity() {
     lateinit var call: Call<LoginCheckDTO>
+    lateinit var conf: Call<ConfirmedDTO>
     lateinit var service: Service
     private val STORAGE_PERMISSION_CODE = 1
     private val SMS_PERMISSION_CODE = 2
@@ -79,6 +82,7 @@ class RegisterActivity : AppCompatActivity() {
         phoneCheck = false,
         finish = false
     )
+
     private fun getStorageService(): Storage {
         val assetManager = this@RegisterActivity.assets
         val inputStream = assetManager.open("goyo-415004-d79f31fe39d5.json")
@@ -198,8 +202,14 @@ class RegisterActivity : AppCompatActivity() {
         // 추출한 값을 '-'로 연결하여 새로운 형식으로 조합합니다.
         return "$year-$month-$day"
     }
+
     private fun formatPhoneNumber(phoneNumber: String): String {
-        return "${phoneNumber.substring(0, 3)}-${phoneNumber.substring(3, 7)}-${phoneNumber.substring(7, 11)}"
+        return "${phoneNumber.substring(0, 3)}-${
+            phoneNumber.substring(
+                3,
+                7
+            )
+        }-${phoneNumber.substring(7, 11)}"
 
     }
 
@@ -209,7 +219,8 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-
+        RetrofitClient.getInstance()
+        service = RetrofitClient.getUserRetrofitInterface()
         var end = false
         var pn = "pn"
         var correct = 1
@@ -255,15 +266,13 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         certification_btn.setOnClickListener {
-            if(randomSixDigitNumber.toString() == certification_et.text.toString()){
+            if (randomSixDigitNumber.toString() == certification_et.text.toString()) {
                 certification_et.setTextColor(Color.GREEN)
                 certification_et.setText("인증되었습니다!")
                 certification_et.isEnabled = false
                 pn = formatPhoneNumber(send_certification_et.text.toString())
                 loginChecked.phoneCheck = true
-            }
-            else
-            {
+            } else {
                 certification_et.setTextColor(Color.RED)
                 certification_et.setText("인증번호가 잘못되었습니다.")
                 certification_et.setText("")
@@ -301,13 +310,10 @@ class RegisterActivity : AppCompatActivity() {
 
         }
 
-        RetrofitClient.getInstance()
-        service = RetrofitClient.getUserRetrofitInterface()
-
 
         val passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,16}$"
         val patternPW = Pattern.compile(passwordPattern)
-        var birthday ="bd"
+        var birthday = "bd"
         val birthdatePattern = "^\\d{8}$"
         val patternBD = Pattern.compile(birthdatePattern)
 
@@ -318,6 +324,106 @@ class RegisterActivity : AppCompatActivity() {
         var bd = "bd"
         var pw = "pw"
         val regNext = findViewById<TextView>(R.id.reg_next)
+
+        val confirmedNicknameBtn = findViewById<Button>(R.id.confirm_nickname_btn)
+        confirmedNicknameBtn.setOnClickListener {
+            nk = regNick.text.toString() // 닉네임
+            if (regNick.text.toString().length in 2..6) {
+                conf = service.confirmNick(ConfirmDTO(nk))
+                conf.clone().enqueue(object : Callback<ConfirmedDTO> {
+                    override fun onResponse(
+                        call: Call<ConfirmedDTO>,
+                        response: Response<ConfirmedDTO>
+                    ) {
+                        if (response.isSuccessful) {
+                            val responseOK = response.body()?.ok
+                            if(!responseOK!!) {
+                                Log.d("서버로부터 받은 요청", "닉네임 : ${response.body()?.ok}")
+                                Toast.makeText(
+                                    this@RegisterActivity,
+                                    "중복확인 완료!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                loginChecked.nickCheck = true
+                                !regNick.isEnabled
+                                regNick.setTextColor(Color.GREEN)
+                            }
+                            else{
+                                Log.d("서버로부터 받은 요청", "닉네임 : ${response.body()?.ok}")
+                                Toast.makeText(
+                                    this@RegisterActivity,
+                                    "중복된 닉네임이 존재합니다!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                regNick.setText("")
+                            }
+                        } else {
+                            Log.d("서버", "실패")
+
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ConfirmedDTO>, t: Throwable) {
+                        Log.e("retrofit 연동", "실패", t)
+                    }
+
+                }
+                )
+            }
+        }
+
+
+
+        val confirmedEmailBtn = findViewById<Button>(R.id.confirm_email_btn)
+        confirmedEmailBtn.setOnClickListener {
+            em = regEmail.text.toString() // 이메일
+            if (Patterns.EMAIL_ADDRESS.matcher(em).matches()) {
+                conf = service.confirmEmail(ConfirmDTO(em))
+                conf.clone().enqueue(object : Callback<ConfirmedDTO> {
+                    override fun onResponse(
+                        call: Call<ConfirmedDTO>,
+                        response: Response<ConfirmedDTO>
+                    ) {
+                        if (response.isSuccessful) {
+                            val responseOK = response.body()?.ok
+                            if(!responseOK!!) {
+                                Log.d("서버로부터 받은 요청", "이메일 : ${response.body()?.ok}")
+                                Toast.makeText(
+                                    this@RegisterActivity,
+                                    "중복확인 완료!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                loginChecked.idCheck = true
+                                !regEmail.isEnabled
+                                regEmail.setTextColor(Color.GREEN)
+                            }
+                            else{
+                                Log.d("서버로부터 받은 요청", "이메일 : ${response.body()?.ok}")
+                                Toast.makeText(
+                                    this@RegisterActivity,
+                                    "중복된 이메일이 존재합니다!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                regEmail.setText("")
+                            }
+                        } else {
+                            Log.d("서버", "서버실패")
+
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ConfirmedDTO>, t: Throwable) {
+                        Log.e("retrofit 연동", "실패", t)
+                    }
+
+                }
+                )
+
+            }
+        }
+
+
+
         regNext.setOnClickListener {
             name = regName.text.toString() // 이름
             em = regEmail.text.toString() // 이메일
@@ -374,55 +480,41 @@ class RegisterActivity : AppCompatActivity() {
                 )
 
                 this@RegisterActivity.finish()
-            }
-            else{
+            } else {
 
-                if(name.length <=5){
+                if (name.length <= 5) {
                     loginChecked.nameCheck = true
                 }
-                if (Patterns.EMAIL_ADDRESS.matcher(em).matches()) {
-                    loginChecked.idCheck = true
-                }
+
                 if (patternPW.matcher(regPwd.text.toString()).matches()) {
 
                     loginChecked.pwCheck = true
                 }
-                if (regNick.text.toString().length in 2..6) {
 
-                    loginChecked.nickCheck = true
-                }
                 if (patternBD.matcher(birthday).matches()) {
 
                     loginChecked.birthdayCheck = true
                 }
 
-                if(!loginChecked.nameCheck){
+                if (!loginChecked.nameCheck) {
                     Toast.makeText(this, "이름을 확인해주세요${name}", Toast.LENGTH_SHORT).show()
                     regName.setText("")
-                }
-                else if(!loginChecked.idCheck){
-                    Toast.makeText(this, "아이디 형식을 확인해주세요${em}", Toast.LENGTH_SHORT).show()
+                } else if (!loginChecked.idCheck) {
+                    Toast.makeText(this, "아이디 형식이나, 인증여부를 확인해주세요.${em}", Toast.LENGTH_SHORT).show()
                     regEmail.setText("")
-                }
-                else if(!loginChecked.pwCheck){
+                } else if (!loginChecked.pwCheck) {
                     Toast.makeText(this, "비밀 번호 형식을 확인해주세요", Toast.LENGTH_SHORT).show()
                     regPwd.setText("")
-                }
-
-                else if(!loginChecked.nickCheck){
+                } else if (!loginChecked.nickCheck) {
                     Toast.makeText(this, "닉네임을 확인해주세요", Toast.LENGTH_SHORT).show()
                     regNick.setText("")
-                }
-                else if(!loginChecked.birthdayCheck){
+                } else if (!loginChecked.birthdayCheck) {
                     Toast.makeText(this, "생년월일을 확인해주세요", Toast.LENGTH_SHORT).show()
                     regBirthdate.setText("")
-                }
-                else if(!loginChecked.phoneCheck){
+                } else if (!loginChecked.phoneCheck) {
                     Toast.makeText(this, "휴대폰 인증을 확인해주세요", Toast.LENGTH_SHORT).show()
                     send_certification_et.setText("")
-                }
-                else
-                {
+                } else {
                     loginChecked.finish = true
                 }
 

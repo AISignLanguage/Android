@@ -28,6 +28,12 @@ interface Service {
     @POST("login")
     fun login(@Body data: LoginRequestDTO): Call<LoginResponseDTO>
 
+    @POST("confirm-nick")
+    fun confirmNick(@Body data: ConfirmDTO): Call<ConfirmedDTO>
+
+
+    @POST("confirm-email")
+    fun confirmEmail(@Body data: ConfirmDTO): Call<ConfirmedDTO>
 
 
 }
