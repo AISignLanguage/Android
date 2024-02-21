@@ -16,10 +16,21 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="회원가입"
-        android:gravity="center"
+        android:text="Create New Account"
+        android:gravity="start"
+        android:layout_marginStart="20dp"
         android:textStyle="bold"
         android:textSize="25dp"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Please fill the form"
+        android:gravity="start"
+        android:layout_marginStart="20dp"
+        android:textStyle="bold"
+        android:textSize="15dp"
         android:layout_marginTop="10dp"/>
 
     <ImageView
@@ -27,7 +38,7 @@
         android:id="@+id/reg_pro"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        tools:srcCompat="@drawable/profile" />
+        tools:srcCompat="@drawable/user_profile" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -61,7 +72,7 @@
         android:textSize="20dp"
         android:fontFamily="@font/font_bd"
         android:textStyle="bold"
-        android:text="이메일 (ID)"
+        android:text="Email Address (ID)"
         />
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -78,10 +89,12 @@
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="20dp"
             android:layout_weight="2"
-            android:background="#EFF4FF"
+            android:background="@drawable/email"
             android:gravity="start|center_vertical"
-            android:hint="example@email.com"
-            android:paddingStart="15dp" />
+            android:hint="email"
+            android:textSize="15dp"
+            android:paddingStart="40dp" />
+
         <androidx.appcompat.widget.AppCompatButton
             android:contentDescription="중복확인 버튼"
             android:background="@drawable/btn_skyblue"

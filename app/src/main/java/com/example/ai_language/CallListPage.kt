@@ -14,11 +14,10 @@ import android.util.TypedValue
 import android.view.View
 import android.view.WindowInsets
 import android.widget.ImageButton
-import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,11 +31,13 @@ data class Phone(val id:String?, val name:String?, val phone:String?)
 
 class CallListPage : AppCompatActivity() {
 
-    lateinit var call : Call<PhoneListDTO>
-    lateinit var service: Service
-    lateinit var phoneNumberDTO: PhoneNumberDTO
-    lateinit var appPhoneNumbers: List<String> //서버에서 가져온 번호만 저장하는 리스트
+    private lateinit var call : Call<PhoneListDTO>
+    private lateinit var service: Service
+    private lateinit var phoneNumberDTO: PhoneNumberDTO
+    private lateinit var appPhoneNumbers: List<String> //서버에서 가져온 번호만 저장하는 리스트
     val contactListMap = mutableListOf<Pair<String, String>>() // 이름, 번호 map
+
+    private lateinit var progressBar : ProgressBar
 
     private val callViewModel: CallListViewModel by viewModels()
     private val inviteViewModel: InviteViewModel by viewModels()
@@ -45,9 +46,9 @@ class CallListPage : AppCompatActivity() {
     private lateinit var callListAdapter : CallListAdapter
     private lateinit var inviteRecyclerView : RecyclerView
     private lateinit var inviteListAdapter : InviteListAdapter
-    var density = 0.0f
-    var standardSize_X = 0
-    var standardSize_Y = 0
+
+    private var standardSize_X = 0
+    private var standardSize_Y = 0
 
     fun dpToPx(dp: Float): Int {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics).toInt()
@@ -212,9 +213,13 @@ class CallListPage : AppCompatActivity() {
         service = RetrofitClient.getUserRetrofitInterface()
         call = service.sendCallData(phoneNumberDTO)
 
+        progressBar = findViewById(R.id.progressBar)
+        progressBar.visibility = View.VISIBLE
+
         // 서버로부터 데이터를 가져오는 요청 보내기
         call.enqueue(object : Callback<PhoneListDTO> {
             override fun onResponse(call: Call<PhoneListDTO>, response: Response<PhoneListDTO>) {
+                progressBar.visibility = View.GONE
                 if (response.isSuccessful) {
                     val PhoneListDTO = response.body() // 서버에서 받은 데이터
                     PhoneListDTO?.phones?.let { phones ->
@@ -254,6 +259,7 @@ class CallListPage : AppCompatActivity() {
 
             override fun onFailure(call: Call<PhoneListDTO>, t: Throwable) {
                 // 통신 실패 처리
+                progressBar.visibility = View.GONE
                 Log.d("로그", "통신 실패: ${t.message}")
             }
         })
