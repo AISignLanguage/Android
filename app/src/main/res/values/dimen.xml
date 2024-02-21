@@ -6,4 +6,6 @@
     <dimen name="height">0dp</dimen>
     <dimen name="fheight">80dp</dimen>
     <dimen name="fwidth">80dp</dimen>
+    <dimen name="fabsize">0dp</dimen>
+    <dimen name="fabimg">0dp</dimen>
 </resources>

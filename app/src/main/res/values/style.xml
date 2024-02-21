@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppFloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <!-- 버튼의 기본 크기 설정 -->
+        <item name="android:layout_width">@dimen/height</item>
+        <item name="android:layout_height">@dimen/width</item>
+        <!-- 버튼의 배경색 설정 -->
+        <item name="backgroundTint">@color/white</item>
+        <!-- 필요한 다른 스타일 속성 추가 -->
+    </style>
+
+</resources>

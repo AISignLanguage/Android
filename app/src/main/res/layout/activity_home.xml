@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
-    tools:context=".MainActivity"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
     <ImageView
         android:layout_width="180dp"
@@ -17,116 +17,137 @@
         android:background="@drawable/logo__1_" />
 
     <FrameLayout
-        android:id="@+id/vp_fragment"
+        android:id="@+id/fr_all"
         android:layout_width="match_parent"
-        android:layout_height="606dp"
-        android:layout_gravity="center"
+        android:layout_height="0dp"
         android:layout_weight="1">
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewpager"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/margin10"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:scaleType="fitXY" />
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/vp_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/margin10"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:scaleType="fitXY" />
+            </FrameLayout>
+
+            <me.relex.circleindicator.CircleIndicator3
+                android:id="@+id/indicator"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="10dp"
+                app:ci_drawable="@drawable/sky_radius"
+                app:ci_drawable_unselected="@drawable/white_radius"
+                app:ci_height="7dp"
+                app:ci_width="7dp" />
+
+            <ImageView
+                android:layout_width="@dimen/line"
+                android:layout_height="2dp"
+                android:layout_margin="@dimen/margin10"
+                android:background="@drawable/line" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom|center"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ImageButton
+                    android:id="@+id/dic_btn"
+                    android:layout_width="@dimen/fabimg"
+                    android:layout_height="@dimen/fabimg"
+                    android:layout_margin="@dimen/margin10"
+                    android:background="@mipmap/dic"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/CameraBtn"
+                    app:layout_constraintStart_toEndOf="@+id/callList_btn"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/CameraBtn"
+                    style="@style/AppFloatingActionButton"
+                    android:layout_width="@dimen/fabsize"
+                    android:layout_height="@dimen/fabsize"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:backgroundTint="#E6F4F1"
+                    android:contentDescription="@string/todos"
+                    app:fabCustomSize="@dimen/fabsize"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.501"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:maxImageSize="@dimen/fabimg"
+                    app:srcCompat="@drawable/camera"
+                    app:tint="@null" />
+
+                <ImageButton
+                    android:id="@+id/my_page_btn"
+                    android:layout_width="@dimen/fabimg"
+                    android:layout_height="@dimen/fabimg"
+                    android:layout_margin="@dimen/margin10"
+                    android:background="@mipmap/user"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/news_btn"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/callList_btn"
+                    android:layout_width="@dimen/fabimg"
+                    android:layout_height="@dimen/fabimg"
+                    android:layout_margin="@dimen/margin10"
+                    android:background="@drawable/call"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/dic_btn"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/news_btn"
+                    android:layout_width="@dimen/fabimg"
+                    android:layout_height="@dimen/fabimg"
+                    android:layout_margin="@dimen/margin10"
+                    android:background="@mipmap/news_btn"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/my_page_btn"
+                    app:layout_constraintStart_toEndOf="@+id/CameraBtn"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
     </FrameLayout>
-    <me.relex.circleindicator.CircleIndicator3
-        android:id="@+id/indicator"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginBottom="10dp"
-        android:layout_gravity="bottom"
-        app:ci_drawable="@drawable/sky_radius"
-        app:ci_drawable_unselected="@drawable/white_radius"
-        app:ci_height="7dp"
-        app:ci_width="7dp"
-        />
-    <ImageView
-        android:layout_width="@dimen/line"
-        android:layout_margin="@dimen/margin10"
-        android:layout_height="2dp"
-        android:background="@drawable/line"/>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="bottom|center"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <ImageButton
-            android:id="@+id/dic_btn"
-            android:layout_width="@dimen/height"
-            android:layout_height="@dimen/width"
-            android:layout_margin="@dimen/margin10"
-            android:background="@mipmap/dic"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/CameraBtn"
-            app:layout_constraintStart_toEndOf="@+id/callList_btn"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.2" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/CameraBtn"
-            android:layout_width="@dimen/height"
-            android:layout_height="@dimen/fwidth"
-            android:layout_margin="@dimen/margin10"
-            android:foreground="@mipmap/camera"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/my_page_btn"
-            android:layout_width="@dimen/height"
-            android:layout_height="@dimen/width"
-            android:layout_margin="@dimen/margin10"
-            android:layout_marginEnd="16dp"
-            android:background="@mipmap/user"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.2" />
-
-        <ImageButton
-            android:id="@+id/callList_btn"
-            android:layout_width="@dimen/height"
-            android:layout_height="@dimen/width"
-            android:layout_margin="@dimen/margin10"
-            android:background="@drawable/call"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/news_btn"
-            android:layout_width="@dimen/height"
-            android:layout_height="@dimen/width"
-            android:layout_margin="@dimen/margin10"
-            android:background="@mipmap/news_btn"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/my_page_btn"
-            app:layout_constraintStart_toEndOf="@+id/CameraBtn"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.2" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </LinearLayout>
