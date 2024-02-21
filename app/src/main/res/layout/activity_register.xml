@@ -83,6 +83,7 @@
             android:hint="example@email.com"
             android:paddingStart="15dp" />
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/confirm_email_btn"
             android:contentDescription="중복확인 버튼"
             android:background="@drawable/btn_skyblue"
             android:layout_marginTop="20dp"
@@ -162,6 +163,7 @@
             android:hint="닉네임 최소 2자, 최대 6자"
             />
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/confirm_nickname_btn"
             android:background="@drawable/btn_skyblue"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"

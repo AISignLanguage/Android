@@ -19,8 +19,17 @@ data class LoginRequestDTO(
     @SerializedName("password") val password: String
 )
 
+
 data class LoginResponseDTO(
     @SerializedName("success") val success: Boolean
+)
+
+//confirm
+data class ConfirmDTO(
+    @SerializedName("word") val word: String
+)
+data class ConfirmedDTO(
+    @SerializedName("ok") val ok: Boolean
 )
 
 //LoginActivity
