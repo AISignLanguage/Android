@@ -7,11 +7,13 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,6 +23,14 @@ class KaKaoLoginActivity : AppCompatActivity() {
 
     private lateinit var userEmail: EditText
     private lateinit var userPw: EditText
+    private lateinit var progressBar: ProgressBar
+    private val disposables = CompositeDisposable()
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.clear()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ka_kao_login)
@@ -33,14 +43,17 @@ class KaKaoLoginActivity : AppCompatActivity() {
             finish()
         }
 
-        //로그인
+        //로그인 비동기처리
         userEmail = findViewById(R.id.userEmail)
         userPw = findViewById(R.id.userPw)
+        progressBar = findViewById(R.id.progressBar)
 
         val signInBtn = findViewById<TextView>(R.id.sign_in_button)
         signInBtn.setOnClickListener {
             val inputUserEmail = userEmail.text.toString()
             val inputUserPw = userPw.text.toString()
+
+            progressBar.visibility = ProgressBar.VISIBLE
 
             RetrofitClient.getInstance()
             val service = RetrofitClient.getUserRetrofitInterface()

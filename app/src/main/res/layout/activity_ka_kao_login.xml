@@ -90,5 +90,13 @@
         android:layout_marginEnd="20dp"
         android:src="@drawable/kakao_login_large_wide" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        />
+
+
 
 </androidx.appcompat.widget.LinearLayoutCompat>
