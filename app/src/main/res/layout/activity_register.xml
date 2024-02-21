@@ -9,7 +9,7 @@
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F8FAFF"
+        android:background="#FFFFFF"
         android:gravity="center|top"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
