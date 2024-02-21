@@ -336,23 +336,30 @@ class RegisterActivity : AppCompatActivity() {
                         response: Response<ConfirmedDTO>
                     ) {
                         if (response.isSuccessful) {
-                            Log.d("서버로부터 받은 요청", "닉네임 : ${response.body()?.ok}")
-                            Toast.makeText(
-                                this@RegisterActivity,
-                                "중복확인 완료!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            loginChecked.nickCheck = true
-                            !regNick.isEnabled
-                            regNick.setTextColor(Color.GREEN)
+                            val responseOK = response.body()?.ok
+                            if(!responseOK!!) {
+                                Log.d("서버로부터 받은 요청", "닉네임 : ${response.body()?.ok}")
+                                Toast.makeText(
+                                    this@RegisterActivity,
+                                    "중복확인 완료!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                loginChecked.nickCheck = true
+                                !regNick.isEnabled
+                                regNick.setTextColor(Color.GREEN)
+                            }
+                            else{
+                                Log.d("서버로부터 받은 요청", "닉네임 : ${response.body()?.ok}")
+                                Toast.makeText(
+                                    this@RegisterActivity,
+                                    "중복된 닉네임이 존재합니다!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                regNick.setText("")
+                            }
                         } else {
-                            Log.d("서버로부터 받은 요청", "닉네임 : ${response.body()?.ok}")
-                            Toast.makeText(
-                                this@RegisterActivity,
-                                "중복된 닉네임이 존재합니다!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            regNick.setText("")
+                            Log.d("서버", "실패")
+
                         }
                     }
 
@@ -378,23 +385,30 @@ class RegisterActivity : AppCompatActivity() {
                         response: Response<ConfirmedDTO>
                     ) {
                         if (response.isSuccessful) {
-                            Log.d("서버로부터 받은 요청", "이메일 : ${response.body()?.ok}")
-                            Toast.makeText(
-                                this@RegisterActivity,
-                                "중복확인 완료!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            loginChecked.idCheck = true
-                            !regEmail.isEnabled
-                            regEmail.setTextColor(Color.GREEN)
+                            val responseOK = response.body()?.ok
+                            if(!responseOK!!) {
+                                Log.d("서버로부터 받은 요청", "이메일 : ${response.body()?.ok}")
+                                Toast.makeText(
+                                    this@RegisterActivity,
+                                    "중복확인 완료!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                loginChecked.idCheck = true
+                                !regEmail.isEnabled
+                                regEmail.setTextColor(Color.GREEN)
+                            }
+                            else{
+                                Log.d("서버로부터 받은 요청", "이메일 : ${response.body()?.ok}")
+                                Toast.makeText(
+                                    this@RegisterActivity,
+                                    "중복된 이메일이 존재합니다!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                regEmail.setText("")
+                            }
                         } else {
-                            Log.d("서버로부터 받은 요청", "이메일 : ${response.body()?.ok}")
-                            Toast.makeText(
-                                this@RegisterActivity,
-                                "중복된 이메일이 존재합니다!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            regEmail.setText("")
+                            Log.d("서버", "서버실패")
+
                         }
                     }
 
