@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
+
     <androidx.appcompat.widget.LinearLayoutCompat
 
         android:layout_width="match_parent"
@@ -14,16 +15,18 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         tools:context=".RegisterActivity">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:gravity="center"
             android:fontFamily="@font/nam"
+            android:gravity="center"
             android:text="회원가입"
             android:textSize="22dp"
             android:textStyle="bold" />
@@ -293,8 +296,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="15dp"
-                android:fontFamily="@font/font_bd"
                 android:background="@drawable/aleady_have_account_"
+                android:fontFamily="@font/font_bd"
                 android:textStyle="bold" />
 
             <TextView

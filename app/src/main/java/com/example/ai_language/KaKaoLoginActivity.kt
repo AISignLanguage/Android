@@ -100,7 +100,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
             startActivity(intent)
         }*/
 
-        val sinUpBtn = findViewById<TextView>(R.id.sign_up_button)
+        val sinUpBtn = findViewById<TextView>(R.id.createAccount)
         sinUpBtn.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             intent.putExtra("nick", "사용자${ Random.nextInt(10000)}")
