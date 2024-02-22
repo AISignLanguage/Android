@@ -96,7 +96,12 @@ class RegisterActivity : AppCompatActivity() {
             if (result.resultCode == RESULT_OK) {
                 val intent = result.data
                 val selectedImageUri: Uri? = intent?.data
-                profile.setImageURI(selectedImageUri)
+                if (selectedImageUri != null) {
+                    Glide.with(this) // 'this'는 Context 객체를 참조해야 합니다. 필요에 따라 변경해주세요.
+                        .load(selectedImageUri)
+                        .circleCrop() // 이미지를 원형으로 잘라냅니다.
+                        .into(profile) // 'profile'은 이미지를 설정할 ImageView의 ID입니다.
+                }
                 CoroutineScope(Dispatchers.IO).launch {
                     val storage = getStorageService()
                     try {
@@ -289,6 +294,7 @@ class RegisterActivity : AppCompatActivity() {
             Glide.with(this)
                 .load(uriString)
                 .override(profilePx, profilePx)
+                .circleCrop()
                 .into(profile)
         } else {
             Log.e("uri 에러", "$uriString")
