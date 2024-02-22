@@ -6,17 +6,18 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_marginStart="10dp"
-    android:layout_marginEnd="10dp">
+    android:layout_marginEnd="10dp"
+    android:background="@drawable/item_border">
 
-    <ImageButton
-        android:id="@+id/inviteBtn"
+    <ImageView
+        android:id="@+id/profileImageView"
         android:layout_width="34dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
         android:layout_margin="10dp"
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
-        android:src="@drawable/invite_message"
+        android:src="@drawable/profile_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,7 +26,7 @@
         android:id="@+id/name"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginStart="60dp"
+        android:layout_margin="10dp"
         android:ellipsize="end"
         android:ems="4"
         android:fontFamily="@font/nam"
@@ -34,20 +35,33 @@
         android:text="박지원"
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/inviteBtn"
+        app:layout_constraintStart_toEndOf="@+id/profileImageView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/phoneNumber"
         android:layout_width="0dp"
         android:layout_height="40dp"
+        android:layout_margin="10dp"
         android:fontFamily="@font/nam"
         android:gravity="center"
         android:text="010-9941-0785"
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/inviteBtn"
         app:layout_constraintStart_toEndOf="@+id/name"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/inviteBtn"
+        android:layout_width="34dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/call_msg_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
