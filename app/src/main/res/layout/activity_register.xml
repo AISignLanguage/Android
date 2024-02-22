@@ -79,8 +79,8 @@
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.8"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
             android:orientation="horizontal">
 
             <EditText
@@ -91,9 +91,9 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="20dp"
-                android:layout_weight="2"
+                android:layout_weight="0.8"
                 android:background="@drawable/emailspace"
-                android:gravity="start|center_vertical|center_horizontal"
+                android:gravity="start|center_vertical"
                 android:hint="이메일 (ID)"
                 android:paddingStart="45dp"
                 android:textSize="12dp" />
@@ -151,8 +151,8 @@
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.8"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
             android:orientation="horizontal">
 
             <EditText
@@ -162,7 +162,8 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_weight="2"
+                android:layout_marginBottom="20dp"
+                android:layout_weight="0.8"
                 android:background="@drawable/nicknamespace"
                 android:gravity="start|center_vertical"
                 android:hint="닉네임 최소 2자, 최대 6자"
