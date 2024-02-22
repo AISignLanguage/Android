@@ -21,28 +21,33 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+
 class GridSpacingItemDecoration(private val spanCount: Int, private val spacing: Int, private val includeEdge: Boolean) : RecyclerView.ItemDecoration() {
+
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         val position = parent.getChildAdapterPosition(view) // 아이템 위치
         val column = position % spanCount // 아이템 열
 
         if (includeEdge) {
-            outRect.left = spacing - column * spacing / spanCount
-            outRect.right = (column + 1) * spacing / spanCount
+            outRect.left = spacing * (spanCount - column) / spanCount // 왼쪽 여백
+            outRect.right = spacing * (column + 1) / spanCount // 오른쪽 여백
 
-            if (position < spanCount) { // 상단 가장자리
+            if (position < spanCount) { // 첫 번째 행의 상단 여백
                 outRect.top = spacing
             }
-            outRect.bottom = spacing // 아이템 하단
+            outRect.bottom = spacing // 아이템 하단 여백
         } else {
-            outRect.left = column * spacing / spanCount
-            outRect.right = spacing - (column + 1) * spacing / spanCount
+            outRect.left = spacing * column / spanCount // 왼쪽 여백
+            outRect.right = spacing - (column + 1) * spacing / spanCount // 오른쪽 여백
             if (position >= spanCount) {
-                outRect.top = spacing // 아이템 상단
+                outRect.top = spacing // 아이템 상단 여백
             }
         }
     }
 }
+
+
 
 class TagAdapter(val itemList: ArrayList<Tagdata>) :
     RecyclerView.Adapter<TagAdapter.TagViewHolder>() {
@@ -64,11 +69,11 @@ class TagAdapter(val itemList: ArrayList<Tagdata>) :
             isButtonPressed = isPressed
             if (isButtonPressed) {
                 // 첫 번째 상태: 배경 #9999FF, 글씨 흰색
-                tag_txt.setBackgroundResource(R.drawable.round_square)
+                tag_txt.setBackgroundResource(R.drawable.tag)
                 tag_txt.setTextColor(Color.WHITE)
             } else {
                 // 두 번째 상태: 배경 투명 & 테두리 #9999FF, 글씨 #9999FF
-                tag_txt.setBackgroundResource(R.drawable.round_square_sel)
+                tag_txt.setBackgroundResource(R.drawable.nottag)
                 tag_txt.setTextColor(Color.parseColor("#9999FF"))
             }
             tag_txt.invalidate() // 뷰를 강제로 다시 그리도록 함
@@ -109,7 +114,7 @@ class DicAdapter(val itemList: ArrayList<DicPic>,private val listener:OnItemClic
 
     inner class DicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val dic_img = itemView.findViewById<ImageView>(R.id.dic_item)
-        val dic_ex = itemView.findViewById<TextView>(R.id.ex_text)
+        val dic_ex = itemView.findViewById<TextView>(R.id.dic_text)
         init {
             itemView.setOnClickListener {
                 val position = adapterPosition
@@ -130,13 +135,20 @@ class DicAdapter(val itemList: ArrayList<DicPic>,private val listener:OnItemClic
         return DicViewHolder(view)
     }
 
+    private fun dpToPx(context: Context, dp: Int): Int {
+        return (dp * context.resources.displayMetrics.density).toInt()
+    }
+
     override fun onBindViewHolder(holder: DicViewHolder, position: Int) {
         val dicPic = itemList[position]
         val dicUri = dicPic.dicpic
         //holder.dic_img.setImageURI(dicUri)
+        val radiusInPixels = dpToPx(holder.itemView.context, 26)
         holder.dic_ex.text = dicPic.ex
         Glide.with(holder.itemView)
             .load(dicUri)
+            .transform(RoundedCorners(radiusInPixels))
+            .centerCrop()
             .into(holder.dic_img)
     }
 
@@ -166,7 +178,7 @@ class DictionaryPage : AppCompatActivity(),DicAdapter.OnItemClickListener {
         }
         rv_dic = findViewById<RecyclerView>(R.id.recyclerGridView)
         rv_tag = findViewById<RecyclerView>(R.id.recyclerTag)
-        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.grid_layout_margin)
+        val spacingInPixels =resources.getDimensionPixelSize(R.dimen.grid_layout_margin)
         rv_dic.addItemDecoration(GridSpacingItemDecoration(2, spacingInPixels, true))
 
 

@@ -294,8 +294,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="15dp"
                 android:fontFamily="@font/font_bd"
-                android:text="Aleady have account?"
-                android:textSize="12dp"
+                android:background="@drawable/aleady_have_account_"
                 android:textStyle="bold" />
 
             <TextView
