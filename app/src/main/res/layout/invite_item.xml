@@ -6,7 +6,9 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_marginStart="10dp"
+    android:layout_marginTop="2dp"
     android:layout_marginEnd="10dp"
+    android:layout_marginBottom="2dp"
     android:background="@drawable/item_border">
 
     <ImageView
@@ -14,7 +16,7 @@
         android:layout_width="34dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
         android:src="@drawable/profile_icon"
@@ -25,8 +27,9 @@
     <TextView
         android:id="@+id/name"
         android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_margin="10dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:ellipsize="end"
         android:ems="4"
         android:fontFamily="@font/nam"
@@ -34,7 +37,6 @@
         android:maxLines="1"
         android:text="박지원"
         android:textSize="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/profileImageView"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,21 +44,21 @@
         android:id="@+id/phoneNumber"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_margin="10dp"
+        android:layout_marginStart="8dp"
         android:fontFamily="@font/nam"
         android:gravity="center"
         android:text="010-9941-0785"
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/inviteBtn"
-        app:layout_constraintStart_toEndOf="@+id/name"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/profileImageView"
+        app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <ImageButton
         android:id="@+id/inviteBtn"
         android:layout_width="34dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
+        android:layout_margin="10dp"
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
         android:src="@drawable/call_msg_icon"
