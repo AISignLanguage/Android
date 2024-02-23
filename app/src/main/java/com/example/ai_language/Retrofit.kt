@@ -5,6 +5,7 @@ import okhttp3.Protocol
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 
 class RetrofitClient private constructor() {
 
@@ -12,7 +13,8 @@ class RetrofitClient private constructor() {
         @Volatile
         private var instance: RetrofitClient? = null
         private lateinit var userRetrofitInterface: Service
-        private val baseUrl = "http://10.0.2.2:8080/api/mog/user/"
+        private val baseUrl = "http://192.168.1.121:8080/api/mog/user/"
+        //private val baseUrl = "http://192.168.1.121:8080/api/mog/user/" - 지원
 
         fun getInstance(): RetrofitClient {
             return instance ?: synchronized(this) {
@@ -35,6 +37,7 @@ class RetrofitClient private constructor() {
         val retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .client(okHttpClient)
             .build()
         userRetrofitInterface = retrofit.create(Service::class.java)

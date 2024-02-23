@@ -11,14 +11,18 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.telephony.SmsManager
 import android.util.Base64
 import android.util.Log
 import android.util.Patterns
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
@@ -28,6 +32,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.storage.Acl
@@ -35,6 +40,11 @@ import com.google.cloud.storage.BlobId
 import com.google.cloud.storage.BlobInfo
 import com.google.cloud.storage.Storage
 import com.google.cloud.storage.StorageOptions
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.observers.DisposableObserver
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -64,8 +74,10 @@ data class LoginChecked(
 
 class RegisterActivity : AppCompatActivity() {
     lateinit var call: Call<LoginCheckDTO>
-    lateinit var conf: Call<ConfirmedDTO>
+    lateinit var conf: Observable<ConfirmedDTO>
     lateinit var service: Service
+    private val disposables = CompositeDisposable()
+    private lateinit var progressBar: ProgressBar
     private val STORAGE_PERMISSION_CODE = 1
     private val SMS_PERMISSION_CODE = 2
     private val ACCOUNT_SID = "${R.string.SID}"
@@ -225,6 +237,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
 
         RetrofitClient.getInstance()
+        progressBar = findViewById(R.id.reg_progressbar)
         service = RetrofitClient.getUserRetrofitInterface()
         var end = false
         var pn = "pn"
@@ -331,50 +344,51 @@ class RegisterActivity : AppCompatActivity() {
         var pw = "pw"
         val regNext = findViewById<TextView>(R.id.reg_next)
 
+        Log.d("RegisterActivity", "Showing ProgressBar")
         val confirmedNicknameBtn = findViewById<Button>(R.id.confirm_nickname_btn)
         confirmedNicknameBtn.setOnClickListener {
             nk = regNick.text.toString() // 닉네임
             if (regNick.text.toString().length in 2..6) {
                 conf = service.confirmNick(ConfirmDTO(nk))
-                conf.clone().enqueue(object : Callback<ConfirmedDTO> {
-                    override fun onResponse(
-                        call: Call<ConfirmedDTO>,
-                        response: Response<ConfirmedDTO>
-                    ) {
-                        if (response.isSuccessful) {
-                            val responseOK = response.body()?.ok
-                            if(!responseOK!!) {
-                                Log.d("서버로부터 받은 요청", "닉네임 : ${response.body()?.ok}")
-                                Toast.makeText(
-                                    this@RegisterActivity,
-                                    "중복확인 완료!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                loginChecked.nickCheck = true
-                                !regNick.isEnabled
-                                regNick.setTextColor(Color.GREEN)
+                progressBar.visibility = View.VISIBLE
+                disposables.add(
+                    conf.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(object : DisposableObserver<ConfirmedDTO>() {
+                            override fun onNext(confirmedDTO: ConfirmedDTO) {
+                                // onSuccess
+                                val responseOK = confirmedDTO.ok
+                                if (!responseOK) {
+                                    Log.d("서버로부터 받은 요청", "닉네임 : $responseOK")
+                                    Toast.makeText(this@RegisterActivity, "중복확인 완료!", Toast.LENGTH_SHORT).show()
+                                    loginChecked.nickCheck = true
+                                    regNick.isEnabled = false
+                                    regNick.setTextColor(Color.GREEN)
+                                } else {
+                                    Log.d("서버로부터 받은 요청", "닉네임 : $responseOK")
+                                    Toast.makeText(this@RegisterActivity, "중복된 닉네임이 존재합니다!", Toast.LENGTH_SHORT).show()
+                                    regNick.setText("")
+                                }
                             }
-                            else{
-                                Log.d("서버로부터 받은 요청", "닉네임 : ${response.body()?.ok}")
-                                Toast.makeText(
-                                    this@RegisterActivity,
-                                    "중복된 닉네임이 존재합니다!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                regNick.setText("")
+
+                            override fun onError(e: Throwable) {
+                                // onError
+                                Log.d("RegisterActivity", "Showing ProgressBar")
+                                progressBar.visibility = View.GONE
+                                Log.e("retrofit 연동", "실패", e)
                             }
-                        } else {
-                            Log.d("서버", "실패")
 
-                        }
-                    }
-
-                    override fun onFailure(call: Call<ConfirmedDTO>, t: Throwable) {
-                        Log.e("retrofit 연동", "실패", t)
-                    }
-
-                }
+                            override fun onComplete() {
+                                // onComplete
+                                Log.d("RegisterActivity", "Showing ProgressBar")
+                                progressBar.visibility = View.GONE
+                            }
+                        })
                 )
+            }
+            else{
+                Toast.makeText(this@RegisterActivity, "올바르지 않은 닉네임 형식입니다.", Toast.LENGTH_SHORT).show()
+
             }
         }
 
@@ -382,55 +396,56 @@ class RegisterActivity : AppCompatActivity() {
 
         val confirmedEmailBtn = findViewById<Button>(R.id.confirm_email_btn)
         confirmedEmailBtn.setOnClickListener {
-            em = regEmail.text.toString() // 이메일
+            val em = regEmail.text.toString() // 이메일
             if (Patterns.EMAIL_ADDRESS.matcher(em).matches()) {
-                conf = service.confirmEmail(ConfirmDTO(em))
-                conf.clone().enqueue(object : Callback<ConfirmedDTO> {
-                    override fun onResponse(
-                        call: Call<ConfirmedDTO>,
-                        response: Response<ConfirmedDTO>
-                    ) {
-                        if (response.isSuccessful) {
-                            val responseOK = response.body()?.ok
-                            if(!responseOK!!) {
-                                Log.d("서버로부터 받은 요청", "이메일 : ${response.body()?.ok}")
-                                Toast.makeText(
-                                    this@RegisterActivity,
-                                    "중복확인 완료!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                loginChecked.idCheck = true
-                                !regEmail.isEnabled
-                                regEmail.setTextColor(Color.GREEN)
+                val conf = service.confirmEmail(ConfirmDTO(em))
+                progressBar.visibility = View.VISIBLE
+                disposables.add(
+                    conf.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(object : DisposableObserver<ConfirmedDTO>() {
+                            override fun onNext(confirmedDTO: ConfirmedDTO) {
+                                // onSuccess
+                                val responseOK = confirmedDTO.ok
+                                if (!responseOK) {
+                                    Log.d("서버로부터 받은 요청", "이메일 : $responseOK")
+                                    Toast.makeText(this@RegisterActivity, "중복확인 완료!", Toast.LENGTH_SHORT).show()
+                                    loginChecked.idCheck = true
+                                    regEmail.isEnabled = false
+                                    regEmail.setTextColor(Color.GREEN)
+                                } else {
+                                    Log.d("서버로부터 받은 요청", "이메일 : $responseOK")
+                                    Toast.makeText(this@RegisterActivity,"중복된 이메일이 존재합니다!",Toast.LENGTH_SHORT).show()
+                                    regEmail.setText("")
+                                }
                             }
-                            else{
-                                Log.d("서버로부터 받은 요청", "이메일 : ${response.body()?.ok}")
-                                Toast.makeText(
-                                    this@RegisterActivity,
-                                    "중복된 이메일이 존재합니다!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                regEmail.setText("")
+
+                            override fun onError(e: Throwable) {
+                                // onError
+                                Log.d("RegisterActivity", "Showing ProgressBar")
+                                progressBar.visibility = View.GONE
+                                Log.e("retrofit 연동", "실패", e)
                             }
-                        } else {
-                            Log.d("서버", "서버실패")
 
-                        }
-                    }
-
-                    override fun onFailure(call: Call<ConfirmedDTO>, t: Throwable) {
-                        Log.e("retrofit 연동", "실패", t)
-                    }
-
-                }
+                            override fun onComplete() {
+                                // onComplete
+                                Log.d("RegisterActivity", "Showing ProgressBar")
+                                progressBar.visibility = View.GONE
+                            }
+                        })
                 )
+            }
+            else{
+                Toast.makeText(this@RegisterActivity, "올바르지 않은 이메일 형식입니다.", Toast.LENGTH_SHORT).show()
 
             }
         }
 
 
         try {
+
             regNext.setOnClickListener {
+                progressBar.visibility = View.VISIBLE
                 name = regName.text.toString() // 이름
                 em = regEmail.text.toString() // 이메일
                 pw = regPwd.text.toString() //비번
@@ -462,6 +477,7 @@ class RegisterActivity : AppCompatActivity() {
                             call: Call<LoginCheckDTO>,
                             response: Response<LoginCheckDTO>
                         ) {
+                            progressBar.visibility = View.GONE
                             if (response.isSuccessful) {
                                 Log.d("서버로부터 받은 요청", "닉네임 : ${response.body()?.nickName}")
                                 Log.d("서버로부터 받은 요청", "이름 : ${response.body()?.name}")
@@ -485,6 +501,7 @@ class RegisterActivity : AppCompatActivity() {
                         }
 
                         override fun onFailure(call: Call<LoginCheckDTO>, t: Throwable) {
+                            progressBar.visibility = View.GONE
                             Log.e("retrofit 연동", "실패", t)
                         }
 
@@ -511,24 +528,34 @@ class RegisterActivity : AppCompatActivity() {
                     if (!loginChecked.nameCheck) {
                         Toast.makeText(this, "이름을 확인해주세요${name}", Toast.LENGTH_SHORT).show()
                         regName.setText("")
+                        progressBar.visibility = View.GONE
                     } else if (!loginChecked.idCheck) {
                         Toast.makeText(this, "아이디 형식이나, 인증여부를 확인해주세요.${em}", Toast.LENGTH_SHORT)
                             .show()
                         regEmail.setText("")
+                        progressBar.visibility = View.GONE
+
                     } else if (!loginChecked.pwCheck) {
                         Toast.makeText(this, "비밀 번호 형식을 확인해주세요", Toast.LENGTH_SHORT).show()
                         regPwd.setText("")
+                        progressBar.visibility = View.GONE
+
                     } else if (!loginChecked.nickCheck) {
                         Toast.makeText(this, "닉네임을 확인해주세요", Toast.LENGTH_SHORT).show()
                         regNick.setText("")
+                        progressBar.visibility = View.GONE
+
                     } else if (!loginChecked.birthdayCheck) {
                         Toast.makeText(this, "생년월일을 확인해주세요", Toast.LENGTH_SHORT).show()
                         regBirthdate.setText("")
+                        progressBar.visibility = View.GONE
                     } else if (!loginChecked.phoneCheck) {
                         Toast.makeText(this, "휴대폰 인증을 확인해주세요", Toast.LENGTH_SHORT).show()
                         send_certification_et.setText("")
+                        progressBar.visibility = View.GONE
                     } else {
                         loginChecked.finish = true
+                        progressBar.visibility = View.GONE
                     }
 
                 }
