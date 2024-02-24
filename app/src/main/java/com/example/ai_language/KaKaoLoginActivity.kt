@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +27,8 @@ class KaKaoLoginActivity : AppCompatActivity() {
     private lateinit var userPw: EditText
     private lateinit var progressBar: ProgressBar
     private val disposables = CompositeDisposable()
+
+    private lateinit var sharedPreferencesManager: EncryptedSharedPreferencesManager
 
     override fun onDestroy() {
         super.onDestroy()
@@ -54,6 +57,13 @@ class KaKaoLoginActivity : AppCompatActivity() {
             val inputUserEmail = userEmail.text.toString()
             val inputUserPw = userPw.text.toString()
 
+            val autoLoginCheckBtn = findViewById<RadioButton>(R.id.radioButton)
+            if (autoLoginCheckBtn.isChecked) {
+                // 이메일과 비밀번호를 SharedPreferences에 저장
+                sharedPreferencesManager.setLoginInfo(applicationContext, inputUserEmail, inputUserPw)
+                Log.d("로그", "setLoginInfo")
+            }
+
             progressBar.visibility = View.VISIBLE
 
             RetrofitClient.getInstance()
@@ -68,21 +78,25 @@ class KaKaoLoginActivity : AppCompatActivity() {
                         val loginResponseDTO = response.body()
                         if(loginResponseDTO != null && loginResponseDTO.success){
                             Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT).show()
+                            Log.d("로그", "로그인 성공")
                             startActivity(intent)
                             finish()
                         }
                         else{
                             Toast.makeText(applicationContext, "로그인 실패", Toast.LENGTH_SHORT).show()
+                            Log.d("로그", "로그인 실패")
                         }
                     }
                     else{
                         Toast.makeText(applicationContext, "서버 응답 실패", Toast.LENGTH_SHORT).show()
+                        Log.d("로그", "서버 응답 실패")
                     }
                 }
 
                 override fun onFailure(call: Call<LoginResponseDTO>, t: Throwable) {
                     progressBar.visibility = View.GONE
                     Toast.makeText(applicationContext, "통신 실패", Toast.LENGTH_SHORT).show()
+                    Log.d("로그", "통신 실패")
                 }
             })
 

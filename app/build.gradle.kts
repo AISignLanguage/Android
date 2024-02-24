@@ -1,5 +1,3 @@
-import com.android.build.api.dsl.Packaging
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -103,6 +101,6 @@ dependencies {
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:adapter-rxjava3:2.9.0")
 
-
-
+    //EncryptedSharedPreferences
+    implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
 }
