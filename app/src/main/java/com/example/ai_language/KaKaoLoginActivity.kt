@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -32,6 +33,64 @@ class KaKaoLoginActivity : AppCompatActivity() {
         disposables.clear()
     }
 
+    private fun attemptLogin() {
+        val sharedPreferencesManager = EncryptedSharedPreferencesManager()
+        val loginInfo = sharedPreferencesManager.getLoginInfo(applicationContext)
+
+        var inputUserEmail: String
+        var inputUserPw: String
+
+        //sharedPreferencesManager에 id, password 있는 경우
+        if (loginInfo.isNotEmpty()) {
+            inputUserEmail = loginInfo["email"].toString()
+            inputUserPw = loginInfo["password"].toString()
+
+            if (inputUserEmail.isNotEmpty() && inputUserPw.isNotEmpty()) {
+                // 자동 로그인 시도
+                Log.d("로그", "자동 로그인 성공, id: ${inputUserEmail}, pwd: ${inputUserPw}")
+                loginUser(inputUserEmail, inputUserPw)
+            }
+        }
+    }
+
+    private fun loginUser(inputUserEmail: String, inputUserPw: String) {
+        progressBar.visibility = View.VISIBLE
+
+        RetrofitClient.getInstance()
+        val service = RetrofitClient.getUserRetrofitInterface()
+
+        val call = service.login(LoginRequestDTO(inputUserEmail, inputUserPw))
+        val intent = Intent(this, Home::class.java)
+        call.enqueue(object : Callback<LoginResponseDTO>{
+            override fun onResponse(call: Call<LoginResponseDTO>,response: Response<LoginResponseDTO>) {
+                progressBar.visibility = View.GONE
+                if(response.isSuccessful){
+                    val loginResponseDTO = response.body()
+                    if(loginResponseDTO != null && loginResponseDTO.success){
+                        Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT).show()
+                        Log.d("로그", "로그인 성공")
+                        startActivity(intent)
+                        finish()
+                    }
+                    else{
+                        Toast.makeText(applicationContext, "로그인 실패", Toast.LENGTH_SHORT).show()
+                        Log.d("로그", "로그인 실패")
+                    }
+                }
+                else{
+                    Toast.makeText(applicationContext, "서버 응답 실패", Toast.LENGTH_SHORT).show()
+                    Log.d("로그", "서버 응답 실패")
+                }
+            }
+
+            override fun onFailure(call: Call<LoginResponseDTO>, t: Throwable) {
+                progressBar.visibility = View.GONE
+                Toast.makeText(applicationContext, "통신 실패", Toast.LENGTH_SHORT).show()
+                Log.d("로그", "통신 실패")
+            }
+        })
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ka_kao_login)
@@ -53,41 +112,17 @@ class KaKaoLoginActivity : AppCompatActivity() {
         signInBtn.setOnClickListener {
             val inputUserEmail = userEmail.text.toString()
             val inputUserPw = userPw.text.toString()
+            val sharedPreferencesManager = EncryptedSharedPreferencesManager()
+            val autoLoginCheckBtn = findViewById<RadioButton>(R.id.radioButton)
 
-            progressBar.visibility = View.VISIBLE
-
-            RetrofitClient.getInstance()
-            val service = RetrofitClient.getUserRetrofitInterface()
-
-            val call = service.login(LoginRequestDTO(inputUserEmail, inputUserPw))
-            val intent = Intent(this, Home::class.java)
-            call.enqueue(object : Callback<LoginResponseDTO>{
-                override fun onResponse(call: Call<LoginResponseDTO>,response: Response<LoginResponseDTO>) {
-                    progressBar.visibility = View.GONE
-                    if(response.isSuccessful){
-                        val loginResponseDTO = response.body()
-                        if(loginResponseDTO != null && loginResponseDTO.success){
-                            Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT).show()
-                            startActivity(intent)
-                            finish()
-                        }
-                        else{
-                            Toast.makeText(applicationContext, "로그인 실패", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                    else{
-                        Toast.makeText(applicationContext, "서버 응답 실패", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<LoginResponseDTO>, t: Throwable) {
-                    progressBar.visibility = View.GONE
-                    Toast.makeText(applicationContext, "통신 실패", Toast.LENGTH_SHORT).show()
-                }
-            })
-
+            if (autoLoginCheckBtn.isChecked) {
+                Log.d("로그", "첫 로그인, id: ${inputUserEmail}, pwd: ${inputUserPw}")
+                sharedPreferencesManager.setLoginInfo(applicationContext, inputUserEmail, inputUserPw)
+            }
+            loginUser(inputUserEmail, inputUserPw)
         }
 
+        //attemptLogin()
 
         //로그인 버튼 -> 아이디 비번 확인만 없으면 없다고 메세지 (DB확인)
         //카카오 버튼, 회원가입 버튼 -> 회원가입 버튼은 바로, 카카오 버튼은 DB확인 후 사용자가 처음접속이면 회원가입으로, 아니면 바로 HOME

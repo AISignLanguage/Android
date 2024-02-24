@@ -3,9 +3,9 @@ package com.example.ai_language
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 
 class RetrofitClient private constructor() {
 
@@ -13,7 +13,7 @@ class RetrofitClient private constructor() {
         @Volatile
         private var instance: RetrofitClient? = null
         private lateinit var userRetrofitInterface: Service
-        private val baseUrl = "http://192.168.1.121:8080/api/mog/user/"
+        private val baseUrl = "http://192.168.219.100:8080/api/mog/user/"
         //private val baseUrl = "http://192.168.1.121:8080/api/mog/user/" - 지원
 
         fun getInstance(): RetrofitClient {
