@@ -84,20 +84,20 @@
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
+            android:layout_height="0dp"
+            android:layout_weight="0.6"
             android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/reg_email"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="20dp"
                 android:layout_weight="0.8"
-                android:background="@drawable/emailspace"
+                android:background="@drawable/nicknamespace"
                 android:gravity="start|center_vertical"
                 android:hint="이메일 (ID)"
                 android:paddingStart="45dp"
@@ -110,10 +110,11 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/emailconfirm"
-                android:padding="1dp" />
+                android:padding="1dp"  />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <TextView
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="20dp"
@@ -156,13 +157,13 @@
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
+            android:layout_height="0dp"
+            android:layout_weight="0.6"
             android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/reg_nick"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
@@ -186,6 +187,7 @@
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <TextView
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:gravity="center_vertical"
@@ -303,16 +305,17 @@
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_weight="0.5"
-            android:layout_margin="10dp"
             android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="0.2"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="15dp"
+                android:gravity="end"
                 android:fontFamily="@font/font_bd"
                 android:text="Aleady have account?"
                 android:textSize="12dp"
@@ -320,8 +323,9 @@
 
             <TextView
                 android:id="@+id/sign_in_button"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="0.1"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="15dp"
