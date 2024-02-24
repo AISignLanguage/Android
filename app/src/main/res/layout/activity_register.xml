@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF"
-        android:gravity="center|top"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,12 +39,14 @@
             tools:srcCompat="@drawable/user_profile" />
 
         <TextView
+            android:gravity="center_vertical"
+
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="20dp"
-            android:layout_weight="0.2"
+            android:layout_weight="0.25"
             android:fontFamily="@font/font_bd"
             android:text="이름"
             android:textSize="15dp"
@@ -68,12 +69,14 @@
             android:textSize="12dp" />
 
         <TextView
+            android:gravity="center_vertical"
+
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_weight="0.2"
+            android:layout_weight="0.25"
             android:fontFamily="@font/font_bd"
             android:text="이메일 (ID)"
             android:textSize="15dp"
@@ -115,9 +118,9 @@
             android:layout_height="0dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_weight="0.2"
+            android:layout_weight="0.25"
             android:fontFamily="@font/font_bd"
-            android:gravity="start"
+            android:gravity="center_vertical"
             android:text="비밀번호 (PW)"
             android:textSize="15dp"
             android:textStyle="bold" />
@@ -139,11 +142,13 @@
 
         <TextView
             android:layout_width="match_parent"
+            android:gravity="center_vertical"
+
             android:layout_height="0dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_weight="0.2"
+            android:layout_weight="0.25"
             android:fontFamily="@font/font_bd"
             android:text="닉네임"
             android:textSize="15dp"
@@ -183,9 +188,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:gravity="center_vertical"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_weight="0.2"
+            android:layout_weight="0.25"
             android:fontFamily="@font/font_bd"
             android:text="생년월일"
             android:textSize="15dp"
@@ -211,7 +217,8 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_weight="0.2"
+            android:layout_weight="0.25"
+            android:gravity="center_vertical"
             android:fontFamily="@font/font_bd"
             android:text="휴대폰 번호"
             android:textSize="15dp"
@@ -220,6 +227,7 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="5dp"
             android:layout_weight="0.6"
             android:orientation="horizontal">
 
@@ -228,24 +236,20 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="0.7"
-                android:background="@drawable/phonenumspace"
-                android:gravity="start|center_vertical"
-                android:hint="휴대폰 번호 11자리 ( - 제외 )"
-                android:paddingStart="45dp"
-                android:textSize="12dp" />
+                android:layout_weight="0.4"
+                android:background="@drawable/confirm"
+                android:gravity="center_vertical"
+                android:paddingStart="15dp"
+                android:textSize="12dp"
+                android:hint="휴대폰 번호 11자리 ( - 제외 )" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/send_certification_btn"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="0.3"
+                android:layout_weight="0.2"
                 android:background="@drawable/pushnum"
                 android:gravity="start|center_vertical" />
 
@@ -314,6 +318,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/sign_in_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
