@@ -100,7 +100,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
             startActivity(intent)
         }*/
 
-        val sinUpBtn = findViewById<TextView>(R.id.createAccount)
+        val sinUpBtn = findViewById<TextView>(R.id.sign_up_button)
         sinUpBtn.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             intent.putExtra("nick", "사용자${ Random.nextInt(10000)}")
@@ -108,19 +108,21 @@ class KaKaoLoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-
-
         val kakaoBtn = findViewById<ImageView>(R.id.kko_login_btn)
         kakaoBtn.setOnClickListener {
             kakaoLogin(this)
+            Log.d("카카오버튼","눌림")
         }
     }
     private var isLoggingIn = false
 
     private fun kakaoLogin(ctxt: Context) {
 
-        if (isLoggingIn) return // 중복 로그인 방지
-
+        if (isLoggingIn) { //이미 카카오로그인한 적이 있으면
+            val intent = Intent(ctxt,Home::class.java)
+            ctxt.startActivity(intent)
+            return
+        }
         isLoggingIn = true
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             isLoggingIn = false
@@ -178,7 +180,6 @@ class KaKaoLoginActivity : AppCompatActivity() {
                 val nickname = user.kakaoAccount?.profile?.nickname
                 val profileImageUrl = user.kakaoAccount?.profile?.thumbnailImageUrl
                 Log.d("결과", "닉네임: $nickname, 프로필 사진 URL: $profileImageUrl")
-
                 val intent = Intent(ctxt, RegisterActivityApp::class.java).apply {
                     putExtra("nick", nickname)
                     putExtra("profile", profileImageUrl)
