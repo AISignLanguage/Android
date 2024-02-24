@@ -171,7 +171,8 @@ class RegisterActivityApp : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_app)
-
+        RetrofitClient.getInstance()
+        service = RetrofitClient.getUserRetrofitInterface()
 
         uriString = intent.getStringExtra("profile")
 
@@ -320,16 +321,17 @@ class RegisterActivityApp : AppCompatActivity() {
         val birthdatePattern = "^\\d{8}$"
         val patternBD = Pattern.compile(birthdatePattern)
 
-
+        var bd = ""
         val regNext = findViewById<TextView>(R.id.reg_next)
         regNext.setOnClickListener {
             nameSpace = regName.text.toString()
             nickSpace = regNick.text.toString()
             conSpace = kakaoConET.text.toString()
             birthSpace = regBirth.text.toString()
+
             try {
                 val formattedDate = formatDate(birthSpace)
-                birthSpace = formattedDate
+               bd = formattedDate
             }catch (e: StringIndexOutOfBoundsException) {
                 // 예외 발생 시 사용자에게 토스트 메시지를 보여주고 LoginActivity로 이동
                 Toast.makeText(this, "올바르지 않은 필드가 존재합니다.", Toast.LENGTH_SHORT).show()
@@ -337,11 +339,11 @@ class RegisterActivityApp : AppCompatActivity() {
             if(loginCheckedKaKao.finish){
                 val userDTO=UserDTO(
                     nameSpace,
-                    birthSpace,
+                    bd,
                     "$nameSpace$birthSpace@kakao.com",
                     "$name$birthSpace",
                     nickSpace,
-                    "",
+                    "000-0000-0000",
                     uriString.toString()
                 )
 
