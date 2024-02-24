@@ -5,8 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
+
     <androidx.appcompat.widget.LinearLayoutCompat
 
+        android:id="@+id/linearLayoutCompat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF"
@@ -21,10 +23,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5"
             android:layout_marginTop="20dp"
-            android:gravity="center"
+            android:layout_weight="0.5"
             android:fontFamily="@font/nam"
+            android:gravity="center"
             android:text="회원가입"
             android:textSize="22dp"
             android:textStyle="bold" />
@@ -33,17 +35,17 @@
             android:id="@+id/reg_pro"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:layout_marginTop="15dp"
+            android:layout_weight="1"
             tools:srcCompat="@drawable/user_profile" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.2"
             android:layout_marginStart="20dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="20dp"
+            android:layout_weight="0.2"
             android:fontFamily="@font/font_bd"
             android:text="이름"
             android:textSize="15dp"
@@ -55,10 +57,10 @@
             android:id="@+id/reg_name"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
+            android:layout_weight="0.5"
             android:background="@drawable/namespace"
             android:gravity="start|center_vertical|center_horizontal"
             android:hint="사용자 이름 입력"
@@ -68,10 +70,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.2"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
+            android:layout_weight="0.2"
             android:fontFamily="@font/font_bd"
             android:text="이메일 (ID)"
             android:textSize="15dp"
@@ -111,9 +113,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.2"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
+            android:layout_weight="0.2"
             android:fontFamily="@font/font_bd"
             android:gravity="start"
             android:text="비밀번호 (PW)"
@@ -124,10 +126,10 @@
             android:id="@+id/reg_pwd"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
+            android:layout_weight="0.5"
             android:background="@drawable/passwordspace"
             android:gravity="start|center_vertical"
             android:hint="영문, 숫자 조합 최소 8자, 최대 16자 입력"
@@ -135,15 +137,13 @@
             android:textSize="12dp" />
 
 
-
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.2"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
+            android:layout_weight="0.2"
             android:fontFamily="@font/font_bd"
             android:text="닉네임"
             android:textSize="15dp"
@@ -183,9 +183,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.2"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
+            android:layout_weight="0.2"
             android:fontFamily="@font/font_bd"
             android:text="생년월일"
             android:textSize="15dp"
@@ -195,10 +195,10 @@
             android:id="@+id/reg_birthdate"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
+            android:layout_weight="0.5"
             android:background="@drawable/birthdayspace"
             android:gravity="start|center_vertical"
             android:hint="생년월일 8자 ( - 제외 )"
@@ -208,10 +208,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.2"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
+            android:layout_weight="0.2"
             android:fontFamily="@font/font_bd"
             android:text="휴대폰 번호"
             android:textSize="15dp"
@@ -227,11 +227,11 @@
                 android:id="@+id/send_certification_et"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:layout_weight="0.7"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
+                android:layout_weight="0.7"
                 android:background="@drawable/phonenumspace"
                 android:gravity="start|center_vertical"
                 android:hint="휴대폰 번호 11자리 ( - 제외 )"
@@ -242,12 +242,12 @@
                 android:id="@+id/send_certification_btn"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:layout_weight="0.3"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:gravity="start|center_vertical"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/pushnum" />
+                android:layout_marginBottom="10dp"
+                android:layout_weight="0.3"
+                android:background="@drawable/pushnum"
+                android:gravity="start|center_vertical" />
 
 
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -255,17 +255,17 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.6"
             android:layout_marginTop="5dp"
+            android:layout_weight="0.6"
             android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/certification_et"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:layout_weight="0.8"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="10dp"
+                android:layout_weight="0.8"
                 android:background="@drawable/confirm"
                 android:gravity="start|center_vertical"
                 android:hint="인증번호 입력"
@@ -276,20 +276,20 @@
                 android:id="@+id/certification_btn"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:layout_weight="0.2"
-                android:gravity="start|center_vertical"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/num" />
+                android:layout_weight="0.2"
+                android:background="@drawable/num"
+                android:gravity="start|center_vertical" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <TextView
             android:id="@+id/reg_next"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_weight="0.35"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="7dp"
+            android:layout_weight="0.35"
             android:background="@drawable/signup"
             android:gravity="center"
             android:textAlignment="center" />
@@ -297,8 +297,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5"
             android:layout_gravity="center"
+            android:layout_weight="0.5"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -308,9 +308,9 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="15dp"
+                android:fontFamily="@font/font_bd"
                 android:text="Aleady have account?"
                 android:textSize="12dp"
-                android:fontFamily="@font/font_bd"
                 android:textStyle="bold" />
 
             <TextView
@@ -327,4 +327,15 @@
         </LinearLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <ProgressBar
+        android:id="@+id/reg_progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayoutCompat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
