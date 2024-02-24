@@ -470,7 +470,6 @@ class RegisterActivity : AppCompatActivity() {
                         // 정규식 =>  @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "휴대폰 번호 양식에 맞지 않습니다.")
                         url //프로필 사진 url
                     )
-
                     call = service.sendData(userDTO)
                     call.clone().enqueue(object : Callback<LoginCheckDTO> {
                         override fun onResponse(
@@ -495,6 +494,7 @@ class RegisterActivity : AppCompatActivity() {
                                 val intent =
                                     Intent(this@RegisterActivity, permissionActivity::class.java)
                                 startActivity(intent)
+                                finish()
                             } else {
                                 Log.d("서버실패?", "실패")
                             }
@@ -508,7 +508,6 @@ class RegisterActivity : AppCompatActivity() {
                     }
                     )
 
-                    this@RegisterActivity.finish()
                 } else {
 
                     if (name.length <= 5) {
@@ -565,7 +564,7 @@ class RegisterActivity : AppCompatActivity() {
             Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show()
         }
 
-        val signInBtn = findViewById<TextView>(R.id.sign_in_button)
+        val signInBtn = findViewById<TextView>(R.id.signin_button)
         signInBtn.setOnClickListener {
             val intent = Intent(this, KaKaoLoginActivity::class.java)
             startActivity(intent)
