@@ -118,11 +118,8 @@ class KaKaoLoginActivity : AppCompatActivity() {
 
     private fun kakaoLogin(ctxt: Context) {
 
-        if (isLoggingIn) { //이미 카카오로그인한 적이 있으면
-            val intent = Intent(ctxt,Home::class.java)
-            ctxt.startActivity(intent)
-            return
-        }
+        if (isLoggingIn) return // 중복 로그인 방지
+
         isLoggingIn = true
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             isLoggingIn = false
