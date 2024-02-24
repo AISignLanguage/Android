@@ -49,7 +49,6 @@ class KaKaoLoginActivity : AppCompatActivity() {
                 // 자동 로그인 시도
                 Log.d("로그", "자동 로그인 성공, id: ${inputUserEmail}, pwd: ${inputUserPw}")
                 loginUser(inputUserEmail, inputUserPw)
-
             }
         }
     }
@@ -103,7 +102,6 @@ class KaKaoLoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-        attemptLogin()
 
         //로그인 비동기 처리 - retrofit
         userEmail = findViewById(R.id.userEmail)
@@ -124,6 +122,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
             loginUser(inputUserEmail, inputUserPw)
         }
 
+        attemptLogin()
 
         //로그인 버튼 -> 아이디 비번 확인만 없으면 없다고 메세지 (DB확인)
         //카카오 버튼, 회원가입 버튼 -> 회원가입 버튼은 바로, 카카오 버튼은 DB확인 후 사용자가 처음접속이면 회원가입으로, 아니면 바로 HOME
