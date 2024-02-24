@@ -49,27 +49,8 @@ class KaKaoLoginActivity : AppCompatActivity() {
                 // 자동 로그인 시도
                 Log.d("로그", "자동 로그인 성공, id: ${inputUserEmail}, pwd: ${inputUserPw}")
                 loginUser(inputUserEmail, inputUserPw)
-                return
-            }
-        }
 
-        //sharedPreferencesManager에 id, password 없는 경우 (첫 로그인)
-        else {
-            // 자동 로그인 실패하거나 저장된 정보가 없는 경우 사용자가 입력한 값 사용
-            inputUserEmail = userEmail.text.toString()
-            inputUserPw = userPw.text.toString()
-
-            val autoLoginCheckBtn = findViewById<RadioButton>(R.id.radioButton)
-            if (autoLoginCheckBtn.isChecked) {
-                // 이메일과 비밀번호를 SharedPreferences에 저장
-                Log.d("로그", "첫 로그인, id: ${inputUserEmail}, pwd: ${inputUserPw}")
-                sharedPreferencesManager.setLoginInfo(
-                    applicationContext,
-                    inputUserEmail,
-                    inputUserPw
-                )
             }
-            loginUser(inputUserEmail, inputUserPw)
         }
     }
 
@@ -122,6 +103,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+        attemptLogin()
 
         //로그인 비동기 처리 - retrofit
         userEmail = findViewById(R.id.userEmail)
@@ -130,9 +112,16 @@ class KaKaoLoginActivity : AppCompatActivity() {
 
         val signInBtn = findViewById<TextView>(R.id.sign_in_button)
         signInBtn.setOnClickListener {
+            val inputUserEmail = userEmail.text.toString()
+            val inputUserPw = userPw.text.toString()
+            val sharedPreferencesManager = EncryptedSharedPreferencesManager()
+            val autoLoginCheckBtn = findViewById<RadioButton>(R.id.radioButton)
 
-            attemptLogin()
-
+            if (autoLoginCheckBtn.isChecked) {
+                Log.d("로그", "첫 로그인, id: ${inputUserEmail}, pwd: ${inputUserPw}")
+                sharedPreferencesManager.setLoginInfo(applicationContext, inputUserEmail, inputUserPw)
+            }
+            loginUser(inputUserEmail, inputUserPw)
         }
 
 
