@@ -33,6 +33,76 @@ class KaKaoLoginActivity : AppCompatActivity() {
         disposables.clear()
     }
 
+    private fun attemptLogin() {
+        val sharedPreferencesManager = EncryptedSharedPreferencesManager()
+        val loginInfo = sharedPreferencesManager.getLoginInfo(applicationContext)
+
+        var inputUserEmail: String
+        var inputUserPw: String
+
+        if (loginInfo.isNotEmpty()) {
+            inputUserEmail = loginInfo["email"].toString()
+            inputUserPw = loginInfo["password"].toString()
+
+            if (inputUserEmail.isNotEmpty() && inputUserPw.isNotEmpty()) {
+                // 자동 로그인 시도
+                loginUser(inputUserEmail, inputUserPw)
+                return
+            }
+        }
+
+        // 자동 로그인이 실패하거나 저장된 정보가 없는 경우 사용자가 입력한 값을 사용
+        inputUserEmail = userEmail.text.toString()
+        inputUserPw = userPw.text.toString()
+
+        val autoLoginCheckBtn = findViewById<RadioButton>(R.id.radioButton)
+        if (autoLoginCheckBtn.isChecked) {
+            // 이메일과 비밀번호를 SharedPreferences에 저장
+            sharedPreferencesManager.setLoginInfo(applicationContext, inputUserEmail, inputUserPw)
+            Log.d("로그", "setLoginInfo")
+        }
+
+        loginUser(inputUserEmail, inputUserPw)
+    }
+
+    private fun loginUser(inputUserEmail: String, inputUserPw: String) {
+        progressBar.visibility = View.VISIBLE
+
+        RetrofitClient.getInstance()
+        val service = RetrofitClient.getUserRetrofitInterface()
+
+        val call = service.login(LoginRequestDTO(inputUserEmail, inputUserPw))
+        val intent = Intent(this, Home::class.java)
+        call.enqueue(object : Callback<LoginResponseDTO>{
+            override fun onResponse(call: Call<LoginResponseDTO>,response: Response<LoginResponseDTO>) {
+                progressBar.visibility = View.GONE
+                if(response.isSuccessful){
+                    val loginResponseDTO = response.body()
+                    if(loginResponseDTO != null && loginResponseDTO.success){
+                        Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT).show()
+                        Log.d("로그", "로그인 성공")
+                        startActivity(intent)
+                        finish()
+                    }
+                    else{
+                        Toast.makeText(applicationContext, "로그인 실패", Toast.LENGTH_SHORT).show()
+                        Log.d("로그", "로그인 실패")
+                    }
+                }
+                else{
+                    Toast.makeText(applicationContext, "서버 응답 실패", Toast.LENGTH_SHORT).show()
+                    Log.d("로그", "서버 응답 실패")
+                }
+            }
+
+            override fun onFailure(call: Call<LoginResponseDTO>, t: Throwable) {
+                progressBar.visibility = View.GONE
+                Toast.makeText(applicationContext, "통신 실패", Toast.LENGTH_SHORT).show()
+                Log.d("로그", "통신 실패")
+            }
+        })
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ka_kao_login)
@@ -53,66 +123,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
         val signInBtn = findViewById<TextView>(R.id.sign_in_button)
         signInBtn.setOnClickListener {
 
-            val inputUserEmail : String
-            val inputUserPw : String
-
-            val sharedPreferencesManager = EncryptedSharedPreferencesManager()
-            val loginInfo = sharedPreferencesManager.getLoginInfo(applicationContext)
-            if (loginInfo.isNotEmpty()) {
-                inputUserEmail = loginInfo["email"].toString()
-                inputUserPw = loginInfo["password"].toString()
-
-                if (!inputUserEmail.isNullOrEmpty() && !inputUserPw.isNullOrEmpty()) {
-
-                }
-
-            } else {
-                inputUserEmail = userEmail.text.toString()
-                inputUserPw = userPw.text.toString()
-            }
-
-            val autoLoginCheckBtn = findViewById<RadioButton>(R.id.radioButton)
-            if (autoLoginCheckBtn.isChecked) {
-                // 이메일과 비밀번호를 SharedPreferences에 저장
-                sharedPreferencesManager.setLoginInfo(applicationContext, inputUserEmail, inputUserPw)
-                Log.d("로그", "setLoginInfo")
-            }
-
-            progressBar.visibility = View.VISIBLE
-
-            RetrofitClient.getInstance()
-            val service = RetrofitClient.getUserRetrofitInterface()
-
-            val call = service.login(LoginRequestDTO(inputUserEmail, inputUserPw))
-            val intent = Intent(this, Home::class.java)
-            call.enqueue(object : Callback<LoginResponseDTO>{
-                override fun onResponse(call: Call<LoginResponseDTO>,response: Response<LoginResponseDTO>) {
-                    progressBar.visibility = View.GONE
-                    if(response.isSuccessful){
-                        val loginResponseDTO = response.body()
-                        if(loginResponseDTO != null && loginResponseDTO.success){
-                            Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT).show()
-                            Log.d("로그", "로그인 성공")
-                            startActivity(intent)
-                            finish()
-                        }
-                        else{
-                            Toast.makeText(applicationContext, "로그인 실패", Toast.LENGTH_SHORT).show()
-                            Log.d("로그", "로그인 실패")
-                        }
-                    }
-                    else{
-                        Toast.makeText(applicationContext, "서버 응답 실패", Toast.LENGTH_SHORT).show()
-                        Log.d("로그", "서버 응답 실패")
-                    }
-                }
-
-                override fun onFailure(call: Call<LoginResponseDTO>, t: Throwable) {
-                    progressBar.visibility = View.GONE
-                    Toast.makeText(applicationContext, "통신 실패", Toast.LENGTH_SHORT).show()
-                    Log.d("로그", "통신 실패")
-                }
-            })
+            attemptLogin()
 
         }
 
