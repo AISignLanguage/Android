@@ -28,8 +28,6 @@ class KaKaoLoginActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private val disposables = CompositeDisposable()
 
-    private lateinit var sharedPreferencesManager: EncryptedSharedPreferencesManager
-
     override fun onDestroy() {
         super.onDestroy()
         disposables.clear()
@@ -54,8 +52,24 @@ class KaKaoLoginActivity : AppCompatActivity() {
 
         val signInBtn = findViewById<TextView>(R.id.sign_in_button)
         signInBtn.setOnClickListener {
-            val inputUserEmail = userEmail.text.toString()
-            val inputUserPw = userPw.text.toString()
+
+            val inputUserEmail : String
+            val inputUserPw : String
+
+            val sharedPreferencesManager = EncryptedSharedPreferencesManager()
+            val loginInfo = sharedPreferencesManager.getLoginInfo(applicationContext)
+            if (loginInfo.isNotEmpty()) {
+                inputUserEmail = loginInfo["email"].toString()
+                inputUserPw = loginInfo["password"].toString()
+
+                if (!inputUserEmail.isNullOrEmpty() && !inputUserPw.isNullOrEmpty()) {
+
+                }
+
+            } else {
+                inputUserEmail = userEmail.text.toString()
+                inputUserPw = userPw.text.toString()
+            }
 
             val autoLoginCheckBtn = findViewById<RadioButton>(R.id.radioButton)
             if (autoLoginCheckBtn.isChecked) {
