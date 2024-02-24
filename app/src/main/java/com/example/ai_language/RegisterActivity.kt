@@ -565,6 +565,13 @@ class RegisterActivity : AppCompatActivity() {
             Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show()
         }
 
+        val signInBtn = findViewById<TextView>(R.id.sign_in_button)
+        signInBtn.setOnClickListener {
+            val intent = Intent(this, KaKaoLoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
     }
 
     private fun dpToPx(context: Context, dp: Int): Int {
