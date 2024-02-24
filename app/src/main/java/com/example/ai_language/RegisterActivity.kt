@@ -233,7 +233,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
 
         RetrofitClient.getInstance()
-        //progressBar = findViewById(R.id.reg_progressbar)
+        progressBar = findViewById(R.id.reg_progressbar)
         service = RetrofitClient.getUserRetrofitInterface()
         var end = false
         var pn = "pn"
@@ -559,13 +559,6 @@ class RegisterActivity : AppCompatActivity() {
         }
         catch (e: StringIndexOutOfBoundsException){
             Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show()
-        }
-
-        val signInBtn = findViewById<TextView>(R.id.sign_in_button)
-        signInBtn.setOnClickListener {
-            val intent = Intent(this, KaKaoLoginActivity::class.java)
-            startActivity(intent)
-            finish()
         }
 
     }
