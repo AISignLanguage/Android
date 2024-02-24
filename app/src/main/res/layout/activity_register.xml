@@ -40,7 +40,6 @@
 
         <TextView
             android:gravity="center_vertical"
-
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="20dp"
@@ -86,6 +85,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.6"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <EditText
@@ -93,9 +94,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="20dp"
                 android:layout_weight="0.8"
                 android:background="@drawable/nicknamespace"
                 android:gravity="start|center_vertical"
@@ -107,7 +106,6 @@
                 android:id="@+id/confirm_email_btn"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/emailconfirm"
                 android:padding="1dp"  />
@@ -158,7 +156,9 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:gravity="center_vertical"
             android:layout_weight="0.6"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <EditText
@@ -166,9 +166,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="20dp"
                 android:layout_weight="0.8"
                 android:background="@drawable/nicknamespace"
                 android:gravity="start|center_vertical"
@@ -180,7 +178,6 @@
                 android:id="@+id/confirm_nickname_btn"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/emailconfirm"
                 android:padding="1dp" />
@@ -290,11 +287,11 @@
 
         <TextView
             android:id="@+id/reg_next"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="7dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
             android:layout_weight="0.35"
             android:background="@drawable/signup"
             android:gravity="center"
@@ -303,19 +300,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_gravity="center"
             android:layout_weight="0.5"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.2"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="15dp"
-                android:gravity="end"
+                android:gravity="end|center_vertical"
                 android:fontFamily="@font/font_bd"
                 android:text="Aleady have account?"
                 android:textSize="12dp"
@@ -325,10 +319,9 @@
                 android:id="@+id/sign_in_button"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.1"
-                android:layout_marginTop="10dp"
+                android:layout_weight="0.12"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="15dp"
+                android:gravity="start|center_vertical"
                 android:fontFamily="@font/font_eb"
                 android:text="Sign In"
                 android:textColor="@android:color/holo_blue_light"
