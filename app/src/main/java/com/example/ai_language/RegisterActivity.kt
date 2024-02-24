@@ -11,6 +11,8 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.telephony.SmsManager
 import android.util.Base64
@@ -30,6 +32,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.storage.Acl
@@ -55,6 +58,7 @@ import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.util.regex.Pattern
+import kotlin.math.log
 import kotlin.random.Random
 
 data class LoginChecked(
@@ -491,6 +495,7 @@ class RegisterActivity : AppCompatActivity() {
                                 val intent =
                                     Intent(this@RegisterActivity, permissionActivity::class.java)
                                 startActivity(intent)
+                                finish()
                             } else {
                                 Log.d("서버실패?", "실패")
                             }
@@ -504,7 +509,6 @@ class RegisterActivity : AppCompatActivity() {
                     }
                     )
 
-                    this@RegisterActivity.finish()
                 } else {
 
                     if (name.length <= 5) {
@@ -559,6 +563,13 @@ class RegisterActivity : AppCompatActivity() {
         }
         catch (e: StringIndexOutOfBoundsException){
             Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show()
+        }
+
+        val signInBtn = findViewById<TextView>(R.id.sign_in_button)
+        signInBtn.setOnClickListener {
+            val intent = Intent(this, KaKaoLoginActivity::class.java)
+            startActivity(intent)
+            finish()
         }
 
     }
