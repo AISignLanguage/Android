@@ -4,18 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#9999FF">
+    android:background="#F3F6FF">
+
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_width="135dp"
+        android:layout_height="55dp"
         android:layout_marginStart="80dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="388dp"
         android:layout_marginEnd="80dp"
 
+        android:background="@drawable/appicon_call"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/app_logo" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
