@@ -40,29 +40,37 @@ class KaKaoLoginActivity : AppCompatActivity() {
         var inputUserEmail: String
         var inputUserPw: String
 
+        //sharedPreferencesManager에 id, password 있는 경우
         if (loginInfo.isNotEmpty()) {
             inputUserEmail = loginInfo["email"].toString()
             inputUserPw = loginInfo["password"].toString()
 
             if (inputUserEmail.isNotEmpty() && inputUserPw.isNotEmpty()) {
                 // 자동 로그인 시도
+                Log.d("로그", "자동 로그인 성공, id: ${inputUserEmail}, pwd: ${inputUserPw}")
                 loginUser(inputUserEmail, inputUserPw)
                 return
             }
         }
 
-        // 자동 로그인이 실패하거나 저장된 정보가 없는 경우 사용자가 입력한 값을 사용
-        inputUserEmail = userEmail.text.toString()
-        inputUserPw = userPw.text.toString()
+        //sharedPreferencesManager에 id, password 없는 경우 (첫 로그인)
+        else {
+            // 자동 로그인 실패하거나 저장된 정보가 없는 경우 사용자가 입력한 값 사용
+            inputUserEmail = userEmail.text.toString()
+            inputUserPw = userPw.text.toString()
 
-        val autoLoginCheckBtn = findViewById<RadioButton>(R.id.radioButton)
-        if (autoLoginCheckBtn.isChecked) {
-            // 이메일과 비밀번호를 SharedPreferences에 저장
-            sharedPreferencesManager.setLoginInfo(applicationContext, inputUserEmail, inputUserPw)
-            Log.d("로그", "setLoginInfo")
+            val autoLoginCheckBtn = findViewById<RadioButton>(R.id.radioButton)
+            if (autoLoginCheckBtn.isChecked) {
+                // 이메일과 비밀번호를 SharedPreferences에 저장
+                Log.d("로그", "첫 로그인, id: ${inputUserEmail}, pwd: ${inputUserPw}")
+                sharedPreferencesManager.setLoginInfo(
+                    applicationContext,
+                    inputUserEmail,
+                    inputUserPw
+                )
+            }
+            loginUser(inputUserEmail, inputUserPw)
         }
-
-        loginUser(inputUserEmail, inputUserPw)
     }
 
     private fun loginUser(inputUserEmail: String, inputUserPw: String) {
