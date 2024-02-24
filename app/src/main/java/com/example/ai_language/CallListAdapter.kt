@@ -36,6 +36,7 @@ class CallListAdapter (private val viewModel: CallListViewModel) : RecyclerView.
             Glide.with(holder.itemView.context)
                 .load(it.imageUrl) // 이미지의 URL을 전달하여 로드
                 //.error(R.drawable.error) // 이미지 로딩 실패 시 표시할 이미지
+                .circleCrop()
                 .into(holder.profileImageView) // 이미지를 설정할 ImageView
         }
     }

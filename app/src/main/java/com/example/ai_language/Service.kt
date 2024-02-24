@@ -1,5 +1,7 @@
 package com.example.ai_language
 
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -29,11 +31,11 @@ interface Service {
     fun login(@Body data: LoginRequestDTO): Call<LoginResponseDTO>
 
     @POST("confirm-nick")
-    fun confirmNick(@Body data: ConfirmDTO): Call<ConfirmedDTO>
+    fun confirmNick(@Body data: ConfirmDTO): Observable<ConfirmedDTO>
 
 
     @POST("confirm-email")
-    fun confirmEmail(@Body data: ConfirmDTO): Call<ConfirmedDTO>
+    fun confirmEmail(@Body data: ConfirmDTO): Observable<ConfirmedDTO>
 
 
 }
