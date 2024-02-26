@@ -54,6 +54,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
     }
 
     private fun loginUser(inputUserEmail: String, inputUserPw: String) {
+        progressBar = findViewById(R.id.progressBar)
         progressBar.visibility = View.VISIBLE
 
         RetrofitClient.getInstance()
@@ -106,7 +107,6 @@ class KaKaoLoginActivity : AppCompatActivity() {
         //로그인 비동기 처리 - retrofit
         userEmail = findViewById(R.id.userEmail)
         userPw = findViewById(R.id.userPw)
-        progressBar = findViewById(R.id.progressBar)
 
         val signInBtn = findViewById<TextView>(R.id.sign_in_button)
         signInBtn.setOnClickListener {
@@ -122,7 +122,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
             loginUser(inputUserEmail, inputUserPw)
         }
 
-        //attemptLogin()
+        attemptLogin()
 
         //로그인 버튼 -> 아이디 비번 확인만 없으면 없다고 메세지 (DB확인)
         //카카오 버튼, 회원가입 버튼 -> 회원가입 버튼은 바로, 카카오 버튼은 DB확인 후 사용자가 처음접속이면 회원가입으로, 아니면 바로 HOME
