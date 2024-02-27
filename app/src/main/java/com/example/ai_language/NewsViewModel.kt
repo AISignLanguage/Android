@@ -11,7 +11,7 @@ import retrofit2.Response
 data class NewsViewModelItem(
     val title: String,
     val content: String,
-    val imageResourceId: String
+    val imageResourceId: Int
 )
 
 class NewsViewModel : ViewModel() {
@@ -21,12 +21,13 @@ class NewsViewModel : ViewModel() {
     init {
         _newsList.postValue(
             listOf(
-                NewsViewModelItem("뉴스 제목 1", "컨텐츠 1", "R.drawable.newitem"),
-                NewsViewModelItem("뉴스 제목 2", "컨텐츠 2", "R.drawable.newitem"),
-                NewsViewModelItem("뉴스 제목 3", "컨텐츠 3", "R.drawable.newitem")
+                NewsViewModelItem("뉴스", "컨텐츠 1", R.drawable.newitem),
+                NewsViewModelItem("뉴스", "컨텐츠 2", R.drawable.newitem),
+                NewsViewModelItem("뉴스", "컨텐츠 3", R.drawable.newitem)
             )
         )
     }
+
 
     fun addNews(newsItem: NewsViewModelItem) {
         val currentList = _newsList.value?.toMutableList() ?: mutableListOf()

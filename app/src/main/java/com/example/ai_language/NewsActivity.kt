@@ -11,71 +11,46 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class NewsAdapter(private val viewModel: NewsViewModel) :
-    RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
-
-    inner class NewsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageView: ImageView = itemView.findViewById(R.id.imageView)
-        val titleTextView: TextView = itemView.findViewById(R.id.newsTitle)
-        val contentTextView: TextView = itemView.findViewById(R.id.content)
-    }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_news_item, parent, false)
-        return NewsViewHolder(view);
-    }
+class FragmentAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
+    private val fragmentList = listOf(TabFragment(), TabFragment2(), TabFragment3())
 
     override fun getItemCount(): Int {
-        return viewModel.newsList.value?.size ?: 0
+        return fragmentList.size
     }
 
-    override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        val newsItem = viewModel.newsList.value?.get(position)
-        newsItem?.let {
-            holder.titleTextView.text = it.title
-            holder.contentTextView.text = it.content
-            Glide.with(holder.itemView)
-                .load(it.imageResourceId)
-                .into(holder.imageView)
-        }
+    override fun createFragment(position: Int): Fragment {
+        return fragmentList[position]
     }
 }
 
 class NewsActivity : AppCompatActivity() {
-
-    private lateinit var viewModel: NewsViewModel
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var homeButton: ImageButton
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_news)
 
-        viewModel = ViewModelProvider(this)[NewsViewModel::class.java]
+        val adapter = FragmentAdapter(this)
+        val viewPager = findViewById<ViewPager2>(R.id.viewPager)
+        viewPager.adapter = adapter
 
-        recyclerView = findViewById(R.id.recyclerViewNews)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        val adapter = NewsAdapter(viewModel)
-        recyclerView.adapter = adapter
+        val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
+        val tabTitles = listOf("Tab 1", "Tab 2", "Tab 3")
 
-        homeButton = findViewById(R.id.imageButton)
-        homeButton.setOnClickListener {
-            val intent = Intent(this, Home::class.java)
-            startActivity(intent)
-            finish()
-        }
-
-        viewModel.newsList.observe(this, { newsList ->
-            adapter.notifyDataSetChanged()
-        })
-
-
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = tabTitles[position]
+        }.attach()
     }
 }
