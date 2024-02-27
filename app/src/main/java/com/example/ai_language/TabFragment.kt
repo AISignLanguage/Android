@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 class TabFragment : Fragment() {
     private lateinit var viewModel: NewsViewModel
     private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: NewsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -19,15 +20,15 @@ class TabFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_tab, container, false)
 
-        viewModel = ViewModelProvider(requireActivity())[NewsViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity()).get(NewsViewModel::class.java)
 
         recyclerView = rootView.findViewById(R.id.recyclerViewtab1)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        val adapter = NewsAdapter(viewModel)
+        adapter = NewsAdapter(viewModel.consonantList.value ?: emptyList())
         recyclerView.adapter = adapter
 
-        viewModel.newsList.observe(viewLifecycleOwner, { newsList ->
-            adapter.notifyDataSetChanged()
+        viewModel.consonantList.observe(viewLifecycleOwner, { newsList ->
+            adapter.updateData(newsList)
         })
 
         return rootView
