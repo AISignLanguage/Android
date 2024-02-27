@@ -38,17 +38,12 @@ class KaKaoLoginActivity : AppCompatActivity() {
         val encryptedSharedPreferences = EncryptedSharedPreferencesManager(this)
         val loginInfo = encryptedSharedPreferences.getLoginInfo()
 
-        var inputUserEmail: String
-        var inputUserPw: String
-
         //sharedPreferencesManager에 id, password 있는 경우
         if (loginInfo.isNotEmpty()) {
-            inputUserEmail = loginInfo["email"].toString()
-            inputUserPw = loginInfo["password"].toString()
+            val inputUserEmail = loginInfo["email"].toString()
+            val inputUserPw = loginInfo["password"].toString()
 
             if (inputUserEmail.isNotEmpty() && inputUserPw.isNotEmpty()) {
-                // 자동 로그인 시도
-                Log.d("로그", "자동 로그인 성공, id: ${inputUserEmail}, pwd: ${inputUserPw}")
                 loginUser(inputUserEmail, inputUserPw)
             }
         }
@@ -71,6 +66,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
                     if(loginResponseDTO != null && loginResponseDTO.success){
                         Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT).show()
                         Log.d("로그", "로그인 성공")
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intent)
                         finish()
                     }
