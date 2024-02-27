@@ -34,8 +34,9 @@ class KaKaoLoginActivity : AppCompatActivity() {
     }
 
     private fun attemptLogin() {
-        val sharedPreferencesManager = EncryptedSharedPreferencesManager()
-        val loginInfo = sharedPreferencesManager.getLoginInfo(applicationContext)
+
+        val encryptedSharedPreferences = EncryptedSharedPreferencesManager(this)
+        val loginInfo = encryptedSharedPreferences.getLoginInfo()
 
         var inputUserEmail: String
         var inputUserPw: String
@@ -112,12 +113,12 @@ class KaKaoLoginActivity : AppCompatActivity() {
         signInBtn.setOnClickListener {
             val inputUserEmail = userEmail.text.toString()
             val inputUserPw = userPw.text.toString()
-            val sharedPreferencesManager = EncryptedSharedPreferencesManager()
+            val sharedPreferencesManager = EncryptedSharedPreferencesManager(this)
             val autoLoginCheckBtn = findViewById<RadioButton>(R.id.radioButton)
 
             if (autoLoginCheckBtn.isChecked) {
                 Log.d("로그", "첫 로그인, id: ${inputUserEmail}, pwd: ${inputUserPw}")
-                sharedPreferencesManager.setLoginInfo(applicationContext, inputUserEmail, inputUserPw)
+                sharedPreferencesManager.setLoginInfo(inputUserEmail, inputUserPw)
             }
             loginUser(inputUserEmail, inputUserPw)
         }
