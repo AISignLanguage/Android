@@ -65,26 +65,25 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.6"
+            android:layout_weight="0.7"
             android:fontFamily="@font/nam"
             android:gravity="center_vertical"
             android:paddingStart="10dp"
-            android:text="손짓의 순간과 함께 한, "
-            android:textSize="20dp"
+            android:text="손짓의 순간과 함께 한,"
+            android:textSize="18dp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/myDay_tv"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="5dp"
-            android:layout_weight="0.4"
-            android:layout_marginEnd="10dp"
+            android:layout_weight="0.45"
+            android:paddingEnd="10dp"
             android:fontFamily="@font/nam"
             android:gravity="center_vertical"
             android:text="D+23일"
             android:textColor="#9999FF"
-            android:textSize="30dp"
+            android:textSize="28dp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -132,7 +131,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/nam"
-        android:text="Withdrawal"
+        android:text="회원탈퇴"
         android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -149,7 +148,7 @@
         android:fontFamily="@font/nam"
         android:paddingStart="50dp"
         android:gravity="center_vertical"
-        android:text="Personal Information"
+        android:text="개인정보"
         android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
