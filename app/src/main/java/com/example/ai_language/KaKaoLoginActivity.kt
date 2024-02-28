@@ -34,26 +34,23 @@ class KaKaoLoginActivity : AppCompatActivity() {
     }
 
     private fun attemptLogin() {
-        val sharedPreferencesManager = EncryptedSharedPreferencesManager()
-        val loginInfo = sharedPreferencesManager.getLoginInfo(applicationContext)
 
-        var inputUserEmail: String
-        var inputUserPw: String
+        val encryptedSharedPreferences = EncryptedSharedPreferencesManager(this)
+        val loginInfo = encryptedSharedPreferences.getLoginInfo()
 
         //sharedPreferencesManager에 id, password 있는 경우
         if (loginInfo.isNotEmpty()) {
-            inputUserEmail = loginInfo["email"].toString()
-            inputUserPw = loginInfo["password"].toString()
+            val inputUserEmail = loginInfo["email"].toString()
+            val inputUserPw = loginInfo["password"].toString()
 
             if (inputUserEmail.isNotEmpty() && inputUserPw.isNotEmpty()) {
-                // 자동 로그인 시도
-                Log.d("로그", "자동 로그인 성공, id: ${inputUserEmail}, pwd: ${inputUserPw}")
                 loginUser(inputUserEmail, inputUserPw)
             }
         }
     }
 
     private fun loginUser(inputUserEmail: String, inputUserPw: String) {
+        progressBar = findViewById(R.id.progressBar)
         progressBar.visibility = View.VISIBLE
 
         RetrofitClient.getInstance()
@@ -69,6 +66,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
                     if(loginResponseDTO != null && loginResponseDTO.success){
                         Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT).show()
                         Log.d("로그", "로그인 성공")
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intent)
                         finish()
                     }
@@ -106,23 +104,22 @@ class KaKaoLoginActivity : AppCompatActivity() {
         //로그인 비동기 처리 - retrofit
         userEmail = findViewById(R.id.userEmail)
         userPw = findViewById(R.id.userPw)
-        progressBar = findViewById(R.id.progressBar)
 
         val signInBtn = findViewById<TextView>(R.id.sign_in_button)
         signInBtn.setOnClickListener {
             val inputUserEmail = userEmail.text.toString()
             val inputUserPw = userPw.text.toString()
-            val sharedPreferencesManager = EncryptedSharedPreferencesManager()
+            val sharedPreferencesManager = EncryptedSharedPreferencesManager(this)
             val autoLoginCheckBtn = findViewById<RadioButton>(R.id.radioButton)
 
             if (autoLoginCheckBtn.isChecked) {
                 Log.d("로그", "첫 로그인, id: ${inputUserEmail}, pwd: ${inputUserPw}")
-                sharedPreferencesManager.setLoginInfo(applicationContext, inputUserEmail, inputUserPw)
+                sharedPreferencesManager.setLoginInfo(inputUserEmail, inputUserPw)
             }
             loginUser(inputUserEmail, inputUserPw)
         }
 
-        //attemptLogin()
+        attemptLogin()
 
         //로그인 버튼 -> 아이디 비번 확인만 없으면 없다고 메세지 (DB확인)
         //카카오 버튼, 회원가입 버튼 -> 회원가입 버튼은 바로, 카카오 버튼은 DB확인 후 사용자가 처음접속이면 회원가입으로, 아니면 바로 HOME

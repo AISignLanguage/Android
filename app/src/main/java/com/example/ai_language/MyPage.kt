@@ -1,10 +1,10 @@
 package com.example.ai_language
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 
 class MyPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +57,7 @@ class MyPage : AppCompatActivity() {
                 override fun onClicked(result: String) {
                     when(result){
                         "ok"->{
+                            disableAutoLogin() //로그아웃 하면 자동 로그인 해제됨
                             val intent = Intent(this@MyPage,LoginActivity::class.java)
                             startActivity(intent)
                             finish()
@@ -69,6 +70,11 @@ class MyPage : AppCompatActivity() {
             })
         }
 
+    }
+
+    fun disableAutoLogin() {
+        val sharedPreferencesManager = EncryptedSharedPreferencesManager(this)
+        sharedPreferencesManager.clearPreferences(this)
     }
 
 }
