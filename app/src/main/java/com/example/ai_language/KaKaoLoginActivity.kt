@@ -44,7 +44,8 @@ class KaKaoLoginActivity : AppCompatActivity() {
             val inputUserPw = loginInfo["password"].toString()
 
             if (inputUserEmail.isNotEmpty() && inputUserPw.isNotEmpty()) {
-                loginUser(inputUserEmail, inputUserPw)
+                userEmail.setText(inputUserEmail)
+                userPw.setText(inputUserPw)
             }
         }
     }
@@ -123,14 +124,6 @@ class KaKaoLoginActivity : AppCompatActivity() {
 
         //로그인 버튼 -> 아이디 비번 확인만 없으면 없다고 메세지 (DB확인)
         //카카오 버튼, 회원가입 버튼 -> 회원가입 버튼은 바로, 카카오 버튼은 DB확인 후 사용자가 처음접속이면 회원가입으로, 아니면 바로 HOME
-
-        /*val signInBtn = findViewById<TextView>(R.id.sign_in_button)
-        signInBtn.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            intent.putExtra("nick", "사용자${ Random.nextInt(10000)}")
-            intent.putExtra("profile", "https://cdn-icons-png.flaticon.com/128/149/149071.png")
-            startActivity(intent)
-        }*/
 
         val sinUpBtn = findViewById<TextView>(R.id.sign_up_button)
         sinUpBtn.setOnClickListener {
