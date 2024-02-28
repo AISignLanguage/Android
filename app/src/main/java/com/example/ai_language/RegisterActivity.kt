@@ -296,7 +296,7 @@ class RegisterActivity : AppCompatActivity() {
 
         regName.setText(nick)
 
-        profile = findViewById<ImageView>(R.id.reg_pro)
+        profile = findViewById(R.id.reg_pro)
         val uriString: String? = intent.getStringExtra("profile")
         if (uriString != null) {
             val profilePx = dpToPx(this, 90)

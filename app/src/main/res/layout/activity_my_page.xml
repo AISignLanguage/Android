@@ -8,34 +8,20 @@
     android:orientation="vertical"
     tools:context=".MyPage">
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/font_bd"
+        android:gravity="center"
+        android:text="개인정보 수정"
+        android:textSize="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.9"
-            android:layout_marginStart="20dp"
-            android:gravity="center_vertical"
-            android:fontFamily="@font/nam"
-            android:text="마이페이지"
-            android:textSize="30dp"
-            android:textStyle="bold" />
-
-        <ImageButton
-            android:id="@+id/homeButton3"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_weight="0.01"
-            android:layout_margin="20dp"
-            android:background="@drawable/homes" />
-    </LinearLayout>
 
     <TextView
         android:id="@+id/ex"
@@ -46,7 +32,7 @@
         android:text="님, 안녕하세요!"
         android:textSize="20dp"
         app:layout_constraintStart_toEndOf="@+id/myName_tv"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <TextView
         android:id="@+id/myName_tv"
@@ -55,10 +41,10 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:text="박지원"
-        android:textStyle="bold"
         android:textSize="25dp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -66,19 +52,21 @@
         android:layout_height="0dp"
         android:layout_gravity="center"
         android:layout_margin="20dp"
-        android:background="#f4f4f4"
+        android:layout_marginTop="120dp"
+        android:background="@drawable/b_blank"
         android:orientation="horizontal"
         android:paddingStart="10dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/myName_tv">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.8"
             android:fontFamily="@font/nam"
             android:gravity="center_vertical"
-            android:layout_weight="0."
             android:paddingStart="10dp"
             android:text="손짓의 순간과 함께 한, "
             android:textSize="22dp"
@@ -86,18 +74,17 @@
 
         <TextView
             android:id="@+id/myDay_tv"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_weight="0.2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_marginStart="5dp"
-            android:gravity="center_vertical"
+            android:layout_weight="0.4"
             android:fontFamily="@font/nam"
+            android:gravity="center_vertical"
             android:text="D+23일"
             android:textColor="#9999FF"
             android:textSize="30dp"
             android:textStyle="bold" />
     </LinearLayout>
-
 
     <TextView
         android:id="@+id/textView16"
@@ -106,7 +93,8 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/nam"
-        android:text="회원정보관리"
+        android:textColor="#8E8B8B"
+        android:text="Account"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

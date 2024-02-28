@@ -32,11 +32,12 @@
 
         <ImageView
             android:id="@+id/reg_pro"
+            android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="15dp"
             android:layout_weight="1"
-            tools:srcCompat="@drawable/user_profile" />
+            tools:srcCompat="@drawable/user_profile"
+            />
 
         <TextView
             android:gravity="center_vertical"
@@ -275,8 +276,8 @@
                 android:layout_weight="0.7"
                 android:background="@drawable/confirm"
                 android:gravity="center_vertical"
-                android:hint="인증버놓 입력"
-                android:paddingStart="45dp"
+                android:hint="인증번호 입력"
+                android:paddingStart="15dp"
                 android:textSize="12dp"  />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -288,7 +289,7 @@
                 android:padding="1dp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/reg_next"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -296,7 +297,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
-            android:layout_weight="0.35"
+            android:layout_weight="0.45"
             android:background="@drawable/signup"
             android:gravity="center"
             android:textAlignment="center" />
