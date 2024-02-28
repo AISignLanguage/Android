@@ -11,17 +11,18 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
             android:fontFamily="@font/nam"
             android:text="마이페이지"
             android:textSize="30dp"
@@ -50,7 +51,7 @@
 
     <TextView
         android:id="@+id/myName_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
@@ -85,9 +86,10 @@
 
         <TextView
             android:id="@+id/myDay_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
             android:layout_marginStart="5dp"
+            android:gravity="center_vertical"
             android:fontFamily="@font/nam"
             android:text="D+23일"
             android:textColor="#9999FF"
@@ -98,11 +100,10 @@
 
     <TextView
         android:id="@+id/textView16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="277dp"
         android:fontFamily="@font/nam"
         android:text="회원정보관리"
         android:textSize="20dp"
@@ -113,11 +114,10 @@
 
     <TextView
         android:id="@+id/sign_out"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="335dp"
         android:fontFamily="@font/nam"
         android:text="로그아웃"
         android:textSize="15dp"
@@ -127,11 +127,10 @@
 
     <TextView
         android:id="@+id/withdrawal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="331dp"
         android:fontFamily="@font/nam"
         android:text="회원 탈퇴"
         android:textSize="15dp"
@@ -141,11 +140,10 @@
 
     <TextView
         android:id="@+id/my_inform_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="303dp"
         android:fontFamily="@font/nam"
         android:text="개인정보 수정"
         android:textSize="15dp"
@@ -155,8 +153,8 @@
 
     <TextView
         android:id="@+id/textView19"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="-"
@@ -167,11 +165,10 @@
 
     <TextView
         android:id="@+id/textView18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="315dp"
         android:fontFamily="@font/nam"
         android:text="고객센터"
         android:textSize="20dp"
@@ -182,11 +179,10 @@
 
     <TextView
         android:id="@+id/FAQ"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="300dp"
         android:fontFamily="@font/nam"
         android:text="자주 묻는 질문"
         android:textSize="15dp"
@@ -196,8 +192,8 @@
 
     <TextView
         android:id="@+id/textView17"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="-"
@@ -208,11 +204,10 @@
 
     <TextView
         android:id="@+id/textView20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="234dp"
         android:fontFamily="@font/nam"
         android:text="어플리케이션 이용"
         android:textSize="20dp"
@@ -223,11 +218,10 @@
 
     <TextView
         android:id="@+id/versionCheck"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="331dp"
         android:fontFamily="@font/nam"
         android:text="버전 확인"
         android:textSize="15dp"
@@ -237,12 +231,10 @@
 
     <TextView
         android:id="@+id/terms"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="331dp"
-        android:layout_marginBottom="219dp"
         android:fontFamily="@font/nam"
         android:text="이용 약관"
         android:textSize="15dp"
