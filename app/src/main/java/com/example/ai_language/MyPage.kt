@@ -11,12 +11,12 @@ class MyPage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_page)
 
-        val home = findViewById<ImageButton>(R.id.homeButton3)
-        home.setOnClickListener{
-            val intent = Intent(this,Home::class.java)
-            startActivity(intent)
-            finish()
-        }
+        //val home = findViewById<ImageButton>(R.id.homeButton3)
+//        home.setOnClickListener{
+//            val intent = Intent(this,Home::class.java)
+//            startActivity(intent)
+//            finish()
+//        }
 
         val my_inform_edit = findViewById<TextView>(R.id.my_inform_edit)
         my_inform_edit.setOnClickListener {
