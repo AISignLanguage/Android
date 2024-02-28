@@ -226,6 +226,12 @@ class RegisterActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, KaKaoLoginActivity::class.java)
+        startActivity(intent)
+        finish() // RegisterActivity 종료
+    }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
