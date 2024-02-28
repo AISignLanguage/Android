@@ -69,22 +69,21 @@
             android:fontFamily="@font/nam"
             android:gravity="center_vertical"
             android:paddingStart="10dp"
-            android:text="손짓의 순간과 함께 한, "
-            android:textSize="20dp"
+            android:text="손짓의 순간과 함께 한,"
+            android:textSize="18dp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/myDay_tv"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="5dp"
-            android:layout_weight="0.4"
-            android:layout_marginEnd="10dp"
+            android:layout_weight="0.45"
+            android:paddingEnd="10dp"
             android:fontFamily="@font/nam"
             android:gravity="center_vertical"
             android:text="D+23일"
             android:textColor="#9999FF"
-            android:textSize="30dp"
+            android:textSize="28dp"
             android:textStyle="bold" />
     </LinearLayout>
 
