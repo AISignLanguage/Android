@@ -84,29 +84,28 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.6"
-            android:layout_marginTop="5dp"
             android:gravity="center_vertical"
+            android:layout_weight="0.5"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/reg_email"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="20dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
-                android:layout_weight="0.8"
+                android:layout_weight="0.7"
                 android:background="@drawable/nicknamespace"
                 android:gravity="start|center_vertical"
-                android:hint="이메일 (ID)"
+                android:hint="ex) goyo123@google.com"
                 android:paddingStart="45dp"
                 android:textSize="12dp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/confirm_email_btn"
-                android:layout_width="80dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="20dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
                 android:background="@drawable/emailconfirm"
                 android:padding="1dp"  />
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -142,7 +141,6 @@
         <TextView
             android:layout_width="match_parent"
             android:gravity="center_vertical"
-
             android:layout_height="0dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
@@ -157,17 +155,18 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:gravity="center_vertical"
-            android:layout_weight="0.6"
-            android:layout_marginTop="5dp"
+            android:layout_weight="0.5"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/reg_nick"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="20dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
-                android:layout_weight="0.8"
+                android:layout_weight="0.7"
                 android:background="@drawable/nicknamespace"
                 android:gravity="start|center_vertical"
                 android:hint="닉네임 최소 2자, 최대 6자"
@@ -176,9 +175,9 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/confirm_nickname_btn"
-                android:layout_width="80dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="20dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
                 android:background="@drawable/emailconfirm"
                 android:padding="1dp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -226,17 +225,19 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="5dp"
-            android:layout_weight="0.6"
+            android:gravity="center_vertical"
+            android:layout_weight="0.5"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/send_certification_et"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="20dp"
+                android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
-                android:layout_weight="0.4"
+                android:layout_weight="0.7"
                 android:background="@drawable/confirm"
                 android:gravity="center_vertical"
                 android:paddingStart="15dp"
@@ -246,9 +247,8 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/send_certification_btn"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="20dp"
-                android:layout_weight="0.2"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
                 android:background="@drawable/pushnum"
                 android:gravity="start|center_vertical" />
 
@@ -258,31 +258,32 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="5dp"
-            android:layout_weight="0.6"
+            android:gravity="center_vertical"
+            android:layout_weight="0.5"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/certification_et"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="20dp"
+                android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
-                android:layout_weight="0.8"
+                android:layout_weight="0.7"
                 android:background="@drawable/confirm"
-                android:gravity="start|center_vertical"
-                android:hint="인증번호 입력"
-                android:paddingStart="15dp"
-                android:textSize="12dp" />
+                android:gravity="center_vertical"
+                android:hint="인증버놓 입력"
+                android:paddingStart="45dp"
+                android:textSize="12dp"  />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/certification_btn"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="20dp"
+                android:layout_height="match_parent"
                 android:layout_weight="0.2"
-                android:background="@drawable/num"
-                android:gravity="start|center_vertical" />
+                android:background="@drawable/emailconfirm"
+                android:padding="1dp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <TextView
@@ -291,7 +292,6 @@
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
             android:layout_weight="0.35"
@@ -302,8 +302,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5"
             android:gravity="center_vertical"
+            android:layout_weight="0.5"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <TextView
