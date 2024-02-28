@@ -32,12 +32,11 @@
 
         <ImageView
             android:id="@+id/reg_pro"
-            android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="15dp"
             android:layout_weight="1"
-            tools:srcCompat="@drawable/user_profile"
-            />
+            tools:srcCompat="@drawable/user_profile" />
 
         <TextView
             android:gravity="center_vertical"
@@ -85,30 +84,29 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_weight="0.6"
+            android:layout_marginTop="5dp"
             android:gravity="center_vertical"
-            android:layout_weight="0.5"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/reg_email"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginEnd="10dp"
-                android:layout_weight="0.7"
+                android:layout_weight="0.8"
                 android:background="@drawable/nicknamespace"
                 android:gravity="start|center_vertical"
-                android:hint="ex) goyo123@google.com"
+                android:hint="이메일 (ID)"
                 android:paddingStart="45dp"
                 android:textSize="12dp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/confirm_email_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.2"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="20dp"
                 android:background="@drawable/emailconfirm"
                 android:padding="1dp"  />
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -145,6 +143,7 @@
         <TextView
             android:layout_width="match_parent"
             android:gravity="center_vertical"
+
             android:layout_height="0dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
@@ -159,18 +158,17 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:gravity="center_vertical"
-            android:layout_weight="0.5"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_weight="0.6"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/reg_nick"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginEnd="10dp"
-                android:layout_weight="0.7"
+                android:layout_weight="0.8"
                 android:background="@drawable/nicknamespace"
                 android:gravity="start|center_vertical"
                 android:hint="닉네임 최소 2자, 최대 6자"
@@ -179,9 +177,9 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/confirm_nickname_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.2"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="20dp"
                 android:background="@drawable/emailconfirm"
                 android:padding="1dp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -229,19 +227,17 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:gravity="center_vertical"
-            android:layout_weight="0.5"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="0.6"
             android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/send_certification_et"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginEnd="10dp"
-                android:layout_weight="0.7"
+                android:layout_weight="0.4"
                 android:background="@drawable/confirm"
                 android:gravity="center_vertical"
                 android:paddingStart="15dp"
@@ -251,8 +247,9 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/send_certification_btn"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.3"
+                android:layout_height="40dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="0.2"
                 android:background="@drawable/pushnum"
                 android:gravity="start|center_vertical" />
 
@@ -262,43 +259,43 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:gravity="center_vertical"
-            android:layout_weight="0.5"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="0.6"
             android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/certification_et"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginEnd="10dp"
-                android:layout_weight="0.7"
+                android:layout_weight="0.8"
                 android:background="@drawable/confirm"
-                android:gravity="center_vertical"
+                android:gravity="start|center_vertical"
                 android:hint="인증번호 입력"
                 android:paddingStart="15dp"
-                android:textSize="12dp"  />
+                android:textSize="12dp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/certification_btn"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginEnd="20dp"
                 android:layout_weight="0.2"
-                android:background="@drawable/emailconfirm"
-                android:padding="1dp" />
+                android:background="@drawable/num"
+                android:gravity="start|center_vertical" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <androidx.appcompat.widget.AppCompatButton
+        <TextView
             android:id="@+id/reg_next"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
-            android:layout_weight="0.45"
+            android:layout_weight="0.5"
             android:background="@drawable/signup"
             android:gravity="center"
             android:textAlignment="center" />
@@ -306,11 +303,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:gravity="center_vertical"
             android:layout_weight="0.5"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
