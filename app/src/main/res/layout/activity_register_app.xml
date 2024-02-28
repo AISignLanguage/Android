@@ -104,7 +104,7 @@
                 android:id="@+id/confirm_nick"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="1.2"
                 android:background="@drawable/emailconfirm"
                 android:padding="1dp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -153,6 +153,7 @@
             android:id="@+id/kakao_ok"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_weight="0.15"
@@ -169,7 +170,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:layout_weight="0.15"
             android:gravity="start|center_vertical|center_horizontal"
@@ -182,7 +182,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_weight="0.7"
                 android:background="@drawable/confirm"
-                android:gravity="start|center_vertical"
+                android:gravity="center_vertical"
                 android:hint="인증번호 입력"
                 android:paddingStart="15dp"
                 android:textSize="12dp" />
@@ -191,7 +191,7 @@
                 android:id="@+id/kakao_con"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="1.2"
                 android:background="@drawable/emailconfirm"
                 android:padding="1dp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
