@@ -94,6 +94,12 @@ class KaKaoLoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ka_kao_login)
 
+        val forgetPage = findViewById<TextView>(R.id.forgetPage)
+        forgetPage.setOnClickListener {
+            val intent = Intent(this, FindIdPwd::class.java)
+            startActivity(intent)
+        }
+
         //테스트 용 홈 화면 이동
         val button3 = findViewById<Button>(R.id.button3)
         button3.setOnClickListener {
