@@ -8,41 +8,41 @@
     android:orientation="vertical"
     tools:context=".MyPage">
 
-
     <TextView
         android:id="@+id/textView8"
-        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:fontFamily="@font/font_bd"
         android:gravity="center"
         android:text="개인정보 수정"
-        android:textSize="24dp"
+        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.05"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
     <TextView
         android:id="@+id/ex"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="46dp"
+        android:layout_marginTop="21dp"
         android:text="님, 안녕하세요!"
-        android:textSize="20dp"
+        android:textSize="12dp"
+        app:layout_constraintHeight_percent="0.03"
         app:layout_constraintStart_toEndOf="@+id/myName_tv"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <TextView
         android:id="@+id/myName_tv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="15dp"
         android:text="박지원"
-        android:textSize="25dp"
+        android:textSize="17dp"
         android:textStyle="bold"
+        app:layout_constraintHeight_percent="0.04"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
@@ -51,40 +51,39 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="3dp"
         android:background="@drawable/b_blank"
         android:orientation="horizontal"
         android:paddingStart="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintHeight_percent="0.09"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/myName_tv">
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.7"
             android:fontFamily="@font/nam"
             android:gravity="center_vertical"
-            android:paddingStart="10dp"
-            android:text="손짓의 순간과 함께 한,"
-            android:textSize="18dp"
+            android:text="손짓의 순간과 함께 한, "
+            android:textSize="15dp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/myDay_tv"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.45"
-            android:paddingEnd="10dp"
             android:fontFamily="@font/nam"
             android:gravity="center_vertical"
-            android:text="D+23일"
+            android:paddingBottom="1dp"
+            android:paddingEnd="10dp"
+            android:text=" D+23일"
             android:textColor="#9999FF"
-            android:textSize="28dp"
+            android:textSize="22dp"
             android:textStyle="bold" />
+
     </LinearLayout>
 
     <TextView
@@ -92,14 +91,15 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:fontFamily="@font/nam"
-        android:textColor="#8E8B8B"
         android:text="Account"
-        android:textSize="20dp"
+        android:textColor="#8E8B8B"
+        android:textSize="18dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.04"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
 
@@ -108,15 +108,16 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="20dp"
-        android:fontFamily="@font/nam"
         android:background="@drawable/logout"
+        android:fontFamily="@font/nam"
         android:gravity="center_vertical"
         android:paddingStart="50dp"
         android:text="로그아웃"
         android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.07"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_inform_edit" />
 
@@ -124,16 +125,17 @@
         android:id="@+id/withdrawal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginEnd="20dp"
-        android:paddingStart="50dp"
-        android:gravity="center_vertical"
-        android:background="@drawable/withdrawal"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/withdrawal"
         android:fontFamily="@font/nam"
+        android:gravity="center_vertical"
+        android:paddingStart="50dp"
         android:text="회원탈퇴"
         android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.07"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sign_out" />
 
@@ -141,16 +143,17 @@
         android:id="@+id/my_inform_edit"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@drawable/personalinformation"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="20dp"
+        android:background="@drawable/personalinformation"
         android:fontFamily="@font/nam"
-        android:paddingStart="50dp"
         android:gravity="center_vertical"
+        android:paddingStart="50dp"
         android:text="개인정보"
         android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.07"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
@@ -158,15 +161,16 @@
         android:id="@+id/textView18"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
         android:fontFamily="@font/nam"
         android:text="Information"
         android:textColor="#8E8B8B"
-        android:textSize="20dp"
+        android:textSize="18dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.04"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/withdrawal" />
 
@@ -174,16 +178,17 @@
         android:id="@+id/FAQ"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@drawable/fagspace"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="20dp"
+        android:background="@drawable/fagspace"
+        android:fontFamily="@font/nam"
         android:gravity="center_vertical"
         android:paddingStart="50dp"
-        android:fontFamily="@font/nam"
         android:text="자주 묻는 질문"
         android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.07"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
@@ -191,16 +196,17 @@
         android:id="@+id/versionCheck"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
-        android:gravity="center_vertical"
-        android:paddingStart="50dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/versionspace"
         android:fontFamily="@font/nam"
+        android:gravity="center_vertical"
+        android:paddingStart="50dp"
         android:text="버전 확인"
         android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.07"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/terms" />
@@ -209,8 +215,8 @@
         android:id="@+id/terms"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/termsspace"
         android:fontFamily="@font/nam"
@@ -219,6 +225,7 @@
         android:text="이용 약관"
         android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.07"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/FAQ" />
@@ -230,13 +237,90 @@
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="10dp"
-        android:gravity="center"
+        android:gravity="center|bottom"
         android:text="@string/terms_service"
-        android:textSize="12dp"
+        android:textSize="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/versionCheck" />
+        app:layout_constraintTop_toBottomOf="@+id/versionCheck"
+        app:layout_constraintVertical_bias="0.8" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.02" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.99" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/my_inform_edit_btn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/my_inform_edit"
+        app:layout_constraintEnd_toEndOf="@+id/my_inform_edit"
+        app:layout_constraintTop_toTopOf="@+id/my_inform_edit"
+        android:background="@drawable/nextspacebtn" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/sign_out_btn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/sign_out"
+        app:layout_constraintEnd_toEndOf="@+id/sign_out"
+        app:layout_constraintTop_toTopOf="@+id/sign_out"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/nextspacebtn" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/withdrawal_btn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="20dp"
+
+        app:layout_constraintBottom_toBottomOf="@+id/withdrawal"
+        app:layout_constraintEnd_toEndOf="@+id/withdrawal"
+        app:layout_constraintTop_toTopOf="@+id/withdrawal"
+        android:background="@drawable/nextspacebtn" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/terms_btn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/terms"
+        app:layout_constraintEnd_toEndOf="@+id/terms"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintTop_toTopOf="@+id/terms"
+        android:background="@drawable/nextspacebtn" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/FAQ_btn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/FAQ"
+        app:layout_constraintEnd_toEndOf="@+id/FAQ"
+        app:layout_constraintTop_toTopOf="@+id/FAQ"
+        android:background="@drawable/nextspacebtn" />
 </androidx.constraintlayout.widget.ConstraintLayout>

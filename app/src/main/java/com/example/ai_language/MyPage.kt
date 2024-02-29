@@ -18,19 +18,19 @@ class MyPage : AppCompatActivity() {
 //            finish()
 //        }
 
-        val my_inform_edit = findViewById<TextView>(R.id.my_inform_edit)
+        val my_inform_edit = findViewById<TextView>(R.id.my_inform_edit_btn)
         my_inform_edit.setOnClickListener {
             val intent = Intent(this,PersonalInfo::class.java)
             startActivity(intent)
         }
 
-        val withDrawer = findViewById<TextView>(R.id.withdrawal)
+        val withDrawer = findViewById<TextView>(R.id.withdrawal_btn)
         withDrawer.setOnClickListener {
             val intent = Intent(this,Unregister::class.java)
             startActivity(intent)
         }
 
-        val faq = findViewById<TextView>(R.id.FAQ) //자주 묻는 질문
+        val faq = findViewById<TextView>(R.id.FAQ_btn) //자주 묻는 질문
         faq.setOnClickListener {
             val intent = Intent(this, FaqPage::class.java)
             startActivity(intent)
@@ -42,13 +42,13 @@ class MyPage : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val term = findViewById<TextView>(R.id.terms)
+        val term = findViewById<TextView>(R.id.terms_btn)
         term.setOnClickListener {
             val intent = Intent(this, TermsActivity::class.java)
             startActivity(intent)
         }
 
-        val sign_out = findViewById<TextView>(R.id.sign_out)
+        val sign_out = findViewById<TextView>(R.id.sign_out_btn)
         sign_out.setOnClickListener {
             val dialog = SignoutDialog(this)
             dialog.exDialog()
