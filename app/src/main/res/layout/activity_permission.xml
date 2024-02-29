@@ -6,9 +6,6 @@
     android:layout_height="480dp"
     tools:context=".permissionActivity">
 
-
-
-
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
