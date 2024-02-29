@@ -206,7 +206,7 @@
         app:layout_constraintVertical_bias="0.074"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/profile" />
+        app:srcCompat="@drawable/user_profile" />
 
     <ProgressBar
         android:id="@+id/progressBar"
