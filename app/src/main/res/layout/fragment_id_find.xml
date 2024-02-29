@@ -11,7 +11,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/findId"
+            android:id="@+id/find_id"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="46dp"
@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/putId"
+            android:id="@+id/put_id"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginTop="5dp"
@@ -36,63 +36,35 @@
             android:textSize="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/findId" />
+            app:layout_constraintTop_toBottomOf="@+id/find_id" />
 
         <TextView
-            android:id="@+id/findEmail"
+            android:id="@+id/find_email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginStart="46dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="45dp"
-            android:text="이메일"
+            android:text="휴대폰 번호"
             android:textSize="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/putId" />
+            app:layout_constraintTop_toBottomOf="@+id/put_id" />
 
         <EditText
-            android:id="@+id/putPwd"
+            android:id="@+id/put_email"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginTop="5dp"
             android:layout_marginStart="45dp"
             android:layout_marginEnd="45dp"
             android:background="@drawable/email_edit"
-            android:hint="이메일"
+            android:hint="휴대폰 번호 11자리 (- 제외)"
             android:paddingStart="35dp"
             android:textSize="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/findEmail" />
-
-        <TextView
-            android:id="@+id/certNum"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="46dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="45dp"
-            android:text="인증번호"
-            android:textSize="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/putPwd" />
-
-        <EditText
-            android:id="@+id/pdwCertNum"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="45dp"
-            android:layout_marginEnd="45dp"
-            android:background="@drawable/email_edit"
-            android:hint="인증번호를 입력하세요"
-            android:paddingStart="35dp"
-            android:textSize="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/certNum" />
+            app:layout_constraintTop_toBottomOf="@+id/find_email" />
 
         <TextView
             android:id="@+id/find_id_btn"
@@ -104,7 +76,7 @@
             android:background="@drawable/find_id_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pdwCertNum" />
+            app:layout_constraintTop_toBottomOf="@+id/put_email" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
