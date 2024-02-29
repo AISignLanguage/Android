@@ -47,6 +47,13 @@
         android:theme="@style/Theme.AI_Language"
         tools:targetApi="31">
         <activity
+            android:name=".ChangePw"
+            android:exported="false" />
+
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.1" />
+        <activity
             android:name=".FindIdPwd"
             android:exported="false" />
 
@@ -66,6 +73,7 @@
         <activity
             android:name=".RegisterActivityApp"
             android:exported="false" />
+
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">

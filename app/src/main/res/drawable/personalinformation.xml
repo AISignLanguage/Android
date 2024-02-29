@@ -8,12 +8,7 @@
         android:strokeColor="#FFE6EDFF"
         android:strokeWidth="1"
         android:pathData="M0.5 10c0-5.25 4.25-9.5 9.5-9.5h294c5.25 0 9.5 4.25 9.5 9.5v30c0 5.25-4.25 9.5-9.5 9.5h-294c-5.25 0-9.5-4.25-9.5-9.5z"/>
-    <path
-        android:strokeColor="#FFA7A7A7"
-        android:strokeWidth="1.88"
-        android:strokeLineCap="round"
-        android:strokeLineJoin="round"
-        android:pathData="M289.19 30.63L294.8 25l-5.62-5.63"/>
+
     <path
         android:strokeColor="#FFA7A7A7"
         android:strokeWidth="1.25"

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ChangePw">
+
+
+    <ImageView
+        android:id="@+id/imageView11"
+        android:layout_width="127dp"
+        android:layout_height="74dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.159"
+        app:srcCompat="@drawable/appicon_call" />
+
+    <EditText
+        android:id="@+id/pw"
+        android:layout_width="285dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="0.5"
+        android:background="@drawable/pw"
+        android:gravity="start|center_vertical"
+        android:inputType="textPassword"
+        android:paddingStart="45dp"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.533"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+    <EditText
+        android:id="@+id/checkPw"
+        android:layout_width="285dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="12dp"
+        android:layout_weight="0.5"
+        android:background="@drawable/pw"
+        android:gravity="start|center_vertical"
+        android:inputType="textPassword"
+        android:paddingStart="45dp"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.533"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="281dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_weight="0.25"
+        android:fontFamily="@font/font_bd"
+        android:gravity="center_vertical"
+        android:text="변경 비밀번호"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pw" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="281dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_weight="0.25"
+        android:fontFamily="@font/font_bd"
+        android:gravity="center_vertical"
+        android:text="변경 비밀번호 확인"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newPw" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/checkButton"
+        android:layout_width="285dp"
+        android:layout_height="40dp"
+        android:background="@drawable/permission_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.533"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkPw"
+        app:layout_constraintVertical_bias="0.277"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="281dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="48dp"
+        android:layout_weight="0.25"
+        android:fontFamily="@font/font_bd"
+        android:gravity="center_vertical"
+        android:text="현재 비밀번호"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+    <EditText
+        android:id="@+id/newPw"
+        android:layout_width="285dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="12dp"
+        android:layout_weight="0.5"
+        android:background="@drawable/pw"
+        android:gravity="start|center_vertical"
+        android:inputType="textPassword"
+        android:paddingStart="45dp"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="비밀번호 변경"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView11" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
