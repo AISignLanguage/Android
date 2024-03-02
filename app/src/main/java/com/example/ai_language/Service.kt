@@ -14,13 +14,16 @@ interface Service {
     @POST("save-user")
     fun saveUser(@Body jsonUser: UserDTO?): Call<ResponseBody?>?
 
-    @POST("find-id")
-    fun sendIdName(@Body data: FindIdDTO): Call<GetIdDTO>
+    @POST("find-id") // 아이디 찾기
+    fun findId(@Body data: FindIdDTO): Call<GetIdDTO>
+
+    @POST("find-pwd") // 비밀번호 찾기
+    fun findPwd(@Body data: FindPwdDTO): Call<FindPwdOk>
 
     @POST("send-data") // 서버의 엔드포인트
     fun sendData(@Body data: UserDTO): Call<LoginCheckDTO> // 전송할 데이터와 응답 타입
 
-    @POST("send-callList") //CallListPage "접속할 때" 서버에 데이터 전달해줌 (페이지 들어갈 때마다 갱신되도록)
+    @POST("send-callList") // 전화번호부
     fun sendCallData(@Body contactsList: PhoneNumberDTO): Call<PhoneListDTO>
 
     @POST("send-news")

@@ -18,7 +18,6 @@ class IdFindFragment : Fragment() {
     private lateinit var call : Call<GetIdDTO>
     private lateinit var service: Service
     private lateinit var getIdDTO: GetIdDTO
-    //private lateinit var findIdDTO: FindIdDTO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,9 +25,7 @@ class IdFindFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val rootView = inflater.inflate(R.layout.fragment_id_find, container, false)
-        return rootView
-
+        return inflater.inflate(R.layout.fragment_id_find, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,7 +43,6 @@ class IdFindFragment : Fragment() {
     }
 
     private fun fetchDataFromServer() {
-
         val nameEditText = view?.findViewById<EditText>(R.id.put_name)
         val phoneNumberEditText = view?.findViewById<EditText>(R.id.put_phoneNumber)
         val name = nameEditText!!.text.toString()
@@ -54,7 +50,7 @@ class IdFindFragment : Fragment() {
 
         // FindIdDTO 객체 생성
         val findIdDTO = FindIdDTO(name, phoneNumber)
-        call = service.sendIdName(findIdDTO)
+        call = service.findId(findIdDTO)
 
         call.enqueue(object : Callback<GetIdDTO> {
             override fun onResponse(call: Call<GetIdDTO>, response: Response<GetIdDTO>) {
