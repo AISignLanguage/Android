@@ -25,10 +25,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
-//전화번호 데이터 클래스
-data class Phone(val id:String?, val name:String?, val phone:String?)
-
 class CallListPage : AppCompatActivity() {
 
     private lateinit var call : Call<PhoneListDTO>

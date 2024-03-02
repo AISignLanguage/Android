@@ -1,7 +1,6 @@
 package com.example.ai_language
 
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -14,6 +13,9 @@ interface Service {
 
     @POST("save-user")
     fun saveUser(@Body jsonUser: UserDTO?): Call<ResponseBody?>?
+
+    @POST("find-id")
+    fun sendIdName(@Body data: FindIdDTO): Call<GetIdDTO>
 
     @POST("send-data") // 서버의 엔드포인트
     fun sendData(@Body data: UserDTO): Call<LoginCheckDTO> // 전송할 데이터와 응답 타입
@@ -32,7 +34,6 @@ interface Service {
 
     @POST("confirm-nick")
     fun confirmNick(@Body data: ConfirmDTO): Observable<ConfirmedDTO>
-
 
     @POST("confirm-email")
     fun confirmEmail(@Body data: ConfirmDTO): Observable<ConfirmedDTO>

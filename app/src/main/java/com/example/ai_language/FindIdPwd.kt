@@ -1,7 +1,7 @@
 package com.example.ai_language
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -11,6 +11,12 @@ class FindIdPwd : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_find_id_pwd)
         initViewPager2()
+
+        if (intent.getBooleanExtra("fromFindEmail", false)) {
+            selectTab(1)
+        } else {
+            selectTab(0)
+        }
     }
     private fun initViewPager2() {
         val adapter = FragmentAdapter(this)
@@ -30,6 +36,11 @@ class FindIdPwd : AppCompatActivity() {
         TabLayoutMediator(tapLayout, viewPager2) { tab, position ->
            tab.text = tabTitles[position]
         }.attach()
+    }
+
+    private fun selectTab(num: Int) {
+        val tabLayout = findViewById<TabLayout>(R.id.tab_layout2)
+        tabLayout.getTabAt(num)?.select() // 두 번째 탭 선택
     }
 
 }
