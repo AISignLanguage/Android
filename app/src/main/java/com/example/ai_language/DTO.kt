@@ -24,6 +24,20 @@ data class LoginResponseDTO(
     @SerializedName("success") val success: Boolean
 )
 
+//Change Password
+data class ChangePasswordRequestDTO(
+    @SerializedName("password") val currentPassword: String,
+    @SerializedName("newPassword") val newPassword: String,
+    @SerializedName("checkPassword") val checkPassword: String
+
+)
+
+data class ChangePasswordResponse(
+    @SerializedName("success") val success: Boolean,
+    @SerializedName("newPassword") val neqPassword: String
+)
+
+
 //confirm
 data class ConfirmDTO(
     @SerializedName("word") val word: String

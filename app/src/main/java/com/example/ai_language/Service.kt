@@ -38,4 +38,7 @@ interface Service {
     fun confirmEmail(@Body data: ConfirmDTO): Observable<ConfirmedDTO>
 
 
+    @POST("password")
+    fun password(@Body data: ChangePasswordRequestDTO): Call<ChangePasswordResponse>
+
 }
