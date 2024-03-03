@@ -19,6 +19,22 @@ data class LoginRequestDTO(
     @SerializedName("password") val password: String
 )
 
+//IdFindFragment
+data class FindIdDTO(
+    @SerializedName("name") val name: String,
+    @SerializedName("phone_number") val phoneNumber: String
+)
+data class GetIdDTO(
+    @SerializedName("email") val email: String
+)
+//PasswordFindFragment
+data class FindPwdDTO(
+    @SerializedName("name") val name: String,
+    @SerializedName("email") val email: String
+)
+data class FindPwdOk(
+    @SerializedName("success_find_pwd") val success_find_pwd: Boolean
+)
 
 data class LoginResponseDTO(
     @SerializedName("success") val success: Boolean
