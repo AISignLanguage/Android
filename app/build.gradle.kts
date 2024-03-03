@@ -56,6 +56,10 @@ dependencies {
     implementation("me.relex:circleindicator:2.1.6")
     implementation("com.github.bumptech.glide:glide:4.12.0")
     implementation("com.google.android.gms:play-services-wearable:18.1.0")
+    implementation(files("libs/activation.jar"))
+    implementation(files("libs\\activation.jar"))
+    implementation(files("libs\\additionnal.jar"))
+    implementation(files("libs\\mail.jar"))
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -98,8 +102,13 @@ dependencies {
     implementation("io.reactivex.rxjava3:rxjava:3.0.3")
     implementation("io.reactivex.rxjava3:rxandroid:3.0.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:adapter-rxjava3:2.9.0")
+
+    // 이메일 전송 (SMTP - Gmali)
+    implementation(files("libs/activation.jar"))
+    implementation(files("libs/additionnal.jar"))
+    implementation(files("libs/mail.jar"))
 
     //EncryptedSharedPreferences
     implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
