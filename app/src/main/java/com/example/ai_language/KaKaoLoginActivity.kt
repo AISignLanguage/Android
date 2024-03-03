@@ -56,6 +56,8 @@ class KaKaoLoginActivity : AppCompatActivity() {
 
         RetrofitClient.getInstance()
         val service = RetrofitClient.getUserRetrofitInterface()
+        val encryptedSharedPreferencesManager = EncryptedSharedPreferencesManager(this)
+
 
         val call = service.login(LoginRequestDTO(inputUserEmail, inputUserPw))
         val intent = Intent(this, Home::class.java)
@@ -67,6 +69,9 @@ class KaKaoLoginActivity : AppCompatActivity() {
                     if(loginResponseDTO != null && loginResponseDTO.success){
                         Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT).show()
                         Log.d("로그", "로그인 성공")
+
+                        encryptedSharedPreferencesManager.saveUserEmail(inputUserEmail)
+
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intent)
                         finish()

@@ -2,6 +2,7 @@ package com.example.ai_language
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import androidx.activity.viewModels
@@ -61,6 +62,17 @@ class EncryptedSharedPreferencesManager (private val context: Context) {
         val editor = encryptedSharedPreferences!!.edit()
         editor.clear()
         editor.apply()
+    }
+
+    fun saveUserEmail(email: String) {
+        val editor = encryptedSharedPreferences.edit()
+        editor.putString("email", email)
+        editor.apply()
+        Log.d("로그", "이메일이 저장되었습니다: $email")
+    }
+
+    fun getUserEmail(): String? {
+        return encryptedSharedPreferences.getString("email", null)
     }
 
 }
