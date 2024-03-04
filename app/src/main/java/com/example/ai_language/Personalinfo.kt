@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.ImageButton
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -50,6 +51,13 @@ class PersonalInfo : AppCompatActivity() {
         val homeButton2 = findViewById<ImageButton>(R.id.homeButton2)
         homeButton2.setOnClickListener{
             val intent = Intent(this,Home::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        val editDate = findViewById<TextView>(R.id.editDate)
+        editDate.setOnClickListener{
+            val intent = Intent(this,ChangePw::class.java)
             startActivity(intent)
             finish()
         }

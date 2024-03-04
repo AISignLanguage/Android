@@ -73,7 +73,7 @@ class MyPage : AppCompatActivity() {
 
     fun disableAutoLogin() {
         val sharedPreferencesManager = EncryptedSharedPreferencesManager(this)
-        sharedPreferencesManager.clearPreferences(this)
+        sharedPreferencesManager.clearPreferences()
     }
 
 }

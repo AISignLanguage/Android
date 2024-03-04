@@ -3,20 +3,33 @@ package com.example.ai_language
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.view.LayoutInflater
-import android.view.Window
+import android.view.WindowManager
+import android.widget.Button
+import androidx.core.content.ContextCompat.startActivity
 
-class ChangePwDialog (context: Context): Dialog(context) {
+class ChangePwDialog (context: Context) {
+    private val dialog = Dialog(context)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setContentView(R.layout.activity_change_pw_dialog)
-        show()
+    private lateinit var onDismissListener: DialogDismissListener
+    interface DialogDismissListener {
+        fun onDialogDismiss()
+    }
+
+    fun dialogShow(){
+        dialog.setContentView(R.layout.activity_change_pw_dialog)
+        dialog.setCancelable(false)
+        dialog.show()
+
+        val checkButton = dialog.findViewById<Button>(R.id.checkButton)
+
+        checkButton.setOnClickListener{
+            dialog.dismiss()
+            onDismissListener.onDialogDismiss()
+        }
+    }
+
+    fun setOnDismissListener(listener: DialogDismissListener) {
+        onDismissListener = listener
     }
 
 }

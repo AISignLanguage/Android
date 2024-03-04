@@ -57,7 +57,7 @@ class EncryptedSharedPreferencesManager (private val context: Context) {
         return loginInfo
     }
 
-    fun clearPreferences(context: Context) {
+    fun clearPreferences() {
         //val prefs = getPreferences(context)
         val editor = encryptedSharedPreferences!!.edit()
         editor.clear()

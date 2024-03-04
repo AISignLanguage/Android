@@ -15,6 +15,11 @@ interface Service {
     @POST("save-user")
     fun saveUser(@Body jsonUser: UserDTO?): Call<ResponseBody?>?
 
+    @POST("find-id") // 아이디 찾기
+    fun findId(@Body data: FindIdDTO): Call<GetIdDTO>
+
+    @POST("find-pwd") // 비밀번호 찾기
+    fun findPwd(@Body data: FindPwdDTO): Call<FindPwdOk>
 
     @POST("send-data") // 서버의 엔드포인트
     fun sendData(@Body data: UserDTO): Call<LoginCheckDTO> // 전송할 데이터와 응답 타입
@@ -37,15 +42,10 @@ interface Service {
     @POST("confirm-email")
     fun confirmEmail(@Body data: ConfirmDTO): Observable<ConfirmedDTO>
 
-
-    @POST("password")
-    fun password(@Body data: ChangePasswordRequestDTO): Call<ChangePasswordResponseDTO>
-
     @POST("checkPassword")
     fun checkPassword(@Body request: CheckPasswordRequestDTO): Call<CheckPasswordResponseDTO>
-    @GET("getPassword")
-    fun getPassword(@Query("email") email: String): Call<CheckPasswordResponseDTO>
 
-
+    @POST("changePassword")
+    fun changePassword(@Body request: ChangePasswordRequestDTO): Call<ChangePasswordResponseDTO>
 
 }
