@@ -36,4 +36,15 @@
     <string name="start_capture">Start Capture</string>
     <string name="stop_capture">Stop Capture</string>
     <string name="todos">TODO</string>
+
+    <string-array name="unregister">
+
+        <item>선택해주세요.</item>
+        <item>수화 번역의 정확도가 떨어져요.</item>
+        <item>어플리케이션 이용이 복잡해요.</item>
+        <item>콘텐츠가 부족해요.</item>
+        <item>이용도가 낮아요.</item>
+        <item>기타</item>
+
+    </string-array>
 </resources>
