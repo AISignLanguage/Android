@@ -54,6 +54,13 @@ class PersonalInfo : AppCompatActivity() {
             }
         }
 
+    private fun changeNickName() {
+        val user_nick_name = findViewById<TextView>(R.id.user_nick_name)
+        user_nick_name.setOnClickListener {
+            
+        }
+    }
+
     private fun sendRequestProfile() {
 
         RetrofitClient.getInstance()
