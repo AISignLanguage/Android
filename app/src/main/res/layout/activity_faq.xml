@@ -62,7 +62,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginTop="15dp"
-                        android:layout_marginLeft="35dp"
+                        android:layout_marginLeft="40dp"
                         android:text="개인정보 수정"
                         android:textSize="15dp"
                         android:clickable="true"/>
@@ -82,8 +82,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="17dp"
-                        android:layout_marginLeft="35dp"
+                        android:layout_marginTop="18dp"
+                        android:layout_marginLeft="40dp"
                         android:text="개인정보 수정 방법"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -111,7 +111,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginTop="15dp"
-                        android:layout_marginLeft="35dp"
+                        android:layout_marginLeft="40dp"
                         android:text="개명"
                         android:textSize="15dp"
                         android:clickable="true"/>
@@ -131,8 +131,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="17dp"
-                        android:layout_marginLeft="35dp"
+                        android:layout_marginTop="18dp"
+                        android:layout_marginLeft="40dp"
                         android:text="개인정보 수정 방법"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -160,7 +160,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginTop="15dp"
-                        android:layout_marginLeft="35dp"
+                        android:layout_marginLeft="40dp"
                         android:text="아이디 및 비밀번호 찾기"
                         android:textSize="15dp"
                         android:clickable="true"/>
@@ -180,8 +180,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="17dp"
-                        android:layout_marginLeft="35dp"
+                        android:layout_marginTop="18dp"
+                        android:layout_marginLeft="40dp"
                         android:text="개인정보 수정 방법"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -219,7 +219,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginTop="15dp"
-                        android:layout_marginLeft="35dp"
+                        android:layout_marginLeft="40dp"
                         android:text="카메라"
                         android:textSize="15dp"
                         android:clickable="true"/>
@@ -239,8 +239,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="17dp"
-                        android:layout_marginLeft="35dp"
+                        android:layout_marginTop="18dp"
+                        android:layout_marginLeft="40dp"
                         android:text="개인정보 수정 방법"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -268,7 +268,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginTop="15dp"
-                        android:layout_marginLeft="35dp"
+                        android:layout_marginLeft="40dp"
                         android:text="카메라 전환"
                         android:textSize="15dp"
                         android:clickable="true"/>
@@ -288,8 +288,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="17dp"
-                        android:layout_marginLeft="35dp"
+                        android:layout_marginTop="18dp"
+                        android:layout_marginLeft="40dp"
                         android:text="개인정보 수정 방법"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -317,7 +317,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginTop="15dp"
-                        android:layout_marginLeft="35dp"
+                        android:layout_marginLeft="40dp"
                         android:text="전화번호 연동"
                         android:textSize="15dp"
                         android:clickable="true"/>
@@ -337,8 +337,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="17dp"
-                        android:layout_marginLeft="35dp"
+                        android:layout_marginTop="18dp"
+                        android:layout_marginLeft="40dp"
                         android:text="개인정보 수정 방법"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -376,7 +376,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginTop="15dp"
-                        android:layout_marginLeft="35dp"
+                        android:layout_marginLeft="40dp"
                         android:text="문의 사항"
                         android:textSize="15dp"
                         android:clickable="true"/>
@@ -396,8 +396,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="17dp"
-                        android:layout_marginLeft="35dp"
+                        android:layout_marginTop="18dp"
+                        android:layout_marginLeft="40dp"
                         android:text="개인정보 수정 방법"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -406,7 +406,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="300dp"
                 android:background="@color/white">
             </LinearLayout>
 
