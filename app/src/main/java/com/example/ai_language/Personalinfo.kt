@@ -1,14 +1,18 @@
 package com.example.ai_language
+
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,7 +31,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class PersonalInfo : AppCompatActivity() {
 
     private val STORAGE_PERMISSION_CODE = 1
@@ -38,6 +41,16 @@ class PersonalInfo : AppCompatActivity() {
     private lateinit var service: Service
     private lateinit var call: Call<GetProfileDTO>
     private lateinit var getProfileDTO: GetProfileDTO
+
+    private lateinit var changeNickNameCall: Call<ChangeNickNameResultDTO>
+    private lateinit var changeNickNameResultDTO: ChangeNickNameResultDTO
+
+    lateinit var name: TextView
+    lateinit var nickName: TextView
+    lateinit var password: TextView
+    lateinit var birthdate: TextView
+    lateinit var phoneNumber: TextView
+    lateinit var change_nickname_btn: Button
 
     lateinit var profileImage: ImageButton
 
@@ -55,29 +68,46 @@ class PersonalInfo : AppCompatActivity() {
         }
 
     private fun changeNickName() {
-        val user_nick_name = findViewById<TextView>(R.id.user_nick_name)
-        user_nick_name.setOnClickListener {
-            
-        }
+        nickName = findViewById(R.id.user_nick_name)
+        val changeName = nickName.text
+        val changeNickNameDTO = ChangeNickNameDTO(changeName.toString())
+        Log.d("로그", "changeName: ${changeNickNameDTO.nickname}")
+        changeNickNameCall = service.changeNickName(changeNickNameDTO)
+
+        changeNickNameCall.enqueue(object : Callback<ChangeNickNameResultDTO>{
+            override fun onResponse(call: Call<ChangeNickNameResultDTO>, response: Response<ChangeNickNameResultDTO>) {
+
+                if (response.isSuccessful) {
+                    Log.d("로그", "isSuccessful")
+                    changeNickNameResultDTO = response.body()!!
+                    val success = changeNickNameResultDTO.success
+
+                    if (success) {
+                        Toast.makeText(this@PersonalInfo, "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@PersonalInfo, "동일한 비밀번호입니다.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ChangeNickNameResultDTO>, t: Throwable) {
+                Log.d("로그", "onFailure")
+            }
+        })
     }
 
     private fun sendRequestProfile() {
-
-        RetrofitClient.getInstance()
-        service = RetrofitClient.getUserRetrofitInterface()
-
         encryptedSharedPreferencesManager = EncryptedSharedPreferencesManager(this)
         val userEmail = encryptedSharedPreferencesManager.getUserEmail()
 
         val email = findViewById<TextView>(R.id.user_email)
         email.text = userEmail
 
-        val url = findViewById<ImageButton>(R.id.user_profile_image)
-        val name = findViewById<TextView>(R.id.user_name)
-        val nickName = findViewById<TextView>(R.id.user_nick_name)
-        val password = findViewById<TextView>(R.id.user_password)
-        val birthdate = findViewById<TextView>(R.id.user_birthdate)
-        val phoneNumber = findViewById<TextView>(R.id.user_phone_number)
+        name = findViewById(R.id.user_name)
+        nickName = findViewById(R.id.user_nick_name)
+        password = findViewById(R.id.user_password)
+        birthdate = findViewById(R.id.user_birthdate)
+        phoneNumber = findViewById(R.id.user_phone_number)
 
         val profileRequestDTO = ProfileRequestDTO(email.text.toString())
         call = service.requestProfile(profileRequestDTO)
@@ -89,17 +119,16 @@ class PersonalInfo : AppCompatActivity() {
                 if (response.isSuccessful) {
                     getProfileDTO = response.body()!!
 
+                    val profileNickName: String? = getProfileDTO?.nickName.toString()
                     val imageUrl = getProfileDTO?.url.let { Uri.parse(it) }
                     loadImage(imageUrl)
 
                     name.text = getProfileDTO?.name
-                    nickName.text = getProfileDTO?.nickName
+                    nickName.text = profileNickName?.let { Editable.Factory.getInstance().newEditable(it) }
+                        ?: Editable.Factory.getInstance().newEditable("")
                     password.text = getProfileDTO?.password
                     birthdate.text = getProfileDTO?.birthdate
                     phoneNumber.text = getProfileDTO?.phoneNumber
-                    Log.d("로그", "${imageUrl}, ${nickName.text}, ${password.text}, ${birthdate.text}, ${phoneNumber.text}")
-                } else {
-                    Log.d("로그", "false")
                 }
             }
 
@@ -114,7 +143,15 @@ class PersonalInfo : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_personal_info)
 
-        sendRequestProfile()
+        RetrofitClient.getInstance()
+        service = RetrofitClient.getUserRetrofitInterface()
+
+        sendRequestProfile() // 유저 정보 불러오기
+
+        change_nickname_btn = findViewById(R.id.change_nickname_btn)
+        change_nickname_btn.setOnClickListener {
+            changeNickName() // 닉네임 변경
+        }
 
         val homeButton2 = findViewById<ImageButton>(R.id.homeButton2)
         homeButton2.setOnClickListener{
@@ -202,6 +239,5 @@ class PersonalInfo : AppCompatActivity() {
             })
             .into(profileImage)
     }
-
 
 }

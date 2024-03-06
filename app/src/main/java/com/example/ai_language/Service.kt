@@ -47,7 +47,9 @@ interface Service {
     @POST("changePassword")
     fun changePassword(@Body request: ChangePasswordRequestDTO): Call<ChangePasswordResponseDTO>
 
-    @POST("requestProfile")
+    @POST("requestProfile") //유저 정보 불러오기
     fun requestProfile(@Body data: ProfileRequestDTO): Call<GetProfileDTO>
 
+    @POST("changeNickName")
+    fun changeNickName(@Body data: ChangeNickNameDTO): Call<ChangeNickNameResultDTO>
 }

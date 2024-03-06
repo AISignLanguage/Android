@@ -117,6 +117,14 @@ data class GetProfileDTO(
     @SerializedName("birthdate") val birthdate: String,
     @SerializedName("phone_number") val phoneNumber: String
 )
+
+data class ChangeNickNameDTO(
+    @SerializedName("nickname") val nickname: String
+)
+data class ChangeNickNameResultDTO(
+    @SerializedName("success") val success: Boolean
+)
+
 //Unregister
 data class DeleteDTO(
     @SerializedName("id") val id: String,
