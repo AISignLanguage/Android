@@ -57,7 +57,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
         RetrofitClient.getInstance()
         val service = RetrofitClient.getUserRetrofitInterface()
         val encryptedSharedPreferencesManager = EncryptedSharedPreferencesManager(this)
-
+        encryptedSharedPreferencesManager.saveUserEmail(inputUserEmail) //유저 정보 요청 목적
 
         val call = service.login(LoginRequestDTO(inputUserEmail, inputUserPw))
         val intent = Intent(this, Home::class.java)
@@ -121,12 +121,12 @@ class KaKaoLoginActivity : AppCompatActivity() {
         signInBtn.setOnClickListener {
             val inputUserEmail = userEmail.text.toString()
             val inputUserPw = userPw.text.toString()
-            val sharedPreferencesManager = EncryptedSharedPreferencesManager(this)
+            val encryptedSharedPreferencesManager = EncryptedSharedPreferencesManager(this)
             val autoLoginCheckBtn = findViewById<RadioButton>(R.id.radioButton)
 
             if (autoLoginCheckBtn.isChecked) {
                 Log.d("로그", "첫 로그인, id: ${inputUserEmail}, pwd: ${inputUserPw}")
-                sharedPreferencesManager.setLoginInfo(inputUserEmail, inputUserPw)
+                encryptedSharedPreferencesManager.setLoginInfo(inputUserEmail, inputUserPw) //자동 로그인 목적
             }
             loginUser(inputUserEmail, inputUserPw)
         }

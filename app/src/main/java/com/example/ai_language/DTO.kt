@@ -105,11 +105,17 @@ data class NewsDTO(
 )
 
 //Personalinfo
-data class UpdateDTO(
-    @SerializedName("uri") val uri: String,            //이미지 uri
-    @SerializedName("nickName") val nickName: String,   //닉네임
-    @SerializedName("loginInfo") val loginInfo: String, //로그인 정보 (앱/카톡)
-    @SerializedName("password") val password: String    //비밀번호
+data class ProfileRequestDTO(
+    @SerializedName("email") val email: String
+)
+data class GetProfileDTO(
+    @SerializedName("url") val url: String,
+    @SerializedName("name") val name: String,
+    @SerializedName("nickName") val nickName: String,
+    //@SerializedName("loginInfo") val loginInfo: String, //로그인 정보 (앱/카톡)
+    @SerializedName("password") val password: String,    //비밀번호
+    @SerializedName("birthdate") val birthdate: String,
+    @SerializedName("phone_number") val phoneNumber: String
 )
 //Unregister
 data class DeleteDTO(

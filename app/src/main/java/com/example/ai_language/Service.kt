@@ -6,7 +6,6 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Query
 
 interface Service {
     @GET("user")
@@ -47,5 +46,8 @@ interface Service {
 
     @POST("changePassword")
     fun changePassword(@Body request: ChangePasswordRequestDTO): Call<ChangePasswordResponseDTO>
+
+    @POST("requestProfile")
+    fun requestProfile(@Body data: ProfileRequestDTO): Call<GetProfileDTO>
 
 }

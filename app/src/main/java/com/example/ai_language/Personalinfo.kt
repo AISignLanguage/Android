@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -22,6 +23,9 @@ import com.bumptech.glide.request.target.Target
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class PersonalInfo : AppCompatActivity() {
@@ -30,7 +34,13 @@ class PersonalInfo : AppCompatActivity() {
 
     lateinit var progressBar: ProgressBar
 
+    private lateinit var encryptedSharedPreferencesManager: EncryptedSharedPreferencesManager
+    private lateinit var service: Service
+    private lateinit var call: Call<GetProfileDTO>
+    private lateinit var getProfileDTO: GetProfileDTO
+
     lateinit var profileImage: ImageButton
+
     private val galleryLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == RESULT_OK) {
@@ -44,9 +54,60 @@ class PersonalInfo : AppCompatActivity() {
             }
         }
 
+    private fun sendRequestProfile() {
+
+        RetrofitClient.getInstance()
+        service = RetrofitClient.getUserRetrofitInterface()
+
+        encryptedSharedPreferencesManager = EncryptedSharedPreferencesManager(this)
+        val userEmail = encryptedSharedPreferencesManager.getUserEmail()
+
+        val email = findViewById<TextView>(R.id.user_email)
+        email.text = userEmail
+
+        val url = findViewById<ImageButton>(R.id.user_profile_image)
+        val name = findViewById<TextView>(R.id.user_name)
+        val nickName = findViewById<TextView>(R.id.user_nick_name)
+        val password = findViewById<TextView>(R.id.user_password)
+        val birthdate = findViewById<TextView>(R.id.user_birthdate)
+        val phoneNumber = findViewById<TextView>(R.id.user_phone_number)
+
+        val profileRequestDTO = ProfileRequestDTO(email.text.toString())
+        call = service.requestProfile(profileRequestDTO)
+
+        call.enqueue(object : Callback<GetProfileDTO>{
+
+            override fun onResponse(call: Call<GetProfileDTO>, response: Response<GetProfileDTO>) {
+
+                if (response.isSuccessful) {
+                    getProfileDTO = response.body()!!
+
+                    val imageUrl = getProfileDTO?.url.let { Uri.parse(it) }
+                    loadImage(imageUrl)
+
+                    name.text = getProfileDTO?.name
+                    nickName.text = getProfileDTO?.nickName
+                    password.text = getProfileDTO?.password
+                    birthdate.text = getProfileDTO?.birthdate
+                    phoneNumber.text = getProfileDTO?.phoneNumber
+                    Log.d("로그", "${imageUrl}, ${nickName.text}, ${password.text}, ${birthdate.text}, ${phoneNumber.text}")
+                } else {
+                    Log.d("로그", "false")
+                }
+            }
+
+            override fun onFailure(call: Call<GetProfileDTO>, t: Throwable) {
+                Log.d("로그", "PersonalInfo 서버 연결 실패")
+            }
+        })
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_personal_info)
+
+        sendRequestProfile()
 
         val homeButton2 = findViewById<ImageButton>(R.id.homeButton2)
         homeButton2.setOnClickListener{
@@ -55,14 +116,14 @@ class PersonalInfo : AppCompatActivity() {
             finish()
         }
 
-        val editDate = findViewById<TextView>(R.id.editDate)
+        val editDate = findViewById<TextView>(R.id.user_password)
         editDate.setOnClickListener{
             val intent = Intent(this,ChangePw::class.java)
             startActivity(intent)
             finish()
         }
 
-        profileImage = findViewById(R.id.profileImage)
+        profileImage = findViewById(R.id.user_profile_image)
         profileImage.setOnClickListener {
             val galleryPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
             if (galleryPermission != PackageManager.PERMISSION_GRANTED) {
@@ -77,6 +138,7 @@ class PersonalInfo : AppCompatActivity() {
             }
         }
         progressBar = findViewById(R.id.progressBar)
+
     }
 
     private fun openGallery() {
