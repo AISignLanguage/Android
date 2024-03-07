@@ -52,4 +52,7 @@ interface Service {
 
     @POST("changeNickName")
     fun changeNickName(@Body data: ChangeNickNameDTO): Call<ChangeNickNameResultDTO>
+
+    @POST("deleteUser")
+    fun deleteUser(@Body requestDTO: DeleteUserRequestDTO): Call<DeleteUserResponseDTO>
 }

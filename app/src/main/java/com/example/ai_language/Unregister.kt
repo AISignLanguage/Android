@@ -15,6 +15,9 @@ import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class Unregister : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,6 +80,48 @@ class Unregister : AppCompatActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    //로그인 이메일 불러오기
+    private fun getSavedEmail(): String? {
+        val sharedPreferencesManager = EncryptedSharedPreferencesManager(this)
+        return sharedPreferencesManager.getUserEmail()
+    }
+
+    //유저 정보 DB 삭제
+    private fun userDelete(){
+        val userEmail = getSavedEmail()
+        if (userEmail.isNullOrEmpty()) {
+            Log.d("로그", "저장된 이메일이 없습니다")
+            return
+        }
+
+        RetrofitClient.getInstance()
+        val service = RetrofitClient.getUserRetrofitInterface()
+
+        val call = service.deleteUser(DeleteUserRequestDTO(userEmail))
+        call.enqueue(object : Callback<DeleteUserResponseDTO>{
+            override fun onResponse(call: Call<DeleteUserResponseDTO>, response: Response<DeleteUserResponseDTO>) {
+                if(response.isSuccessful){
+                    val deleteUserResponse = response.body()
+                    if(deleteUserResponse != null && deleteUserResponse.success){
+                        Log.d("로그", "사용자 삭제 성공")
+                    }
+                    else{
+                        Log.d("로그", "사용자 삭제 실패")
+                    }
+                }
+                else{
+                    Log.d("로그", "서버 응답 실패")
+                }
+            }
+
+            override fun onFailure(call: Call<DeleteUserResponseDTO>, t: Throwable) {
+                Log.d("로그", "서버 요청 실패")
+            }
+
+        })
+
     }
 
 

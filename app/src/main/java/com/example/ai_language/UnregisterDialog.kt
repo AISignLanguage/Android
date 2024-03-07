@@ -12,6 +12,9 @@ class UnregisterDialog(context: Context) : Dialog(context){
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(R.layout.activity_unregister_dialog, null)
         setContentView(view)
+
+
     }
+
 
 }
