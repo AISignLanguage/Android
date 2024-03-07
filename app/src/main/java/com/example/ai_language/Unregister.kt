@@ -15,6 +15,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import retrofit2.Call
 import retrofit2.Callback
@@ -81,15 +82,20 @@ class Unregister : AppCompatActivity() {
         }
 
         unregisterButton.setOnClickListener{
-            userDelete()
-            val unregisterDialog = UnregisterDialog(this)
-            unregisterDialog.show()
+            if(editText.visibility == View.VISIBLE && editText.text.isNullOrEmpty()){
+                Toast.makeText(applicationContext, "사유를 입력해 주세요", Toast.LENGTH_SHORT).show()
+            }
 
-            Handler().postDelayed({
-                unregisterDialog.dismiss()
-                navigateToHomeActivity()
-            }, 3000)
+            if(editText.visibility == View.GONE || (editText.visibility == View.VISIBLE && editText.text.isNotEmpty())){
+                userDelete()
+                val unregisterDialog = UnregisterDialog(this)
+                unregisterDialog.show()
 
+                Handler().postDelayed({
+                    unregisterDialog.dismiss()
+                    navigateToHomeActivity()
+                }, 3000)
+            }
         }
 
     }
