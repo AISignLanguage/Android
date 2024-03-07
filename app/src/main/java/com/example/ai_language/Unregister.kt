@@ -65,6 +65,7 @@ class Unregister : AppCompatActivity() {
         val unregisterButton = findViewById<Button>(R.id.unregisterButton)
         unregisterButton.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         unregisterButton.setOnClickListener{
+            userDelete()
             val unregisterDialog = UnregisterDialog(this)
             unregisterDialog.show()
 
@@ -72,6 +73,7 @@ class Unregister : AppCompatActivity() {
                 unregisterDialog.dismiss()
                 navigateToHomeActivity()
             }, 3000)
+
         }
 
     }

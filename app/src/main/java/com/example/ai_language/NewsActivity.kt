@@ -22,7 +22,7 @@ class NewsActivity : AppCompatActivity() {
         viewPager.adapter = adapter
 
         val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
-        val tabTitles = listOf("Tab 1", "Tab 2", "Tab 3")
+        val tabTitles = listOf("자음", "모음", "숫자")
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = tabTitles[position]
