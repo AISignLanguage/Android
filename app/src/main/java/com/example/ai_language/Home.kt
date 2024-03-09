@@ -3,9 +3,7 @@ package com.example.ai_language
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageButton
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -13,10 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.example.ai_language.call.CallListPage
+import com.example.ai_language.camera.CameraPage
 import me.relex.circleindicator.CircleIndicator3
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 class PagerAdapter(fa: FragmentActivity, private val mCount: Int) : FragmentStateAdapter(fa) {

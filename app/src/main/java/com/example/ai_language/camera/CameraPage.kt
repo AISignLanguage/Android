@@ -1,4 +1,4 @@
-package com.example.ai_language
+package com.example.ai_language.camera
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,7 +7,6 @@ import android.widget.ImageButton
 import android.Manifest
 import android.content.ContentValues
 import android.content.pm.PackageManager
-import android.os.Build
 import android.provider.MediaStore
 import androidx.camera.core.ImageCapture
 import androidx.camera.video.Recorder
@@ -33,6 +32,8 @@ import androidx.camera.video.QualitySelector
 import androidx.camera.video.VideoRecordEvent
 import androidx.camera.view.PreviewView
 import androidx.core.content.PermissionChecker
+import com.example.ai_language.Home
+import com.example.ai_language.R
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -50,7 +51,7 @@ class CameraPage : AppCompatActivity() {
 
         val homeBtn = findViewById<ImageButton>(R.id.homeButton)
         homeBtn.setOnClickListener {
-            val intent = Intent(this,Home::class.java)
+            val intent = Intent(this, Home::class.java)
             startActivity(intent)
             finish()
         }
@@ -60,7 +61,8 @@ class CameraPage : AppCompatActivity() {
             startCamera()
         } else {
             ActivityCompat.requestPermissions(
-                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+            )
         }
 
         val videoBtn = findViewById<ImageButton>(R.id.CameraBtn)
@@ -198,7 +200,8 @@ class CameraPage : AppCompatActivity() {
                         else {
                             recording?.close()
                             recording = null
-                            Log.e(TAG, "Video capture ends with error: " +
+                            Log.e(
+                                TAG, "Video capture ends with error: " +
                                     "${recordEvent.error}")
                         }
                         VideoBtn.apply {

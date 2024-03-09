@@ -1,13 +1,12 @@
-package com.example.ai_language
+package com.example.ai_language.call
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ai_language.R
 
 class InviteListAdapter (private val viewModel: InviteViewModel) :
     RecyclerView.Adapter<InviteListAdapter.InviteListViewHolder>() {

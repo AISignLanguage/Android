@@ -1,4 +1,4 @@
-package com.example.ai_language
+package com.example.ai_language.call
 
 import android.util.Log
 import androidx.lifecycle.LiveData

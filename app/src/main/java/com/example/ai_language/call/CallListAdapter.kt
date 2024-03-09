@@ -1,16 +1,14 @@
-package com.example.ai_language
+package com.example.ai_language.call
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.view.menu.MenuView.ItemView
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.ai_language.R
 
 class CallListAdapter (private val viewModel: CallListViewModel) : RecyclerView.Adapter<CallListAdapter.CallListViewHolder>() {
 

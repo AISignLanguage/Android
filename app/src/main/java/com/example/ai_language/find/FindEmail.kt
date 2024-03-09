@@ -1,4 +1,4 @@
-package com.example.ai_language
+package com.example.ai_language.find
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,6 +6,8 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.ai_language.KaKaoLoginActivity
+import com.example.ai_language.R
 import java.util.regex.Pattern
 
 class FindEmail : AppCompatActivity() {

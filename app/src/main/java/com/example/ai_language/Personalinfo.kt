@@ -7,8 +7,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -46,7 +48,7 @@ class PersonalInfo : AppCompatActivity() {
     private lateinit var changeNickNameResultDTO: ChangeNickNameResultDTO
 
     lateinit var name: TextView
-    lateinit var nickName: TextView
+    lateinit var nickName: EditText
     lateinit var password: TextView
     lateinit var birthdate: TextView
     lateinit var phoneNumber: TextView
@@ -66,35 +68,6 @@ class PersonalInfo : AppCompatActivity() {
                 progressBar.visibility = ProgressBar.GONE
             }
         }
-
-    private fun changeNickName() {
-        nickName = findViewById(R.id.user_nick_name)
-        val changeName = nickName.text
-        val changeNickNameDTO = ChangeNickNameDTO(changeName.toString())
-        Log.d("로그", "changeName: ${changeNickNameDTO.nickname}")
-        changeNickNameCall = service.changeNickName(changeNickNameDTO)
-
-        changeNickNameCall.enqueue(object : Callback<ChangeNickNameResultDTO>{
-            override fun onResponse(call: Call<ChangeNickNameResultDTO>, response: Response<ChangeNickNameResultDTO>) {
-
-                if (response.isSuccessful) {
-                    Log.d("로그", "isSuccessful")
-                    changeNickNameResultDTO = response.body()!!
-                    val success = changeNickNameResultDTO.success
-
-                    if (success) {
-                        Toast.makeText(this@PersonalInfo, "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this@PersonalInfo, "동일한 비밀번호입니다.", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<ChangeNickNameResultDTO>, t: Throwable) {
-                Log.d("로그", "onFailure")
-            }
-        })
-    }
 
     private fun sendRequestProfile() {
         encryptedSharedPreferencesManager = EncryptedSharedPreferencesManager(this)
@@ -150,7 +123,8 @@ class PersonalInfo : AppCompatActivity() {
 
         change_nickname_btn = findViewById(R.id.change_nickname_btn)
         change_nickname_btn.setOnClickListener {
-            changeNickName() // 닉네임 변경
+            val intent = Intent(this, ChangeNicknameActivity::class.java)
+            startActivity(intent)
         }
 
         val homeButton2 = findViewById<ImageButton>(R.id.homeButton2)

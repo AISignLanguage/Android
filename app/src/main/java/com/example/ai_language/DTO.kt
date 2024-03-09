@@ -122,7 +122,7 @@ data class ChangeNickNameDTO(
     @SerializedName("nickname") val nickname: String
 )
 data class ChangeNickNameResultDTO(
-    @SerializedName("success") val success: Boolean
+    @SerializedName("result") val result: Int
 )
 
 //Unregister

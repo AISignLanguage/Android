@@ -1,4 +1,4 @@
-package com.example.ai_language
+package com.example.ai_language.camera
 
 import android.Manifest
 import android.content.Context
