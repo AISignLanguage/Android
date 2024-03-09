@@ -30,53 +30,57 @@ class NewsViewModel : ViewModel() {
     }
 
     fun initializeData(){
-        _consonantList.postValue(
-            listOf(
-                NewsViewModelItem("자음", "컨텐츠 1", R.drawable.newitem),
-                NewsViewModelItem("자음", "컨텐츠 2", R.drawable.newitem),
-                NewsViewModelItem("자음", "컨텐츠 3", R.drawable.newitem),
-                NewsViewModelItem("자음", "컨텐츠 1", R.drawable.newitem),
-                NewsViewModelItem("자음", "컨텐츠 2", R.drawable.newitem),
-                NewsViewModelItem("자음", "컨텐츠 3", R.drawable.newitem),
-                NewsViewModelItem("자음", "컨텐츠 1", R.drawable.newitem),
-                NewsViewModelItem("자음", "컨텐츠 2", R.drawable.newitem),
-                NewsViewModelItem("자음", "컨텐츠 3", R.drawable.newitem),
-                NewsViewModelItem("자음", "컨텐츠 1", R.drawable.newitem),
-                NewsViewModelItem("자음", "컨텐츠 2", R.drawable.newitem),
-                NewsViewModelItem("자음", "컨텐츠 3", R.drawable.newitem),
-                NewsViewModelItem("자음", "컨텐츠 1", R.drawable.newitem),
-                NewsViewModelItem("자음", "컨텐츠 2", R.drawable.newitem)
-            )
-        )
+        _consonantList.postValue(createConsonantList())
+        _vowelList.postValue(createVowelList())
+        _numberList.postValue(createNumberList())
+    }
 
-        _vowelList.postValue(
-            listOf(
-                NewsViewModelItem("모음", "컨텐츠 1", R.drawable.newitem),
-                NewsViewModelItem("모음", "컨텐츠 2", R.drawable.newitem),
-                NewsViewModelItem("모음", "컨텐츠 3", R.drawable.newitem),
-                NewsViewModelItem("모음", "컨텐츠 1", R.drawable.newitem),
-                NewsViewModelItem("모음", "컨텐츠 2", R.drawable.newitem),
-                NewsViewModelItem("모음", "컨텐츠 3", R.drawable.newitem),
-                NewsViewModelItem("모음", "컨텐츠 1", R.drawable.newitem),
-                NewsViewModelItem("모음", "컨텐츠 2", R.drawable.newitem),
-                NewsViewModelItem("모음", "컨텐츠 3", R.drawable.newitem),
-                NewsViewModelItem("모음", "컨텐츠 3", R.drawable.newitem)
-            )
+    private fun createConsonantList(): List<NewsViewModelItem> {
+        return listOf(
+            NewsViewModelItem("자음", "컨텐츠 1", R.drawable.newitem),
+            NewsViewModelItem("자음", "컨텐츠 2", R.drawable.newitem),
+            NewsViewModelItem("자음", "컨텐츠 3", R.drawable.newitem),
+            NewsViewModelItem("자음", "컨텐츠 1", R.drawable.newitem),
+            NewsViewModelItem("자음", "컨텐츠 2", R.drawable.newitem),
+            NewsViewModelItem("자음", "컨텐츠 3", R.drawable.newitem),
+            NewsViewModelItem("자음", "컨텐츠 1", R.drawable.newitem),
+            NewsViewModelItem("자음", "컨텐츠 2", R.drawable.newitem),
+            NewsViewModelItem("자음", "컨텐츠 3", R.drawable.newitem),
+            NewsViewModelItem("자음", "컨텐츠 1", R.drawable.newitem),
+            NewsViewModelItem("자음", "컨텐츠 2", R.drawable.newitem),
+            NewsViewModelItem("자음", "컨텐츠 3", R.drawable.newitem),
+            NewsViewModelItem("자음", "컨텐츠 1", R.drawable.newitem),
+            NewsViewModelItem("자음", "컨텐츠 2", R.drawable.newitem)
         )
+    }
 
-        _numberList.postValue(
-            listOf(
-                NewsViewModelItem("숫자", "컨텐츠 1", R.drawable.newitem),
-                NewsViewModelItem("숫자", "컨텐츠 2", R.drawable.newitem),
-                NewsViewModelItem("숫자", "컨텐츠 3", R.drawable.newitem),
-                NewsViewModelItem("숫자", "컨텐츠 1", R.drawable.newitem),
-                NewsViewModelItem("숫자", "컨텐츠 2", R.drawable.newitem),
-                NewsViewModelItem("숫자", "컨텐츠 3", R.drawable.newitem),
-                NewsViewModelItem("숫자", "컨텐츠 1", R.drawable.newitem),
-                NewsViewModelItem("숫자", "컨텐츠 2", R.drawable.newitem),
-                NewsViewModelItem("숫자", "컨텐츠 3", R.drawable.newitem),
-                NewsViewModelItem("숫자", "컨텐츠 3", R.drawable.newitem)
-            )
+    private fun createVowelList(): List<NewsViewModelItem> {
+        return listOf(
+            NewsViewModelItem("모음", "컨텐츠 1", R.drawable.newitem),
+            NewsViewModelItem("모음", "컨텐츠 2", R.drawable.newitem),
+            NewsViewModelItem("모음", "컨텐츠 3", R.drawable.newitem),
+            NewsViewModelItem("모음", "컨텐츠 1", R.drawable.newitem),
+            NewsViewModelItem("모음", "컨텐츠 2", R.drawable.newitem),
+            NewsViewModelItem("모음", "컨텐츠 3", R.drawable.newitem),
+            NewsViewModelItem("모음", "컨텐츠 1", R.drawable.newitem),
+            NewsViewModelItem("모음", "컨텐츠 2", R.drawable.newitem),
+            NewsViewModelItem("모음", "컨텐츠 3", R.drawable.newitem),
+            NewsViewModelItem("모음", "컨텐츠 3", R.drawable.newitem)
+        )
+    }
+
+    private fun createNumberList(): List<NewsViewModelItem> {
+        return listOf(
+            NewsViewModelItem("숫자", "컨텐츠 1", R.drawable.newitem),
+            NewsViewModelItem("숫자", "컨텐츠 2", R.drawable.newitem),
+            NewsViewModelItem("숫자", "컨텐츠 3", R.drawable.newitem),
+            NewsViewModelItem("숫자", "컨텐츠 1", R.drawable.newitem),
+            NewsViewModelItem("숫자", "컨텐츠 2", R.drawable.newitem),
+            NewsViewModelItem("숫자", "컨텐츠 3", R.drawable.newitem),
+            NewsViewModelItem("숫자", "컨텐츠 1", R.drawable.newitem),
+            NewsViewModelItem("숫자", "컨텐츠 2", R.drawable.newitem),
+            NewsViewModelItem("숫자", "컨텐츠 3", R.drawable.newitem),
+            NewsViewModelItem("숫자", "컨텐츠 3", R.drawable.newitem)
         )
     }
 

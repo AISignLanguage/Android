@@ -61,6 +61,15 @@ data class ChangePasswordResponseDTO(
     @SerializedName("success") val success: Boolean
 )
 
+//Delete User
+data class DeleteUserRequestDTO(
+    @SerializedName("email") val email: String
+)
+
+data class DeleteUserResponseDTO(
+    @SerializedName("success") val success: Boolean
+)
+
 
 //confirm
 data class ConfirmDTO(
