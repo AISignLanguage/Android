@@ -19,7 +19,7 @@ data class LoginRequestDTO(
     @SerializedName("password") val password: String
 )
 
-//IdFindFragment
+//IdFindFragment (아이디 찾기 - 이메일 인증)
 data class FindIdDTO(
     @SerializedName("name") val name: String,
     @SerializedName("phone_number") val phoneNumber: String
@@ -27,7 +27,7 @@ data class FindIdDTO(
 data class GetIdDTO(
     @SerializedName("email") val email: String
 )
-//PasswordFindFragment
+//PasswordFindFragment (비밀번호 찾기)
 data class FindPwdDTO(
     @SerializedName("name") val name: String,
     @SerializedName("email") val email: String
@@ -91,7 +91,7 @@ data class LoginCheckDTO(
     @SerializedName("registerd_at") val registerdAt: String,
 )
 
-//CallListPage
+//CallListPage (전화번호 DB에서 불러오기)
 data class PhoneNumberDTO(
     @SerializedName("phoneNumber") val phoneNumbers: List<String>
 )
@@ -113,7 +113,7 @@ data class NewsDTO(
     @SerializedName("content") val content: String  //내용
 )
 
-//Personalinfo
+//Personalinfo (개인 정보 불러오기)
 data class ProfileRequestDTO(
     @SerializedName("email") val email: String
 )
@@ -127,7 +127,9 @@ data class GetProfileDTO(
     @SerializedName("phone_number") val phoneNumber: String
 )
 
+// ChangeNicknameActivity (닉네임 변경)
 data class ChangeNickNameDTO(
+    @SerializedName("originalNickname") val originalNickname: String,
     @SerializedName("nickname") val nickname: String
 )
 data class ChangeNickNameResultDTO(

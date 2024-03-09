@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -26,6 +27,7 @@ class IdFindFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN) // 키보드가 UI 가리지 않게
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -47,6 +49,16 @@ class IdFindFragment : Fragment() {
 
     }
 
+    private fun formatPhoneNumber(phoneNumber: String): String {
+        return "${phoneNumber.substring(0, 3)}-${
+            phoneNumber.substring(
+                3,
+                7
+            )
+        }-${phoneNumber.substring(7, 11)}"
+
+    }
+
     private fun fetchDataFromServer() {
         val nameEditText = view?.findViewById<EditText>(R.id.put_name)
         val phoneNumberEditText = view?.findViewById<EditText>(R.id.put_phoneNumber)
@@ -54,7 +66,7 @@ class IdFindFragment : Fragment() {
         val phoneNumber = phoneNumberEditText!!.text.toString()
 
         // FindIdDTO 객체 생성
-        val findIdDTO = FindIdDTO(name, phoneNumber)
+        val findIdDTO = FindIdDTO(name, formatPhoneNumber(phoneNumber))
         call = service.findId(findIdDTO)
 
         call.enqueue(object : Callback<GetIdDTO> {

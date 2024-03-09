@@ -6,15 +6,10 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -44,15 +39,11 @@ class PersonalInfo : AppCompatActivity() {
     private lateinit var call: Call<GetProfileDTO>
     private lateinit var getProfileDTO: GetProfileDTO
 
-    private lateinit var changeNickNameCall: Call<ChangeNickNameResultDTO>
-    private lateinit var changeNickNameResultDTO: ChangeNickNameResultDTO
-
     lateinit var name: TextView
-    lateinit var nickName: EditText
+    lateinit var nickName: TextView
     lateinit var password: TextView
     lateinit var birthdate: TextView
     lateinit var phoneNumber: TextView
-    lateinit var change_nickname_btn: Button
 
     lateinit var profileImage: ImageButton
 
@@ -69,6 +60,7 @@ class PersonalInfo : AppCompatActivity() {
             }
         }
 
+    // 서버 DB에서 유저 정보 불러오기
     private fun sendRequestProfile() {
         encryptedSharedPreferencesManager = EncryptedSharedPreferencesManager(this)
         val userEmail = encryptedSharedPreferencesManager.getUserEmail()
@@ -92,13 +84,11 @@ class PersonalInfo : AppCompatActivity() {
                 if (response.isSuccessful) {
                     getProfileDTO = response.body()!!
 
-                    val profileNickName: String? = getProfileDTO?.nickName.toString()
                     val imageUrl = getProfileDTO?.url.let { Uri.parse(it) }
                     loadImage(imageUrl)
 
                     name.text = getProfileDTO?.name
-                    nickName.text = profileNickName?.let { Editable.Factory.getInstance().newEditable(it) }
-                        ?: Editable.Factory.getInstance().newEditable("")
+                    nickName.text = getProfileDTO.nickName
                     password.text = getProfileDTO?.password
                     birthdate.text = getProfileDTO?.birthdate
                     phoneNumber.text = getProfileDTO?.phoneNumber
@@ -121,9 +111,10 @@ class PersonalInfo : AppCompatActivity() {
 
         sendRequestProfile() // 유저 정보 불러오기
 
-        change_nickname_btn = findViewById(R.id.change_nickname_btn)
-        change_nickname_btn.setOnClickListener {
+        nickName = findViewById(R.id.user_nick_name)
+        nickName.setOnClickListener {
             val intent = Intent(this, ChangeNicknameActivity::class.java)
+            intent.putExtra("originalNickname", nickName.text.toString())
             startActivity(intent)
         }
 

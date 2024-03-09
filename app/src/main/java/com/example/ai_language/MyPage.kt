@@ -71,6 +71,7 @@ class MyPage : AppCompatActivity() {
 
     }
 
+    // 자동 로그인 해제 (EncryptedSharedPreferences에서 정보 삭제)
     fun disableAutoLogin() {
         val sharedPreferencesManager = EncryptedSharedPreferencesManager(this)
         sharedPreferencesManager.clearPreferences()

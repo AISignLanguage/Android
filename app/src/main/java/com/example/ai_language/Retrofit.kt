@@ -13,7 +13,7 @@ class RetrofitClient private constructor() {
         @Volatile
         private var instance: RetrofitClient? = null
         private lateinit var userRetrofitInterface: Service
-        private val baseUrl = "http://192.168.89.159:8080/api/mog/user/"
+        private val baseUrl = "http://192.168.219.107:8080/api/mog/user/"
 
         //private val baseUrl = "http://192.168.219.110:8080/api/mog/user/"
 

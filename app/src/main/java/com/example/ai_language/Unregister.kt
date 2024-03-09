@@ -5,7 +5,6 @@ import android.graphics.Paint
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -96,6 +95,7 @@ class Unregister : AppCompatActivity() {
                     navigateToHomeActivity()
                 }, 3000)
             }
+            disableAutoLogin() // 자동 로그인 해제
         }
 
     }
@@ -146,6 +146,12 @@ class Unregister : AppCompatActivity() {
 
         })
 
+    }
+
+    // 자동 로그인 해제 (EncryptedSharedPreferences에서 정보 삭제)
+    fun disableAutoLogin() {
+        val sharedPreferencesManager = EncryptedSharedPreferencesManager(this)
+        sharedPreferencesManager.clearPreferences()
     }
 
 
