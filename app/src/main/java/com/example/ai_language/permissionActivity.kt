@@ -3,6 +3,7 @@ package com.example.ai_language
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageButton
 
 class permissionActivity : AppCompatActivity() {
@@ -10,7 +11,7 @@ class permissionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_permission)
 
-        val checkButton = findViewById<ImageButton>(R.id.checkButton)
+        val checkButton = findViewById<Button>(R.id.checkButton)
         checkButton.setOnClickListener {
             val intent = Intent(this, Home::class.java)
             startActivity(intent)
