@@ -7,6 +7,15 @@ import android.widget.ImageButton
 import android.Manifest
 import android.content.ContentValues
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.ImageFormat
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.RectF
+import android.graphics.YuvImage
 import android.provider.MediaStore
 import androidx.camera.core.ImageCapture
 import androidx.camera.video.Recorder
@@ -24,7 +33,9 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.camera.video.FallbackStrategy
 import androidx.camera.video.MediaStoreOutputOptions
 import androidx.camera.video.Quality
@@ -34,8 +45,16 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.PermissionChecker
 import com.example.ai_language.Home
 import com.example.ai_language.R
+import org.tensorflow.lite.support.image.TensorImage
+import org.tensorflow.lite.task.vision.detector.ObjectDetector
+import java.io.ByteArrayOutputStream
+import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
 import java.util.Locale
+
+
+data class DetectionResult(val boundingBox: RectF, val text: String)
+
 
 class CameraPage : AppCompatActivity() {
 
@@ -128,6 +147,7 @@ class CameraPage : AppCompatActivity() {
             }
         )
     }
+
     // Implements VideoCapture use case, including start and stop capturing.
     private fun captureVideo(VideoBtn: ImageButton) {
         val videoCapture = this.videoCapture ?: return
@@ -214,63 +234,78 @@ class CameraPage : AppCompatActivity() {
             }
     }
 
+
+    fun ImageProxy.toBitmap(): Bitmap? {
+        val yBuffer = planes[0].buffer // Y
+        val uBuffer = planes[1].buffer // U
+        val vBuffer = planes[2].buffer // V
+
+        val ySize = yBuffer.remaining()
+        val uSize = uBuffer.remaining()
+        val vSize = vBuffer.remaining()
+
+        val nv21 = ByteArray(ySize + uSize + vSize)
+
+        // U and V are swapped
+        yBuffer.get(nv21, 0, ySize)
+        vBuffer.get(nv21, ySize, vSize)
+        uBuffer.get(nv21, ySize + vSize, uSize)
+
+        val yuvImage = YuvImage(nv21, ImageFormat.NV21, this.width, this.height, null)
+        val out = ByteArrayOutputStream()
+        yuvImage.compressToJpeg(Rect(0, 0, yuvImage.width, yuvImage.height), 100, out)
+        val imageBytes = out.toByteArray()
+        return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+    }
+
+    private fun ByteBuffer.toByteArray(): ByteArray {
+        rewind()    // Rewind the buffer to zero
+        val data = ByteArray(remaining())
+        get(data)   // Copy the buffer into a byte array
+        return data // Return the byte array
+    }
     private fun startCamera() {
-        val viewFinder = findViewById<PreviewView>(R.id.viewFinder)
-
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-
-        // Runnable 추가, 기본 스레드에서 실행되는 Executor 넣음
-        cameraProviderFuture.addListener(Runnable {
-            // Used to bind the lifecycle of cameras to the lifecycle owner
+        cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+            val viewFinder = findViewById<PreviewView>(R.id.viewFinder)
 
-            // Preview 객체를 초기화 하고 viewFinder에서 setSurfaceProvider 가져온 다음 Preview에서 설정
-            val preview = Preview.Builder()
-                .build()
-                .also {
-                    it.setSurfaceProvider(viewFinder.surfaceProvider)
-                }
-
-            // imageCaputre 인스턴스를 빌드
-            imageCapture = ImageCapture.Builder().build()
-
-            // VideoCapture UseCase 생성
-            val recorder = Recorder.Builder()
-                .setQualitySelector(
-                    QualitySelector.from(
-                        Quality.HIGHEST,
-                        FallbackStrategy.higherQualityOrLowerThan(Quality.SD)))
-                .build()
-            videoCapture = VideoCapture.withOutput(recorder)
-
-            //카메라 전면/후면 전환
-            val changeBtn = findViewById<ImageButton>(R.id.changeBtn)
-            changeBtn.setOnClickListener {
-                // CameraSelector 업데이트
-                if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
-                    cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-                    startCamera() //바뀐 카메라 화면으로 카메라 재실행
-                } else {
-                    cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-                    startCamera() //바뀐 카메라 화면으로 카메라 재실행
-                }
+            // Preview 사용 사례 초기화
+            val preview = Preview.Builder().build().also {
+                it.setSurfaceProvider(viewFinder.surfaceProvider)
             }
 
-            // cameraProvider에 바인딩된 항목 제거 한 뒤,
-            // 위에서 생성한 객체들을 cameraProvider에 바인딩
+            // ImageAnalysis 사용 사례 초기화
+            val imageAnalysis = ImageAnalysis.Builder().build().also {
+                it.setAnalyzer(cameraExecutor, ImageAnalysis.Analyzer { imageProxy ->
+                    val rotationDegrees = imageProxy.imageInfo.rotationDegrees
+                    // 여기에 이미지 처리 로직을 추가합니다. 예를 들어, Bitmap 변환과 객체 감지를 수행할 수 있습니다.
+                    val bitmap = imageProxy.toBitmap() // ImageProxy를 Bitmap으로 변환하는 함수 필요
+                    if (bitmap != null) {
+                        runOnUiThread {
+                            val detectionResults = runObjectDetection(bitmap) // 객체 감지 함수 실행
+                            val imgWithResult = drawDetectionResult(bitmap, detectionResults)
+                            val overlayView: ImageView = findViewById(R.id.overlayView)
+                            overlayView.setImageBitmap(imgWithResult)
+                        }
+                    }
+                    imageProxy.close() // 처리가 끝나면 ImageProxy를 닫아야 합니다.
+                })
+            }
+
+            // CameraSelector 초기화
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             try {
-                // Unbind use cases before rebinding
+                // 기존에 바인딩된 사용 사례를 해제
                 cameraProvider.unbindAll()
 
-                // Bind use cases to camera
-                cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageCapture, videoCapture)
+                // 카메라에 사용 사례 바인딩
+                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis)
 
-            } catch(exc: Exception) {
-                Log.e(TAG, "Use case binding failed", exc)
+            } catch (exc: Exception) {
+                Log.e(TAG, "카메라 시작 실패", exc)
             }
-
         }, ContextCompat.getMainExecutor(this))
     }
 
@@ -285,6 +320,7 @@ class CameraPage : AppCompatActivity() {
     }
 
     companion object {
+        private const val MAX_FONT_SIZE = 96F
         private const val TAG = "CameraXApp"
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
@@ -314,5 +350,74 @@ class CameraPage : AppCompatActivity() {
             }
         }
     }
+
+    private fun runObjectDetection(bitmap: Bitmap): List<DetectionResult> {
+        // Step 1: Create TFLite's TensorImage object
+        val image = TensorImage.fromBitmap(bitmap)
+
+        // Step 2: Initialize the detector object
+        val options = ObjectDetector.ObjectDetectorOptions.builder()
+            .setMaxResults(5)
+            .setScoreThreshold(0.3f)
+            .build()
+        val detector = ObjectDetector.createFromFileAndOptions(
+            this,
+            "model.tflite",
+            options
+        )
+
+        // Step 3: Feed given image to the detector
+        val results = detector.detect(image)
+
+        return results.map { detection ->
+            val category = detection.categories.firstOrNull() ?: return@map null
+            val text = "${category.label}, ${category.score.times(100).toInt()}%"
+            DetectionResult(detection.boundingBox, text)
+        }.filterNotNull()
+    }
+
+
+
+    private fun drawDetectionResult(
+        bitmap: Bitmap,
+        detectionResults: List<DetectionResult>
+    ): Bitmap {
+        val outputBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+        val canvas = Canvas(outputBitmap)
+        val pen = Paint()
+        pen.textAlign = Paint.Align.LEFT
+
+        detectionResults.forEach {
+            // draw bounding box
+            pen.color = Color.RED
+            pen.strokeWidth = 8F
+            pen.style = Paint.Style.STROKE
+            val box = it.boundingBox
+            canvas.drawRect(box, pen)
+
+            val tagSize = Rect(0, 0, 0, 0)
+
+            // calculate the right font size
+            pen.style = Paint.Style.FILL_AND_STROKE
+            pen.color = Color.YELLOW
+            pen.strokeWidth = 2F
+
+            pen.textSize = MAX_FONT_SIZE
+            pen.getTextBounds(it.text, 0, it.text.length, tagSize)
+            val fontSize: Float = pen.textSize * box.width() / tagSize.width()
+
+            // adjust the font size so texts are inside the bounding box
+            if (fontSize < pen.textSize) pen.textSize = fontSize
+
+            var margin = (box.width() - tagSize.width()) / 2.0F
+            if (margin < 0F) margin = 0F
+            canvas.drawText(
+                it.text, box.left + margin,
+                box.top + tagSize.height().times(1F), pen
+            )
+        }
+        return outputBitmap
+    }
+
 
 }
