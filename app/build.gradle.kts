@@ -109,7 +109,7 @@ dependencies {
     implementation(files("libs/activation.jar"))
     implementation(files("libs/additionnal.jar"))
     implementation(files("libs/mail.jar"))
-
+    implementation ("org.tensorflow:tensorflow-lite-task-vision:0.3.1")
     //EncryptedSharedPreferences
     implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
 }
