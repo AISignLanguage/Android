@@ -30,7 +30,7 @@ class NewsViewModel : ViewModel() {
 
     }
 
-    fun initializeData(){
+    private fun initializeData(){
         _consonantList.postValue(createConsonantList())
         _vowelList.postValue(createVowelList())
         _numberList.postValue(createNumberList())

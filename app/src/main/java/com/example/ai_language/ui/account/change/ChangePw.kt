@@ -25,6 +25,7 @@ class ChangePw : AppCompatActivity() {
     private lateinit var newpassword: EditText
     private lateinit var checkpassword: EditText
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_pw)
