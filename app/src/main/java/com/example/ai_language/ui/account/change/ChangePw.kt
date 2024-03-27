@@ -1,4 +1,4 @@
-package com.example.ai_language
+package com.example.ai_language.ui.account.change
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +7,14 @@ import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
+import com.example.ai_language.domain.model.request.ChangePasswordRequestDTO
+import com.example.ai_language.domain.model.request.ChangePasswordResponseDTO
+import com.example.ai_language.domain.model.request.CheckPasswordRequestDTO
+import com.example.ai_language.domain.model.request.CheckPasswordResponseDTO
+import com.example.ai_language.Util.EncryptedSharedPreferencesManager
+import com.example.ai_language.ui.account.KaKaoLoginActivity
+import com.example.ai_language.R
+import com.example.ai_language.Util.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,17 +64,19 @@ class ChangePw : AppCompatActivity() {
 
         val call = service.checkPassword(CheckPasswordRequestDTO(savedEmail))
         call.enqueue(object : Callback<CheckPasswordResponseDTO> {
-            override fun onResponse(call: Call<CheckPasswordResponseDTO>,response: Response<CheckPasswordResponseDTO>) {
+            override fun onResponse(
+                call: Call<CheckPasswordResponseDTO>,
+                response: Response<CheckPasswordResponseDTO>
+            ) {
                 val passwordFromServer = response.body()?.password
                 if (passwordFromServer != null) {
-                    if (passwordFromServer == inputPw){
+                    if (passwordFromServer == inputPw) {
                         Log.d("로그", "현재 비밀번호 일치")
 
                         //비밀번호 변경 함수 호출
                         changePassword(inputNewPw, inputCheckPw)
 
-                    }
-                    else{
+                    } else {
                         Log.d("로그", "현재 비밀번호 불일치")
                         Toast.makeText(applicationContext, "현재 비밀번호 불일치", Toast.LENGTH_SHORT).show()
                     }
@@ -103,16 +113,22 @@ class ChangePw : AppCompatActivity() {
 
         val call = service.changePassword(ChangePasswordRequestDTO(savedEmail, newPassword))
         call.enqueue(object : Callback<ChangePasswordResponseDTO> {
-            override fun onResponse(call: Call<ChangePasswordResponseDTO>, response: Response<ChangePasswordResponseDTO>) {
+            override fun onResponse(
+                call: Call<ChangePasswordResponseDTO>,
+                response: Response<ChangePasswordResponseDTO>
+            ) {
                 Log.d("로그", "$savedEmail")
                 if (response.isSuccessful) {
                     val changePasswordResponseDTO = response.body()
-                    if(changePasswordResponseDTO != null && changePasswordResponseDTO.success){
+                    if (changePasswordResponseDTO != null && changePasswordResponseDTO.success) {
                         Log.d("로그", "비밀번호가 성공적으로 변경되었습니다.")
-                        Toast.makeText(applicationContext, "비밀번호가 성공적으로 변경되었습니다.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            applicationContext,
+                            "비밀번호가 성공적으로 변경되었습니다.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         showChangeDialog()
-                    }
-                    else{
+                    } else {
                         Log.d("로그", "비밀번호 변경에 실패했습니다.")
 
                     }

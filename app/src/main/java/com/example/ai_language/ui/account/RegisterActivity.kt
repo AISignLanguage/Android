@@ -1,4 +1,4 @@
-package com.example.ai_language
+package com.example.ai_language.ui.account
 
 import android.Manifest
 import android.app.PendingIntent
@@ -31,6 +31,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
+import com.example.ai_language.R
+import com.example.ai_language.Util.RetrofitClient
+import com.example.ai_language.data.remote.Service
+import com.example.ai_language.domain.model.request.ConfirmDTO
+import com.example.ai_language.domain.model.request.ConfirmedDTO
+import com.example.ai_language.domain.model.request.LoginCheckDTO
+import com.example.ai_language.domain.model.request.UserDTO
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.storage.Acl
 import com.google.cloud.storage.BlobId
@@ -362,13 +369,21 @@ class RegisterActivity : AppCompatActivity() {
                                 val responseOK = confirmedDTO.ok
                                 if (!responseOK) {
                                     Log.d("서버로부터 받은 요청", "닉네임 : $responseOK")
-                                    Toast.makeText(this@RegisterActivity, "중복확인 완료!", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        this@RegisterActivity,
+                                        "중복확인 완료!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     loginChecked.nickCheck = true
                                     regNick.isEnabled = false
                                     regNick.setTextColor(Color.GREEN)
                                 } else {
                                     Log.d("서버로부터 받은 요청", "닉네임 : $responseOK")
-                                    Toast.makeText(this@RegisterActivity, "중복된 닉네임이 존재합니다!", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        this@RegisterActivity,
+                                        "중복된 닉네임이 존재합니다!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     regNick.setText("")
                                 }
                             }
@@ -387,13 +402,12 @@ class RegisterActivity : AppCompatActivity() {
                             }
                         })
                 )
-            }
-            else{
-                Toast.makeText(this@RegisterActivity, "올바르지 않은 닉네임 형식입니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this@RegisterActivity, "올바르지 않은 닉네임 형식입니다.", Toast.LENGTH_SHORT)
+                    .show()
 
             }
         }
-
 
 
         val confirmedEmailBtn = findViewById<Button>(R.id.confirm_email_btn)
@@ -411,13 +425,21 @@ class RegisterActivity : AppCompatActivity() {
                                 val responseOK = confirmedDTO.ok
                                 if (!responseOK) {
                                     Log.d("서버로부터 받은 요청", "이메일 : $responseOK")
-                                    Toast.makeText(this@RegisterActivity, "중복확인 완료!", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        this@RegisterActivity,
+                                        "중복확인 완료!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     loginChecked.idCheck = true
                                     regEmail.isEnabled = false
                                     regEmail.setTextColor(Color.GREEN)
                                 } else {
                                     Log.d("서버로부터 받은 요청", "이메일 : $responseOK")
-                                    Toast.makeText(this@RegisterActivity,"중복된 이메일이 존재합니다!",Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        this@RegisterActivity,
+                                        "중복된 이메일이 존재합니다!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     regEmail.setText("")
                                 }
                             }
@@ -436,9 +458,9 @@ class RegisterActivity : AppCompatActivity() {
                             }
                         })
                 )
-            }
-            else{
-                Toast.makeText(this@RegisterActivity, "올바르지 않은 이메일 형식입니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this@RegisterActivity, "올바르지 않은 이메일 형식입니다.", Toast.LENGTH_SHORT)
+                    .show()
 
             }
         }
@@ -456,8 +478,7 @@ class RegisterActivity : AppCompatActivity() {
                 try {
                     val formattedDate = formatDate(birthday)
                     bd = formattedDate
-                }
-                catch (e: StringIndexOutOfBoundsException) {
+                } catch (e: StringIndexOutOfBoundsException) {
                     // 예외 발생 시 사용자에게 토스트 메시지를 보여주고 LoginActivity로 이동
                     Toast.makeText(this, "올바르지 않은 필드가 존재합니다.", Toast.LENGTH_SHORT).show()
                 }
@@ -562,8 +583,7 @@ class RegisterActivity : AppCompatActivity() {
 
                 }
             }
-        }
-        catch (e: StringIndexOutOfBoundsException){
+        } catch (e: StringIndexOutOfBoundsException) {
             Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show()
         }
 

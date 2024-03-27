@@ -1,4 +1,5 @@
-package com.example.ai_language
+package com.example.ai_language.ui.account
+
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
@@ -31,8 +32,14 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.view.View
 import androidx.annotation.RequiresApi
+import com.example.ai_language.R
+import com.example.ai_language.Util.RetrofitClient
+import com.example.ai_language.data.remote.Service
+import com.example.ai_language.domain.model.request.ConfirmDTO
+import com.example.ai_language.domain.model.request.ConfirmedDTO
+import com.example.ai_language.domain.model.request.LoginCheckDTO
+import com.example.ai_language.domain.model.request.UserDTO
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.storage.Acl
 import com.google.cloud.storage.BlobId
@@ -41,7 +48,6 @@ import com.google.cloud.storage.Storage
 import com.google.cloud.storage.StorageOptions
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.observers.DisposableObserver
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -63,11 +69,13 @@ data class LoginCheckedKaKao(
     var finish: Boolean
 
 )
+
 class RegisterActivityApp : AppCompatActivity() {
     companion object {
         private const val STORAGE_PERMISSION_CODE = 1
         private const val REQUEST_CODE_POST_NOTIFICATIONS = 101
     }
+
     lateinit var call: Call<LoginCheckDTO>
     lateinit var service: Service
     lateinit var conf: Observable<ConfirmedDTO>
@@ -83,7 +91,7 @@ class RegisterActivityApp : AppCompatActivity() {
     var randomSixDigitNumber = "000000"
     lateinit var profile: ImageView
 
-     var uriString: String? = ""
+    var uriString: String? = ""
     private val galleryLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == RESULT_OK) {
@@ -133,19 +141,25 @@ class RegisterActivityApp : AppCompatActivity() {
                         // 오류 처리
                         Log.e("RegisterActivity", "Image upload failed", e)
                         withContext(Dispatchers.Main) {
-                            Toast.makeText(this@RegisterActivityApp, "이미지 업로드 실패", Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                this@RegisterActivityApp,
+                                "이미지 업로드 실패",
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                         }
                     }
                 }
             }
         }
+
     private fun getStorageService(): Storage {
         val assetManager = this@RegisterActivityApp.assets
         val inputStream = assetManager.open("goyo-415004-d79f31fe39d5.json")
         val credentials = GoogleCredentials.fromStream(inputStream)
         return StorageOptions.newBuilder().setCredentials(credentials).build().service
     }
+
     private fun sendSMS(message: String) {
         // 텍스트 메시지 생성
         val templateId = 103256L // 카카오 개발자 콘솔에서 확인한 템플릿 ID
@@ -159,10 +173,11 @@ class RegisterActivityApp : AppCompatActivity() {
             if (error != null) {
                 Log.e(TAG, "메시지 보내기 실패", error)
             } else {
-                Log.d("메세지","message + $templateId $templateArgs")
+                Log.d("메세지", "message + $templateId $templateArgs")
             }
         }
     }
+
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
@@ -204,29 +219,28 @@ class RegisterActivityApp : AppCompatActivity() {
         }
         kakao_ok.setOnClickListener {
             val random = Random.Default
-            randomSixDigitNumber = random.nextInt(100000, 999999).toString() // 범위를 100000부터 999999까지로 지정하여 6자리 랜덤 숫자 생성
+            randomSixDigitNumber = random.nextInt(100000, 999999)
+                .toString() // 범위를 100000부터 999999까지로 지정하여 6자리 랜덤 숫자 생성
             sendSMS("인증번호는 $randomSixDigitNumber 입니다.")
             sendNotification(this, "카카오톡 -> 나와의 채팅에서 확인하실 수 있습니다.")
         }
         kakaoKon.setOnClickListener {
-            if(kakaoConET.text.toString() == randomSixDigitNumber){
+            if (kakaoConET.text.toString() == randomSixDigitNumber) {
                 kakaoConET.setTextColor(Color.GREEN)
                 kakaoConET.setText("인증되었습니다!")
                 kakaoConET.isEnabled = false
-                Log.d("번호",randomSixDigitNumber  )
-                Log.d("번호",randomSixDigitNumber  )
+                Log.d("번호", randomSixDigitNumber)
+                Log.d("번호", randomSixDigitNumber)
                 kakaoKon.isEnabled = false
                 loginCheckedKaKao.regCheck = true
-            }
-            else if(kakaoConET.text.toString() == "000000"){
+            } else if (kakaoConET.text.toString() == "000000") {
                 kakaoConET.setTextColor(Color.RED)
                 kakaoConET.setText("인증 실패!")
-                Log.d("번호",randomSixDigitNumber)
-            }
-            else{
+                Log.d("번호", randomSixDigitNumber)
+            } else {
                 kakaoConET.setTextColor(Color.RED)
                 kakaoConET.setText("인증 실패!")
-                Log.d("번호",randomSixDigitNumber)
+                Log.d("번호", randomSixDigitNumber)
             }
         }
 
@@ -239,27 +253,27 @@ class RegisterActivityApp : AppCompatActivity() {
             val profilePx = dpToPx(this, 90)
             Glide.with(this)
                 .load(uriString)
-                .override(profilePx,profilePx)
+                .override(profilePx, profilePx)
                 .circleCrop()
                 .into(profile)
         } else {
-            Log.e("uri 에러","$uriString")
+            Log.e("uri 에러", "$uriString")
         }
         profile.setOnClickListener {
-            val galleryPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            val galleryPermission = ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE
+            )
             if (galleryPermission != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(android.Manifest.permission.READ_MEDIA_IMAGES),
                     STORAGE_PERMISSION_CODE
                 )
-            }
-            else{
+            } else {
                 openGallery()
             }
         }
-
-
 
 
         val regNick = findViewById<EditText>(R.id.regNick)
@@ -267,34 +281,43 @@ class RegisterActivityApp : AppCompatActivity() {
         val confirmNickBtn = findViewById<B>(R.id.confirm_nick)
         confirmNickBtn.setOnClickListener {
             nickSpace = regNick.text.toString()
-            if(nickSpace.length in 2..6){
+            if (nickSpace.length in 2..6) {
                 conf = service.confirmNick(ConfirmDTO(nickSpace))
                 //progressBar.visibility = View.VISIBLE
                 disposables.add(
                     conf.subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeWith(object : DisposableObserver<ConfirmedDTO>(){
+                        .subscribeWith(object : DisposableObserver<ConfirmedDTO>() {
                             override fun onNext(t: ConfirmedDTO) {
                                 val responseOK = t.ok
-                                if(!responseOK){
+                                if (!responseOK) {
                                     Log.d("서버로부터 받은 요청", "닉네임 : $responseOK")
-                                    Toast.makeText(this@RegisterActivityApp, "중복확인 완료!", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        this@RegisterActivityApp,
+                                        "중복확인 완료!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     loginCheckedKaKao.nickCheck = true
                                     regNick.isEnabled = false
                                     regNick.setTextColor(Color.GREEN)
-                                }
-                                else {
+                                } else {
                                     Log.d("서버로부터 받은 요청", "닉네임 : $responseOK")
-                                    Toast.makeText(this@RegisterActivityApp, "중복된 닉네임이 존재합니다!", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        this@RegisterActivityApp,
+                                        "중복된 닉네임이 존재합니다!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     regNick.setText("")
                                 }
                             }
+
                             override fun onError(e: Throwable) {
                                 // onError
                                 Log.d("RegisterActivity", "Showing ProgressBar")
                                 //progressBar.visibility = View.GONE
                                 Log.e("retrofit 연동", "실패", e)
                             }
+
                             override fun onComplete() {
                                 // onComplete
                                 Log.d("RegisterActivity", "Showing ProgressBar")
@@ -304,8 +327,9 @@ class RegisterActivityApp : AppCompatActivity() {
 
                         )
                 )
-            } else{
-                Toast.makeText(this@RegisterActivityApp, "올바르지 않은 닉네임 형식입니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this@RegisterActivityApp, "올바르지 않은 닉네임 형식입니다.", Toast.LENGTH_SHORT)
+                    .show()
 
             }
         }
@@ -331,13 +355,13 @@ class RegisterActivityApp : AppCompatActivity() {
 
             try {
                 val formattedDate = formatDate(birthSpace)
-               bd = formattedDate
-            }catch (e: StringIndexOutOfBoundsException) {
+                bd = formattedDate
+            } catch (e: StringIndexOutOfBoundsException) {
                 // 예외 발생 시 사용자에게 토스트 메시지를 보여주고 LoginActivity로 이동
                 Toast.makeText(this, "올바르지 않은 필드가 존재합니다.", Toast.LENGTH_SHORT).show()
             }
-            if(loginCheckedKaKao.finish){
-                val userDTO=UserDTO(
+            if (loginCheckedKaKao.finish) {
+                val userDTO = UserDTO(
                     nameSpace,
                     bd,
                     "$nameSpace$birthSpace@kakao.com",
@@ -348,19 +372,19 @@ class RegisterActivityApp : AppCompatActivity() {
                 )
 
                 call = service.sendData(userDTO)
-                call.clone().enqueue(object : Callback<LoginCheckDTO>{
+                call.clone().enqueue(object : Callback<LoginCheckDTO> {
                     override fun onResponse(
-                        call : Call<LoginCheckDTO>,
-                        response : Response<LoginCheckDTO>
-                    ){
+                        call: Call<LoginCheckDTO>,
+                        response: Response<LoginCheckDTO>
+                    ) {
                         //progressBar.visibility = View.GONE
-                        if(response.isSuccessful){
-                            val intent = Intent(this@RegisterActivityApp,permissionActivity::class.java)
+                        if (response.isSuccessful) {
+                            val intent =
+                                Intent(this@RegisterActivityApp, permissionActivity::class.java)
                             startActivity(intent)
                             showToast("회원가입에 성공하셨습니다!")
                             finish()
-                        }
-                        else{
+                        } else {
                             showToast("서버 실패")
                         }
                     }
@@ -374,8 +398,8 @@ class RegisterActivityApp : AppCompatActivity() {
                 }
                 )
                 this@RegisterActivityApp.finish()
-            }else{
-                if(nameSpace.length <= 5) {
+            } else {
+                if (nameSpace.length <= 5) {
                     loginCheckedKaKao.nameCheck = true
                 }
                 if (patternBD.matcher(birthSpace).matches()) {
@@ -385,8 +409,7 @@ class RegisterActivityApp : AppCompatActivity() {
                     Toast.makeText(this, "이름을 확인해주세요${name}", Toast.LENGTH_SHORT).show()
                     regName.setText("")
                     //progressBar.visibility = View.GONE
-                }
-                else if (!loginCheckedKaKao.nickCheck) {
+                } else if (!loginCheckedKaKao.nickCheck) {
                     Toast.makeText(this, "닉네임을 확인해주세요", Toast.LENGTH_SHORT).show()
                     regNick.setText("")
                     //progressBar.visibility = View.GONE
@@ -395,13 +418,11 @@ class RegisterActivityApp : AppCompatActivity() {
                     Toast.makeText(this, "생년월일을 확인해주세요", Toast.LENGTH_SHORT).show()
                     regBirth.setText("")
                     //progressBar.visibility = View.GONE
-                }
-                else if (!loginCheckedKaKao.regCheck) {
+                } else if (!loginCheckedKaKao.regCheck) {
                     Toast.makeText(this, "카카오톡 인증을 확인해주세요", Toast.LENGTH_SHORT).show()
                     kakaoConET.setText("")
                     //progressBar.visibility = View.GONE
-                }
-                else {
+                } else {
                     loginCheckedKaKao.finish = true
                     //progressBar.visibility = View.GONE
                 }
@@ -409,6 +430,7 @@ class RegisterActivityApp : AppCompatActivity() {
             }
         }
     }
+
     fun formatDate(originalDate: String): String {
         // 연도, 월, 일을 추출합니다.
         val year = originalDate.substring(0, 4)
@@ -418,15 +440,18 @@ class RegisterActivityApp : AppCompatActivity() {
         // 추출한 값을 '-'로 연결하여 새로운 형식으로 조합합니다.
         return "$year-$month-$day"
     }
+
     private fun dpToPx(context: Context, dp: Int): Int {
         return (dp * context.resources.displayMetrics.density).toInt()
     }
+
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
         intent.action = Intent.ACTION_PICK
         galleryLauncher.launch(intent)
     }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -443,7 +468,8 @@ class RegisterActivityApp : AppCompatActivity() {
     private fun sendNotification(context: Context, message: String) {
         val launchIntent = context.packageManager.getLaunchIntentForPackage("com.kakao.talk")
         val notificationId = Random.nextInt()
-        val pendingIntent = PendingIntent.getActivity(context, 0, launchIntent, PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent =
+            PendingIntent.getActivity(context, 0, launchIntent, PendingIntent.FLAG_IMMUTABLE)
         val notificationBuilder = NotificationCompat.Builder(context, "1")
             .setSmallIcon(R.drawable.invite_message) // 알림 아이콘으로 교체하세요
             .setContentTitle("인증번호가 도착하였습니다!")

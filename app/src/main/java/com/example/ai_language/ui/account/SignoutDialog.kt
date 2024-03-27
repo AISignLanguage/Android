@@ -1,34 +1,28 @@
-package com.example.ai_language
+package com.example.ai_language.ui.account
 
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.os.Bundle
 import android.view.WindowManager
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.appcompat.widget.ViewUtils
-import kotlin.io.path.fileVisitor
+import com.example.ai_language.R
 
-class SignoutDialog(context: Context){
+class SignoutDialog(context: Context) {
     private val dialog = Dialog(context)
-    fun exDialog(){
+    fun exDialog() {
 
 
         dialog.setContentView(R.layout.sign_out_dialog)
-        dialog.window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.WRAP_CONTENT)
+        dialog.window!!.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
         dialog.setCanceledOnTouchOutside(true)
         dialog.setCancelable(true)
 
         val ok_btn = dialog.findViewById<Button>(R.id.sign_out_ok)
         val no_btn = dialog.findViewById<Button>(R.id.sign_out_no)
 
-        ok_btn.setOnClickListener{
+        ok_btn.setOnClickListener {
             onClickListener.onClicked("ok")
             dialog.dismiss()
         }
@@ -41,12 +35,13 @@ class SignoutDialog(context: Context){
         dialog.show()
     }
 
-    interface ButtonClickListener{
-        fun onClicked(result : String)
+    interface ButtonClickListener {
+        fun onClicked(result: String)
     }
+
     private lateinit var onClickListener: ButtonClickListener
 
-    fun setOnClickedListener(listener : ButtonClickListener){
+    fun setOnClickedListener(listener: ButtonClickListener) {
         onClickListener = listener
     }
 

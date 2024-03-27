@@ -1,4 +1,4 @@
-package com.example.ai_language
+package com.example.ai_language.ui.account.change
 
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -21,6 +21,13 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.example.ai_language.R
+import com.example.ai_language.Util.RetrofitClient
+import com.example.ai_language.data.remote.Service
+import com.example.ai_language.Util.EncryptedSharedPreferencesManager
+import com.example.ai_language.domain.model.request.GetProfileDTO
+import com.example.ai_language.domain.model.request.ProfileRequestDTO
+import com.example.ai_language.ui.home.Home
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -52,10 +59,9 @@ class PersonalInfo : AppCompatActivity() {
             if (result.resultCode == RESULT_OK) {
                 val intent = result.data
                 val selectedImageUri: Uri? = intent?.data
-                if(selectedImageUri != null)
+                if (selectedImageUri != null)
                     loadImage(selectedImageUri)
-            }
-            else{
+            } else {
                 progressBar.visibility = ProgressBar.GONE
             }
         }
@@ -77,7 +83,7 @@ class PersonalInfo : AppCompatActivity() {
         val profileRequestDTO = ProfileRequestDTO(email.text.toString())
         call = service.requestProfile(profileRequestDTO)
 
-        call.enqueue(object : Callback<GetProfileDTO>{
+        call.enqueue(object : Callback<GetProfileDTO> {
 
             override fun onResponse(call: Call<GetProfileDTO>, response: Response<GetProfileDTO>) {
 
@@ -119,30 +125,32 @@ class PersonalInfo : AppCompatActivity() {
         }
 
         val homeButton2 = findViewById<ImageButton>(R.id.homeButton2)
-        homeButton2.setOnClickListener{
-            val intent = Intent(this,Home::class.java)
+        homeButton2.setOnClickListener {
+            val intent = Intent(this, Home::class.java)
             startActivity(intent)
             finish()
         }
 
         val editDate = findViewById<TextView>(R.id.user_password)
-        editDate.setOnClickListener{
-            val intent = Intent(this,ChangePw::class.java)
+        editDate.setOnClickListener {
+            val intent = Intent(this, ChangePw::class.java)
             startActivity(intent)
             finish()
         }
 
         profileImage = findViewById(R.id.user_profile_image)
         profileImage.setOnClickListener {
-            val galleryPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            val galleryPermission = ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE
+            )
             if (galleryPermission != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(android.Manifest.permission.READ_MEDIA_IMAGES),
                     STORAGE_PERMISSION_CODE
                 )
-            }
-            else{
+            } else {
                 openGallery()
             }
         }
@@ -176,7 +184,7 @@ class PersonalInfo : AppCompatActivity() {
     }
 
     //RxJava
-    private fun loadImage(uri: Uri){
+    private fun loadImage(uri: Uri) {
         Glide.with(this)
             .load(uri)
             .addListener(object : RequestListener<Drawable> {

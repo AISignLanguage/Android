@@ -1,4 +1,4 @@
-package com.example.ai_language
+package com.example.ai_language.ui.account
 
 import android.content.Context
 import android.content.Intent
@@ -13,7 +13,13 @@ import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.ai_language.R
+import com.example.ai_language.Util.RetrofitClient
+import com.example.ai_language.Util.EncryptedSharedPreferencesManager
+import com.example.ai_language.domain.model.request.LoginRequestDTO
+import com.example.ai_language.domain.model.request.LoginResponseDTO
 import com.example.ai_language.find.FindIdPwd
+import com.example.ai_language.ui.home.Home
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -62,27 +68,29 @@ class KaKaoLoginActivity : AppCompatActivity() {
 
         val call = service.login(LoginRequestDTO(inputUserEmail, inputUserPw))
         val intent = Intent(this, Home::class.java)
-        call.enqueue(object : Callback<LoginResponseDTO>{
-            override fun onResponse(call: Call<LoginResponseDTO>,response: Response<LoginResponseDTO>) {
+        call.enqueue(object : Callback<LoginResponseDTO> {
+            override fun onResponse(
+                call: Call<LoginResponseDTO>,
+                response: Response<LoginResponseDTO>
+            ) {
                 progressBar.visibility = View.GONE
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     val loginResponseDTO = response.body()
-                    if(loginResponseDTO != null && loginResponseDTO.success){
+                    if (loginResponseDTO != null && loginResponseDTO.success) {
                         Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT).show()
                         Log.d("로그", "로그인 성공")
 
                         encryptedSharedPreferencesManager.saveUserEmail(inputUserEmail)
 
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intent)
                         finish()
-                    }
-                    else{
+                    } else {
                         Toast.makeText(applicationContext, "로그인 실패", Toast.LENGTH_SHORT).show()
                         Log.d("로그", "로그인 실패")
                     }
-                }
-                else{
+                } else {
                     Toast.makeText(applicationContext, "서버 응답 실패", Toast.LENGTH_SHORT).show()
                     Log.d("로그", "서버 응답 실패")
                 }
@@ -127,7 +135,10 @@ class KaKaoLoginActivity : AppCompatActivity() {
 
             if (autoLoginCheckBtn.isChecked) {
                 Log.d("로그", "첫 로그인, id: ${inputUserEmail}, pwd: ${inputUserPw}")
-                encryptedSharedPreferencesManager.setLoginInfo(inputUserEmail, inputUserPw) //자동 로그인 목적
+                encryptedSharedPreferencesManager.setLoginInfo(
+                    inputUserEmail,
+                    inputUserPw
+                ) //자동 로그인 목적
             }
             loginUser(inputUserEmail, inputUserPw)
         }
@@ -140,17 +151,21 @@ class KaKaoLoginActivity : AppCompatActivity() {
         val sinUpBtn = findViewById<TextView>(R.id.sign_up_button)
         sinUpBtn.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
-            intent.putExtra("nick", "사용자${ Random.nextInt(10000)}")
-            intent.putExtra("profile", "https://storage.googleapis.com/goyo-storage/profile/edit_profile.png")
+            intent.putExtra("nick", "사용자${Random.nextInt(10000)}")
+            intent.putExtra(
+                "profile",
+                "https://storage.googleapis.com/goyo-storage/profile/edit_profile.png"
+            )
             startActivity(intent)
             finish()
         }
         val kakaoBtn = findViewById<ImageView>(R.id.kko_login_btn)
         kakaoBtn.setOnClickListener {
             kakaoLogin(this)
-            Log.d("카카오버튼","눌림")
+            Log.d("카카오버튼", "눌림")
         }
     }
+
     private var isLoggingIn = false
 
     private fun kakaoLogin(ctxt: Context) {

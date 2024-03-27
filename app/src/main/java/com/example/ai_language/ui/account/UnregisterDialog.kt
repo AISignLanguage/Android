@@ -1,11 +1,12 @@
-package com.example.ai_language
+package com.example.ai_language.ui.account
 
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import com.example.ai_language.R
 
-class UnregisterDialog(context: Context) : Dialog(context){
+class UnregisterDialog(context: Context) : Dialog(context) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

@@ -14,7 +14,7 @@ import javax.mail.internet.InternetAddress
 import javax.mail.internet.MimeMessage
 
 class GMailSender : Authenticator() {
-    private val host  = "arcn987@gmail.com"
+    private val host = "arcn987@gmail.com"
     private val password = "bkml ucgv zumo cfyw"
     private val passwordLength = 8 // 기본 길이는 8
 
@@ -32,6 +32,7 @@ class GMailSender : Authenticator() {
             .map { chars.random() }         //문자 하나씩 생성
             .joinToString("")    //문자열로 합침
     }
+
     fun getEmailCode(): String {
         return emailCode
     }

@@ -1,4 +1,4 @@
-package com.example.ai_language
+package com.example.ai_language.ui.account.change
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,11 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.ai_language.domain.model.request.ChangeNickNameDTO
+import com.example.ai_language.domain.model.request.ChangeNickNameResultDTO
+import com.example.ai_language.R
+import com.example.ai_language.Util.RetrofitClient
+import com.example.ai_language.data.remote.Service
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,7 +24,7 @@ class ChangeNicknameActivity : AppCompatActivity() {
     private lateinit var changeNickNameResultDTO: ChangeNickNameResultDTO
 
     private lateinit var originalNickname: String
-    private lateinit var changeNicknameBtn : Button
+    private lateinit var changeNicknameBtn: Button
     private lateinit var editNickname: EditText
     private lateinit var homeBtn: ImageButton
 
@@ -32,7 +37,7 @@ class ChangeNicknameActivity : AppCompatActivity() {
         service = RetrofitClient.getUserRetrofitInterface()
 
         homeBtn = findViewById(R.id.homeButton)
-        homeBtn.setOnClickListener{
+        homeBtn.setOnClickListener {
             val intent = Intent(this, PersonalInfo::class.java)
             startActivity(intent)
         }
@@ -66,7 +71,10 @@ class ChangeNicknameActivity : AppCompatActivity() {
 
         call.enqueue(object : Callback<ChangeNickNameResultDTO> {
 
-            override fun onResponse(call: Call<ChangeNickNameResultDTO>, response: Response<ChangeNickNameResultDTO>) {
+            override fun onResponse(
+                call: Call<ChangeNickNameResultDTO>,
+                response: Response<ChangeNickNameResultDTO>
+            ) {
                 if (response.isSuccessful) {
                     Log.d("로그", "isSuccessful")
                     changeNickNameResultDTO = response.body()!!
@@ -77,10 +85,12 @@ class ChangeNicknameActivity : AppCompatActivity() {
                             editNickname.text = null
                             makeToastMsg("변경할 닉네임이 존재하지 않습니다!")
                         }
+
                         2 -> {
                             editNickname.text = null
                             makeToastMsg("중복된 닉네임이 존재합니다!")
                         }
+
                         3 -> {
                             makeToastMsg("닉네임이 변경되었습니다.")
                             val intent = Intent(applicationContext, PersonalInfo::class.java)
