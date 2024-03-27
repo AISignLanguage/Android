@@ -1,4 +1,4 @@
-package com.example.ai_language.call
+package com.example.ai_language.ui.call
 
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -26,14 +26,15 @@ class CallActivity : AppCompatActivity() {
 
     private val appId = "353bae93c92b4275bf34d1301ea06e42"
     private val channelName = "ta"
-    private val token = "007eJxTYIhgy7vTzVkkLHig+NUCj/yvqdoh78yq3O98md8ucmNlsa4Cg7GpcVJiqqVxsqVRkomRuWlSmrFJiqGxgWFqooFZqonRgoV7UhsCGRlYtiYzMEIhiM/EUJLIwAAA06Ed7Q=="
+    private val token =
+        "007eJxTYIhgy7vTzVkkLHig+NUCj/yvqdoh78yq3O98md8ucmNlsa4Cg7GpcVJiqqVxsqVRkomRuWlSmrFJiqGxgWFqooFZqonRgoV7UhsCGRlYtiYzMEIhiM/EUJLIwAAA06Ed7Q=="
 
     private val uid = 0
     private var isJoined = false
 
-    private var agoraEngine : RtcEngine? = null
-    private var localSurfaceView : SurfaceView? = null
-    private var remoteSurfaceView : SurfaceView? = null
+    private var agoraEngine: RtcEngine? = null
+    private var localSurfaceView: SurfaceView? = null
+    private var remoteSurfaceView: SurfaceView? = null
 
     companion object {
         protected const val PERMISSION_REQ_ID = 22
@@ -54,7 +55,7 @@ class CallActivity : AppCompatActivity() {
                 ) == PackageManager.PERMISSION_GRANTED)
     }
 
-    private fun showMessage(message : String) {
+    private fun showMessage(message: String) {
         runOnUiThread {
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }
@@ -83,11 +84,11 @@ class CallActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, REQUESTED_PERMISSIONS, PERMISSION_REQ_ID);
         }
 
-        val joinButton = findViewById<Button>(R.id.joinButton).setOnClickListener{
+        val joinButton = findViewById<Button>(R.id.joinButton).setOnClickListener {
             setUpVideoSdkEngine()
             joinCall()
         }
-        val leaveButton = findViewById<Button>(R.id.leaveButton).setOnClickListener{
+        val leaveButton = findViewById<Button>(R.id.leaveButton).setOnClickListener {
             leaveCall()
         }
     }
@@ -159,22 +160,24 @@ class CallActivity : AppCompatActivity() {
         }
     }
 
-    private val mRtcEventHandler : IRtcEngineEventHandler = object : IRtcEngineEventHandler() {
-            override fun onUserJoined(uid: Int, elapsed: Int) {
-                showMessage("Reomte User Joined $uid")
-                runOnUiThread { setupRemoteVideo(uid)
-                Log.d("로그", "ㅇㅇ")}
-            }
-
-            override fun onJoinChannelSuccess(channel: String, uid: Int, elapsed: Int) {
-                isJoined = true
-                showMessage("Joined Channel $channel")
-            }
-
-            override fun onUserOffline(uid: Int, reason: Int) {
-                showMessage("user offline")
-                runOnUiThread { remoteSurfaceView!!.visibility = View.GONE }
+    private val mRtcEventHandler: IRtcEngineEventHandler = object : IRtcEngineEventHandler() {
+        override fun onUserJoined(uid: Int, elapsed: Int) {
+            showMessage("Reomte User Joined $uid")
+            runOnUiThread {
+                setupRemoteVideo(uid)
+                Log.d("로그", "ㅇㅇ")
             }
         }
+
+        override fun onJoinChannelSuccess(channel: String, uid: Int, elapsed: Int) {
+            isJoined = true
+            showMessage("Joined Channel $channel")
+        }
+
+        override fun onUserOffline(uid: Int, reason: Int) {
+            showMessage("user offline")
+            runOnUiThread { remoteSurfaceView!!.visibility = View.GONE }
+        }
+    }
 }
 

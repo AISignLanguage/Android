@@ -1,4 +1,4 @@
-package com.example.ai_language.call
+package com.example.ai_language.ui.call
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.ai_language.R
 
-class CallListAdapter (private val viewModel: CallListViewModel) : RecyclerView.Adapter<CallListAdapter.CallListViewHolder>() {
+class CallListAdapter(private val viewModel: CallListViewModel) :
+    RecyclerView.Adapter<CallListAdapter.CallListViewHolder>() {
 
     //커스텀 클릭 이벤트 (CallListPage에서 클릭 이벤트)
     interface OnItemClickListener {
         fun onItemClick(view: View, position: Int)
     }
+
     private lateinit var mOnItemClickListener: OnItemClickListener //객체 저장 변수
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) { //객체 전달 메서드
         mOnItemClickListener = onItemClickListener

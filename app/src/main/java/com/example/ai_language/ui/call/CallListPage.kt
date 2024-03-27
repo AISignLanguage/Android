@@ -1,4 +1,4 @@
-package com.example.ai_language.call
+package com.example.ai_language.ui.call
 
 import android.app.Activity
 import android.content.Context
@@ -21,39 +21,40 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ai_language.Home
-import com.example.ai_language.PhoneListDTO
-import com.example.ai_language.PhoneNumberDTO
+import com.example.ai_language.ui.home.Home
+import com.example.ai_language.domain.model.request.PhoneListDTO
+import com.example.ai_language.domain.model.request.PhoneNumberDTO
 import com.example.ai_language.R
-import com.example.ai_language.RetrofitClient
-import com.example.ai_language.Service
+import com.example.ai_language.Util.RetrofitClient
+import com.example.ai_language.data.remote.Service
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class CallListPage : AppCompatActivity() {
 
-    private lateinit var call : Call<PhoneListDTO>
+    private lateinit var call: Call<PhoneListDTO>
     private lateinit var service: Service
     private lateinit var phoneNumberDTO: PhoneNumberDTO
     private lateinit var appPhoneNumbers: List<String> //서버에서 가져온 번호만 저장하는 리스트
     val contactListMap = mutableListOf<Pair<String, String>>() // 이름, 번호 map
 
-    private lateinit var progressBar : ProgressBar
+    private lateinit var progressBar: ProgressBar
 
     private val callViewModel: CallListViewModel by viewModels()
     private val inviteViewModel: InviteViewModel by viewModels()
 
     private lateinit var callRecyclerView: RecyclerView
-    private lateinit var callListAdapter : CallListAdapter
-    private lateinit var inviteRecyclerView : RecyclerView
-    private lateinit var inviteListAdapter : InviteListAdapter
+    private lateinit var callListAdapter: CallListAdapter
+    private lateinit var inviteRecyclerView: RecyclerView
+    private lateinit var inviteListAdapter: InviteListAdapter
 
     private var standardSize_X = 0
     private var standardSize_Y = 0
 
     fun dpToPx(dp: Float): Int {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics).toInt()
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
+            .toInt()
     }
 
     fun getScreenSize(activity: Activity): Point {
@@ -62,7 +63,10 @@ class CallListPage : AppCompatActivity() {
             val insets = windowMetrics.windowInsets
                 .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars() or WindowInsets.Type.displayCutout())
             val bounds = windowMetrics.bounds
-            Point(bounds.width() - insets.left - insets.right, bounds.height() - insets.top - insets.bottom)
+            Point(
+                bounds.width() - insets.left - insets.right,
+                bounds.height() - insets.top - insets.bottom
+            )
         } else {
             val displayMetrics = DisplayMetrics()
             @Suppress("DEPRECATION")
@@ -71,13 +75,19 @@ class CallListPage : AppCompatActivity() {
         }
         return metrics
     }
+
     fun getStandardSize() {
         val screenSize = getScreenSize(this)
         standardSize_X = screenSize.x  // 픽셀 단위로 화면 너비를 직접 사용
         standardSize_Y = screenSize.y  // 픽셀 단위로 화면 높이를 직접 사용
     }
+
     fun dpToPx(dp: Float, context: Context): Int {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics).toInt()
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp,
+            context.resources.displayMetrics
+        ).toInt()
     }
 
 
@@ -86,7 +96,7 @@ class CallListPage : AppCompatActivity() {
         setContentView(R.layout.activity_call_list)
 
         val homeButton = findViewById<ImageButton>(R.id.homeButton)
-        homeButton.setOnClickListener{
+        homeButton.setOnClickListener {
             val intent = Intent(this, Home::class.java)
             startActivity(intent)
         }
@@ -101,11 +111,12 @@ class CallListPage : AppCompatActivity() {
         //val call = service.getCallData(uri, installCheck)
 
         callRecyclerView = findViewById<RecyclerView>(R.id.rv_call)
-        callRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        callRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         callListAdapter = CallListAdapter(callViewModel)
         callRecyclerView.adapter = callListAdapter
 
-        callListAdapter.setOnItemClickListener (object : CallListAdapter.OnItemClickListener {
+        callListAdapter.setOnItemClickListener(object : CallListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 Toast.makeText(applicationContext, "전화하기", Toast.LENGTH_SHORT).show()
                 val intent = Intent(applicationContext, CallActivity::class.java)
@@ -124,7 +135,8 @@ class CallListPage : AppCompatActivity() {
         inviteRecyclerView = findViewById<RecyclerView>(R.id.rv_invite)
         inviteListAdapter = InviteListAdapter(inviteViewModel)
         inviteRecyclerView.adapter = inviteListAdapter
-        inviteRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        inviteRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         //초대버튼 클릭
         inviteListAdapter.setOnItemClickListener(object : InviteListAdapter.OnItemClickListener {
@@ -150,27 +162,33 @@ class CallListPage : AppCompatActivity() {
         // 연락처 전체 정보에 대한 쿼리 수행
         val cursor: Cursor? = contentResolver.query(
             ContactsContract.Contacts.CONTENT_URI,
-            null, null, null, null)
+            null, null, null, null
+        )
 
         val phoneNumbers = mutableListOf<String>()
 
         while (cursor?.moveToNext() == true) {
-            val idColumnIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID) //동명이인 때문에 ID 필요
+            val idColumnIndex =
+                cursor.getColumnIndex(ContactsContract.Contacts._ID) //동명이인 때문에 ID 필요
             val id: String? = if (idColumnIndex != -1) cursor.getString(idColumnIndex) else null
 
             val nameColumnIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
-            val name: String? = if (nameColumnIndex != -1) cursor.getString(nameColumnIndex) else null
+            val name: String? =
+                if (nameColumnIndex != -1) cursor.getString(nameColumnIndex) else null
 
             val phoneCursor: Cursor? = contentResolver.query(
                 ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 null,
                 ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, // id 기반으로 전화번호
-                null, null)
+                null, null
+            )
 
             if (phoneCursor?.moveToFirst() == true) {   // 동명이인 때문에 고유 id로 검색
-                val numberColumnIndex = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                val numberColumnIndex =
+                    phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
                 if (numberColumnIndex != -1) {
-                    val number: String? = if (numberColumnIndex != -1) phoneCursor.getString(numberColumnIndex) else null
+                    val number: String? =
+                        if (numberColumnIndex != -1) phoneCursor.getString(numberColumnIndex) else null
                     var cleanedNumber: String? = null
 
                     // "+"와 "82"로 시작하는 경우에는 국가 코드를 제거하고 0을 추가하여 번호 정리
@@ -227,8 +245,15 @@ class CallListPage : AppCompatActivity() {
                     PhoneListDTO?.phones?.let { phones ->
                         for (phoneDTOList in phones) {
                             for (phoneDTO in phoneDTOList) {
-                                Log.d("로그", "${phoneDTO.name}, ${phoneDTO.phoneNumbers}, Url: ${phoneDTO.profileImageUrl}")
-                                val callListItem = CallListItem(phoneDTO.name, phoneDTO.phoneNumbers, phoneDTO.profileImageUrl)
+                                Log.d(
+                                    "로그",
+                                    "${phoneDTO.name}, ${phoneDTO.phoneNumbers}, Url: ${phoneDTO.profileImageUrl}"
+                                )
+                                val callListItem = CallListItem(
+                                    phoneDTO.name,
+                                    phoneDTO.phoneNumbers,
+                                    phoneDTO.profileImageUrl
+                                )
                                 callViewModel.addListItem(callListItem) // 뷰 모델에 서버에서 가져온 데이터 추가
                             }
                             // 중첩된 리스트에 대해 이중 반복문을 사용하여 phoneNumber 추출
@@ -254,8 +279,10 @@ class CallListPage : AppCompatActivity() {
 
                 } else {
                     // 요청 실패 처리
-                    Log.d("로그", "데이터 요청 실패. 응답 코드: ${response.code()}, "
-                            + "오류 메시지: ${response.errorBody()?.string()}")
+                    Log.d(
+                        "로그", "데이터 요청 실패. 응답 코드: ${response.code()}, "
+                                + "오류 메시지: ${response.errorBody()?.string()}"
+                    )
                 }
             }
 

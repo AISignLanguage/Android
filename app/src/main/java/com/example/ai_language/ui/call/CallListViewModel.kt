@@ -1,4 +1,4 @@
-package com.example.ai_language.call
+package com.example.ai_language.ui.call
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -9,7 +9,7 @@ data class CallListItem(val name: String?, val callNumber: String?, val imageUrl
 data class InviteListItem(val name: String, val callNumber: String)
 class CallListViewModel : ViewModel() {
     var _callDataList = MutableLiveData<List<CallListItem>>()
-    val callDataList : LiveData<List<CallListItem>>
+    val callDataList: LiveData<List<CallListItem>>
         get() = _callDataList
 
     fun addListItem(item: CallListItem) {
@@ -31,8 +31,9 @@ class CallListViewModel : ViewModel() {
 
 class InviteViewModel : ViewModel() {
     var _inviteDataList = MutableLiveData<List<InviteListItem>>()
-    val inviteDataList : LiveData<List<InviteListItem>>
+    val inviteDataList: LiveData<List<InviteListItem>>
         get() = _inviteDataList
+
     fun addListItem(item: InviteListItem) {
         //liveData가 비었으면 빈 mutableList 생성후 넣음, 아니면 그냥 넣음
         val currentList = inviteDataList.value?.toMutableList() ?: mutableListOf()
