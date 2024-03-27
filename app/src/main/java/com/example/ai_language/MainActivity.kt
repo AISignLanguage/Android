@@ -1,6 +1,6 @@
 ﻿package com.example.ai_language
 
-import com.example.ai_language.DictionaryPage
+import com.example.ai_language.ui.dictionary.DictionaryPage
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
