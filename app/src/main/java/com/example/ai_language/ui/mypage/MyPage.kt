@@ -1,9 +1,15 @@
-package com.example.ai_language
+package com.example.ai_language.ui.mypage
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.ai_language.ui.account.change.PersonalInfo
+import com.example.ai_language.R
+import com.example.ai_language.ui.account.SignoutDialog
+import com.example.ai_language.ui.account.Unregister
+import com.example.ai_language.Util.EncryptedSharedPreferencesManager
+import com.example.ai_language.ui.account.LoginActivity
 
 class MyPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,13 +25,13 @@ class MyPage : AppCompatActivity() {
 
         val my_inform_edit = findViewById<TextView>(R.id.my_inform_edit_btn)
         my_inform_edit.setOnClickListener {
-            val intent = Intent(this,PersonalInfo::class.java)
+            val intent = Intent(this, PersonalInfo::class.java)
             startActivity(intent)
         }
 
         val withDrawer = findViewById<TextView>(R.id.withdrawal_btn)
         withDrawer.setOnClickListener {
-            val intent = Intent(this,Unregister::class.java)
+            val intent = Intent(this, Unregister::class.java)
             startActivity(intent)
         }
 
@@ -52,16 +58,17 @@ class MyPage : AppCompatActivity() {
             val dialog = SignoutDialog(this)
             dialog.exDialog()
 
-            dialog.setOnClickedListener(object : SignoutDialog.ButtonClickListener{
+            dialog.setOnClickedListener(object : SignoutDialog.ButtonClickListener {
                 override fun onClicked(result: String) {
-                    when(result){
-                        "ok"->{
+                    when (result) {
+                        "ok" -> {
                             disableAutoLogin() //로그아웃 하면 자동 로그인 해제됨
-                            val intent = Intent(this@MyPage,LoginActivity::class.java)
+                            val intent = Intent(this@MyPage, LoginActivity::class.java)
                             startActivity(intent)
                             finish()
                         }
-                        "no"->{
+
+                        "no" -> {
 
                         }
                     }
