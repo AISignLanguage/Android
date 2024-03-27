@@ -1,4 +1,4 @@
-package com.example.ai_language
+package com.example.ai_language.Util
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

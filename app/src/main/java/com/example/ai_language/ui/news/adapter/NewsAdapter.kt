@@ -1,4 +1,4 @@
-package com.example.ai_language
+package com.example.ai_language.ui.news.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +7,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.ai_language.R
+import com.example.ai_language.ui.news.viewmodel.NewsViewModelItem
 
 class NewsAdapter(private var newsList: List<NewsViewModelItem>) :
     RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
@@ -18,7 +20,8 @@ class NewsAdapter(private var newsList: List<NewsViewModelItem>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_news_item, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.activity_news_item, parent, false)
         return NewsViewHolder(view)
     }
 
