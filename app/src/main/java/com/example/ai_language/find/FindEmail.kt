@@ -6,7 +6,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.ai_language.KaKaoLoginActivity
+import com.example.ai_language.ui.account.KaKaoLoginActivity
 import com.example.ai_language.R
 import java.util.regex.Pattern
 
@@ -37,6 +37,7 @@ class FindEmail : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
     private fun showId() {
         intent = getIntent()
         name = findViewById(R.id.name)
@@ -47,9 +48,10 @@ class FindEmail : AppCompatActivity() {
         email.text = emailMasking(userEmail)
     }
 
-    private fun emailMasking(email: String) : String {
+    private fun emailMasking(email: String): String {
         val result = StringBuffer()
-        val REGEX_EMAIL = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
+        val REGEX_EMAIL =
+            "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
         val pattern = Pattern.compile(REGEX_EMAIL, Pattern.CASE_INSENSITIVE)
 
         if (!pattern.matcher(email).matches()) {

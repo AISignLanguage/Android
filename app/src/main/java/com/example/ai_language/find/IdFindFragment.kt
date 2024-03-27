@@ -11,17 +11,17 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.ai_language.FindIdDTO
-import com.example.ai_language.GetIdDTO
+import com.example.ai_language.domain.model.request.FindIdDTO
+import com.example.ai_language.domain.model.request.GetIdDTO
 import com.example.ai_language.R
-import com.example.ai_language.RetrofitClient
-import com.example.ai_language.Service
+import com.example.ai_language.Util.RetrofitClient
+import com.example.ai_language.data.remote.Service
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class IdFindFragment : Fragment() {
-    private lateinit var call : Call<GetIdDTO>
+    private lateinit var call: Call<GetIdDTO>
     private lateinit var service: Service
     private lateinit var getIdDTO: GetIdDTO
 
@@ -30,7 +30,11 @@ class IdFindFragment : Fragment() {
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN) // 키보드가 UI 가리지 않게
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_id_find, container, false)
     }
@@ -78,7 +82,7 @@ class IdFindFragment : Fragment() {
                     if (email == null) {
                         Toast.makeText(requireContext(), "잘못된 정보입니다", Toast.LENGTH_SHORT).show()
                         nameEditText.text = (null)
-                        phoneNumberEditText.text =(null)
+                        phoneNumberEditText.text = (null)
                     } else {
                         val intent = Intent(requireActivity(), FindEmail::class.java)
                         Log.d("로그", "name : ${name}, email : ${email}")

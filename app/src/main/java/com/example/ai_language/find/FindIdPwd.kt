@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
-import com.example.ai_language.FragmentAdapter
+import com.example.ai_language.Util.FragmentAdapter
 import com.example.ai_language.R
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -23,6 +23,7 @@ class FindIdPwd : AppCompatActivity() {
             selectTab(0)
         }
     }
+
     private fun initViewPager2() {
         val adapter = FragmentAdapter(this)
         adapter.addFragment(IdFindFragment())
@@ -39,7 +40,7 @@ class FindIdPwd : AppCompatActivity() {
         val tabTitles = listOf("아이디 찾기", "비밀번호 찾기")
 
         TabLayoutMediator(tapLayout, viewPager2) { tab, position ->
-           tab.text = tabTitles[position]
+            tab.text = tabTitles[position]
         }.attach()
     }
 

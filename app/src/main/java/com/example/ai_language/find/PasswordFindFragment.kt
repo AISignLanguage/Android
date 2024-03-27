@@ -12,12 +12,12 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.ai_language.ChangePw
-import com.example.ai_language.FindPwdDTO
-import com.example.ai_language.FindPwdOk
+import com.example.ai_language.ui.account.change.ChangePw
+import com.example.ai_language.domain.model.request.FindPwdDTO
+import com.example.ai_language.domain.model.request.FindPwdOk
 import com.example.ai_language.R
-import com.example.ai_language.RetrofitClient
-import com.example.ai_language.Service
+import com.example.ai_language.Util.RetrofitClient
+import com.example.ai_language.data.remote.Service
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,7 +36,11 @@ class PasswordFindFragment : Fragment() {
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN) // 키보드가 UI 가리지 않게
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_password_find, container, false)
     }
@@ -90,7 +94,8 @@ class PasswordFindFragment : Fragment() {
                             val find_pwd_btn = view?.findViewById<TextView>(R.id.find_pwd_btn)!!
                             find_pwd_btn.setOnClickListener {
                                 Log.d("로그", gMailSender.getEmailCode())
-                                val certification_number = view?.findViewById<TextView>(R.id.certification_number)!!
+                                val certification_number =
+                                    view?.findViewById<TextView>(R.id.certification_number)!!
 
                                 if (gMailSender.emailCheck(certification_number.text.toString())) {
                                     val intent = Intent(requireContext(), ChangePw::class.java)
@@ -108,6 +113,7 @@ class PasswordFindFragment : Fragment() {
                 }
 
             }
+
             override fun onFailure(call: Call<FindPwdOk>, t: Throwable) {
                 Log.d("로그", "서버 연결 실패 (PasswordFindFragment)")
             }

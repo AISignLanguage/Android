@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    tools:context=".TagItem">
+    tools:context=".ui.dictionary.TagItem">
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/tag"

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".call.CallListPage">
+    tools:context=".ui.call.CallListPage">
 
     <ImageButton
         android:id="@+id/homeButton"
@@ -26,11 +26,11 @@
         android:id="@+id/logo_icon"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.11"
-        app:layout_constraintWidth_percent="0.3"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.11"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.3"
         app:srcCompat="@drawable/appicon_call" />
 
     <TextView

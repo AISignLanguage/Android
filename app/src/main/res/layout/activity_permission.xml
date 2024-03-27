@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="320dp"
-    android:layout_height="480dp"
-    tools:context=".permissionActivity">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context=".ui.account.permissionActivity">
 
     <FrameLayout
         android:id="@+id/frameLayout"
