@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F7F9FF"
-    tools:context=".TabFragment">
+    tools:context=".ui.news.TabFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView
