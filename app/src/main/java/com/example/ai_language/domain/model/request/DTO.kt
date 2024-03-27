@@ -1,4 +1,4 @@
-package com.example.ai_language
+package com.example.ai_language.domain.model.request
 
 import com.google.gson.annotations.SerializedName
 
@@ -24,14 +24,17 @@ data class FindIdDTO(
     @SerializedName("name") val name: String,
     @SerializedName("phone_number") val phoneNumber: String
 )
+
 data class GetIdDTO(
     @SerializedName("email") val email: String
 )
+
 //PasswordFindFragment (비밀번호 찾기)
 data class FindPwdDTO(
     @SerializedName("name") val name: String,
     @SerializedName("email") val email: String
 )
+
 data class FindPwdOk(
     @SerializedName("success_find_pwd") val success_find_pwd: Boolean
 )
@@ -75,6 +78,7 @@ data class DeleteUserResponseDTO(
 data class ConfirmDTO(
     @SerializedName("word") val word: String
 )
+
 data class ConfirmedDTO(
     @SerializedName("ok") val ok: Boolean
 )
@@ -117,6 +121,7 @@ data class NewsDTO(
 data class ProfileRequestDTO(
     @SerializedName("email") val email: String
 )
+
 data class GetProfileDTO(
     @SerializedName("url") val url: String,
     @SerializedName("name") val name: String,
@@ -132,6 +137,7 @@ data class ChangeNickNameDTO(
     @SerializedName("originalNickname") val originalNickname: String,
     @SerializedName("nickname") val nickname: String
 )
+
 data class ChangeNickNameResultDTO(
     @SerializedName("result") val result: Int
 )
