@@ -1,11 +1,11 @@
-package com.example.ai_language
+package com.example.ai_language.ui.home
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.ai_language.R
 
 class Page1 : Fragment() {
 
@@ -24,7 +24,7 @@ class Page1 : Fragment() {
                     R.anim.fade_in, // 팝 진입 애니메이션 (뒤로 가기 시)
                     R.anim.fade_out // 팝 종료 애니메이션 (뒤로 가기 시)
                 )
-                replace(R.id.fr_all,posterFragment)
+                replace(R.id.fr_all, posterFragment)
                 addToBackStack(null)
                 commit()
             }

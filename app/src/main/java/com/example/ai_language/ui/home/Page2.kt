@@ -1,10 +1,11 @@
-package com.example.ai_language
+package com.example.ai_language.ui.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.ai_language.R
 
 class Page2 : Fragment() {
     override fun onCreateView(
