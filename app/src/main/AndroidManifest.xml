@@ -6,6 +6,7 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
@@ -47,16 +48,16 @@
         android:theme="@style/Theme.AI_Language"
         tools:targetApi="31">
         <activity
-            android:name=".ChangeNicknameActivity"
+            android:name=".ui.account.change.ChangeNicknameActivity"
             android:exported="false" />
         <activity
-            android:name=".ChangePwDialog"
+            android:name=".ui.account.change.ChangePwDialog"
             android:exported="false" />
         <activity
             android:name=".find.FindEmail"
             android:exported="false" />
         <activity
-            android:name=".ChangePw"
+            android:name=".ui.account.change.ChangePw"
             android:exported="false" />
 
         <meta-data
@@ -72,16 +73,16 @@
             android:value="2.1" />
 
         <activity
-            android:name=".call.CallActivity"
+            android:name=".ui.call.CallActivity"
             android:exported="false" />
         <activity
-            android:name=".permissionActivity"
+            android:name=".ui.account.permissionActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".ui.account.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivityApp"
+            android:name=".ui.account.RegisterActivityApp"
             android:exported="false" />
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
@@ -98,55 +99,55 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".KaKaoLoginActivity"
+            android:name=".ui.account.KaKaoLoginActivity"
             android:exported="false" />
         <activity
-            android:name=".camera.CameraPage"
+            android:name=".ui.camera.CameraPage"
             android:exported="false" />
         <activity
-            android:name=".VersionCheck"
+            android:name=".ui.mypage.VersionCheck"
             android:exported="false" />
         <activity
-            android:name=".FaqPage"
+            android:name=".ui.mypage.FaqPage"
             android:exported="false" />
         <activity
-            android:name=".News_item"
+            android:name=".ui.news.News_item"
             android:exported="false" />
         <activity
-            android:name=".NewsActivity"
+            android:name=".ui.news.NewsActivity"
             android:exported="false" />
         <activity
-            android:name=".Unregister"
+            android:name=".ui.account.Unregister"
             android:exported="false" />
         <activity
-            android:name=".TermsActivity"
+            android:name=".ui.mypage.TermsActivity"
             android:exported="false" />
         <activity
-            android:name=".Poster"
+            android:name=".ui.home.Poster"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.account.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".TagItem"
+            android:name=".ui.dictionary.TagItem"
             android:exported="false" />
         <activity
-            android:name=".Dic_item"
+            android:name=".ui.dictionary.Dic_item"
             android:exported="false" />
         <activity
-            android:name=".DictionaryPage"
+            android:name=".ui.dictionary.DictionaryPage"
             android:exported="false" />
         <activity
-            android:name=".MyPage"
+            android:name=".ui.mypage.MyPage"
             android:exported="false" />
         <activity
-            android:name=".Home"
+            android:name=".ui.home.Home"
             android:exported="false" />
         <activity
-            android:name=".call.CallListPage"
+            android:name=".ui.call.CallListPage"
             android:exported="false" />
         <activity
-            android:name=".PersonalInfo"
+            android:name=".ui.account.change.PersonalInfo"
             android:exported="false" />
         <activity
             android:name=".SplashActivity"
