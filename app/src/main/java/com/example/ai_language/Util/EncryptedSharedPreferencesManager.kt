@@ -1,4 +1,4 @@
-package com.example.ai_language
+package com.example.ai_language.Util
 
 import android.content.Context
 import android.content.SharedPreferences
