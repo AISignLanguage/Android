@@ -7,6 +7,12 @@ android {
     namespace = "com.example.ai_language"
     compileSdk = 34
 
+    dataBinding {
+        enable = true
+    }
+    buildFeatures {
+        viewBinding = true
+    }
     defaultConfig {
         applicationId = "com.example.ai_language"
         minSdk = 29
@@ -48,6 +54,10 @@ android {
 }
 
 dependencies {
+
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+
+
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
@@ -112,4 +122,7 @@ dependencies {
     implementation ("org.tensorflow:tensorflow-lite-task-vision:0.3.1")
     //EncryptedSharedPreferences
     implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
+
+
 }
