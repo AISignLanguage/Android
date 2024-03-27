@@ -1,10 +1,11 @@
-package com.example.ai_language
+package com.example.ai_language.ui.account
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import android.widget.ImageButton
+import com.example.ai_language.R
+import com.example.ai_language.ui.home.Home
 
 class permissionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
