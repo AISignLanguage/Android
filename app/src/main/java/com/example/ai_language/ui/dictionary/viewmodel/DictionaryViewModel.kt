@@ -1,4 +1,4 @@
-package com.example.ai_language
+package com.example.ai_language.ui.dictionary.viewmodel
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
