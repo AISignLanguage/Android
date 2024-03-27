@@ -1,8 +1,9 @@
-package com.example.ai_language
+package com.example.ai_language.ui.news.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.ai_language.R
 
 data class NewsViewModelItem(
     val title: String,
