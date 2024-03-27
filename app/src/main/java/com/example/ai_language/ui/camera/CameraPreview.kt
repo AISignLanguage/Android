@@ -1,4 +1,4 @@
-package com.example.ai_language.camera
+package com.example.ai_language.ui.camera
 
 import android.Manifest
 import android.content.Context
@@ -15,9 +15,11 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.app.ActivityCompat
 
-class CameraPreview(context: Context, private val cameraId: String) : SurfaceView(context), SurfaceHolder.Callback {
+class CameraPreview(context: Context, private val cameraId: String) : SurfaceView(context),
+    SurfaceHolder.Callback {
     private var cameraDevice: CameraDevice? = null
-    private val cameraManager: CameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+    private val cameraManager: CameraManager =
+        context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
 
     private val cameraStateCallback = object : CameraDevice.StateCallback() {
         override fun onOpened(camera: CameraDevice) {
@@ -41,21 +43,26 @@ class CameraPreview(context: Context, private val cameraId: String) : SurfaceVie
             val holder = holder
             val surface = holder.surface
 
-            val captureRequestBuilder = cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+            val captureRequestBuilder =
+                cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
             captureRequestBuilder?.addTarget(surface)
 
-            cameraDevice?.createCaptureSession(listOf(surface), object : CameraCaptureSession.StateCallback() {
-                override fun onConfigured(session: CameraCaptureSession) {
-                    if (cameraDevice == null) {
-                        return
+            cameraDevice?.createCaptureSession(
+                listOf(surface),
+                object : CameraCaptureSession.StateCallback() {
+                    override fun onConfigured(session: CameraCaptureSession) {
+                        if (cameraDevice == null) {
+                            return
+                        }
+                        session.setRepeatingRequest(captureRequestBuilder!!.build(), null, null)
                     }
-                    session.setRepeatingRequest(captureRequestBuilder!!.build(), null, null)
-                }
 
-                override fun onConfigureFailed(session: CameraCaptureSession) {
-                    Log.e("CameraPreview", "Configuration change")
-                }
-            }, null)
+                    override fun onConfigureFailed(session: CameraCaptureSession) {
+                        Log.e("CameraPreview", "Configuration change")
+                    }
+                },
+                null
+            )
         } catch (e: CameraAccessException) {
             e.printStackTrace()
         }
