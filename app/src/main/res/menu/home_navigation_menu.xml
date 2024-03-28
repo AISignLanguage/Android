@@ -9,10 +9,7 @@
         android:id="@+id/navigation_dictionary"
         android:title="사전"
         android:icon="@drawable/ic_dictionary"/>
-    <item
-        android:id="@+id/navigation_camera"
-        android:title="카메라"
-        android:icon="@drawable/ic_camera"/>
+    <item/>
 
     <item
         android:id="@+id/navigation_word_page"
