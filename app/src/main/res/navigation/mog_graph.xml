@@ -23,11 +23,7 @@
         android:name="com.example.ai_language.ui.call.CallActivity"
         tools:layout="@layout/activity_call"
         android:label="CallFragment"/>
-    <fragment
-        android:id="@+id/navigation_camera"
-        android:name="com.example.ai_language.ui.camera.camera"
-        tools:layout="@layout/fragment_camera"
-        android:label="CameraFragment"/>
+
     <fragment
         android:id="@+id/navigation_dictionary"
         android:name="com.example.ai_language.ui.dictionary.DictionaryPage"
