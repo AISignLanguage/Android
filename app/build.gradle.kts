@@ -1,12 +1,23 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id ("dagger.hilt.android.plugin")
+    id("org.jetbrains.kotlin.plugin.parcelize")
+    kotlin("kapt")
+
+    id("kotlin-kapt") // 'kotlin-kapt' 플러그인 추가
 }
 
+hilt {
+    enableAggregatingTask = false
+}
 android {
     namespace = "com.example.ai_language"
     compileSdk = 34
 
+    kapt {
+        correctErrorTypes = true
+    }
     dataBinding {
         enable = true
     }
@@ -57,7 +68,8 @@ dependencies {
 
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
-
+    implementation ("com.google.dagger:hilt-android:2.50")
+    kapt ("com.google.dagger:hilt-compiler:2.50")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     implementation("androidx.core:core-ktx:1.12.0")
