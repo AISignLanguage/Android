@@ -8,7 +8,6 @@ import com.example.ai_language.databinding.FragmentCameraBinding
 
 class camera : BaseFragment<FragmentCameraBinding>(R.layout.fragment_camera) {
     override fun setLayout() {
-        startActivity(Intent(requireActivity(),CameraPage::class.java))
     }
 
 }
