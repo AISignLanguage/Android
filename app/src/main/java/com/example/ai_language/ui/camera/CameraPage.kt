@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.ImageFormat
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
@@ -59,9 +60,11 @@ class CameraPage : AppCompatActivity() {
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
     private lateinit var cameraExecutor: ExecutorService
-    private var cameraSelector: CameraSelector =
-        CameraSelector.DEFAULT_BACK_CAMERA // Select back camera as a default
-
+    private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA // Select back camera as a default
+    fun Bitmap.rotate(degrees: Float): Bitmap {
+        val matrix = Matrix().apply { postRotate(degrees) }
+        return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera_page)
@@ -85,14 +88,14 @@ class CameraPage : AppCompatActivity() {
         val videoBtn = findViewById<ImageButton>(R.id.CameraBtn)
         val btn = findViewById<Button>(R.id.button2)
 
-        btn.setOnClickListener { takePhoto() }
-        videoBtn.setOnClickListener { captureVideo(videoBtn) }
+        btn.setOnClickListener{ takePhoto() }
+        videoBtn.setOnClickListener{ captureVideo(videoBtn) }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
 
     }
 
-    private fun changeCamera(): CameraSelector {
+    private fun changeCamera() : CameraSelector {
         val currentCameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
         return if (currentCameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
             CameraSelector.DEFAULT_FRONT_CAMERA
@@ -122,11 +125,9 @@ class CameraPage : AppCompatActivity() {
         // Create output options object which contains file + metadata (이미지 저장 옵션 설정)
         // 이 객체에서 원하는 출력 방법 지정 가능
         val outputOptions = ImageCapture.OutputFileOptions
-            .Builder(
-                contentResolver,
+            .Builder(contentResolver,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                contentValues
-            )
+                contentValues)
             .build()
 
         // Set up image capture listener, which is triggered after photo has been taken
@@ -141,7 +142,7 @@ class CameraPage : AppCompatActivity() {
                 }
 
                 // 캡쳐 성공 -> 사진을 저장
-                override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                override fun onImageSaved(output: ImageCapture.OutputFileResults){
                     Log.d(TAG, "Photo capture succeeded: ${output.savedUri}")
                 }
             }
@@ -190,18 +191,16 @@ class CameraPage : AppCompatActivity() {
             .prepareRecording(this, mediaStoreOutputOptions)
             .apply {
                 // 오디오 사용 설정
-                if (PermissionChecker.checkSelfPermission(
-                        this@CameraPage,
-                        Manifest.permission.RECORD_AUDIO
-                    ) ==
-                    PermissionChecker.PERMISSION_GRANTED
-                ) {
+                if (PermissionChecker.checkSelfPermission(this@CameraPage,
+                        Manifest.permission.RECORD_AUDIO) ==
+                    PermissionChecker.PERMISSION_GRANTED)
+                {
                     withAudioEnabled()
                 }
             }
             .start(ContextCompat.getMainExecutor(this)) { recordEvent ->
                 // 새 녹음 시작, 리스너 등록
-                when (recordEvent) {
+                when(recordEvent) {
                     is VideoRecordEvent.Start -> {
                         VideoBtn.apply {
                             isEnabled = true
@@ -224,8 +223,7 @@ class CameraPage : AppCompatActivity() {
                             recording = null
                             Log.e(
                                 TAG, "Video capture ends with error: " +
-                                        "${recordEvent.error}"
-                            )
+                                        "${recordEvent.error}")
                         }
                         VideoBtn.apply {
                             isEnabled = true
@@ -267,7 +265,6 @@ class CameraPage : AppCompatActivity() {
         get(data)   // Copy the buffer into a byte array
         return data // Return the byte array
     }
-
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProviderFuture.addListener({
@@ -283,8 +280,7 @@ class CameraPage : AppCompatActivity() {
             val imageAnalysis = ImageAnalysis.Builder().build().also {
                 it.setAnalyzer(cameraExecutor, ImageAnalysis.Analyzer { imageProxy ->
                     val rotationDegrees = imageProxy.imageInfo.rotationDegrees
-                    // 여기에 이미지 처리 로직을 추가합니다. 예를 들어, Bitmap 변환과 객체 감지를 수행할 수 있습니다.
-                    val bitmap = imageProxy.toBitmap() // ImageProxy를 Bitmap으로 변환하는 함수 필요
+                    val bitmap = imageProxy.toBitmap()?.rotate(rotationDegrees.toFloat()) // 이미지 회전 처리
                     if (bitmap != null) {
                         runOnUiThread {
                             val detectionResults = runObjectDetection(bitmap) // 객체 감지 함수 실행
@@ -315,8 +311,7 @@ class CameraPage : AppCompatActivity() {
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
-            baseContext, it
-        ) == PackageManager.PERMISSION_GRANTED
+            baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun onDestroy() {
@@ -330,7 +325,7 @@ class CameraPage : AppCompatActivity() {
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS =
-            mutableListOf(
+            mutableListOf (
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO
             ).apply {
@@ -342,18 +337,15 @@ class CameraPage : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults:
-        IntArray
-    ) {
+        IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (allPermissionsGranted()) {
                 startCamera()
             } else {
-                Toast.makeText(
-                    this,
+                Toast.makeText(this,
                     "Permissions not granted by the user.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                    Toast.LENGTH_SHORT).show()
                 finish()
             }
         }
@@ -383,6 +375,7 @@ class CameraPage : AppCompatActivity() {
             DetectionResult(detection.boundingBox, text)
         }.filterNotNull()
     }
+
 
 
     private fun drawDetectionResult(
