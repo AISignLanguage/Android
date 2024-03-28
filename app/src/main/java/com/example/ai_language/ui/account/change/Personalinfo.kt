@@ -90,14 +90,14 @@ class PersonalInfo : AppCompatActivity() {
                 if (response.isSuccessful) {
                     getProfileDTO = response.body()!!
 
-                    val imageUrl = getProfileDTO?.url.let { Uri.parse(it) }
+                    val imageUrl = getProfileDTO.url.let { Uri.parse(it) }
                     loadImage(imageUrl)
 
-                    name.text = getProfileDTO?.name
+                    name.text = getProfileDTO.name
                     nickName.text = getProfileDTO.nickName
-                    password.text = getProfileDTO?.password
-                    birthdate.text = getProfileDTO?.birthdate
-                    phoneNumber.text = getProfileDTO?.phoneNumber
+                    password.text = getProfileDTO.password
+                    birthdate.text = getProfileDTO.birthdate
+                    phoneNumber.text = getProfileDTO.phoneNumber
                 }
             }
 
@@ -191,7 +191,7 @@ class PersonalInfo : AppCompatActivity() {
                 override fun onLoadFailed(
                     e: GlideException?,
                     model: Any?,
-                    target: Target<Drawable>?,
+                    target: Target<Drawable>,
                     isFirstResource: Boolean
                 ): Boolean {
                     progressBar.visibility = ProgressBar.GONE
@@ -199,15 +199,17 @@ class PersonalInfo : AppCompatActivity() {
                 }
 
                 override fun onResourceReady(
-                    resource: Drawable?,
-                    model: Any?,
+                    resource: Drawable,
+                    model: Any,
                     target: Target<Drawable>?,
-                    dataSource: DataSource?,
+                    dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
                     progressBar.visibility = ProgressBar.GONE
                     return false
                 }
+
+
 
             })
             .into(profileImage)

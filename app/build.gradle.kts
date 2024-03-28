@@ -1,12 +1,23 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id ("dagger.hilt.android.plugin")
+    id("org.jetbrains.kotlin.plugin.parcelize")
+    kotlin("kapt")
+
+    id("kotlin-kapt") // 'kotlin-kapt' 플러그인 추가
 }
 
+hilt {
+    enableAggregatingTask = false
+}
 android {
     namespace = "com.example.ai_language"
     compileSdk = 34
 
+    kapt {
+        correctErrorTypes = true
+    }
     dataBinding {
         enable = true
     }
@@ -57,19 +68,22 @@ dependencies {
 
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
-
-    implementation("androidx.core:core-ktx:1.9.0")
+    implementation ("com.google.dagger:hilt-android:2.50")
+    kapt ("com.google.dagger:hilt-compiler:2.50")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("me.relex:circleindicator:2.1.6")
-    implementation("com.github.bumptech.glide:glide:4.12.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.google.android.gms:play-services-wearable:18.1.0")
     implementation(files("libs/activation.jar"))
-    implementation(files("libs\\activation.jar"))
-    implementation(files("libs\\additionnal.jar"))
-    implementation(files("libs\\mail.jar"))
+    implementation(files("libs/activation.jar"))
+    implementation(files("libs/additionnal.jar"))
+    implementation(files("libs/mail.jar"))
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -83,7 +97,7 @@ dependencies {
     implementation("com.kakao.sdk:v2-navi:2.19.0") // 카카오내비
     implementation("com.kakao.sdk:v2-cert:2.19.0") // 카카오 인증서비스
     implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("com.squareup.okhttp3:okhttp:4.9.2")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
     //JetPack CameraX API
     var camerax_version = ("1.1.0-beta01")
@@ -94,11 +108,11 @@ dependencies {
     implementation("androidx.camera:camera-view:${camerax_version}")
     implementation("androidx.camera:camera-extensions:${camerax_version}")
     // ViewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     // LiveData
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
     //KTX
-    implementation("androidx.fragment:fragment-ktx:1.3.3")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
     //WebRtc - 영상통화
     implementation(files("libs/autobanh.jar"))
     //Agora SDK

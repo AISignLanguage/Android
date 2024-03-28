@@ -7,35 +7,33 @@ import android.widget.ImageButton
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ai_language.R
 import com.example.ai_language.Util.FragmentAdapter
+import com.example.ai_language.base.BaseFragment
+import com.example.ai_language.databinding.ActivityNewsBinding
 import com.example.ai_language.ui.home.Home
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
-class NewsActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_news)
+class NewsActivity : BaseFragment<ActivityNewsBinding>(R.layout.activity_news) {
+    override fun setLayout() {
+        with(binding) {
+            val adapter = FragmentAdapter(requireActivity())
+            adapter.addFragment(TabFragment())
+            adapter.addFragment(TabFragment2())
+            adapter.addFragment(TabFragment3())
 
-        val adapter = FragmentAdapter(this)
-        adapter.addFragment(TabFragment())
-        adapter.addFragment(TabFragment2())
-        adapter.addFragment(TabFragment3())
+            viewPager.adapter = adapter
 
-        val viewPager = findViewById<ViewPager2>(R.id.viewPager)
-        viewPager.adapter = adapter
+            val tabTitles = listOf("자음", "모음", "숫자")
 
-        val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
-        val tabTitles = listOf("자음", "모음", "숫자")
+            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+                tab.text = tabTitles[position]
+            }.attach()
 
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = tabTitles[position]
-        }.attach()
-
-        val back_btn = findViewById<ImageButton>(R.id.back_btn)
-        back_btn.setOnClickListener {
-            val intent = Intent(this, Home::class.java)
-            startActivity(intent)
-            finish()
+            backBtn.setOnClickListener {
+                val intent = Intent(requireActivity(), Home::class.java)
+                startActivity(intent)
+                requireActivity().finish()
+            }
         }
     }
 }

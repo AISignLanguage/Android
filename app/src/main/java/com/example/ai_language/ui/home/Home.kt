@@ -1,144 +1,84 @@
 package com.example.ai_language.ui.home
 
+
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Bundle
-import android.widget.ImageButton
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
-import com.example.ai_language.ui.mypage.MyPage
-import com.example.ai_language.ui.news.NewsActivity
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.ai_language.R
+import com.example.ai_language.base.BaseActivity
 import com.example.ai_language.data.remote.Service
-import com.example.ai_language.ui.call.CallListPage
+import com.example.ai_language.databinding.ActivityHomeBinding
 import com.example.ai_language.ui.camera.CameraPage
-import com.example.ai_language.ui.dictionary.DictionaryPage
-import com.example.ai_language.ui.home.adapter.PagerAdapter
-import me.relex.circleindicator.CircleIndicator3
+
+class Home : BaseActivity<ActivityHomeBinding>(R.layout.activity_home) {
 
 
-class Home : AppCompatActivity() {
+    override fun setLayout() {
+        setBottomNavigation()
+        setOnClick()
+    }
 
-    private val CAMERA_PERMISSION_CODE = 1000
-    private val READ_CONTACTS_PERMISSION_REQUEST = 1
-
-    lateinit var service: Service
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
-
-        val page = 3
-        val viewPager2 = findViewById<ViewPager2>(R.id.viewpager)
-        val pagerAdapter = PagerAdapter(this, page)
-        viewPager2.adapter = pagerAdapter
-
-        val indicator = findViewById<CircleIndicator3>(R.id.indicator)
-        indicator.setViewPager(viewPager2)
-        indicator.createIndicators(page, 0)
-        viewPager2.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-
-        viewPager2.currentItem = 1000
-        viewPager2.offscreenPageLimit = 3
-
-        viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-                if (positionOffsetPixels == 0) {
-                    viewPager2.currentItem = position
-                }
-            }
-
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                val thispage = position % page;
-                indicator.animatePageSelected(thispage)
-
-            }
-
-
-        })
-
-
-        val dic_btn = findViewById<ImageButton>(R.id.dic_btn)
-        dic_btn.setOnClickListener {
-            val intent = Intent(this, DictionaryPage::class.java)
-            startActivity(intent)
+    private fun setBottomNavigation() {
+        val bottomNavigationView = binding.bottomNavigationMain
+        val navController =
+            supportFragmentManager.findFragmentById(R.id.container_main)?.findNavController()
+        navController?.let {
+            bottomNavigationView.setupWithNavController(it)
         }
 
-        val mypg_btn = findViewById<ImageButton>(R.id.my_page_btn)
-        mypg_btn.setOnClickListener {
-            val intent = Intent(this, MyPage::class.java)
-            startActivity(intent)
-        }
+    }
+    fun setOnClick(){
+        binding.ftbCamera.setOnClickListener{
+            startActivity(Intent(this, CameraPage::class.java))
 
-        val news_btn = findViewById<ImageButton>(R.id.news_btn)
-        news_btn.setOnClickListener {
-//            val newsData = NewsDTO("title", "image", "content")
-//            service = RetrofitClient.getUserRetrofitInterface()
-//            val call = service.sendNewsData(newsData)
-//
-//            call.enqueue(object : Callback<NewsDTO> {
-//                override fun onResponse(call: Call<NewsDTO>, response: Response<NewsDTO>) {
-//                    if (response.isSuccessful) {
-//                        //val responseData = response.body()
-//                        //Toast.makeText(this@Home, "callList 전송 성공", Toast.LENGTH_SHORT).show()
-//                        Log.e("로그", "newsList 전송 성공")
-//                    }
-//                    else {
-//                        Log.e("로그", "newsList 전송 실패")
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<NewsDTO>, t: Throwable) {
-//                    Log.d("로그", "Retrofit 연동 실패")
-//                }
-//            })
-
-            val intent = Intent(this, NewsActivity::class.java)
-            startActivity(intent)
-        }
-
-        val callLsit_btn = findViewById<ImageButton>(R.id.callList_btn) //전화번호부 화면으로 이동
-
-        callLsit_btn.setOnClickListener {
-            val callPermission =
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS)
-            if (callPermission != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(android.Manifest.permission.READ_CONTACTS),
-                    READ_CONTACTS_PERMISSION_REQUEST
-                )
-            } else {
-                val intent = Intent(this, CallListPage::class.java)
-                startActivity(intent)
-            }
-        }
-
-        val camera_btn = findViewById<ImageButton>(R.id.CameraBtn) //카메라(동영상) 화면으로 이동
-        camera_btn.setOnClickListener {
-            val cameraPermission =
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
-            if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(android.Manifest.permission.CAMERA),
-                    CAMERA_PERMISSION_CODE
-                )
-            } else {
-                val intent = Intent(this, CameraPage::class.java)
-                startActivity(intent)
-            }
         }
     }
+
+
+
+
+//    private fun setButtonClickListeners() {
+//        findViewById<ImageButton>(R.id.dic_btn).setOnClickListener {
+//            startNewActivity(DictionaryPage::class.java)
+//        }
+//
+//        findViewById<ImageButton>(R.id.my_page_btn).setOnClickListener {
+//            startNewActivity(MyPage::class.java)
+//        }
+//
+//        findViewById<ImageButton>(R.id.news_btn).setOnClickListener {
+//            startNewActivity(NewsActivity::class.java)
+//        }
+//
+//        findViewById<ImageButton>(R.id.callList_btn).setOnClickListener {
+//            checkAndRequestPermission(
+//                android.Manifest.permission.READ_CONTACTS,
+//                READ_CONTACTS_PERMISSION_REQUEST,
+//                CallListPage::class.java
+//            )
+//        }
+//
+//        findViewById<ImageButton>(R.id.CameraBtn).setOnClickListener {
+//            checkAndRequestPermission(
+//                android.Manifest.permission.CAMERA,
+//                CAMERA_PERMISSION_CODE,
+//                com.example.ai_language.ui.camera.com.example.ai_language.ui.camera.CameraPage::class.java
+//            )
+//        }
+//    }
+//
+//
+//    private fun checkAndRequestPermission(permission: String, requestCode: Int, activityClass: Class<*>) {
+//        val permissionStatus = ContextCompat.checkSelfPermission(this, permission)
+//        if (permissionStatus != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(
+//                this,
+//                arrayOf(permission),
+//                requestCode
+//            )
+//        } else {
+//            startNewActivity(activityClass)
+//        }
+//    }
+
 }

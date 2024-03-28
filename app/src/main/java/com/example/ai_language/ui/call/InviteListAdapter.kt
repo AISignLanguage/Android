@@ -46,7 +46,7 @@ class InviteListAdapter(private val viewModel: InviteViewModel) :
         init {
             inviteBtn.setOnClickListener {
                 val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION && mOnItemClickListener != null) {
+                if (position != RecyclerView.NO_POSITION) {
                     mOnItemClickListener.onItemClick(itemView, position)
                 }
             }
