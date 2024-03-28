@@ -2,21 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_call"
-        android:title="전화"
         android:icon="@drawable/ic_call"
         />
     <item
         android:id="@+id/navigation_dictionary"
-        android:title="사전"
         android:icon="@drawable/ic_dictionary"/>
     <item/>
 
     <item
         android:id="@+id/navigation_word_page"
-        android:title="워드"
         android:icon="@drawable/ic_wordpage"/>
     <item
         android:id="@+id/navigation_my_page"
-        android:title="마이페이지"
         android:icon="@drawable/ic_mypage"/>
 </menu>
