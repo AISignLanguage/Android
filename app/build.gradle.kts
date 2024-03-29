@@ -61,6 +61,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    aaptOptions{
+        noCompress("tflite")
+    }
     buildToolsVersion = "34.0.0"
 }
 
@@ -137,6 +140,10 @@ dependencies {
     //EncryptedSharedPreferences
     implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
+
+    // tensorflow Lite
+    implementation ("org.tensorflow:tensorflow-lite:2.13.0")
+    implementation ("org.tensorflow:tensorflow-lite-support:0.4.4")
 
 
 }

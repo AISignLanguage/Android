@@ -56,15 +56,30 @@ data class DetectionResult(val boundingBox: RectF, val text: String)
 
 class CameraPage : AppCompatActivity() {
 
+    companion object {
+        private const val MAX_FONT_SIZE = 96F
+        private const val TAG = "CameraXApp"
+        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+        private const val REQUEST_CODE_PERMISSIONS = 10
+        private val REQUIRED_PERMISSIONS =
+            mutableListOf (
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO
+            ).apply {
+                /*if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                }*/
+            }.toTypedArray()
+    }
+
+    private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     private var imageCapture: ImageCapture? = null
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
+
+    // 카메라 작업을 수행하기 위한 스레드 풀을 관리 (메인 스레드와 별도로 동작)
     private lateinit var cameraExecutor: ExecutorService
-    private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA // Select back camera as a default
-    fun Bitmap.rotate(degrees: Float): Bitmap {
-        val matrix = Matrix().apply { postRotate(degrees) }
-        return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
-    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera_page)
@@ -85,25 +100,35 @@ class CameraPage : AppCompatActivity() {
             )
         }
 
-        val videoBtn = findViewById<ImageButton>(R.id.CameraBtn)
-        val btn = findViewById<Button>(R.id.button2)
-
-        btn.setOnClickListener{ takePhoto() }
-        videoBtn.setOnClickListener{ captureVideo(videoBtn) }
+        //val videoBtn = findViewById<ImageButton>(R.id.CameraBtn)
+        //val btn = findViewById<Button>(R.id.button2)
+        //btn.setOnClickListener{ takePhoto() }
+        //videoBtn.setOnClickListener{ captureVideo(videoBtn) } 실시간 번역만 사용, 녹화 X
 
         cameraExecutor = Executors.newSingleThreadExecutor()
-
     }
 
-    private fun changeCamera() : CameraSelector {
-        val currentCameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-        return if (currentCameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
-            CameraSelector.DEFAULT_FRONT_CAMERA
-        } else {
-            CameraSelector.DEFAULT_BACK_CAMERA
+    // 버튼 클릭해서 카메라 전면 후면 전환하는 함수
+    private fun toggleCamera() {
+        val changeBtn = findViewById<ImageButton>(R.id.changeBtn)
+        changeBtn.setOnClickListener {
+            // CameraSelector 업데이트
+            if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
+                cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+                startCamera() //바뀐 카메라 화면으로 카메라 재실행
+            } else {
+                cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+                startCamera() //바뀐 카메라 화면으로 카메라 재실행
+            }
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraExecutor.shutdown()
+    }
+
+    // 카메로부터 이미지를 촬영하고 저장하는 함수
     private fun takePhoto() {
         // Get a stable reference of the modifiable image capture use case
         val imageCapture = imageCapture ?: return
@@ -149,13 +174,15 @@ class CameraPage : AppCompatActivity() {
         )
     }
 
-    // Implements VideoCapture use case, including start and stop capturing.
+    // CameraX VideoCapture 기능 사용하여 비디오를 촬영하고 저장하는 함수
     private fun captureVideo(VideoBtn: ImageButton) {
         val videoCapture = this.videoCapture ?: return
         val recImg = findViewById<ImageView>(R.id.recImg)
+
         //중복 녹화 방지
         VideoBtn.isEnabled = false
         val curRecording = recording
+
         // 진행 중인 활성 녹화 세션 중지
         if (curRecording != null) {
             // Stop the current recording session.
@@ -235,48 +262,22 @@ class CameraPage : AppCompatActivity() {
             }
     }
 
-
-    fun ImageProxy.toBitmap(): Bitmap? {
-        val yBuffer = planes[0].buffer // Y
-        val uBuffer = planes[1].buffer // U
-        val vBuffer = planes[2].buffer // V
-
-        val ySize = yBuffer.remaining()
-        val uSize = uBuffer.remaining()
-        val vSize = vBuffer.remaining()
-
-        val nv21 = ByteArray(ySize + uSize + vSize)
-
-        // U and V are swapped
-        yBuffer.get(nv21, 0, ySize)
-        vBuffer.get(nv21, ySize, vSize)
-        uBuffer.get(nv21, ySize + vSize, uSize)
-
-        val yuvImage = YuvImage(nv21, ImageFormat.NV21, this.width, this.height, null)
-        val out = ByteArrayOutputStream()
-        yuvImage.compressToJpeg(Rect(0, 0, yuvImage.width, yuvImage.height), 100, out)
-        val imageBytes = out.toByteArray()
-        return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-    }
-
-    private fun ByteBuffer.toByteArray(): ByteArray {
-        rewind()    // Rewind the buffer to zero
-        val data = ByteArray(remaining())
-        get(data)   // Copy the buffer into a byte array
-        return data // Return the byte array
-    }
+    // 카메라를 사용하여 미리보기 표시하고 객체 감지 수행하는 함수 (카메라 화면 제공)
     private fun startCamera() {
+
+        // 카메라 제공자 초기화, 리스너 등록
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
             val viewFinder = findViewById<PreviewView>(R.id.viewFinder)
 
-            // Preview 사용 사례 초기화
+            // 카메라 설정 초기화 (Preview 사용 사례 초기화)
             val preview = Preview.Builder().build().also {
-                it.setSurfaceProvider(viewFinder.surfaceProvider)
+                it.setSurfaceProvider(viewFinder.surfaceProvider) // 미리보기 제공
             }
 
-            // ImageAnalysis 사용 사례 초기화
+            // ImageAnalysis 사용 사례 초기화 -> 각 프레임마다 이미지 분석, 결과를 화면에 표시
+            // 이미지 분석 작업 수행할 ImageAnalysis.Analyzer 설정
             val imageAnalysis = ImageAnalysis.Builder().build().also {
                 it.setAnalyzer(cameraExecutor, ImageAnalysis.Analyzer { imageProxy ->
                     val rotationDegrees = imageProxy.imageInfo.rotationDegrees
@@ -293,14 +294,14 @@ class CameraPage : AppCompatActivity() {
                 })
             }
 
-            // CameraSelector 초기화
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            // 버튼 클릭 시 카메라 전면 후면 전환
+            toggleCamera()
 
             try {
                 // 기존에 바인딩된 사용 사례를 해제
                 cameraProvider.unbindAll()
 
-                // 카메라에 사용 사례 바인딩
+                // 카메라에 사용 사례 바인딩 (카메라를 사용하여 미리보기를 표시하고, 이미지 분석을 수행)
                 cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis)
 
             } catch (exc: Exception) {
@@ -312,27 +313,6 @@ class CameraPage : AppCompatActivity() {
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
             baseContext, it) == PackageManager.PERMISSION_GRANTED
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        cameraExecutor.shutdown()
-    }
-
-    companion object {
-        private const val MAX_FONT_SIZE = 96F
-        private const val TAG = "CameraXApp"
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
-        private const val REQUEST_CODE_PERMISSIONS = 10
-        private val REQUIRED_PERMISSIONS =
-            mutableListOf (
-                Manifest.permission.CAMERA,
-                Manifest.permission.RECORD_AUDIO
-            ).apply {
-                /*if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                }*/
-            }.toTypedArray()
     }
 
     override fun onRequestPermissionsResult(
@@ -351,24 +331,61 @@ class CameraPage : AppCompatActivity() {
         }
     }
 
+    // 데이터 전처리
+    // CameraX에서 제공되는 이미지를 일반적인 비트맵 형식으로 변환하여
+    // 이미지 처리나 모델 추론 등의 작업을 수행하는 함수
+    fun ImageProxy.toBitmap(): Bitmap? {
+        // 플레인 및 버퍼 가져오기
+        val yBuffer = planes[0].buffer // Y
+        val uBuffer = planes[1].buffer // U
+        val vBuffer = planes[2].buffer // V
+
+        // 버퍼 크기 계산
+        val ySize = yBuffer.remaining()
+        val uSize = uBuffer.remaining()
+        val vSize = vBuffer.remaining()
+
+        // U and V are swapped (NV21 형식으로 이미지 데이터 병합)
+        val nv21 = ByteArray(ySize + uSize + vSize)
+        yBuffer.get(nv21, 0, ySize)
+        vBuffer.get(nv21, ySize, vSize)
+        uBuffer.get(nv21, ySize + vSize, uSize)
+
+        // YUVImage 생성 및 JPEG 압축
+        val yuvImage = YuvImage(nv21, ImageFormat.NV21, this.width, this.height, null)
+        val out = ByteArrayOutputStream()
+        yuvImage.compressToJpeg(Rect(0, 0, yuvImage.width, yuvImage.height), 100, out)
+        val imageBytes = out.toByteArray()
+        return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+    }
+
+    // 비트맵 이미지를 주어진 각도만큼 회전시키는 함수
+    fun Bitmap.rotate(degrees: Float): Bitmap {
+        val matrix = Matrix().apply { postRotate(degrees) }
+        return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
+    }
+
+    // 비트맵 이미지를 입력으로 받아 해당 이미지를 모델로 감지하여 위치와 확률 포함하는 목록 반환하는 함수
     private fun runObjectDetection(bitmap: Bitmap): List<DetectionResult> {
-        // Step 1: Create TFLite's TensorImage object
+
+        // Step 1: Create TFLite's TensorImage object (TensorImage 객체 생성)
         val image = TensorImage.fromBitmap(bitmap)
 
-        // Step 2: Initialize the detector object
+        // Step 2: Initialize the detector object (감지기 객체 초기화)
         val options = ObjectDetector.ObjectDetectorOptions.builder()
-            .setMaxResults(5)
-            .setScoreThreshold(0.3f)
+            .setMaxResults(5)           // 최대 결과수
+            .setScoreThreshold(0.3f)    // 점수 임계값
             .build()
         val detector = ObjectDetector.createFromFileAndOptions(
             this,
-            "model.tflite",
+            "model.tflite",   // 모델 파일 이용해서 객체 감지기 초기화(활성화)
             options
         )
 
         // Step 3: Feed given image to the detector
-        val results = detector.detect(image)
+        val results = detector.detect(image)  // 주어진 이미지 객체 감지 -> 모델로 추론 -> 결과반환
 
+        // 결과 처리
         return results.map { detection ->
             val category = detection.categories.firstOrNull() ?: return@map null
             val text = "${category.label}, ${category.score.times(100).toInt()}%"
@@ -376,24 +393,26 @@ class CameraPage : AppCompatActivity() {
         }.filterNotNull()
     }
 
-
-
+    // 인자로 주어진 비트맵 이미지와 객체 감지 결과를 사용하여 감지된 객체에 대한
+    // 바운딩 박스와 텍스트를 그리고 결과를 포함하는 새로운 비트맵을 생성하는 함수
     private fun drawDetectionResult(
         bitmap: Bitmap,
         detectionResults: List<DetectionResult>
     ): Bitmap {
+        // 새로운 비트맵, 캔버스 생성, 펜 설정
         val outputBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
         val canvas = Canvas(outputBitmap)
         val pen = Paint()
         pen.textAlign = Paint.Align.LEFT
 
+        // 객체 감지 결과 목록 반복하면서 각 객체에 대해 바운딩 박스와 텍스트 그림
         detectionResults.forEach {
             // draw bounding box
             pen.color = Color.RED
             pen.strokeWidth = 8F
             pen.style = Paint.Style.STROKE
             val box = it.boundingBox
-            canvas.drawRect(box, pen)
+            canvas.drawRect(box, pen)   // 바운딩 박스 그리기
 
             val tagSize = Rect(0, 0, 0, 0)
 
@@ -411,6 +430,8 @@ class CameraPage : AppCompatActivity() {
 
             var margin = (box.width() - tagSize.width()) / 2.0F
             if (margin < 0F) margin = 0F
+
+            // 텍스트 그리기
             canvas.drawText(
                 it.text, box.left + margin,
                 box.top + tagSize.height().times(1F), pen
@@ -418,6 +439,5 @@ class CameraPage : AppCompatActivity() {
         }
         return outputBitmap
     }
-
 
 }

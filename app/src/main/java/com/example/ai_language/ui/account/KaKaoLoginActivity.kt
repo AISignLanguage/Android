@@ -40,6 +40,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
         disposables.clear()
     }
 
+    // 자동 로그인
     private fun attemptLogin() {
 
         val encryptedSharedPreferences = EncryptedSharedPreferencesManager(this)
