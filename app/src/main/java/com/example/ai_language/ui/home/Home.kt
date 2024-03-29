@@ -10,6 +10,7 @@ import com.example.ai_language.data.remote.Service
 import com.example.ai_language.databinding.ActivityHomeBinding
 import com.example.ai_language.ui.camera.CameraPage
 
+
 class Home : BaseActivity<ActivityHomeBinding>(R.layout.activity_home) {
 
 

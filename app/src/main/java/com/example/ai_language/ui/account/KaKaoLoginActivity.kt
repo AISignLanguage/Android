@@ -28,6 +28,7 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -47,8 +48,6 @@ class KaKaoLoginActivity : AppCompatActivity() {
         disposables.clear()
     }
 
-
-    //로그인 전적있으면 아이디 비번 배치
     private fun attemptLogin() {
 
         val encryptedSharedPreferences = EncryptedSharedPreferencesManager(this)
@@ -66,9 +65,6 @@ class KaKaoLoginActivity : AppCompatActivity() {
         }
     }
 
-
-
-//유저로그인
     private fun loginUser(inputUserEmail: String, inputUserPw: String) {
         progressBar = findViewById(R.id.progressBar)
         progressBar.visibility = View.VISIBLE
