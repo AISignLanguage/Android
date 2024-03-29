@@ -13,16 +13,23 @@ import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.example.ai_language.MyApp
 import com.example.ai_language.R
 import com.example.ai_language.Util.RetrofitClient
 import com.example.ai_language.Util.EncryptedSharedPreferencesManager
+import com.example.ai_language.Util.extensions.datastore
 import com.example.ai_language.domain.model.request.LoginRequestDTO
 import com.example.ai_language.domain.model.request.LoginResponseDTO
 import com.example.ai_language.find.FindIdPwd
 import com.example.ai_language.ui.home.Home
 import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.common.model.ClientError
+import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,6 +47,8 @@ class KaKaoLoginActivity : AppCompatActivity() {
         disposables.clear()
     }
 
+
+    //로그인 전적있으면 아이디 비번 배치
     private fun attemptLogin() {
 
         val encryptedSharedPreferences = EncryptedSharedPreferencesManager(this)
@@ -57,6 +66,9 @@ class KaKaoLoginActivity : AppCompatActivity() {
         }
     }
 
+
+
+//유저로그인
     private fun loginUser(inputUserEmail: String, inputUserPw: String) {
         progressBar = findViewById(R.id.progressBar)
         progressBar.visibility = View.VISIBLE
@@ -104,10 +116,17 @@ class KaKaoLoginActivity : AppCompatActivity() {
         })
     }
 
+
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ka_kao_login)
 
+
+
+        //아이디 잃어버렸을 때
         val forgetPage = findViewById<TextView>(R.id.forgetPage)
         forgetPage.setOnClickListener {
             val intent = Intent(this, FindIdPwd::class.java)
@@ -159,42 +178,81 @@ class KaKaoLoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        //카카오로그인
         val kakaoBtn = findViewById<ImageView>(R.id.kko_login_btn)
         kakaoBtn.setOnClickListener {
-            kakaoLogin(this)
-            Log.d("카카오버튼", "눌림")
+            validAccessToken()
         }
     }
 
-    private var isLoggingIn = false
-
     private fun kakaoLogin(ctxt: Context) {
-
-        if (isLoggingIn) return // 중복 로그인 방지
-
-        isLoggingIn = true
-        val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-            isLoggingIn = false
-            if (error != null) {
-                Log.e("결과", "카카오계정으로 로그인 실패 : ${error}")
-            } else if (token != null) {
-
-                requestUserInfoAndStartRegisterActivity(ctxt)
-            }
-        }
-
-        if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
-            UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
+            val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                 if (error != null) {
-                    Log.d("결과", "카카오톡 로그인 실패", error)
-                    // 사용자에게 카카오 계정 로그인 옵션 제공
+                    Log.e("결과", "카카오계정으로 로그인 실패: $error")
                 } else if (token != null) {
-
                     requestUserInfoAndStartRegisterActivity(ctxt)
+                    Log.e("성공", "로그인 성공 ${token.accessToken}")
                 }
             }
-        } else {
-            UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
+
+            if (UserApiClient.instance.isKakaoTalkLoginAvailable(ctxt)) {
+                UserApiClient.instance.loginWithKakaoTalk(ctxt) { token, error ->
+                    if (error != null) {
+                        Log.d("결과", "카카오톡 로그인 실패", error)
+                        if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                            return@loginWithKakaoTalk
+                        }
+                        else {
+                            UserApiClient.instance.loginWithKakaoAccount(
+                                this,
+                                callback = callback
+                            ) // 카카오 이메일 로그인
+                        }
+                    } else if (token != null) {
+                        requestUserInfoAndStartRegisterActivity(ctxt)
+                        lifecycleScope.launch {
+                            Log.e("토큰", "${datastore.data.toString()}")
+                            // Call suspend functions within the coroutine scope
+                            MyApp.getInstance().tokenManager.saveToken(token)
+                            MyApp.getInstance().tokenManager.findToken.collect{
+                                Log.d("토큰", "User ID: $it")
+                                Log.d("토큰", "Access Token: ${token.accessToken}")
+                                Log.d("토큰", "Access Token Expires At: ${token.accessTokenExpiresAt}")
+                                Log.d("토큰", "Refresh Token: ${token.refreshToken}")
+                                Log.d("토큰", "Refresh Token Expires At: ${token.refreshTokenExpiresAt}")
+                                Log.d("토큰", "ID Token: ${token.idToken}")
+                                Log.d("토큰", "Scopes: ${token.scopes}")
+                                MyApp.getInstance().tokenManager.findToken.collect { token ->
+                                    Log.d("데이터", token ?: "토큰이 없습니다.") // token이 null인 경우에 대비하여 null 체크
+                                }
+
+                            }
+                        }
+                    }
+                }
+            } else {
+                // Use callback to attempt login
+                UserApiClient.instance.loginWithKakaoAccount(ctxt, callback = callback)
+            }
+    }
+
+    private fun validAccessToken(){
+        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
+            if (error != null) {
+                Toast.makeText(this, "토큰 실패", Toast.LENGTH_SHORT).show()
+                lifecycleScope.launch {
+                    kakaoLogin(this@KaKaoLoginActivity)
+                }
+                Log.d("카카오버튼", "눌림")
+            }
+            else if (tokenInfo != null) {
+                Log.d("토큰정보","$tokenInfo")
+                Toast.makeText(this, "토큰 성공", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, Home::class.java)
+                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                finish()
+            }
         }
     }
 
@@ -228,6 +286,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
             } else if (user != null) {
                 val nickname = user.kakaoAccount?.profile?.nickname
                 val profileImageUrl = user.kakaoAccount?.profile?.thumbnailImageUrl
+
                 Log.d("결과", "닉네임: $nickname, 프로필 사진 URL: $profileImageUrl")
                 val intent = Intent(ctxt, RegisterActivityApp::class.java).apply {
                     putExtra("nick", nickname)
