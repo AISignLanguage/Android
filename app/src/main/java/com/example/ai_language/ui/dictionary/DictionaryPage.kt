@@ -45,58 +45,16 @@ class DictionaryPage : BaseFragment<ActivityDictionaryPageBinding>(R.layout.acti
     override fun setLayout() {
         with(binding) {
             startServer()
+            setOnClicked()
+            setRecyclerView()
             dicViewModel = ViewModelProvider(requireActivity())[DictionaryViewModel::class.java]
-
-            homeBtnDic.setOnClickListener {
-                val intent = Intent(requireContext(), Home::class.java)
-                startActivity(intent)
-                requireActivity().finish()
-            }
-            val spacingInPixels = resources.getDimensionPixelSize(R.dimen.grid_layout_margin)
-            recyclerGridView.addItemDecoration(GridSpacingItemDecoration(2, spacingInPixels, true))
-
-
-            // 여러 Drawable 리소스 ID를 가져와 Uri로 변환하여 itemList에 추가
-            val drawableResId1 = R.drawable.recycleritem // Drawable 리소스 ID 1
-            val drawableUri1 = drawableResourceIdToUri(requireContext(), drawableResId1)
-            dicViewModel.dicAddData(DicPic(drawableUri1, "설명 1"))
-
-            val drawableResId2 = R.drawable.recycleritem // Drawable 리소스 ID 2
-            val drawableUri2 = drawableResourceIdToUri(requireContext(), drawableResId2)
-            dicViewModel.dicAddData(DicPic(drawableUri2, "설명 2"))
-
-
-            // GridLayoutManager를 사용하여 2열 그리드로 설정
-            val layoutManager = GridLayoutManager(requireContext(), 2)
-            recyclerGridView.layoutManager = layoutManager
-
-
-            // RecyclerView에 어댑터 설정
-            val adapter = dicViewModel.dic_data.value?.let { DicAdapter(it, this@DictionaryPage) }
-            recyclerGridView.adapter = adapter
-
-            dicViewModel.tagAddData(Tagdata("전체"))
-
-
-            val layoutManager2 = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            recyclerTag.layoutManager = layoutManager2
-
-            val adapter2 = dicViewModel.tag_data.value?.let { TagAdapter(it) }
-            recyclerTag.adapter = adapter2
-
-
-
-
-            dicViewModel.dic_data.observe(requireActivity(), Observer { newData ->
-                adapter?.notifyDataSetChanged()
-            })
-
-            dicViewModel.tag_data.observe(requireActivity(), Observer { newData ->
-                adapter2?.notifyDataSetChanged()
-            })
-
         }
 
+    }
+
+    private fun setRecyclerView(){
+        setGridRecyclerView()
+        setTagRecyclerView()
     }
 
     private fun startServer() {
@@ -140,13 +98,50 @@ class DictionaryPage : BaseFragment<ActivityDictionaryPageBinding>(R.layout.acti
     override fun onItemClick(dicPic: DicPic) {
 
     }
+    private fun setTagRecyclerView(){
+        with(binding) {
+            val layoutManager2 =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            recyclerTag.layoutManager = layoutManager2
 
-    private fun drawableResourceIdToUri(context: Context, drawableResId: Int): Uri {
-        val res = context.resources
-        val uriString = "android.resource://${res.getResourcePackageName(drawableResId)}/${
-            res.getResourceTypeName(drawableResId)
-        }/${res.getResourceEntryName(drawableResId)}"
-        return Uri.parse(uriString)
+            val adapter2 = dicViewModel.tag_data.value?.let { TagAdapter(it) }
+            recyclerTag.adapter = adapter2
+            dicViewModel.tag_data.observe(requireActivity()) {
+                adapter2?.notifyDataSetChanged()
+            }
+            if(dicViewModel.tag_data.value?.isEmpty() == true){
+                dicViewModel.tagAddData(Tagdata("전체"))
+            }
+        }
+    }
+
+    private fun setGridRecyclerView(){
+        with(binding) {
+            val spacingInPixels = resources.getDimensionPixelSize(R.dimen.grid_layout_margin)
+            recyclerGridView.addItemDecoration(GridSpacingItemDecoration(2, spacingInPixels, true))
+
+            // GridLayoutManager를 사용하여 2열 그리드로 설정
+            val layoutManager = GridLayoutManager(requireContext(), 2)
+            recyclerGridView.layoutManager = layoutManager
+
+            // RecyclerView에 어댑터 설정
+            val adapter = dicViewModel.dic_data.value?.let { DicAdapter(it, this@DictionaryPage) }
+            recyclerGridView.adapter = adapter
+
+            dicViewModel.dic_data.observe(requireActivity()) {
+                adapter?.notifyDataSetChanged()
+            }
+        }
+    }
+
+    private fun setOnClicked(){
+        with(binding){
+            homeBtnDic.setOnClickListener {
+                val intent = Intent(requireContext(), Home::class.java)
+                startActivity(intent)
+                requireActivity().finish()
+            }
+        }
     }
 
 }
