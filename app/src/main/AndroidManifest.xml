@@ -114,7 +114,7 @@
             android:name=".ui.news.News_item"
             android:exported="false" />
         <activity
-            android:name=".ui.news.NewsActivity"
+            android:name=".ui.news.NewsFragment"
             android:exported="false" />
         <activity
             android:name=".ui.account.Unregister"
@@ -144,7 +144,7 @@
             android:name=".ui.home.Home"
             android:exported="false" />
         <activity
-            android:name=".ui.call.CallListPage"
+            android:name=".ui.call.CallListFragment"
             android:exported="false" />
         <activity
             android:name=".ui.account.change.PersonalInfo"

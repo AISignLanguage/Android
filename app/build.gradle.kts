@@ -1,71 +1,71 @@
-plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id ("dagger.hilt.android.plugin")
-    id("org.jetbrains.kotlin.plugin.parcelize")
-    kotlin("kapt")
+    plugins {
+        id("com.android.application")
+        id("org.jetbrains.kotlin.android")
+        id ("dagger.hilt.android.plugin")
+        id("org.jetbrains.kotlin.plugin.parcelize")
+        kotlin("kapt")
 
-    id("kotlin-kapt") // 'kotlin-kapt' 플러그인 추가
-}
-
-hilt {
-    enableAggregatingTask = false
-}
-android {
-    namespace = "com.example.ai_language"
-    compileSdk = 34
-
-    kapt {
-        correctErrorTypes = true
+        id("kotlin-kapt") // 'kotlin-kapt' 플러그인 추가
     }
-    dataBinding {
-        enable = true
+
+    hilt {
+        enableAggregatingTask = false
     }
-    buildFeatures {
-        viewBinding = true
-    }
-    defaultConfig {
-        applicationId = "com.example.ai_language"
-        minSdk = 29
-        targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+    android {
+        namespace = "com.example.ai_language"
+        compileSdk = 34
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        kapt {
+            correctErrorTypes = true
+        }
+        dataBinding {
+            enable = true
+        }
+        buildFeatures {
+            viewBinding = true
+        }
+        defaultConfig {
+            applicationId = "com.example.ai_language"
+            minSdk = 29
+            targetSdk = 33
+            versionCode = 1
+            versionName = "1.0"
 
-        multiDexEnabled = true
+            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // 필요한 경우 추가적인 exclude를 여기에 추가합니다.
-        packaging {
-            resources {
-                excludes.add("META-INF/INDEX.LIST")
+            multiDexEnabled = true
+
+            // 필요한 경우 추가적인 exclude를 여기에 추가합니다.
+            packaging {
+                resources {
+                    excludes.add("META-INF/INDEX.LIST")
+                }
+            }
+
+
+        }
+
+        buildTypes {
+            release {
+                isMinifyEnabled = false
+                proguardFiles(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
+                )
             }
         }
-
-
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+        compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
         }
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+        aaptOptions{
+            noCompress("tflite")
+        }
+        buildToolsVersion = "34.0.0"
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-    aaptOptions{
-        noCompress("tflite")
-    }
-    buildToolsVersion = "34.0.0"
-}
 
 dependencies {
 
