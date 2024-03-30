@@ -15,8 +15,12 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,28 +31,24 @@ import com.example.ai_language.R
 import com.example.ai_language.Util.RetrofitClient
 import com.example.ai_language.base.BaseFragment
 import com.example.ai_language.databinding.ActivityDictionaryPageBinding
-import com.example.ai_language.domain.model.response.ResponseBodys
 import com.example.ai_language.ui.dictionary.adapter.DicAdapter
 import com.example.ai_language.ui.dictionary.adapter.TagAdapter
-import com.example.ai_language.ui.dictionary.viewmodel.DicPic
+import com.example.ai_language.ui.dictionary.data.Tagdata
 import com.example.ai_language.ui.dictionary.viewmodel.DictionaryViewModel
-import com.example.ai_language.ui.dictionary.viewmodel.Tagdata
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
-
-class DictionaryPage : BaseFragment<ActivityDictionaryPageBinding>(R.layout.activity_dictionary_page), DicAdapter.OnItemClickListener {
-    private lateinit var dicViewModel: DictionaryViewModel
+@AndroidEntryPoint
+class DictionaryPage : BaseFragment<ActivityDictionaryPageBinding>(R.layout.activity_dictionary_page) {
+    private val dicViewModel by viewModels<DictionaryViewModel>()
+    private val dicAdapter = DicAdapter()
 
 
     override fun setLayout() {
-        with(binding) {
-            startServer()
-            setOnClicked()
-            setRecyclerView()
-            dicViewModel = ViewModelProvider(requireActivity())[DictionaryViewModel::class.java]
-        }
+        startServer()
+        setOnClicked()
+        setRecyclerView()
 
     }
 
@@ -58,47 +58,16 @@ class DictionaryPage : BaseFragment<ActivityDictionaryPageBinding>(R.layout.acti
     }
 
     private fun startServer() {
-        val service = RetrofitClient.getUserRetrofitInterface2()
-        val call = service.fetchData(
+        dicViewModel.getDictionaryByOpenApi(
             "73de7874-baa6-4268-8909-f5eb6d3decb6",
             "100",
-            "1"
-        )
-        call.enqueue(object : Callback<ResponseBodys> {
-
-            override fun onResponse(call: Call<ResponseBodys>, response: Response<ResponseBodys>) {
-                if (response.isSuccessful) {
-
-                    dicViewModel.dic_data.value?.clear()
-                    val items = response.body()?.response?.body?.items?.item
-                    items?.let {
-                        for (item in items) {
-                            val title = item.title
-                            val ex = item.subDescription
-                            val referenceIdentifier = item.referenceIdentifier
-                            val uri = Uri.parse(referenceIdentifier)
-
-                            // DicPic 객체를 생성하여 리스트에 추가
-                            val dicPic = DicPic(uri, title)
-                            dicViewModel.dicAddData(dicPic)
-                        }
-                    }
-                } else {
-                    Log.d("에러:", "응답 실패")
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseBodys>, t: Throwable) {
-                TODO("Not yet implemented")
-            }
-        })
+            "1")
     }
 
-
-    override fun onItemClick(dicPic: DicPic) {
-
-    }
     private fun setTagRecyclerView(){
+
+
+
         with(binding) {
             val layoutManager2 =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -116,20 +85,23 @@ class DictionaryPage : BaseFragment<ActivityDictionaryPageBinding>(R.layout.acti
     }
 
     private fun setGridRecyclerView(){
-        with(binding) {
-            val spacingInPixels = resources.getDimensionPixelSize(R.dimen.grid_layout_margin)
-            recyclerGridView.addItemDecoration(GridSpacingItemDecoration(2, spacingInPixels, true))
 
-            // GridLayoutManager를 사용하여 2열 그리드로 설정
-            val layoutManager = GridLayoutManager(requireContext(), 2)
-            recyclerGridView.layoutManager = layoutManager
-
-            // RecyclerView에 어댑터 설정
-            val adapter = dicViewModel.dic_data.value?.let { DicAdapter(it, this@DictionaryPage) }
-            recyclerGridView.adapter = adapter
-
-            dicViewModel.dic_data.observe(requireActivity()) {
-                adapter?.notifyDataSetChanged()
+        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.grid_layout_margin)
+       binding.recyclerGridView.addItemDecoration(GridSpacingItemDecoration(2, spacingInPixels, true))
+        // GridLayoutManager를 사용하여 2열 그리드로 설정
+        val layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.recyclerGridView.layoutManager = layoutManager
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED){
+                dicViewModel.dicList.collectLatest {
+                    if(it.response?.body?.items?.item?.isEmpty() == true) {
+                        binding.blankInfo.visibility = View.VISIBLE
+                    }else{
+                        binding.blankInfo.visibility = View.GONE
+                        dicAdapter.update(it)
+                        binding.recyclerGridView.adapter = dicAdapter
+                    }
+                }
             }
         }
     }
