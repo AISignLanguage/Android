@@ -1,13 +1,24 @@
 package com.example.ai_language.ui.dictionary.viewmodel
 
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-data class DicPic(var dicpic: Uri, var ex: String)
+import com.example.ai_language.ui.dictionary.data.DicPic
+import com.example.ai_language.ui.dictionary.data.Tagdata
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
-data class Tagdata(val tag: String, var isPressed: Boolean = false)
 class DictionaryViewModel : ViewModel (){
+
+    private var _dicList = MutableStateFlow(DicPic())
+    val dicList: StateFlow<DicPic> = _dicList
+
+    private var _tagList = MutableStateFlow(Tagdata())
+    val tagList = _tagList
+
+
+
+
     private val dic_list = MutableLiveData<ArrayList<DicPic>>()
     val dic_data : LiveData<ArrayList<DicPic>>get() = dic_list
     private var dic_items = ArrayList<DicPic>()
