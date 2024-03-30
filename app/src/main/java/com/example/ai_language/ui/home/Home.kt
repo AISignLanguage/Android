@@ -12,8 +12,9 @@ import com.example.ai_language.R
 import com.example.ai_language.base.BaseActivity
 import com.example.ai_language.databinding.ActivityHomeBinding
 import com.example.ai_language.ui.camera.CameraPage
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class Home : BaseActivity<ActivityHomeBinding>(R.layout.activity_home) {
 
     override fun setLayout() {
