@@ -13,49 +13,36 @@ import com.example.ai_language.base.BaseFragment
 import com.example.ai_language.databinding.ActivityMyPageBinding
 import com.example.ai_language.ui.account.LoginActivity
 
-class MyPage :BaseFragment<ActivityMyPageBinding>(R.layout.activity_my_page) {
+class MyPage : BaseFragment<ActivityMyPageBinding>(R.layout.activity_my_page) {
     override fun setLayout() {
+        setOnClicked()
+    }
 
-        // val home = findViewById<ImageButton>(R.id.homeButton3)
-//        home.setOnClickListener{
-//            val intent = Intent(this,Home::class.java)
-//            startActivity(intent)
-//            finish()
-//        }
-
+    private fun setOnClicked() {
         with(binding) {
             myInformEdit.setOnClickListener {
                 val intent = Intent(requireContext(), PersonalInfo::class.java)
                 startActivity(intent)
             }
-
-
             withdrawal.setOnClickListener {
                 val intent = Intent(requireContext(), Unregister::class.java)
                 startActivity(intent)
             }
-
-
             FAQBtn.setOnClickListener {
                 val intent = Intent(requireContext(), FaqPage::class.java)
                 startActivity(intent)
             }
-
             versionCheck.setOnClickListener {
                 val intent = Intent(requireContext(), VersionCheck::class.java)
                 startActivity(intent)
             }
-
-
             termsBtn.setOnClickListener {
                 val intent = Intent(requireContext(), TermsActivity::class.java)
                 startActivity(intent)
             }
-
             signOutBtn.setOnClickListener {
                 val dialog = SignoutDialog(requireContext())
                 dialog.exDialog()
-
                 dialog.setOnClickedListener(object : SignoutDialog.ButtonClickListener {
                     override fun onClicked(result: String) {
                         when (result) {
@@ -67,19 +54,17 @@ class MyPage :BaseFragment<ActivityMyPageBinding>(R.layout.activity_my_page) {
                             }
 
                             "no" -> {
-
+                                // 자동 로그인 해제 (EncryptedSharedPreferences에서 정보 삭제)
                             }
                         }
                     }
                 })
             }
 
+
         }
-
-        // 자동 로그인 해제 (EncryptedSharedPreferences에서 정보 삭제)
-
-
     }
+
     fun disableAutoLogin() {
         val sharedPreferencesManager = EncryptedSharedPreferencesManager(requireContext())
         sharedPreferencesManager.clearPreferences()
