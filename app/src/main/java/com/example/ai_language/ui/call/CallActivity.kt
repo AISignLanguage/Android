@@ -1,23 +1,17 @@
 package com.example.ai_language.ui.call
 
 import android.content.pm.PackageManager
-import android.os.Bundle
 import android.util.Log
 import android.view.SurfaceView
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.ai_language.R
 import com.example.ai_language.base.BaseActivity
-import com.example.ai_language.base.BaseFragment
 import com.example.ai_language.databinding.ActivityCallBinding
-
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
 import io.agora.rtc2.IRtcEngineEventHandler
@@ -25,7 +19,7 @@ import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.RtcEngineConfig
 import io.agora.rtc2.video.VideoCanvas
 
-class CallActivity : BaseFragment<ActivityCallBinding>(R.layout.activity_call) {
+class CallActivity : BaseActivity<ActivityCallBinding>(R.layout.activity_call) {
 
     private val appId = "353bae93c92b4275bf34d1301ea06e42"
     private val channelName = "ta"
@@ -49,25 +43,25 @@ class CallActivity : BaseFragment<ActivityCallBinding>(R.layout.activity_call) {
 
     private fun checkSelfPermission(): Boolean {
         return (ContextCompat.checkSelfPermission(
-            requireContext(),
+            this,
             REQUESTED_PERMISSIONS[0]
         ) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(
-                    requireContext(),
+                    this,
                     REQUESTED_PERMISSIONS[1]
                 ) == PackageManager.PERMISSION_GRANTED)
     }
 
     private fun showMessage(message: String) {
-        requireActivity().runOnUiThread {
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        this.runOnUiThread {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun setUpVideoSdkEngine() {
         try {
             val config = RtcEngineConfig()
-            config.mContext = requireActivity().baseContext
+            config.mContext = this.baseContext
             config.mAppId = appId
             config.mEventHandler = mRtcEventHandler
             agoraEngine = RtcEngine.create(config)
@@ -79,17 +73,17 @@ class CallActivity : BaseFragment<ActivityCallBinding>(R.layout.activity_call) {
     }
 
     override fun setLayout() {
-        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) //통화하는 동안 화면 꺼지지 않게 유지
+        this.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) //통화하는 동안 화면 꺼지지 않게 유지
 
         if (!checkSelfPermission()) {
-            ActivityCompat.requestPermissions(requireActivity(), REQUESTED_PERMISSIONS, PERMISSION_REQ_ID);
+            ActivityCompat.requestPermissions(this, REQUESTED_PERMISSIONS, PERMISSION_REQ_ID);
         }
 
-//        val joinButton = requireActivity().findViewById<Button>(R.id.joinButton).setOnClickListener {
+//        val joinButton = this.findViewById<Button>(R.id.joinButton).setOnClickListener {
 //            setUpVideoSdkEngine()
 //            joinCall()
 //        }
-//        val leaveButton = requireActivity().findViewById<Button>(R.id.leaveButton).setOnClickListener {
+//        val leaveButton = this.findViewById<Button>(R.id.leaveButton).setOnClickListener {
 //            leaveCall()
 //        }
     }
@@ -108,7 +102,7 @@ class CallActivity : BaseFragment<ActivityCallBinding>(R.layout.activity_call) {
     }
 
     private fun setupRemoteVideo(uid: Int) {
-        remoteSurfaceView = SurfaceView(requireActivity().baseContext)
+        remoteSurfaceView = SurfaceView(this.baseContext)
         remoteSurfaceView!!.setZOrderMediaOverlay(true)
         binding.remoteUser.addView(remoteSurfaceView)
 
@@ -124,7 +118,7 @@ class CallActivity : BaseFragment<ActivityCallBinding>(R.layout.activity_call) {
 
     private fun setupLocalVideo() {
 
-        localSurfaceView = SurfaceView(requireActivity().baseContext)
+        localSurfaceView = SurfaceView(this.baseContext)
         binding.localUser.addView((localSurfaceView))
 
         agoraEngine!!.setupLocalVideo(
@@ -146,7 +140,7 @@ class CallActivity : BaseFragment<ActivityCallBinding>(R.layout.activity_call) {
             agoraEngine!!.startPreview()
             agoraEngine!!.joinChannel(token, channelName, uid, option)
         } else {
-            Toast.makeText(requireActivity(), "permission not grant", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "permission not grant", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -165,7 +159,7 @@ class CallActivity : BaseFragment<ActivityCallBinding>(R.layout.activity_call) {
     private val mRtcEventHandler: IRtcEngineEventHandler = object : IRtcEngineEventHandler() {
         override fun onUserJoined(uid: Int, elapsed: Int) {
             showMessage("Reomte User Joined $uid")
-            requireActivity().runOnUiThread {
+            runOnUiThread {
                 setupRemoteVideo(uid)
                 Log.d("로그", "ㅇㅇ")
             }
@@ -178,7 +172,7 @@ class CallActivity : BaseFragment<ActivityCallBinding>(R.layout.activity_call) {
 
         override fun onUserOffline(uid: Int, reason: Int) {
             showMessage("user offline")
-            requireActivity().runOnUiThread { remoteSurfaceView!!.visibility = View.GONE }
+            runOnUiThread { remoteSurfaceView!!.visibility = View.GONE }
         }
     }
 }

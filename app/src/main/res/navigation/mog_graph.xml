@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/navigation_call"
-        android:name="com.example.ai_language.ui.call.CallListActivity"
+        android:name="com.example.ai_language.ui.call.CallListFragment"
         tools:layout="@layout/activity_call"
         android:label="CallFragment"/>
 
@@ -31,7 +31,7 @@
         android:label="DictionaryFragment"/>
     <fragment
         android:id="@+id/navigation_word_page"
-        android:name="com.example.ai_language.ui.news.NewsActivity"
+        android:name="com.example.ai_language.ui.news.NewsFragment"
         tools:layout="@layout/activity_news"
         android:label="NewsFragment"/>
 </navigation>

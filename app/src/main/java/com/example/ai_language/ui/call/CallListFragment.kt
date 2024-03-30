@@ -18,19 +18,19 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ai_language.ui.home.Home
-import com.example.ai_language.domain.model.request.PhoneListDTO
-import com.example.ai_language.domain.model.request.PhoneNumberDTO
 import com.example.ai_language.R
 import com.example.ai_language.Util.RetrofitClient
 import com.example.ai_language.base.BaseFragment
 import com.example.ai_language.data.remote.Service
 import com.example.ai_language.databinding.ActivityCallListBinding
+import com.example.ai_language.domain.model.request.PhoneListDTO
+import com.example.ai_language.domain.model.request.PhoneNumberDTO
+import com.example.ai_language.ui.home.Home
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CallListActivity : BaseFragment<ActivityCallListBinding>(R.layout.activity_call_list) {
+class CallListFragment : BaseFragment<ActivityCallListBinding>(R.layout.activity_call_list) {
 
     private lateinit var call: Call<PhoneListDTO>
     private lateinit var service: Service
