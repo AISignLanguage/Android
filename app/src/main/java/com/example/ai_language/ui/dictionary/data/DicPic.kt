@@ -4,6 +4,6 @@ import android.net.Uri
 
 
 data class DicPic(
-    var dicpic: Uri? = null,
+    var dicpic: String? = "",
     var ex: String = ""
 )
