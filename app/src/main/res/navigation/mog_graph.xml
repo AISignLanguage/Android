@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/navigation_home"
+    android:id="@+id/mog_graph">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.ai_language.ui.home.HomeFragment"
+        tools:layout="@layout/fragment_home"
+        android:label="HomeFragment"
+        />
+
+    <fragment
+        android:id="@+id/navigation_my_page"
+        android:name="com.example.ai_language.ui.mypage.MyPage"
+        tools:layout="@layout/activity_my_page"
+        android:label="MyPageFragment"/>
+
+    <fragment
+        android:id="@+id/navigation_call"
+        android:name="com.example.ai_language.ui.call.CallListActivity"
+        tools:layout="@layout/activity_call"
+        android:label="CallFragment"/>
+
+    <fragment
+        android:id="@+id/navigation_dictionary"
+        android:name="com.example.ai_language.ui.dictionary.DictionaryPage"
+        tools:layout="@layout/activity_dictionary_page"
+        android:label="DictionaryFragment"/>
+    <fragment
+        android:id="@+id/navigation_word_page"
+        android:name="com.example.ai_language.ui.news.NewsActivity"
+        tools:layout="@layout/activity_news"
+        android:label="NewsFragment"/>
+</navigation>

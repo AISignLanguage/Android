@@ -144,7 +144,7 @@
             android:name=".ui.home.Home"
             android:exported="false" />
         <activity
-            android:name=".ui.call.CallListPage"
+            android:name=".ui.call.CallListActivity"
             android:exported="false" />
         <activity
             android:name=".ui.account.change.PersonalInfo"

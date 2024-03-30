@@ -3,4 +3,31 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="main">#9999FF</color>
+    <color name="black_70">#B3000000</color>
+    <color name="black_60">#99000000</color>
+    <color name="black_50">#80000000</color>
+    <color name="black_30">#4D000000</color>
+    <color name="black_10">#1A000000</color>
+    <color name="blue_main">#85B5FF</color>
+    <color name="blue_main_20">#3385B5FF</color>
+    <color name="blue_sub_20">#33B3D1FF</color>
+
+    <color name="orange_main">#FFB367</color>
+    <color name="orange_sub">#1AFFAD5B</color>
+
+    <color name="gray_700">#1A000000</color>
+    <color name="gray_600">#1A696969</color>
+    <color name="gray_400">#4B4B4B</color>
+    <color name="gray_350">#4E4E4E</color>
+    <color name="gray_50">#CCCCCC</color>
+    <color name="gray_30">#F6F6F6</color>
+    <color name="gray_20">#E9E9E9</color>
+    <color name="gray_10">#EEEEEE</color>
+
+    <color name="iw_indicator_off_color">#D9D9D9</color>
+    <color name="iw_indicator_on_color">#FFFFFF</color>
+    <color name="tab_color">#85B5FF</color>
+    <color name="failed_color">#FF4949</color>
+    <color name="red">#FF0000</color>
+
 </resources>
