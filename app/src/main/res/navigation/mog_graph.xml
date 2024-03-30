@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/navigation_call"
-        android:name="com.example.ai_language.ui.call.CallActivity"
+        android:name="com.example.ai_language.ui.call.CallListActivity"
         tools:layout="@layout/activity_call"
         android:label="CallFragment"/>
 

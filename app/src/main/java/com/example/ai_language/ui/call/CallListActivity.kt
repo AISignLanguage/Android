@@ -6,18 +6,15 @@ import android.content.Intent
 import android.database.Cursor
 import android.graphics.Point
 import android.os.Build
-import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.WindowInsets
-import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,12 +23,14 @@ import com.example.ai_language.domain.model.request.PhoneListDTO
 import com.example.ai_language.domain.model.request.PhoneNumberDTO
 import com.example.ai_language.R
 import com.example.ai_language.Util.RetrofitClient
+import com.example.ai_language.base.BaseFragment
 import com.example.ai_language.data.remote.Service
+import com.example.ai_language.databinding.ActivityCallListBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CallListPage : AppCompatActivity() {
+class CallListActivity : BaseFragment<ActivityCallListBinding>(R.layout.activity_call_list) {
 
     private lateinit var call: Call<PhoneListDTO>
     private lateinit var service: Service
@@ -77,7 +76,7 @@ class CallListPage : AppCompatActivity() {
     }
 
     fun getStandardSize() {
-        val screenSize = getScreenSize(this)
+        val screenSize = getScreenSize(requireActivity())
         standardSize_X = screenSize.x  // 픽셀 단위로 화면 너비를 직접 사용
         standardSize_Y = screenSize.y  // 픽셀 단위로 화면 높이를 직접 사용
     }
@@ -90,14 +89,10 @@ class CallListPage : AppCompatActivity() {
         ).toInt()
     }
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_call_list)
-
-        val homeButton = findViewById<ImageButton>(R.id.homeButton)
+    override fun setLayout() {
+        val homeButton = binding.homeButton
         homeButton.setOnClickListener {
-            val intent = Intent(this, Home::class.java)
+            val intent = Intent(requireContext(), Home::class.java)
             startActivity(intent)
         }
 
@@ -107,19 +102,35 @@ class CallListPage : AppCompatActivity() {
         fetchDataFromServer() //서버에서 데이터 갱신
     }
 
+
+//    override fun onViewCreated(savedInstanceState: Bundle?) {
+//        super.onCreate(view, savedInstanceState)
+//
+//        val homeButton = binding.root.findViewById<ImageButton>(R.id.homeButton)
+//        homeButton.setOnClickListener {
+//            val intent = Intent(requireContext(), Home::class.java)
+//            startActivity(intent)
+//        }
+//
+//        callListRecyclerView()
+//        inviteRecyclerView()
+//        getContacts()
+//        fetchDataFromServer() //서버에서 데이터 갱신
+//    }
+
     private fun callListRecyclerView() {
         //val call = service.getCallData(uri, installCheck)
 
-        callRecyclerView = findViewById<RecyclerView>(R.id.rv_call)
+        callRecyclerView = binding.rvCall
         callRecyclerView.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         callListAdapter = CallListAdapter(callViewModel)
         callRecyclerView.adapter = callListAdapter
 
         callListAdapter.setOnItemClickListener(object : CallListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-                Toast.makeText(applicationContext, "전화하기", Toast.LENGTH_SHORT).show()
-                val intent = Intent(applicationContext, CallActivity::class.java)
+                Toast.makeText(requireContext(), "전화하기", Toast.LENGTH_SHORT).show()
+                val intent = Intent(requireContext(), CallActivity::class.java)
                 startActivity(intent)
             }
         })
@@ -132,16 +143,16 @@ class CallListPage : AppCompatActivity() {
 
     private fun inviteRecyclerView() {
         //RecyclerView 초기화 및 어댑터 설정 - 앱 비 사용자
-        inviteRecyclerView = findViewById<RecyclerView>(R.id.rv_invite)
+        inviteRecyclerView = binding.rvInvite
         inviteListAdapter = InviteListAdapter(inviteViewModel)
         inviteRecyclerView.adapter = inviteListAdapter
         inviteRecyclerView.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         //초대버튼 클릭
         inviteListAdapter.setOnItemClickListener(object : InviteListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-                Toast.makeText(applicationContext, "초대하기", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "초대하기", Toast.LENGTH_SHORT).show()
             }
         })
 
@@ -160,7 +171,7 @@ class CallListPage : AppCompatActivity() {
 
     private fun getContacts() {
         // 연락처 전체 정보에 대한 쿼리 수행
-        val cursor: Cursor? = contentResolver.query(
+        val cursor: Cursor? = requireActivity().contentResolver.query(
             ContactsContract.Contacts.CONTENT_URI,
             null, null, null, null
         )
@@ -176,7 +187,7 @@ class CallListPage : AppCompatActivity() {
             val name: String? =
                 if (nameColumnIndex != -1) cursor.getString(nameColumnIndex) else null
 
-            val phoneCursor: Cursor? = contentResolver.query(
+            val phoneCursor: Cursor? = requireActivity().contentResolver.query(
                 ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 null,
                 ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, // id 기반으로 전화번호
@@ -233,7 +244,7 @@ class CallListPage : AppCompatActivity() {
         service = RetrofitClient.getUserRetrofitInterface()
         call = service.sendCallData(phoneNumberDTO)
 
-        progressBar = findViewById(R.id.progressBar)
+        progressBar = binding.progressBar
         progressBar.visibility = View.VISIBLE
 
         // 서버로부터 데이터를 가져오는 요청 보내기
