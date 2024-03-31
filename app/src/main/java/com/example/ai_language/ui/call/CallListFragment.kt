@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.Path.Direction
 import android.graphics.Point
 import android.os.Build
 import android.provider.ContactsContract
@@ -16,6 +17,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ai_language.R
@@ -96,11 +98,12 @@ class CallListFragment : BaseFragment<ActivityCallListBinding>(R.layout.activity
     }
 
     override fun setLayout() {
-        val homeButton = binding.homeButton
-        homeButton.setOnClickListener {
-            val intent = Intent(requireContext(), Home::class.java)
-            startActivity(intent)
-        }
+        onClickedByNavi()
+//        val homeButton = binding.homeButton
+//        homeButton.setOnClickListener {
+//            val intent = Intent(requireContext(), Home::class.java)
+//            startActivity(intent)
+//        }
 
         callListRecyclerView()
         inviteRecyclerView()
@@ -123,6 +126,13 @@ class CallListFragment : BaseFragment<ActivityCallListBinding>(R.layout.activity
 //        getContacts()
 //        fetchDataFromServer() //서버에서 데이터 갱신
 //    }
+
+    private fun onClickedByNavi() {
+        binding.logoIcon.setNavigationOnClickListener {
+            val navController = findNavController()
+            navController.navigate(R.id.action_callListFragment_to_homeFragment)
+        }
+    }
 
     private fun callListRecyclerView() {
         //val call = service.getCallData(uri, installCheck)

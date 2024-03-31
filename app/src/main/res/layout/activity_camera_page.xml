@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout  xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -67,37 +66,42 @@
             app:layout_constraintBottom_toTopOf="@+id/CameraBtn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"  />
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:gravity="center"
             android:background="@color/white"
-            app:layout_constraintTop_toTopOf="@id/viewFinder"
+            android:gravity="center"
             app:layout_constraintEnd_toEndOf="@id/viewFinder"
-            app:layout_constraintStart_toStartOf="@id/viewFinder" />
+            app:layout_constraintStart_toStartOf="@id/viewFinder"
+            app:layout_constraintTop_toTopOf="@id/viewFinder" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:gravity="center"
             android:background="@color/white"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="@id/viewFinder"
             app:layout_constraintEnd_toEndOf="@id/viewFinder"
             app:layout_constraintStart_toStartOf="@id/viewFinder" />
 
-        <ImageView
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/recImg"
-            android:layout_width="wrap_content"
-            android:layout_height="70dp"
-            android:src="@drawable/rec"
-            android:textColor="#FF0000"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/viewFinder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@mipmap/ic_launcher_round"
+                android:contentDescription="TODO" />
+        </com.google.android.material.appbar.MaterialToolbar>
+
 
         <Button
             android:id="@+id/button2"

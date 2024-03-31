@@ -11,18 +11,27 @@
         android:orientation="vertical"
         tools:context=".ui.mypage.MyPage">
 
-        <TextView
-            android:id="@+id/textView8"
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_mypage"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:fontFamily="@font/font_bd"
-            android:gravity="center"
-            android:text="개인정보 수정"
-            android:textSize="20dp"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.05"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline3" />
+            app:layout_constraintTop_toTopOf="@+id/guideline3"
+            app:navigationIcon="@drawable/ic_arrow_back"
+
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@mipmap/ic_launcher_round"
+                android:contentDescription="TODO" />
+        </com.google.android.material.appbar.MaterialToolbar>
+
 
         <TextView
             android:id="@+id/ex"
@@ -34,7 +43,7 @@
             android:textSize="12dp"
             app:layout_constraintHeight_percent="0.03"
             app:layout_constraintStart_toEndOf="@+id/myName_tv"
-            app:layout_constraintTop_toBottomOf="@+id/textView8" />
+            app:layout_constraintTop_toBottomOf="@+id/tb_mypage" />
 
         <TextView
             android:id="@+id/myName_tv"
@@ -47,7 +56,7 @@
             android:textStyle="bold"
             app:layout_constraintHeight_percent="0.04"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView8" />
+            app:layout_constraintTop_toBottomOf="@+id/tb_mypage" />
 
         <LinearLayout
             android:id="@+id/linearLayout4"
