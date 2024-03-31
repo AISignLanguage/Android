@@ -1,7 +1,13 @@
 package com.example.ai_language.data.remote
 
-class CallListService {
+import com.example.ai_language.domain.model.request.PhoneListDTO
+import com.example.ai_language.domain.model.request.PhoneNumberDTO
+import retrofit2.http.Body
 
+interface CallListService {
+    suspend fun sendPhoneNumbers(
+        @Body phoneNumberDTO: PhoneNumberDTO
+    ): PhoneListDTO
 }
 //interface DictionaryService {
 //    @GET("/openapi/service/rest/meta13/getCTE01701")
