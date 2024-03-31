@@ -9,10 +9,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.ai_language.R
+import com.example.ai_language.domain.model.request.PhoneDTO
 import com.example.ai_language.ui.call.viewmodel.CallListViewModel
 
 class CallListAdapter(private val viewModel: CallListViewModel) :
     RecyclerView.Adapter<CallListAdapter.CallListViewHolder>() {
+        private val items = mutableListOf<PhoneDTO>()
 
     //커스텀 클릭 이벤트 (CallListPage에서 클릭 이벤트)
     interface OnItemClickListener {
@@ -29,6 +31,11 @@ class CallListAdapter(private val viewModel: CallListViewModel) :
         return CallListViewHolder(view)
     }
 
+    fun update(newItems: PhoneDTO) {
+        items.add(newItems)
+        notifyItemInserted(items.size)
+    }
+
     override fun onBindViewHolder(holder: CallListViewHolder, position: Int) {
         val item = viewModel.callDataList.value?.get(position)
         item?.let {
@@ -42,9 +49,7 @@ class CallListAdapter(private val viewModel: CallListViewModel) :
         }
     }
 
-    override fun getItemCount(): Int {
-        return viewModel.callDataList.value?.size ?: 0
-    }
+    override fun getItemCount(): Int = items.size
 
     inner class CallListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name = itemView.findViewById<TextView>(R.id.name)

@@ -4,12 +4,19 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 data class CallListItem(val name: String?, val callNumber: String?, val imageUrl: String?)
 data class InviteListItem(val name: String, val callNumber: String)
 class CallListViewModel : ViewModel() {
-    var _callDataList = MutableLiveData<List<CallListItem>>()
-    val callDataList: LiveData<List<CallListItem>>
+//    var _callDataList = MutableLiveData<List<CallListItem>>()
+//    val callDataList: LiveData<List<CallListItem>>
+//        get() = _callDataList
+
+    // CallListViewModel에 플로우 적용
+    private var _callDataList = MutableStateFlow<List<CallListItem>>(emptyList())
+    val callDataList: StateFlow<List<CallListItem>>
         get() = _callDataList
 
     fun addListItem(item: CallListItem) {
