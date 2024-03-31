@@ -33,12 +33,7 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface Service {
-    @GET("/openapi/service/rest/meta13/getCTE01701")
-    fun fetchData(
-        @Query("serviceKey") serviceKey: String,
-        @Query("numOfRows") numOfRows: String,
-        @Query("pageNo") pageNo: String
-    ): Call<ResponseBodys>
+
 
     @GET("user")
     fun getUSer(): Call<UserDTO>

@@ -1,4 +1,5 @@
 package com.example.ai_language.di.module
+
 import com.example.ai_language.Util.Util
 import dagger.Module
 import dagger.Provides
@@ -19,9 +20,18 @@ object NetworkModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class MogInterceptorOkHttpClient
 
-    @MogInterceptorOkHttpClient
-    @Singleton
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class OpenApiRetrofit
+
     @Provides
+    @Singleton
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor =
+        HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
+
+    @MogInterceptorOkHttpClient
+    @Provides
+    @Singleton
     fun provideMogOkHttpClient(
         interceptor: HttpLoggingInterceptor
     ): OkHttpClient {
@@ -30,13 +40,17 @@ object NetworkModule {
             .build()
     }
 
-    @MogInterceptorOkHttpClient
-    @Singleton
     @Provides
+    @Singleton
+    fun provideConverterFactory(): GsonConverterFactory = GsonConverterFactory.create()
+
+    @MogInterceptorOkHttpClient
+    @Provides
+    @Singleton
     fun provideMogRetrofit(
         gsonConverterFactory: GsonConverterFactory,
         @MogInterceptorOkHttpClient client: OkHttpClient
-    ) : Retrofit {
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(Util.BASE_URL)
             .addConverterFactory(gsonConverterFactory)
@@ -44,12 +58,17 @@ object NetworkModule {
             .build()
     }
 
+    @OpenApiRetrofit
     @Provides
     @Singleton
-    fun provideLoggingInterceptor(): HttpLoggingInterceptor =
-        HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
-
-    @Provides
-    @Singleton
-    fun provideConverterFactory(): GsonConverterFactory = GsonConverterFactory.create()
+    fun provideOpenApiRetrofit(
+        gsonConverterFactory: GsonConverterFactory,
+        @MogInterceptorOkHttpClient client: OkHttpClient  // 이 부분에서도 MogInterceptorOkHttpClient를 사용합니다.
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(Util.BASE_URL2)
+            .addConverterFactory(gsonConverterFactory)
+            .client(client)
+            .build()
+    }
 }

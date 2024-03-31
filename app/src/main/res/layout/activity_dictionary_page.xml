@@ -58,6 +58,19 @@
             tools:listitem="@layout/activity_tag_item"
             tools:orientation="horizontal" />
 
+        <TextView
+            android:id="@+id/blank_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="검색 결과 없음"
+            android:textSize="24dp"
+            app:layout_constraintBottom_toBottomOf="@id/recyclerGridView"
+            app:layout_constraintEnd_toEndOf="@id/recyclerGridView"
+            app:layout_constraintStart_toStartOf="@id/recyclerGridView"
+            app:layout_constraintTop_toTopOf="@id/recyclerGridView" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerGridView"
             android:layout_width="wrap_content"
@@ -70,7 +83,10 @@
             app:spanCount="2"
             tools:itemCount="2"
             tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            tools:listitem="@layout/activity_dic_item" />
+            tools:listitem="@layout/activity_dic_item">
+
+
+        </androidx.recyclerview.widget.RecyclerView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

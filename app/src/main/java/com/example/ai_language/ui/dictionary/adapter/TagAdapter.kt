@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ai_language.R
-import com.example.ai_language.ui.dictionary.viewmodel.Tagdata
+import com.example.ai_language.ui.dictionary.data.Tagdata
 
 class TagAdapter(val itemList: ArrayList<Tagdata>) :
     RecyclerView.Adapter<TagAdapter.TagViewHolder>() {
