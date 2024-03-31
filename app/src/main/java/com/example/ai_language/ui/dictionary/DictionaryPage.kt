@@ -36,11 +36,13 @@ import com.example.ai_language.ui.dictionary.adapter.TagAdapter
 import com.example.ai_language.ui.dictionary.data.Tagdata
 import com.example.ai_language.ui.dictionary.viewmodel.DictionaryViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class DictionaryPage : BaseFragment<ActivityDictionaryPageBinding>(R.layout.activity_dictionary_page) {
+class DictionaryPage :
+    BaseFragment<ActivityDictionaryPageBinding>(R.layout.activity_dictionary_page) {
     private val dicViewModel by viewModels<DictionaryViewModel>()
     private val dicAdapter = DicAdapter()
 
@@ -52,7 +54,7 @@ class DictionaryPage : BaseFragment<ActivityDictionaryPageBinding>(R.layout.acti
 
     }
 
-    private fun setRecyclerView(){
+    private fun setRecyclerView() {
         setGridRecyclerView()
         setTagRecyclerView()
     }
@@ -61,13 +63,11 @@ class DictionaryPage : BaseFragment<ActivityDictionaryPageBinding>(R.layout.acti
         dicViewModel.getDictionaryByOpenApi(
             "73de7874-baa6-4268-8909-f5eb6d3decb6",
             "100",
-            "1")
+            "1"
+        )
     }
 
-    private fun setTagRecyclerView(){
-
-
-
+    private fun setTagRecyclerView() {
         with(binding) {
             val layoutManager2 =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -78,25 +78,30 @@ class DictionaryPage : BaseFragment<ActivityDictionaryPageBinding>(R.layout.acti
             dicViewModel.tag_data.observe(requireActivity()) {
                 adapter2?.notifyDataSetChanged()
             }
-            if(dicViewModel.tag_data.value?.isEmpty() == true){
+            if (dicViewModel.tag_data.value?.isEmpty() == true) {
                 dicViewModel.tagAddData(Tagdata("전체"))
             }
         }
     }
 
-    private fun setGridRecyclerView(){
-
+    private fun setGridRecyclerView() {
         val spacingInPixels = resources.getDimensionPixelSize(R.dimen.grid_layout_margin)
-       binding.recyclerGridView.addItemDecoration(GridSpacingItemDecoration(2, spacingInPixels, true))
+        binding.recyclerGridView.addItemDecoration(
+            GridSpacingItemDecoration(
+                2,
+                spacingInPixels,
+                true
+            )
+        )
         // GridLayoutManager를 사용하여 2열 그리드로 설정
         val layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerGridView.layoutManager = layoutManager
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.CREATED){
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
                 dicViewModel.dicList.collectLatest {
-                    if(it.response?.body?.items?.item?.isEmpty() == true) {
+                    if (it.response?.body?.items?.item?.isEmpty() == true) {
                         binding.blankInfo.visibility = View.VISIBLE
-                    }else{
+                    } else {
                         binding.blankInfo.visibility = View.GONE
                         dicAdapter.update(it)
                         binding.recyclerGridView.adapter = dicAdapter
@@ -106,8 +111,8 @@ class DictionaryPage : BaseFragment<ActivityDictionaryPageBinding>(R.layout.acti
         }
     }
 
-    private fun setOnClicked(){
-        with(binding){
+    private fun setOnClicked() {
+        with(binding) {
             homeBtnDic.setOnClickListener {
                 val intent = Intent(requireContext(), Home::class.java)
                 startActivity(intent)
@@ -116,4 +121,9 @@ class DictionaryPage : BaseFragment<ActivityDictionaryPageBinding>(R.layout.acti
         }
     }
 
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        lifecycleScope.cancel()
+    }
 }
