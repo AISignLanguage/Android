@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ai_language.domain.model.response.ResponseBodys
 import com.example.ai_language.domain.repository.DictionaryRepository
-import com.example.ai_language.ui.dictionary.data.DicPic
 import com.example.ai_language.ui.dictionary.data.Tagdata
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
