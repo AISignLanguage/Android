@@ -4,12 +4,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.ai_language.databinding.CallItemBinding
 import com.example.ai_language.domain.model.request.PhoneDTO
-import com.example.ai_language.ui.call.viewmodel.CallListViewModel
 
-class CallListAdapter(private val viewModel: CallListViewModel) :
+class CallListAdapter() :
     RecyclerView.Adapter<CallListAdapter.CallListViewHolder>() {
         private val items = mutableListOf<PhoneDTO>()
 
@@ -52,12 +50,13 @@ class CallListAdapter(private val viewModel: CallListViewModel) :
         }
 
         fun bind(item: PhoneDTO) {
-            binding.name.text = item.name
-            binding.phoneNumber.text = item.phoneNumbers
-            Glide.with(binding.root.context)
-                .load(item.profileImageUrl)
-                .circleCrop()
-                .into(binding.profileImageView)
+            binding.phoneDTO = item
+//            binding.name.text = item.name
+//            binding.phoneNumber.text = item.phoneNumbers
+//            Glide.with(binding.root.context)
+//                .load(item.profileImageUrl)
+//                .circleCrop()
+//                .into(binding.profileImageView)
         }
     }
 

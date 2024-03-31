@@ -34,10 +34,12 @@ import com.example.ai_language.ui.call.viewmodel.CallListViewModel
 import com.example.ai_language.ui.call.viewmodel.InviteListItem
 import com.example.ai_language.ui.call.viewmodel.InviteViewModel
 import com.example.ai_language.ui.home.Home
+import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+@AndroidEntryPoint
 class CallListFragment : BaseFragment<ActivityCallListBinding>(R.layout.activity_call_list) {
 
     private lateinit var call: Call<PhoneListDTO>
@@ -48,11 +50,13 @@ class CallListFragment : BaseFragment<ActivityCallListBinding>(R.layout.activity
 
     private lateinit var progressBar: ProgressBar
 
-    private val callViewModel: CallListViewModel by viewModels()
+    private val callViewModel by viewModels<CallListViewModel>()
+    private val callListAdapter = CallListAdapter()
+
     private val inviteViewModel: InviteViewModel by viewModels()
 
     private lateinit var callRecyclerView: RecyclerView
-    private lateinit var callListAdapter: CallListAdapter
+    //private lateinit var callListAdapter: CallListAdapter
     private lateinit var inviteRecyclerView: RecyclerView
     private lateinit var inviteListAdapter: InviteListAdapter
 
@@ -140,7 +144,7 @@ class CallListFragment : BaseFragment<ActivityCallListBinding>(R.layout.activity
         callRecyclerView = binding.rvCall
         callRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        callListAdapter = CallListAdapter(callViewModel)
+        //callListAdapter = CallListAdapter(callViewModel)
         callRecyclerView.adapter = callListAdapter
 
         callListAdapter.setOnItemClickListener(object : CallListAdapter.OnItemClickListener {
