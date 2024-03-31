@@ -41,7 +41,7 @@
             android:layout_gravity="center|bottom"
             android:background="@drawable/imageblank2"
             android:clipToOutline="true"
-            imageUrl="@{DicPic.referenceIdentifier}"
+            scaleImageUrl="@{DicPic.referenceIdentifier}"
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="@id/dic_text"
             app:layout_constraintStart_toStartOf="@id/dic_text"
