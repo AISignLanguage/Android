@@ -1,4 +1,4 @@
-package com.example.ai_language.ui.call
+package com.example.ai_language.ui.call.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.ai_language.R
+import com.example.ai_language.ui.call.viewmodel.CallListViewModel
 
 class CallListAdapter(private val viewModel: CallListViewModel) :
     RecyclerView.Adapter<CallListAdapter.CallListViewHolder>() {

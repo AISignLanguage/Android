@@ -25,6 +25,12 @@ import com.example.ai_language.data.remote.Service
 import com.example.ai_language.databinding.ActivityCallListBinding
 import com.example.ai_language.domain.model.request.PhoneListDTO
 import com.example.ai_language.domain.model.request.PhoneNumberDTO
+import com.example.ai_language.ui.call.adapter.CallListAdapter
+import com.example.ai_language.ui.call.adapter.InviteListAdapter
+import com.example.ai_language.ui.call.viewmodel.CallListItem
+import com.example.ai_language.ui.call.viewmodel.CallListViewModel
+import com.example.ai_language.ui.call.viewmodel.InviteListItem
+import com.example.ai_language.ui.call.viewmodel.InviteViewModel
 import com.example.ai_language.ui.home.Home
 import retrofit2.Call
 import retrofit2.Callback
