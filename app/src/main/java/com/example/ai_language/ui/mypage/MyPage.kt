@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
 import com.example.ai_language.ui.account.change.PersonalInfo
 import com.example.ai_language.R
 import com.example.ai_language.ui.account.SignoutDialog
@@ -19,6 +20,7 @@ class MyPage : BaseFragment<ActivityMyPageBinding>(R.layout.activity_my_page) {
     }
 
     private fun setOnClicked() {
+        onClickedByNavi()
         with(binding) {
             myInformEdit.setOnClickListener {
                 val intent = Intent(requireContext(), PersonalInfo::class.java)
@@ -62,6 +64,14 @@ class MyPage : BaseFragment<ActivityMyPageBinding>(R.layout.activity_my_page) {
             }
 
 
+        }
+    }
+
+
+    private fun onClickedByNavi() {
+        binding.tbMypage.setNavigationOnClickListener {
+            val navController = findNavController()
+            navController.navigate(R.id.action_navigation_my_page_to_navigation_home)
         }
     }
 

@@ -21,6 +21,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -49,7 +50,7 @@ class DictionaryPage :
 
     override fun setLayout() {
         startServer()
-        setOnClicked()
+        onClickedByNavi()
         setRecyclerView()
 
     }
@@ -111,13 +112,10 @@ class DictionaryPage :
         }
     }
 
-    private fun setOnClicked() {
-        with(binding) {
-            homeBtnDic.setOnClickListener {
-                val intent = Intent(requireContext(), Home::class.java)
-                startActivity(intent)
-                requireActivity().finish()
-            }
+    private fun onClickedByNavi() {
+        binding.linearLayout3.setNavigationOnClickListener {
+            val navController = findNavController()
+            navController.navigate(R.id.action_navigation_dictionary_to_navigation_home)
         }
     }
 
