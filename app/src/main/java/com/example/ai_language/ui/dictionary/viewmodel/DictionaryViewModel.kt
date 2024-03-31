@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DictionaryViewModel @Inject constructor(
     private val dictionaryRepository: DictionaryRepository
-) : ViewModel(){
+) : ViewModel() {
 
     private var _dicList = MutableStateFlow(ResponseBodys())
     val dicList: StateFlow<ResponseBodys> = _dicList
@@ -28,55 +28,29 @@ class DictionaryViewModel @Inject constructor(
     val tagList = _tagList
 
 
-    fun getDictionaryByOpenApi(serviceKey: String, numOfRows: String, pageNo: String){
+    private val tag_list = MutableLiveData<ArrayList<Tagdata>>()
+    val tag_data: LiveData<ArrayList<Tagdata>> get() = tag_list
+    private var tag_items = ArrayList<Tagdata>()
+
+    fun getDictionaryByOpenApi(serviceKey: String, numOfRows: String, pageNo: String) {
         viewModelScope.launch {
             try {
-                dictionaryRepository.getDictionaryByOpenApi(serviceKey,numOfRows,pageNo).collect{
+                dictionaryRepository.getDictionaryByOpenApi(serviceKey, numOfRows, pageNo).collect {
                     _dicList.value = it
                 }
-            }catch (e : Exception){
+            } catch (e: Exception) {
                 Log.e("Dictionary Error", e.message.toString())
             }
         }
     }
 
-
-
-    private val dic_list = MutableLiveData<ArrayList<DicPic>>()
-    val dic_data : LiveData<ArrayList<DicPic>>get() = dic_list
-    private var dic_items = ArrayList<DicPic>()
-    //딕셔너리 리스트
-
-    private val tag_list = MutableLiveData<ArrayList<Tagdata>>()
-    val tag_data : LiveData<ArrayList<Tagdata>>get() = tag_list
-    private var tag_items = ArrayList<Tagdata>()
     //태그 리스트
     init {
-        dic_list.value = dic_items
         tag_list.value = tag_items
     }
-    fun dicAddData(item : DicPic){
-        dic_items.add(item)
-        dic_list.postValue(dic_items)
-    }
-    fun dicUpdateData(item : DicPic, pos : Int){
-        dic_items[pos] = item
-        dic_list.value = dic_items
-    }
-    fun dicRemoveData(pos : Int){
-        dic_items.removeAt(pos)
-        dic_list.value = dic_items
-    }
-    fun tagAddData(item : Tagdata){
+
+    fun tagAddData(item: Tagdata) {
         tag_items.add(item)
-        tag_list.value = tag_items
-    }
-    fun tagUpdateData(item : Tagdata, pos : Int){
-        tag_items[pos] = item
-        tag_list.value = tag_items
-    }
-    fun tagRemoveData(pos : Int){
-        tag_items.removeAt(pos)
         tag_list.value = tag_items
     }
 }
