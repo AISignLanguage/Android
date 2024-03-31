@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ai_language.databinding.CallItemBinding
 import com.example.ai_language.domain.model.request.PhoneDTO
+import com.example.ai_language.domain.model.request.PhoneListDTO
 
 class CallListAdapter() :
     RecyclerView.Adapter<CallListAdapter.CallListViewHolder>() {
@@ -26,9 +27,9 @@ class CallListAdapter() :
         return CallListViewHolder(binding)
     }
 
-    fun update(newItems: PhoneDTO) {
-        items.add(newItems)
-        notifyItemInserted(items.size)
+    fun update(newItems: PhoneListDTO) {
+        newItems.phones.flatten().forEach { items.add(it) } // 새로운 아이템을 전체 추가
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: CallListViewHolder, position: Int) {
