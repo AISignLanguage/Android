@@ -14,17 +14,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class CallListItem(val name: String?, val callNumber: String?, val imageUrl: String?)
 data class InviteListItem(val name: String, val callNumber: String)
 
 @HiltViewModel
 class CallListViewModel @Inject constructor(
     private val callListRepository: CallListRepository
 ) :ViewModel() {
-
-//    var _callDataList = MutableLiveData<List<CallListItem>>()
-//    val callDataList: LiveData<List<CallListItem>>
-//        get() = _callDataList
 
     // CallListViewModel에 플로우 적용
     private var _callDataList = MutableStateFlow(PhoneListDTO(emptyList()))
@@ -34,6 +29,7 @@ class CallListViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 callListRepository.sendPhoneNumbers(phoneNumbers).collect{
+                    Log.d("로그", "${_callDataList.value}")
                     _callDataList.value = it
                 }
             }catch (e : Exception){
@@ -41,14 +37,6 @@ class CallListViewModel @Inject constructor(
             }
         }
     }
-
-//    fun addListItem(item: CallListItem) {
-//        //liveData가 비었으면 빈 mutableList 생성후 넣음, 아니면 그냥 넣음
-//        val currentList = callDataList.value?.toMutableList() ?: mutableListOf()
-//        currentList.add(item)
-//        _callDataList.value = currentList // LiveData를 새로운 목록으로 업데이트
-//        Log.d("로그", "addListItem " + "${_callDataList.value}")
-//    }
 
 }
 

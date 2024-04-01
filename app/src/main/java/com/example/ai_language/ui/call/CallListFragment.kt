@@ -1,11 +1,15 @@
 package com.example.ai_language.ui.call
 
 import android.app.Activity
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.database.ContentObserver
 import android.database.Cursor
 import android.graphics.Point
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.provider.ContactsContract
 import android.util.DisplayMetrics
 import android.util.Log
@@ -58,6 +62,8 @@ class CallListFragment : BaseFragment<ActivityCallListBinding>(R.layout.activity
     private lateinit var inviteRecyclerView: RecyclerView
     private lateinit var inviteListAdapter: InviteListAdapter
 
+    private lateinit var contentObserver: ContentObserver
+
     private var standardSize_X = 0
     private var standardSize_Y = 0
 
@@ -99,35 +105,34 @@ class CallListFragment : BaseFragment<ActivityCallListBinding>(R.layout.activity
         ).toInt()
     }
 
+    private fun registerContentObserver() {
+        val contentResolver: ContentResolver = requireActivity().contentResolver
+
+        // ContentObserver를 생성하여 연락처 데이터의 변화를 감지
+        contentObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
+            override fun onChange(selfChange: Boolean) {
+                super.onChange(selfChange)
+                // 연락처 데이터 변화가 감지되면 연락처 데이터를 다시 가져오고 서버에 데이터 갱신 요청
+                getContacts()
+                fetchDataFromServer()
+            }
+        }
+
+        // ContentResolver에 ContentObserver 등록
+        contentResolver.registerContentObserver(
+            ContactsContract.Contacts.CONTENT_URI,
+            true,
+            contentObserver
+        )
+    }
+
     override fun setLayout() {
         onClickedByNavi()
-//        val homeButton = binding.homeButton
-//        homeButton.setOnClickListener {
-//            val intent = Intent(requireContext(), Home::class.java)
-//            startActivity(intent)
-//        }
 
         callListRecyclerView()
         //inviteRecyclerView()
-        getContacts()
-        fetchDataFromServer() //서버에서 데이터 갱신
+        registerContentObserver() //서버에서 데이터 갱신
     }
-
-
-//    override fun onViewCreated(savedInstanceState: Bundle?) {
-//        super.onCreate(view, savedInstanceState)
-//
-//        val homeButton = binding.root.findViewById<ImageButton>(R.id.homeButton)
-//        homeButton.setOnClickListener {
-//            val intent = Intent(requireContext(), Home::class.java)
-//            startActivity(intent)
-//        }
-//
-//        callListRecyclerView()
-//        inviteRecyclerView()
-//        getContacts()
-//        fetchDataFromServer() //서버에서 데이터 갱신
-//    }
 
     private fun onClickedByNavi() {
         binding.logoIcon.setNavigationOnClickListener {
@@ -148,7 +153,7 @@ class CallListFragment : BaseFragment<ActivityCallListBinding>(R.layout.activity
         lifecycleScope.launch{
             repeatOnLifecycle(Lifecycle.State.CREATED) {
                 callViewModel.callDataList.collectLatest {
-                    if (it.phones.isEmpty()) {
+                    if (it.phones?.isEmpty() == true) {
                         Log.d("로그", "callDataList is null")
                     }  else {
                         callListAdapter.update(it)
@@ -166,10 +171,6 @@ class CallListFragment : BaseFragment<ActivityCallListBinding>(R.layout.activity
             }
         })
 
-        //뷰 모델 observe
-//        callViewModel.callDataList.observe(this, Observer { callDataList ->
-//            callListAdapter.notifyDataSetChanged()
-//        })
     }
 
     private fun inviteRecyclerView() {

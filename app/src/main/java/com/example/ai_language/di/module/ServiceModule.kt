@@ -1,5 +1,6 @@
 package com.example.ai_language.di.module
 
+import com.example.ai_language.data.remote.CallListService
 import com.example.ai_language.data.remote.DictionaryService
 import dagger.Module
 import dagger.Provides
@@ -19,5 +20,9 @@ object ServiceModule {
         @NetworkModule.OpenApiRetrofit retrofit: Retrofit
     ): DictionaryService = retrofit.create(DictionaryService::class.java)
 
-
+    @Provides
+    @Singleton
+    fun sendCallService(
+        @NetworkModule.MogInterceptorOkHttpClient retrofit: Retrofit
+    ) : CallListService = retrofit.create(CallListService::class.java)
 }

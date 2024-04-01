@@ -28,7 +28,7 @@ class CallListAdapter() :
     }
 
     fun update(newItems: PhoneListDTO) {
-        newItems.phones.flatten().forEach { items.add(it) } // 새로운 아이템을 전체 추가
+        newItems.phones!!.flatten().forEach { items.add(it) } // 새로운 아이템을 전체 추가
         notifyDataSetChanged()
     }
 
