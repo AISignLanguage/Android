@@ -53,6 +53,9 @@
             android:exported="true"></service>
 
         <activity
+            android:name=".ui.call.Call_item"
+            android:exported="false" />
+        <activity
             android:name=".ui.account.change.ChangeNicknameActivity"
             android:exported="false" />
         <activity
