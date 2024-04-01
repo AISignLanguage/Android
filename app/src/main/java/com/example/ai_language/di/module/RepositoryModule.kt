@@ -2,10 +2,13 @@ package com.example.ai_language.di.module
 
 import com.example.ai_language.data.source.CallListDataSource
 import com.example.ai_language.data.source.CallListRepositoryImpl
-import com.example.ai_language.data.source.DictionaryDataSource
-import com.example.ai_language.data.source.DictionaryRepositoryImpl
+import com.example.ai_language.data.source.Map.MapDataSource
+import com.example.ai_language.data.source.Map.MapRepositoryImpl
+import com.example.ai_language.data.source.dictionary.DictionaryDataSource
+import com.example.ai_language.data.source.dictionary.DictionaryRepositoryImpl
 import com.example.ai_language.domain.repository.CallListRepository
 import com.example.ai_language.domain.repository.DictionaryRepository
+import com.example.ai_language.domain.repository.MapRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,5 +28,10 @@ object RepositoryModule {
     @Provides
     fun provideCallListRepository(callListDataSource: CallListDataSource): CallListRepository =
         CallListRepositoryImpl(callListDataSource)
+
+    @Singleton
+    @Provides
+    fun provideCorporationRepository(mapDataSource: MapDataSource) : MapRepository =
+        MapRepositoryImpl(mapDataSource)
 
 }

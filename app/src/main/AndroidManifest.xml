@@ -47,11 +47,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AI_Language"
         tools:targetApi="31">
-        <service
-            android:name=".data.remote.CameraService"
-            android:enabled="true"
-            android:exported="true"></service>
+        <activity
+            android:name=".ui.map.MapActivity"
+            android:exported="false" />
 
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="wf7lge71wa" />
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_SECRET"
+            android:value="S2xrrmnpETvuzVH4QolG12oY050t1GntJ8uxrl23"/>
         <activity
             android:name=".ui.call.Call_item"
             android:exported="false" />
