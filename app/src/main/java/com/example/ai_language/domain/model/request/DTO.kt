@@ -97,17 +97,17 @@ data class LoginCheckDTO(
 
 //CallListPage (전화번호 DB에서 불러오기)
 data class PhoneNumberDTO(
-    @SerializedName("phoneNumber") val phoneNumbers: List<String>
+    @SerializedName("phoneNumber") val phoneNumbers: List<String>? = null
 )
 
 data class PhoneDTO(
-    @SerializedName("name") val name: String?,
-    @SerializedName("phoneNumber") val phoneNumbers: String?,
-    @SerializedName("profileImageUrl") val profileImageUrl: String?
+    @SerializedName("name") val name: String? = null,
+    @SerializedName("phoneNumber") val phoneNumbers: String? = null,
+    @SerializedName("profileImageUrl") val profileImageUrl: String? = null
 )
 
 data class PhoneListDTO(
-    val phones: List<List<PhoneDTO>>
+    val phones: List<List<PhoneDTO>>? = null
 )
 
 //NewsPage
