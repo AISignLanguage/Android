@@ -1,4 +1,4 @@
-package com.example.ai_language.ui.call
+package com.example.ai_language.ui.call.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +7,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ai_language.R
+import com.example.ai_language.ui.call.viewmodel.InviteViewModel
 
 class InviteListAdapter(private val viewModel: InviteViewModel) :
     RecyclerView.Adapter<InviteListAdapter.InviteListViewHolder>() {

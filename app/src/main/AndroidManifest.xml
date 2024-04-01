@@ -58,6 +58,9 @@
             android:name="com.naver.maps.map.CLIENT_SECRET"
             android:value="S2xrrmnpETvuzVH4QolG12oY050t1GntJ8uxrl23"/>
         <activity
+            android:name=".ui.call.Call_item"
+            android:exported="false" />
+        <activity
             android:name=".ui.account.change.ChangeNicknameActivity"
             android:exported="false" />
         <activity
