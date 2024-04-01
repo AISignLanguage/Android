@@ -32,7 +32,7 @@ class Home : BaseActivity<ActivityHomeBinding>(R.layout.activity_home) {
         }
 
     }
-    fun setOnClick(){
+    private fun setOnClick(){
         binding.ftbCamera.setOnClickListener{
             startActivity(Intent(this, CameraPage::class.java))
 
@@ -40,7 +40,7 @@ class Home : BaseActivity<ActivityHomeBinding>(R.layout.activity_home) {
     }
 
     // 권한 확인 함수
-    fun checkPermissions() {
+    private fun checkPermissions() {
         // 사용자가 권한  확인 했는지 확인
         val status = ContextCompat.checkSelfPermission(this, "android.permission.READ_CONTACTS")
         if (status == PackageManager.PERMISSION_GRANTED) {

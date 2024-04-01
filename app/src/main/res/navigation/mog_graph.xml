@@ -16,7 +16,11 @@
         android:id="@+id/navigation_my_page"
         android:name="com.example.ai_language.ui.mypage.MyPage"
         tools:layout="@layout/activity_my_page"
-        android:label="MyPageFragment"/>
+        android:label="MyPageFragment">
+        <action
+            android:id="@+id/action_navigation_my_page_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_call"
@@ -28,10 +32,30 @@
         android:id="@+id/navigation_dictionary"
         android:name="com.example.ai_language.ui.dictionary.DictionaryPage"
         tools:layout="@layout/activity_dictionary_page"
-        android:label="DictionaryFragment"/>
+        android:label="DictionaryFragment">
+        <action
+            android:id="@+id/action_navigation_dictionary_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_word_page"
         android:name="com.example.ai_language.ui.news.NewsFragment"
         tools:layout="@layout/activity_news"
-        android:label="NewsFragment"/>
+        android:label="NewsFragment">
+        <action
+            android:id="@+id/action_navigation_word_page_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_call_list_page"
+        android:name="com.example.ai_language.ui.call.CallListFragment"
+        tools:layout="@layout/activity_call_list"
+        android:label="CallList">
+        <action
+            android:id="@+id/action_callListFragment_to_homeFragment"
+            app:destination="@id/navigation_home" />
+    </fragment>
+
+
 </navigation>

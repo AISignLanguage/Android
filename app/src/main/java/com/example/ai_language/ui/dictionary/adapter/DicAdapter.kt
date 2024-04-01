@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ai_language.databinding.ActivityDicItemBinding
 import com.example.ai_language.domain.model.response.Item
 import com.example.ai_language.domain.model.response.ResponseBodys
-import com.example.ai_language.ui.dictionary.data.DicPic
 class DicAdapter : RecyclerView.Adapter<DicAdapter.DicViewHolder>() {
     private val items = mutableListOf<Item>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DicViewHolder {
