@@ -20,6 +20,6 @@ include(":app")
 
 // plugins 블록을 여기로 옮기세요
 plugins {
-    id("com.android.application") version "8.3.1" apply false
+    id("com.android.application") version "8.2.2" apply false
     id("org.jetbrains.kotlin.android") version "1.9.0" apply false
 }

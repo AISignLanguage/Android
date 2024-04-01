@@ -97,7 +97,7 @@ data class LoginCheckDTO(
 
 //CallListPage (전화번호 DB에서 불러오기)
 data class PhoneNumberDTO(
-    @SerializedName("phoneNumber") val phoneNumbers: List<String>
+    val phoneNumber: List<String>
 )
 
 data class PhoneDTO(
