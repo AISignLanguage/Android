@@ -23,6 +23,8 @@ import com.example.ai_language.domain.model.request.LoginRequestDTO
 import com.example.ai_language.domain.model.request.LoginResponseDTO
 import com.example.ai_language.find.FindIdPwd
 import com.example.ai_language.ui.home.Home
+import com.example.ai_language.ui.map.MapActivity
+import com.example.ai_language.ui.map.MapFragment
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -115,13 +117,19 @@ class KaKaoLoginActivity : AppCompatActivity() {
 
 
 
+    private fun setOnClickMapBtn(){
+        val mapBtn = findViewById<Button>(R.id.bt_map)
+        mapBtn.setOnClickListener {
+            startActivity(Intent(this, MapActivity::class.java))
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ka_kao_login)
 
 
-
+        setOnClickMapBtn()
         //아이디 잃어버렸을 때
         val forgetPage = findViewById<TextView>(R.id.forgetPage)
         forgetPage.setOnClickListener {
