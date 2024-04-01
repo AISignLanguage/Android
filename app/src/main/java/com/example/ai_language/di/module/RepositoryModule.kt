@@ -1,7 +1,7 @@
 package com.example.ai_language.di.module
 
-import com.example.ai_language.data.source.DictionaryDataSource
-import com.example.ai_language.data.source.DictionaryRepositoryImpl
+import com.example.ai_language.data.source.dictionary.DictionaryDataSource
+import com.example.ai_language.data.source.dictionary.DictionaryRepositoryImpl
 import com.example.ai_language.domain.repository.DictionaryRepository
 import dagger.Module
 import dagger.Provides

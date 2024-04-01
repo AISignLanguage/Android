@@ -1,4 +1,4 @@
-package com.example.ai_language.data.source
+package com.example.ai_language.data.source.dictionary
 
 import android.util.Log
 import com.example.ai_language.data.remote.DictionaryService
