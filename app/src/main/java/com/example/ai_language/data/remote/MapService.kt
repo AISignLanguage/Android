@@ -5,10 +5,10 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface MapService {
-    @GET("https://openapi.gg.go.kr/Signlangintrprtcenter")
-    fun getInfo(
-        @Query("KEY") key: String = "sample key",
-        @Query("Type") type: String = "xml",
+    @GET("Signlangintrprtcenter")
+    suspend fun getCorporationByOpenApi(
+        @Query("KEY") key: String = "4b7ecc6c16b1492db814d065c2e0e16f",
+        @Query("Type") type: String = "json",
         @Query("pIndex") pageIndex: Int = 1,
         @Query("pSize") pageSize: Int = 100,
         @Query("SIGUN_NM") sigunNm: String? = null,
