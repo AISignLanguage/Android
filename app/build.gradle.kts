@@ -72,6 +72,8 @@ dependencies {
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation ("com.google.dagger:hilt-android:2.50")
+    implementation("androidx.activity:activity:1.8.0")
+    implementation("androidx.compose.animation:animation-core-android:1.6.4")
     kapt ("com.google.dagger:hilt-compiler:2.50")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
@@ -145,5 +147,7 @@ dependencies {
     implementation ("org.tensorflow:tensorflow-lite:2.13.0")
     implementation ("org.tensorflow:tensorflow-lite-support:0.4.4")
 
+    //naver Map
+    implementation("com.naver.maps:map-sdk:3.18.0")
 
 }
