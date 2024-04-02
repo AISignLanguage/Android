@@ -146,5 +146,8 @@ dependencies {
     implementation ("org.tensorflow:tensorflow-lite:2.13.0")
     implementation ("org.tensorflow:tensorflow-lite-support:0.4.4")
 
+    //naver Map
+    implementation("com.naver.maps:map-sdk:3.18.0")
+    implementation ("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2")
 
 }

@@ -24,6 +24,10 @@ object NetworkModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class OpenApiRetrofit
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class OpenApiRetrofit2
+
     @Provides
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor =
@@ -67,6 +71,20 @@ object NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(Util.BASE_URL2)
+            .addConverterFactory(gsonConverterFactory)
+            .client(client)
+            .build()
+    }
+
+    @OpenApiRetrofit2
+    @Provides
+    @Singleton
+    fun provideOpenApiRetrofit2(
+        gsonConverterFactory: GsonConverterFactory,
+        @MogInterceptorOkHttpClient client: OkHttpClient  // 이 부분에서도 MogInterceptorOkHttpClient를 사용합니다.
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(Util.BASE_URL3)
             .addConverterFactory(gsonConverterFactory)
             .client(client)
             .build()
