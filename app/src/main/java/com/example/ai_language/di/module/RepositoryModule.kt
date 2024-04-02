@@ -1,7 +1,7 @@
 package com.example.ai_language.di.module
 
-import com.example.ai_language.data.source.CallListDataSource
-import com.example.ai_language.data.source.CallListRepositoryImpl
+import com.example.ai_language.data.source.call.CallListDataSource
+import com.example.ai_language.data.source.call.CallRepositoryImpl
 import com.example.ai_language.data.source.Map.MapDataSource
 import com.example.ai_language.data.source.Map.MapRepositoryImpl
 import com.example.ai_language.data.source.dictionary.DictionaryDataSource
@@ -27,7 +27,7 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideCallListRepository(callListDataSource: CallListDataSource): CallListRepository =
-        CallListRepositoryImpl(callListDataSource)
+        CallRepositoryImpl(callListDataSource)
 
     @Singleton
     @Provides
