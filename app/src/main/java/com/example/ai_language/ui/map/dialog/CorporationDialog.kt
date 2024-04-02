@@ -1,6 +1,5 @@
 package com.example.ai_language.ui.map.dialog
 
-import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -13,11 +12,9 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.example.ai_language.R
-import com.example.ai_language.data.source.Map.MapDataSource
 import com.example.ai_language.databinding.CorporationDialogBinding
 import com.example.ai_language.ui.map.data.MapDialogData
 import com.example.ai_language.ui.map.listener.DetailImWriteDialogInterface
-import com.example.ai_language.ui.map.listener.DialogDismissListener
 
 class CorporationDialog(
     private val detailImWriteDialogInterface: DetailImWriteDialogInterface,
