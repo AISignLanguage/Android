@@ -35,6 +35,7 @@ import com.example.ai_language.domain.model.request.PhoneNumberDTO
 import com.example.ai_language.ui.call.adapter.CallListAdapter
 import com.example.ai_language.ui.call.adapter.InviteListAdapter
 import com.example.ai_language.ui.call.viewmodel.CallListViewModel
+import com.example.ai_language.ui.call.viewmodel.InviteListItem
 import com.example.ai_language.ui.call.viewmodel.InviteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -44,13 +45,8 @@ import retrofit2.Call
 @AndroidEntryPoint
 class CallListFragment : BaseFragment<ActivityCallListBinding>(R.layout.activity_call_list) {
 
-    private lateinit var call: Call<PhoneListDTO>
-    private lateinit var service: Service
     private lateinit var phoneNumberDTO: PhoneNumberDTO
-    private lateinit var appPhoneNumbers: List<String> //서버에서 가져온 번호만 저장하는 리스트
-    val contactListMap = mutableListOf<Pair<String, String>>() // 이름, 번호 map
-
-    private lateinit var progressBar: ProgressBar
+    private val contactListMap = mutableListOf<Pair<String, String>>() // 이름, 번호 map
 
     private val callViewModel by viewModels<CallListViewModel>()
     private val callListAdapter = CallListAdapter()
@@ -58,11 +54,8 @@ class CallListFragment : BaseFragment<ActivityCallListBinding>(R.layout.activity
     private val inviteViewModel: InviteViewModel by viewModels()
 
     private lateinit var callRecyclerView: RecyclerView
-    //private lateinit var callListAdapter: CallListAdapter
     private lateinit var inviteRecyclerView: RecyclerView
     private lateinit var inviteListAdapter: InviteListAdapter
-
-    private lateinit var contentObserver: ContentObserver
 
     private var standardSize_X = 0
     private var standardSize_Y = 0
@@ -105,33 +98,13 @@ class CallListFragment : BaseFragment<ActivityCallListBinding>(R.layout.activity
         ).toInt()
     }
 
-    private fun registerContentObserver() {
-        val contentResolver: ContentResolver = requireActivity().contentResolver
 
-        // ContentObserver를 생성하여 연락처 데이터의 변화를 감지
-        contentObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
-            override fun onChange(selfChange: Boolean) {
-                super.onChange(selfChange)
-                // 연락처 데이터 변화가 감지되면 연락처 데이터를 다시 가져오고 서버에 데이터 갱신 요청
-                getContacts()
-                fetchDataFromServer()
-            }
-        }
-
-        // ContentResolver에 ContentObserver 등록
-        contentResolver.registerContentObserver(
-            ContactsContract.Contacts.CONTENT_URI,
-            true,
-            contentObserver
-        )
-    }
 
     override fun setLayout() {
         onClickedByNavi()
-
+        getContacts()
         callListRecyclerView()
-        //inviteRecyclerView()
-        registerContentObserver() //서버에서 데이터 갱신
+        inviteRecyclerView()
     }
 
     private fun onClickedByNavi() {
@@ -141,23 +114,28 @@ class CallListFragment : BaseFragment<ActivityCallListBinding>(R.layout.activity
         }
     }
 
+    // callListRecyclerView 초기화 및 생명주기로 서버에서 뷰모델 값 받아오고 그 이후에는 뷰모델로 업데이트 하는 함수
     private fun callListRecyclerView() {
-        //val call = service.getCallData(uri, installCheck)
 
         callRecyclerView = binding.rvCall
         callRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        //callListAdapter = CallListAdapter(callViewModel)
         callRecyclerView.adapter = callListAdapter
+
+        if (callViewModel.callDataList.value.phones.isEmpty()) {
+            callViewModel.sendPhoneNumbers(phoneNumberDTO)
+            Log.d("로그", "callViewModel 생성")
+        }
 
         lifecycleScope.launch{
             repeatOnLifecycle(Lifecycle.State.CREATED) {
                 callViewModel.callDataList.collectLatest {
                     if (it.phones?.isEmpty() == true) {
                         Log.d("로그", "callDataList is null")
-                    }  else {
+                    } else {
                         callListAdapter.update(it)
                         binding.rvCall.adapter = callListAdapter
+                        Log.d("로그", "callViewModel 업데이트 ")
                     }
                 }
             }
@@ -188,19 +166,38 @@ class CallListFragment : BaseFragment<ActivityCallListBinding>(R.layout.activity
             }
         })
 
-        //뷰 모델 observe
-        inviteViewModel.inviteDataList.observe(this, Observer { inviteDataList ->
-            inviteListAdapter.notifyDataSetChanged()
-        })
+        // CallListViewModel에서 전화번호만 추출 (서버에서 가져와서 CallListViewModel에 저장됨)
+        val phoneNumbers = mutableListOf<String>()
+        callViewModel.callDataList.value.phones.forEach { phoneList ->
+            phoneList.forEach { phoneDTO ->
+                // phoneDTO에서 전화번호를 추출하여 리스트에 추가
+                phoneDTO.phoneNumbers?.let { phoneNumber ->
+                    phoneNumbers.add(phoneNumber)
+                    Log.d("로그", "$phoneNumber")
+                }
+            }
+        }
+
+        // CallListViewModel에서 받아온 번호와 일치하지 않는 번호 필터링 (일치하지 않는 이름, 번호만 저장)
+        val filteredContactListMap = contactListMap.filter { contact ->
+            !phoneNumbers.contains(contact.second) // appPhoneNumbers에 해당 번호가 없는 경우만 필터링
+        }
+
+        // filteredContactListMap 모든 항목 반복해서 아이템 만들고 뷰 모델에 추가 (앱 비 사용자)
+        for (contact in filteredContactListMap) {
+            val inviteListItem = InviteListItem(contact.first, contact.second)
+            inviteViewModel.addListItem(inviteListItem)
+        }
+
+            //뷰 모델 observe
+            inviteViewModel.inviteDataList.observe(this, Observer { inviteDataList ->
+                inviteListAdapter.notifyDataSetChanged()
+            })
     }
 
-
-    private fun ChangePhoneNumber(number: String?): Boolean {
-        // 유효한 전화번호 패턴 확인 (010-1234-5678)
-        val regex = Regex("^010-\\d{3,4}-\\d{4}$")
-        return !number.isNullOrEmpty() && regex.matches(number)
-    }
-
+    // 주소록 앱에서 전화번호 추출
+    // 1. 이름과 전화번호 Pair 묶음 생성 -> 앱 비 사용자 분리하기 위함 (invieteRecylcerView)
+    // 2. 전화번호 리스트 생성해서 서버에 보낼 DTO 생성 -> 서버에 보내기 위함
     private fun getContacts() {
         // 연락처 전체 정보에 대한 쿼리 수행
         val cursor: Cursor? = requireActivity().contentResolver.query(
@@ -263,81 +260,8 @@ class CallListFragment : BaseFragment<ActivityCallListBinding>(R.layout.activity
 
             // 해당 연락처의 전화번호들을 DTO로 변환하여 리스트에 추가
             phoneNumberDTO = PhoneNumberDTO(phoneNumbers)
-            //Log.d("로그", "phoneNumbers : ${phoneNumbers}")
 
         } //while 종료
         cursor?.close()
-    }
-
-    // 서버에서 데이터를 가져오는 함수
-    private fun fetchDataFromServer() {
-        callViewModel.sendPhoneNumbers(
-            phoneNumberDTO
-        )
-//        // Retrofit 인스턴스 생성
-//        RetrofitClient.getInstance()
-//        service = RetrofitClient.getUserRetrofitInterface()
-//        call = service.sendCallData(phoneNumberDTO)
-//
-//        progressBar = binding.progressBar
-//        progressBar.visibility = View.VISIBLE
-//
-//        // 서버로부터 데이터를 가져오는 요청 보내기
-//        call.enqueue(object : Callback<PhoneListDTO> {
-//            override fun onResponse(call: Call<PhoneListDTO>, response: Response<PhoneListDTO>) {
-//                progressBar.visibility = View.GONE
-//                if (response.isSuccessful) {
-//                    val PhoneListDTO = response.body() // 서버에서 받은 데이터
-//                    PhoneListDTO?.phones?.let { phones ->
-//                        for (phoneDTOList in phones) {
-//                            for (phoneDTO in phoneDTOList) {
-//                                Log.d(
-//                                    "로그",
-//                                    "${phoneDTO.name}, ${phoneDTO.phoneNumbers}, Url: ${phoneDTO.profileImageUrl}"
-//                                )
-//                                val callListItem = CallListItem(
-//                                    phoneDTO.name,
-//                                    phoneDTO.phoneNumbers,
-//                                    phoneDTO.profileImageUrl
-//                                )
-//                                callViewModel.addListItem(callListItem) // 뷰 모델에 서버에서 가져온 데이터 추가
-//                            }
-//                            // 중첩된 리스트에 대해 이중 반복문을 사용하여 phoneNumber 추출
-//                            appPhoneNumbers = phones
-//                                .flatMap { it } // 중첩된 리스트를 하나의 리스트로 평탄화
-//                                .mapNotNull { it.phoneNumbers } // 각 PhoneDTO에서 phoneNumber 추출하고 null 필터링
-//                            Log.d("로그", "appPhoneNumbers : ${appPhoneNumbers}")
-//                        }
-//                    }
-//
-//                    // 서버에서 받은 번호와 일치하지 않는 번호만 남겨두기 위한 필터링
-//                    val filteredContactListMap = contactListMap.filter { contact ->
-//                        !appPhoneNumbers.contains(contact.second) // appPhoneNumbers에 해당 번호가 없는 경우만 필터링
-//                    }
-//                    contactListMap.clear() // 기존의 데이터를 모두 지움
-//                    contactListMap.addAll(filteredContactListMap) // 필터링된 데이터만 추가
-//
-//                    //filteredContactListMap의 모든 항목 반복해서 아이템 만들고 뷰 모델에 추가
-//                    for (contact in filteredContactListMap) {
-//                        val inviteListItem = InviteListItem(contact.first, contact.second)
-//                        inviteViewModel.addListItem(inviteListItem)
-//                    }
-//
-//                } else {
-//                    // 요청 실패 처리
-//                    Log.d(
-//                        "로그", "데이터 요청 실패. 응답 코드: ${response.code()}, "
-//                                + "오류 메시지: ${response.errorBody()?.string()}"
-//                    )
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<PhoneListDTO>, t: Throwable) {
-//                // 통신 실패 처리
-//                progressBar.visibility = View.GONE
-//                Log.d("로그", "통신 실패: ${t.message}")
-//            }
-//        })
-
     }
 }
