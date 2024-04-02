@@ -20,6 +20,9 @@ import com.example.ai_language.base.BaseActivity
 import com.example.ai_language.databinding.ActivityMapBinding
 import com.example.ai_language.databinding.DialogBusinessInfoBinding
 import com.example.ai_language.ui.dictionary.viewmodel.DictionaryViewModel
+import com.example.ai_language.ui.map.data.MapDialogData
+import com.example.ai_language.ui.map.dialog.CorporationDialog
+import com.example.ai_language.ui.map.listener.DetailImWriteDialogInterface
 import com.example.ai_language.ui.map.viewModel.MapViewModel
 import com.naver.maps.map.CameraUpdate
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,11 +30,16 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map), OnMapReadyCallback {
+class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
+    DetailImWriteDialogInterface, OnMapReadyCallback {
 
     private val mapViewModel by viewModels<MapViewModel>()
-
+    private var dialog: CorporationDialog? = null
     override fun setLayout() {
+        startMap()
+    }
+
+    private fun startMap() {
         initFragment()
         startMapPoint()
     }
@@ -47,6 +55,32 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map), OnM
 
     private fun startMapPoint() {
         mapViewModel.getCorporationByOpenApi("4b7ecc6c16b1492db814d065c2e0e16f", "json", 1, 100)
+    }
+
+    private fun addMenu(mapDialogData: MapDialogData) {
+        if (dialog?.isVisible != true) {
+            dialog = CorporationDialog(this, mapDialogData)
+            dialog?.apply {
+                isCancelable = true
+                showNow(supportFragmentManager, "DetailImWritDialog")
+            }
+        }
+    }
+
+    override fun onClickButton(id: Int) {
+        when (id) {
+            1 -> {
+                //길찾기
+            }
+
+            2 -> {
+                // 자세히보기
+            }
+        }
+    }
+
+    private fun createDialogData(title: String, address: String, state: String): MapDialogData {
+        return MapDialogData(title, address, state)
     }
 
     override fun onMapReady(naverMap: com.naver.maps.map.NaverMap) {
@@ -70,10 +104,12 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map), OnM
                                 marker.setOnClickListener { overlay ->
                                     overlay as Marker
                                     // 마커의 위치에 대응하는 사업자명 가져오기
-                                    val businessName = businessInfo.BIZPLC_NM
+                                    val title = businessInfo.BIZPLC_NM
                                     val address = businessInfo.REFINE_LOTNO_ADDR
+                                    val state = businessInfo.BSN_STATE_NM
+                                    Log.d("값", "r$title + $address + $state")
                                     // 다이얼로그 표시
-                                    showBusinessInfoDialog(businessName, address)
+                                    addMenu(createDialogData(title, address, state))
                                     true
                                 }
                             } else {
@@ -89,23 +125,5 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map), OnM
             }
         }
     }
-
-    private fun showBusinessInfoDialog(businessName: String, address: String) {
-        // 다이얼로그 레이아웃을 인플레이트하여 뷰 바인딩 생성
-        val dialogBinding = DialogBusinessInfoBinding.inflate(LayoutInflater.from(this))
-
-        // 다이얼로그에 표시할 정보 설정
-        dialogBinding.textViewBusinessName.text = businessName
-        dialogBinding.textViewAddress.text = address
-
-        // 다이얼로그 생성
-        val dialog = AlertDialog.Builder(this)
-            .setView(dialogBinding.root)
-            .setPositiveButton("확인") { _, _ ->
-                // 확인 버튼 클릭 시 처리할 내용 (이 경우 아무 작업 없음)
-            }
-            .create()
-        // 다이얼로그 표시
-        dialog.show()
-    }
 }
+
