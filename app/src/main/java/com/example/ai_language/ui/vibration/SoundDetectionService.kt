@@ -17,9 +17,7 @@ class SoundDetectionService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-
         // 여기에 소리 감지 및 진동 제어 로직 추가
-
         return START_STICKY
     }
 
