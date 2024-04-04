@@ -9,6 +9,15 @@
     tools:context=".ui.account.KaKaoLoginActivity">
 
     <Button
+        android:id="@+id/btn_vibaration"
+        android:layout_marginTop="30dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="..."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <Button
         android:id="@+id/button3"
         android:layout_width="20dp"
         android:layout_height="20dp"
