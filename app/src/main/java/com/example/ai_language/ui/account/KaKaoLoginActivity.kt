@@ -2,6 +2,7 @@ package com.example.ai_language.ui.account
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -13,25 +14,26 @@ import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import android.Manifest
 import com.example.ai_language.MyApp
 import com.example.ai_language.R
-import com.example.ai_language.Util.RetrofitClient
 import com.example.ai_language.Util.EncryptedSharedPreferencesManager
+import com.example.ai_language.Util.RetrofitClient
 import com.example.ai_language.Util.extensions.datastore
 import com.example.ai_language.domain.model.request.LoginRequestDTO
 import com.example.ai_language.domain.model.request.LoginResponseDTO
 import com.example.ai_language.find.FindIdPwd
 import com.example.ai_language.ui.home.Home
 import com.example.ai_language.ui.map.MapActivity
-import com.example.ai_language.ui.map.MapFragment
+import com.example.ai_language.ui.vibration.SoundDetectionService
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,7 +46,8 @@ class KaKaoLoginActivity : AppCompatActivity() {
     private lateinit var userPw: EditText
     private lateinit var progressBar: ProgressBar
     private val disposables = CompositeDisposable()
-
+    private var isServiceRunning = false // 서비스 실행 여부를 추적하는 변수
+    private var soundDetectionService: SoundDetectionService? = null // 서비스 인스턴스를 추적하는 변수
     override fun onDestroy() {
         super.onDestroy()
         disposables.clear()
@@ -115,19 +118,54 @@ class KaKaoLoginActivity : AppCompatActivity() {
     }
 
 
-
-
-    private fun setOnClickMapBtn(){
+    private fun setOnClickMapBtn() {
         val mapBtn = findViewById<Button>(R.id.bt_map)
         mapBtn.setOnClickListener {
             startActivity(Intent(this, MapActivity::class.java))
         }
     }
 
+    private fun startDetectionService() {
+        val serviceIntent = Intent(this, SoundDetectionService::class.java)
+        if (!isServiceRunning) {
+            ContextCompat.startForegroundService(this, serviceIntent)
+            isServiceRunning = true
+        } else {
+            Toast.makeText(this, "서비스가 이미 실행 중입니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun stopDetectionService() {
+        val serviceIntent = Intent(this, SoundDetectionService::class.java)
+        if (isServiceRunning) {
+            stopService(serviceIntent)
+            isServiceRunning = false
+        } else {
+            Toast.makeText(this, "서비스가 실행 중이지 않습니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    companion object {
+        private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ka_kao_login)
-
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), REQUEST_RECORD_AUDIO_PERMISSION)
+        }
+        var st = true
+        val startStopButton = findViewById<Button>(R.id.btn_vibaration)
+        startStopButton.setOnClickListener {
+            if (isServiceRunning) {
+                stopDetectionService()
+                startStopButton.text = "시작"
+            } else {
+                startDetectionService()
+                startStopButton.text = "멈추기"
+            }
+        }
 
         setOnClickMapBtn()
         //아이디 잃어버렸을 때
