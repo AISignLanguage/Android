@@ -6,6 +6,7 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -56,15 +57,10 @@
             android:value="wf7lge71wa" />
         <meta-data
             android:name="com.naver.maps.map.CLIENT_SECRET"
-            android:value="S2xrrmnpETvuzVH4QolG12oY050t1GntJ8uxrl23"/>
-        <activity
-            android:name=".ui.call.Call_item"
-            android:exported="false" />
+            android:value="S2xrrmnpETvuzVH4QolG12oY050t1GntJ8uxrl23" />
+
         <activity
             android:name=".ui.account.change.ChangeNicknameActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.account.change.ChangePwDialog"
             android:exported="false" />
         <activity
             android:name=".find.FindEmail"
@@ -127,9 +123,6 @@
             android:name=".ui.news.News_item"
             android:exported="false" />
         <activity
-            android:name=".ui.news.NewsFragment"
-            android:exported="false" />
-        <activity
             android:name=".ui.account.Unregister"
             android:exported="false" />
         <activity
@@ -148,16 +141,7 @@
             android:name=".ui.dictionary.Dic_item"
             android:exported="false" />
         <activity
-            android:name=".ui.dictionary.DictionaryPage"
-            android:exported="false" />
-        <activity
-            android:name=".ui.mypage.MyPage"
-            android:exported="false" />
-        <activity
             android:name=".ui.home.Home"
-            android:exported="false" />
-        <activity
-            android:name=".ui.call.CallListFragment"
             android:exported="false" />
         <activity
             android:name=".ui.account.change.PersonalInfo"
