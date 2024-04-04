@@ -3,17 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.ai_language">
 
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
@@ -21,22 +23,21 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- The Agora SDK requires Bluetooth permissions in case users are using Bluetooth devices. -->
-    <uses-permission android:name="android.permission.BLUETOOTH" /> <!-- For Android 12 and above devices, the following permission is also required. -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-
-    <uses-feature android:name="android.hardware.camera.any" />
-    <uses-feature
-        android:name="android.hardware.telephony"
-        android:required="false" />
-
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
     <application
         android:name=".MyApp"
         android:allowBackup="true"
@@ -48,17 +49,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AI_Language"
         tools:targetApi="31">
-        <activity
-            android:name=".ui.map.MapActivity"
-            android:exported="false" />
-
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="wf7lge71wa" />
         <meta-data
             android:name="com.naver.maps.map.CLIENT_SECRET"
             android:value="S2xrrmnpETvuzVH4QolG12oY050t1GntJ8uxrl23" />
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.1" />
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.1" />
 
+        <activity
+            android:name=".ui.map.MapActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.account.change.ChangeNicknameActivity"
             android:exported="false" />
@@ -68,19 +74,9 @@
         <activity
             android:name=".ui.account.change.ChangePw"
             android:exported="false" />
-
-        <meta-data
-            android:name="android.max_aspect"
-            android:value="2.1" />
-
         <activity
             android:name=".find.FindIdPwd"
             android:exported="false" />
-
-        <meta-data
-            android:name="android.max_aspect"
-            android:value="2.1" />
-
         <activity
             android:name=".ui.call.CallActivity"
             android:exported="false" />
@@ -146,17 +142,17 @@
         <activity
             android:name=".ui.account.change.PersonalInfo"
             android:exported="false" />
+
+        <service android:name=".ui.vibration.SoundDetectionService"/>
         <activity
             android:name=".SplashActivity"
             android:exported="true"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
     </application>
-
 </manifest>
