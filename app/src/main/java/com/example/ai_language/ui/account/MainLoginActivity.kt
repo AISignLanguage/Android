@@ -40,7 +40,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import kotlin.random.Random
 
-class KaKaoLoginActivity : AppCompatActivity() {
+class MainLoginActivity : AppCompatActivity() {
 
     private lateinit var userEmail: EditText
     private lateinit var userPw: EditText
@@ -53,6 +53,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
         disposables.clear()
     }
 
+    // 자동 로그인 여부 판별해서 로그인 처리
     private fun attemptLogin() {
 
         val encryptedSharedPreferences = EncryptedSharedPreferencesManager(this)
@@ -151,7 +152,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_ka_kao_login)
+        setContentView(R.layout.activity_main_login)
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), REQUEST_RECORD_AUDIO_PERMISSION)
         }
@@ -284,7 +285,7 @@ class KaKaoLoginActivity : AppCompatActivity() {
             if (error != null) {
                 Toast.makeText(this, "토큰 실패", Toast.LENGTH_SHORT).show()
                 lifecycleScope.launch {
-                    kakaoLogin(this@KaKaoLoginActivity)
+                    kakaoLogin(this@MainLoginActivity)
                 }
                 Log.d("카카오버튼", "눌림")
             }
