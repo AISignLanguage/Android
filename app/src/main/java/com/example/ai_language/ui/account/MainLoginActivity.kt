@@ -23,6 +23,8 @@ import com.example.ai_language.R
 import com.example.ai_language.Util.EncryptedSharedPreferencesManager
 import com.example.ai_language.Util.RetrofitClient
 import com.example.ai_language.Util.extensions.datastore
+import com.example.ai_language.base.BaseActivity
+import com.example.ai_language.databinding.ActivityMainLoginBinding
 import com.example.ai_language.domain.model.request.LoginRequestDTO
 import com.example.ai_language.domain.model.request.LoginResponseDTO
 import com.example.ai_language.find.FindIdPwd
@@ -40,7 +42,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import kotlin.random.Random
 
-class MainLoginActivity : AppCompatActivity() {
+class MainLoginActivity : BaseActivity<ActivityMainLoginBinding>(R.layout.activity_main_login) {
 
     private lateinit var userEmail: EditText
     private lateinit var userPw: EditText
@@ -53,7 +55,7 @@ class MainLoginActivity : AppCompatActivity() {
         disposables.clear()
     }
 
-    // 자동 로그인 여부 판별해서 로그인 처리
+    // 자동 로그인 함수 -> 아이디, 비밀번호가 자동으로 입력됨
     private fun attemptLogin() {
 
         val encryptedSharedPreferences = EncryptedSharedPreferencesManager(this)
@@ -71,8 +73,9 @@ class MainLoginActivity : AppCompatActivity() {
         }
     }
 
+    // 로그인 함수
     private fun loginUser(inputUserEmail: String, inputUserPw: String) {
-        progressBar = findViewById(R.id.progressBar)
+        progressBar = binding.progressBar
         progressBar.visibility = View.VISIBLE
 
         RetrofitClient.getInstance()
@@ -120,7 +123,7 @@ class MainLoginActivity : AppCompatActivity() {
 
 
     private fun setOnClickMapBtn() {
-        val mapBtn = findViewById<Button>(R.id.bt_map)
+        val mapBtn = binding.btMap
         mapBtn.setOnClickListener {
             startActivity(Intent(this, MapActivity::class.java))
         }
@@ -150,14 +153,12 @@ class MainLoginActivity : AppCompatActivity() {
         private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main_login)
+    override fun setLayout() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), REQUEST_RECORD_AUDIO_PERMISSION)
         }
         var st = true
-        val startStopButton = findViewById<Button>(R.id.btn_vibaration)
+        val startStopButton = binding.btnVibaration
         startStopButton.setOnClickListener {
             if (isServiceRunning) {
                 stopDetectionService()
@@ -170,14 +171,14 @@ class MainLoginActivity : AppCompatActivity() {
 
         setOnClickMapBtn()
         //아이디 잃어버렸을 때
-        val forgetPage = findViewById<TextView>(R.id.forgetPage)
+        val forgetPage = binding.forgetPage
         forgetPage.setOnClickListener {
             val intent = Intent(this, FindIdPwd::class.java)
             startActivity(intent)
         }
 
         //테스트 용 홈 화면 이동
-        val button3 = findViewById<Button>(R.id.button3)
+        val button3 = binding.button3
         button3.setOnClickListener {
             val intent = Intent(this, Home::class.java)
             startActivity(intent)
@@ -185,15 +186,15 @@ class MainLoginActivity : AppCompatActivity() {
         }
 
         //로그인 비동기 처리 - retrofit
-        userEmail = findViewById(R.id.userEmail)
-        userPw = findViewById(R.id.userPw)
+        userEmail = binding.userEmail
+        userPw = binding.userPw
 
-        val signInBtn = findViewById<TextView>(R.id.sign_in_button)
+        val signInBtn = binding.signInButton
         signInBtn.setOnClickListener {
             val inputUserEmail = userEmail.text.toString()
             val inputUserPw = userPw.text.toString()
             val encryptedSharedPreferencesManager = EncryptedSharedPreferencesManager(this)
-            val autoLoginCheckBtn = findViewById<RadioButton>(R.id.radioButton)
+            val autoLoginCheckBtn = binding.radioButton
 
             if (autoLoginCheckBtn.isChecked) {
                 Log.d("로그", "첫 로그인, id: ${inputUserEmail}, pwd: ${inputUserPw}")
@@ -210,7 +211,7 @@ class MainLoginActivity : AppCompatActivity() {
         //로그인 버튼 -> 아이디 비번 확인만 없으면 없다고 메세지 (DB확인)
         //카카오 버튼, 회원가입 버튼 -> 회원가입 버튼은 바로, 카카오 버튼은 DB확인 후 사용자가 처음접속이면 회원가입으로, 아니면 바로 HOME
 
-        val sinUpBtn = findViewById<TextView>(R.id.sign_up_button)
+        val sinUpBtn = binding.signUpButton
         sinUpBtn.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             intent.putExtra("nick", "사용자${Random.nextInt(10000)}")
@@ -223,7 +224,7 @@ class MainLoginActivity : AppCompatActivity() {
         }
 
         //카카오로그인
-        val kakaoBtn = findViewById<ImageView>(R.id.kko_login_btn)
+        val kakaoBtn = binding.kkoLoginBtn
         kakaoBtn.setOnClickListener {
             validAccessToken()
         }
