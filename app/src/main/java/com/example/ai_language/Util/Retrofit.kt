@@ -14,7 +14,7 @@ class RetrofitClient private constructor() {
     companion object {
         @Volatile
         private var instance: RetrofitClient? = null
-
+        private const val baseUrl = "http://192.168.219.154:8080/api/mog/userentity/"
         private const val baseUrl1 = "http://34.64.212.107:8080/api/mog/user/"
         private const val baseUrl2 = "http://api.kcisa.kr"
 
@@ -29,7 +29,7 @@ class RetrofitClient private constructor() {
         fun getUserRetrofitInterface(): Service {
             return getInstance().let { retrofitClient ->
                 val retrofit = Retrofit.Builder()
-                    .baseUrl(baseUrl1)
+                    .baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava3CallAdapterFactory.create()) // RxJava 3 Call Adapter Factory 추가
                     .client(retrofitClient.createOkHttpClient())
