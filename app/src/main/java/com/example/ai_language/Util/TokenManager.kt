@@ -46,10 +46,42 @@ class TokenManager @Inject constructor(
         .map { preferences ->
             preferences[REFRESH_TOKEN]
         }
+
+    // JWT 토큰 함수
+    suspend fun saveJwtToken(jwtAccessToken: String, jwtRefreshToken: String) {
+        dataStore.edit { preferences ->
+            preferences[JWT_ACCESS_TOKEN] = jwtAccessToken
+            preferences[JWT_REFRESH_TOKEN] = jwtRefreshToken
+        }
+    }
+
+    suspend fun deleteJwtAccessToken() {
+        dataStore.edit { preferences ->
+            preferences.remove(JWT_ACCESS_TOKEN)
+        }
+    }
+    suspend fun deleteJwtRefreshToken() {
+        dataStore.edit { preferences ->
+            preferences.remove(JWT_REFRESH_TOKEN)
+        }
+    }
+
+    fun getJwtAccessToken(): Flow<String?> = dataStore.data
+        .map { preferences ->
+            preferences[JWT_ACCESS_TOKEN]
+        }
+
+    fun getJwtRefreshToken(): Flow<String?> = dataStore.data
+        .map { preferences ->
+            preferences[JWT_REFRESH_TOKEN]
+        }
+
     companion object {
         private val USER_ID = stringPreferencesKey("user_id")
         private val ACCESS_TOKEN = stringPreferencesKey("access_token")
         private val REFRESH_TOKEN = stringPreferencesKey("refresh_token")
 
+        private val JWT_ACCESS_TOKEN = stringPreferencesKey("jwt_access_token")
+        private val JWT_REFRESH_TOKEN = stringPreferencesKey("jwt_refresh_token")
     }
 }
