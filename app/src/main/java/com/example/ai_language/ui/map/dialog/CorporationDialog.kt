@@ -81,11 +81,11 @@ class CorporationDialog(
     private fun setupClickListeners() {
         binding.btFindRoute.apply {
             text = "길찾기"
-            setOnClickListener { onButtonClicked(1) }
+            setOnClickListener { onButtonClicked(2) }
         }
         binding.bdFindDetail.apply {
             text = "자세히 보기"
-            setOnClickListener { onButtonClicked(2) }
+            setOnClickListener { onButtonClicked(1) }
         }
     }
 
