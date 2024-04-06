@@ -19,7 +19,7 @@ class LoginActivity : AppCompatActivity() {
         }*/
 
         Handler().postDelayed({
-            val intent = Intent(this, KaKaoLoginActivity::class.java)
+            val intent = Intent(this, MainLoginActivity::class.java)
             startActivity(intent)
             finish()
         }, 2000)

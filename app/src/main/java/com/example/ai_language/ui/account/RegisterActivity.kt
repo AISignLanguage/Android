@@ -235,7 +235,7 @@ class RegisterActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        val intent = Intent(this, KaKaoLoginActivity::class.java)
+        val intent = Intent(this, MainLoginActivity::class.java)
         startActivity(intent)
         finish() // RegisterActivity 종료
     }
@@ -589,7 +589,7 @@ class RegisterActivity : AppCompatActivity() {
 
         val signInBtn = findViewById<TextView>(R.id.signin_button)
         signInBtn.setOnClickListener {
-            val intent = Intent(this, KaKaoLoginActivity::class.java)
+            val intent = Intent(this, MainLoginActivity::class.java)
             startActivity(intent)
             finish()
         }
