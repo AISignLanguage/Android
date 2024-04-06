@@ -28,6 +28,14 @@ object NetworkModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class OpenApiRetrofit2
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class OpenApiRetrofit3
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class TMapRetrofit
+
     @Provides
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor =
@@ -89,4 +97,35 @@ object NetworkModule {
             .client(client)
             .build()
     }
+
+
+    @OpenApiRetrofit3
+    @Provides
+    @Singleton
+    fun provideNaverRetrofit2(
+        gsonConverterFactory: GsonConverterFactory,
+        @MogInterceptorOkHttpClient client: OkHttpClient  // 이 부분에서도 MogInterceptorOkHttpClient를 사용합니다.
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(Util.BASE_URL4)
+            .addConverterFactory(gsonConverterFactory)
+            .client(client)
+            .build()
+    }
+
+
+    @TMapRetrofit
+    @Provides
+    @Singleton
+    fun provideTMapRetrofit(
+        gsonConverterFactory: GsonConverterFactory,
+        @MogInterceptorOkHttpClient client: OkHttpClient  // 이 부분에서도 MogInterceptorOkHttpClient를 사용합니다.
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(Util.BASE_URL5)
+            .addConverterFactory(gsonConverterFactory)
+            .client(client)
+            .build()
+    }
+
 }

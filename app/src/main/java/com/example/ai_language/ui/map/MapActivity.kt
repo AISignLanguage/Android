@@ -1,30 +1,39 @@
 package com.example.ai_language.ui.map
 
-import android.os.Bundle
+import android.Manifest
+import android.content.pm.PackageManager
+import android.graphics.Color
+import android.os.health.PackageHealthStats
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.viewModels
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.MapFragment
-import com.naver.maps.map.OnMapReadyCallback
-import com.naver.maps.map.overlay.Marker
 import com.example.ai_language.R
 import com.example.ai_language.base.BaseActivity
 import com.example.ai_language.databinding.ActivityMapBinding
-import com.example.ai_language.databinding.DialogBusinessInfoBinding
-import com.example.ai_language.ui.dictionary.viewmodel.DictionaryViewModel
+import com.example.ai_language.domain.model.request.TmapDTO
+import com.example.ai_language.domain.model.response.Feature
+import com.example.ai_language.domain.model.response.Geometry
 import com.example.ai_language.ui.map.data.MapDialogData
 import com.example.ai_language.ui.map.dialog.CorporationDialog
+import com.example.ai_language.ui.map.enums.GeoType
+import com.example.ai_language.ui.map.enums.SettingMapAction
 import com.example.ai_language.ui.map.listener.DetailImWriteDialogInterface
 import com.example.ai_language.ui.map.viewModel.MapViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.LocationTrackingMode
+import com.naver.maps.map.MapFragment
+import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.PathOverlay
+import com.naver.maps.map.util.FusedLocationSource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -32,31 +41,85 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
     DetailImWriteDialogInterface, OnMapReadyCallback {
-
-    private val mapViewModel by viewModels<MapViewModel>()
-    private var dialog: CorporationDialog? = null
+    private lateinit var locationSource: FusedLocationSource // Naver Map의 위치 정보 소스
+    private val mapViewModel by viewModels<MapViewModel>() // ViewModel 인스턴스
+    private var dialog: CorporationDialog? = null // 사용자 상호작용을 위한 대화상자
+    private lateinit var naverMap: com.naver.maps.map.NaverMap // Naver Map 객체
+    private lateinit var fusedLocationClient: FusedLocationProviderClient // Google의 위치 정보 제공 클라이언트
+    private lateinit var goal: LatLng
+    private var path : PathOverlay? = null
     override fun setLayout() {
         startMap()
     }
 
     private fun startMap() {
-        initFragment()
-        startMapPoint()
+        getStartLocation() // 시작 위치를 가져오는 메서드를 호출
+        initFragment() // MapFragment를 초기화하는 메서드를 호출
+        getMapPoint() // 맵 데이터를 가져오는 메서드를 호출
+        onClickedByMapResource()
     }
 
+    //시작 위치 설정
+    private fun getStartLocation() {
+        fusedLocationClient =
+            LocationServices.getFusedLocationProviderClient(this) // 위치 정보 제공 클라이언트 초기화
+        locationSource = FusedLocationSource(this, PERMISSION_REQUEST_CODE) // 위치 정보 소스 초기화
+    }
+
+    // MapFragment를 초기화하고 맵이 준비되면 onMapReady 콜백을 받기 위해 호출
     private fun initFragment() {
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map_fragment) as MapFragment?
             ?: MapFragment.newInstance().also {
                 supportFragmentManager.beginTransaction().add(R.id.map_fragment, it).commit()
             }
-        mapFragment.getMapAsync(this) // onMapReady 콜백을 받기 위해 이 메서드를 호출합니다.
-
+        mapFragment.getMapAsync(this) // onMapReady 콜백을 받기 위해 이 메서드를 호출
     }
 
-    private fun startMapPoint() {
+    //맵 Api가져옴(경기도 수화 통역 센터) (키, 타입, 페이지, 사이즈)
+    private fun getMapPoint() {
         mapViewModel.getCorporationByOpenApi("4b7ecc6c16b1492db814d065c2e0e16f", "json", 1, 100)
     }
 
+    private fun startRoute(start: String, goal: String) {
+        mapViewModel.getRouteByOpenApi(
+            "wf7lge71wa",
+            "S2xrrmnpETvuzVH4QolG12oY050t1GntJ8uxrl23",
+            start,
+            goal
+        )
+    }
+
+    private fun startRoute2(start: LatLng, end: LatLng, startName: String, endName: String) {
+        mapViewModel.getRouteBytMapApi(
+            TmapDTO(
+                startX = start.longitude,
+                startY = start.latitude,
+                endX = end.longitude,
+                endY = end.latitude,
+                startName = startName,
+                endName = endName
+            )
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 사용자가 위치 권한을 부여한 경우, 위치 추적 모드를 Follow로 설정
+                naverMap.locationTrackingMode = LocationTrackingMode.Follow
+            } else {
+                // 권한이 거부되었다면, 사용자에게 필요성을 알리는 다이얼로그 등을 표시할 수 있습니다.
+            }
+        }
+    }
+
+
+    //다이얼로그 생성
     private fun addMenu(mapDialogData: MapDialogData) {
         if (dialog?.isVisible != true) {
             dialog = CorporationDialog(this, mapDialogData)
@@ -69,21 +132,140 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
 
     override fun onClickButton(id: Int) {
         when (id) {
-            1 -> {
-                //길찾기
+            2 -> {
+                Log.d("경로", "onClickButton called with id: $id")
+                lifecycleScope.launch {
+                    thisLocation(SettingMapAction.LOCATION)
+                    repeatOnLifecycle(Lifecycle.State.CREATED) {
+                        mapViewModel.tMapList.collectLatest { response ->
+                            path?.map = null
+                            path = PathOverlay()
+                            val pathContainer: MutableList<LatLng> = mutableListOf()
+                            for (feature in response.features) {
+                                Log.d("경로:패스","${feature.geometry}")
+                                val coordinates = feature.geometry.coordinates
+                                when (feature.geometry.type) {
+                                    "Point" -> {
+                                        if (coordinates is List<*>) {
+                                            val longitude = (coordinates[0] as? Double) ?: 0.0
+                                            val latitude = (coordinates[1] as? Double) ?: 0.0
+                                            val point = LatLng(latitude, longitude)
+                                            pathContainer.add(point)
+                                        }
+                                    }
+                                    "LineString" -> {
+                                        if (coordinates is List<*>) {
+                                            for (coordinate in coordinates) {
+                                                if (coordinate is List<*>) {
+                                                    val longitude = (coordinate[0] as? Double) ?: 0.0
+                                                    val latitude = (coordinate[1] as? Double) ?: 0.0
+                                                    val point = LatLng(latitude, longitude)
+                                                    pathContainer.add(point)
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else -> {
+                                        // 기타 경우 처리
+                                    }
+                                }
+                            }
+
+                            if (pathContainer.size >= 2) {
+                                path!!.coords = pathContainer
+                                path!!.color = Color.GREEN
+                                path!!.map = naverMap
+                                val cameraUpdate = CameraUpdate.scrollTo(path!!.coords[0])
+                                    .animate(CameraAnimation.Fly, 3000)
+                                naverMap.moveCamera(cameraUpdate)
+                                Toast.makeText(this@MapActivity, "경로안내 시작", Toast.LENGTH_SHORT)
+                                    .show()
+                            } else {
+                                Log.d("MapActivity", "경로를 구성하는 좌표가 2개 미만입니다: ${pathContainer.size}")
+                                // 적절한 오류 처리 또는 사용자 알림
+                            }
+                        }
+                    }
+                }
             }
 
-            2 -> {
+            1 -> {
                 // 자세히보기
             }
         }
     }
 
+
+
+    //플로팅 버튼 내위치로
+    private fun onClickedByMapResource() {
+        binding.ftbMapFragmentThisLocation.setOnClickListener {
+            thisLocation(SettingMapAction.CREATE)
+        }
+    }
+
+    //
+    private fun thisLocation(setting: SettingMapAction) {
+        Log.d("권한", "ㅇ")
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Log.d("권한", "한개없음")
+            return
+        }
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            if (location != null) {
+                // 위치 정보를 사용한 로직
+                when (setting) {
+                    SettingMapAction.CREATE -> {
+                        Log.d(" 경로1", "$location")
+                        val currentLatLng = LatLng(location.latitude, location.longitude)
+                        val cameraUpdate = CameraUpdate.scrollTo(currentLatLng)
+                        naverMap.moveCamera(cameraUpdate)
+                    }
+
+                    SettingMapAction.LOCATION -> {
+                        val currentLatLng = LatLng(location.latitude, location.longitude)
+                        val cameraUpdate = CameraUpdate.scrollTo(currentLatLng)
+                        naverMap.moveCamera(cameraUpdate)
+                        val start = "${currentLatLng.latitude},${currentLatLng.longitude}"
+                        startRoute2(currentLatLng, goal, "출발지", "도착지")
+                    }
+                }
+            } else {
+                Log.d("MapActivity", "위치 정보가 사용 불가능합니다.")
+                // 위치 정보가 없는 경우의 처리 로직
+            }
+        }
+    }
+
+    //다이얼로그 데이터 세팅 (데이터 클래스)
     private fun createDialogData(title: String, address: String, state: String): MapDialogData {
         return MapDialogData(title, address, state)
     }
 
+    companion object {
+        const val PERMISSION_REQUEST_CODE = 123
+    }
+
     override fun onMapReady(naverMap: com.naver.maps.map.NaverMap) {
+        this.naverMap = naverMap
+        naverMap.locationSource = locationSource
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ),
+            PERMISSION_REQUEST_CODE
+        )
+        thisLocation(SettingMapAction.CREATE)
         // 여기에서 마커와 다른 지도 관련 설정을 할 수 있습니다.
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.CREATED) {
@@ -91,23 +273,27 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
                     response.Signlangintrprtcenter.forEach { content ->
                         content.row.forEach { businessInfo ->
                             // 위도, 경도 값이 null이 아닌지 확인하고 안전하게 처리합니다.
-                            val latitude = businessInfo.REFINE_WGS84_LAT?.toDoubleOrNull()
-                            val longitude = businessInfo.REFINE_WGS84_LOGT?.toDoubleOrNull()
+                            val latitude = businessInfo.REFINE_WGS84_LAT?.toDoubleOrNull() //위도
+                            val longitude =
+                                businessInfo.REFINE_WGS84_LOGT?.toDoubleOrNull() //경도
                             if (latitude != null && longitude != null) {
-                                val location = LatLng(latitude, longitude)
+                                val location = LatLng(latitude, longitude) //마커 좌표 설정
                                 // 마커 생성 및 설정
-                                val marker = Marker().apply {
+                                val marker = Marker().apply { //마커 세팅
                                     position = location
                                     map = naverMap
                                 }
                                 // 마커를 클릭했을 때 해당 위치의 사업자명을 표시하는 다이얼로그 표시
                                 marker.setOnClickListener { overlay ->
                                     overlay as Marker
+                                    val cameraUpdate = CameraUpdate.scrollTo(location)
+                                    naverMap.moveCamera(cameraUpdate) // 마커클릭시 그 위치로 카메라 이동
                                     // 마커의 위치에 대응하는 사업자명 가져오기
                                     val title = businessInfo.BIZPLC_NM
                                     val address = businessInfo.REFINE_LOTNO_ADDR
                                     val state = businessInfo.BSN_STATE_NM
-                                    Log.d("값", "r$title + $address + $state")
+                                    Log.d("값", "$title + $address + $state")
+                                    goal = overlay.position
                                     // 다이얼로그 표시
                                     addMenu(createDialogData(title, address, state))
                                     true
@@ -124,6 +310,8 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
                 }
             }
         }
+
+
     }
 }
 

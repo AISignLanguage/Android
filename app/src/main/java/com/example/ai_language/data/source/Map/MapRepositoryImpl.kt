@@ -7,8 +7,8 @@ import javax.inject.Inject
 
 
 class MapRepositoryImpl @Inject constructor(
-    private val mapDataSource: MapDataSource
-) : MapRepository{
+    private val mapDataSource: MapDataSource,
+) : MapRepository {
     override suspend fun getCorporationByOpenApi(
         KEY: String,
         Type: String,
