@@ -24,9 +24,11 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.ai_language.R
 import com.example.ai_language.Util.RetrofitClient
@@ -37,12 +39,14 @@ import com.example.ai_language.domain.model.request.ConfirmDTO
 import com.example.ai_language.domain.model.request.ConfirmedDTO
 import com.example.ai_language.domain.model.request.LoginCheckDTO
 import com.example.ai_language.domain.model.request.UserDTO
+import com.example.ai_language.ui.account.viewmodel.AccountViewModel
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.storage.Acl
 import com.google.cloud.storage.BlobId
 import com.google.cloud.storage.BlobInfo
 import com.google.cloud.storage.Storage
 import com.google.cloud.storage.StorageOptions
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -56,8 +60,6 @@ import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.util.regex.Pattern
@@ -74,6 +76,7 @@ data class LoginChecked(
 
 )
 
+@AndroidEntryPoint
 class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity_register) {
     lateinit var call: Call<LoginCheckDTO>
     lateinit var conf: Observable<ConfirmedDTO>
@@ -104,6 +107,7 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
     private lateinit var certification_btn: Button
     private var randomSixDigitNumber: Int = 0
 
+    private val accountViewModel by viewModels<AccountViewModel>()
     //private var end = false
     //var correct = 1
 
@@ -487,6 +491,7 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
 
     // 회원가입 버튼 클릭시 회원가입 처리하는 함수
     private fun onRegister() {
+
         val nick = intent.getStringExtra("nick")
         regName.setText(nick)
 
@@ -498,13 +503,11 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
 
         var name = regName.text.toString()
         var em = "em"
-
         var bd = "bd"
         var pw = "pw"
         val regNext = binding.regNext
 
         try {
-
             regNext.setOnClickListener {
                 progressBar.visibility = View.VISIBLE
                 name = regName.text.toString() // 이름
@@ -512,6 +515,7 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
                 pw = regPwd.text.toString() //비번
                 nk = regNick.text.toString() // 닉네임
                 birthday = regBirthdate.text.toString() //생일
+
                 try {
                     val formattedDate = formatDate(birthday)
                     bd = formattedDate
@@ -519,55 +523,44 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
                     // 예외 발생 시 사용자에게 토스트 메시지를 보여주고 LoginActivity로 이동
                     Toast.makeText(this, "올바르지 않은 필드가 존재합니다.", Toast.LENGTH_SHORT).show()
                 }
+
+                val userDTO = UserDTO(
+                    name, //이름 => 공백이 아니어야함
+                    bd, //생일 => xxxx-xx-xx 형태
+                    em, // => 이메일 xxx@xxx.xxx
+                    pw, // 비밀 번호 => 최소 8자, 최대 15자
+                    nk, // 닉네임
+                    pn, //핸드폰 번호 => 010-xxxx-xxxx
+                    // 정규식 =>  @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "휴대폰 번호 양식에 맞지 않습니다.")
+                    url //프로필 사진 url
+                )
+
                 if (loginChecked.finish) {
-                    val userDTO = UserDTO(
-                        name, //이름 => 공백이 아니어야함
-                        bd, //생일 => xxxx-xx-xx 형태
-                        em, // => 이메일 xxx@xxx.xxx
-                        pw, // 비밀 번호 => 최소 8자, 최대 15자
-                        nk, // 닉네임
-                        pn, //핸드폰 번호 => 010-xxxx-xxxx
-                        // 정규식 =>  @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "휴대폰 번호 양식에 맞지 않습니다.")
-                        url //프로필 사진 url
-                    )
 
-                    call = service.sendData(userDTO)
-                    call.clone().enqueue(object : Callback<LoginCheckDTO> {
-                        override fun onResponse(
-                            call: Call<LoginCheckDTO>,
-                            response: Response<LoginCheckDTO>
-                        ) {
-                            progressBar.visibility = View.GONE
-                            if (response.isSuccessful) {
-                                Log.d("서버로부터 받은 요청", "닉네임 : ${response.body()?.nickName}")
-                                Log.d("서버로부터 받은 요청", "이름 : ${response.body()?.name}")
-                                Log.d("서버로부터 받은 요청", "이메일 : ${response.body()?.email}")
-                                Log.d("서버로부터 받은 요청", "생일 : ${response.body()?.birthdate}")
-                                Log.d("서버로부터 받은 요청", "폰넘버 : ${response.body()?.phoneNumber}")
-                                Log.d("서버로부터 받은 요청", "프로필 : ${response.body()?.profileImageUrl}")
-                                Log.d("서버로부터 받은 요청", "날짜 : ${response.body()?.registerdAt}")
-                                Toast.makeText(
-                                    this@RegisterActivity,
-                                    "회원가입에 성공하셨습니다!",
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
-                                val intent =
-                                    Intent(this@RegisterActivity, permissionActivity::class.java)
-                                startActivity(intent)
-                                finish()
-                            } else {
-                                Log.d("서버실패?", "실패")
-                            }
-                        }
-
-                        override fun onFailure(call: Call<LoginCheckDTO>, t: Throwable) {
-                            progressBar.visibility = View.GONE
-                            Log.e("retrofit 연동", "실패", t)
-                        }
-
+                    if(accountViewModel.loginCheckDTO.value == null) {
+                        accountViewModel.sendData(userDTO)
                     }
-                    )
+
+                    lifecycleScope.launch {
+                        try {
+                            accountViewModel.loginCheckDTO.collect {  loginCheckDTO ->
+                                if (loginChecked != null) {
+                                    progressBar.visibility = View.GONE
+                                    Log.d("로그", "응답성공 : $loginCheckDTO")
+                                    Toast.makeText(
+                                        this@RegisterActivity,
+                                        "회원가입에 성공하셨습니다!",
+                                        Toast.LENGTH_SHORT).show()
+                                        val intent =
+                                            Intent(this@RegisterActivity, permissionActivity::class.java)
+                                        startActivity(intent)
+                                        finish()
+                                }
+                            }
+                        } catch ( e:Exception) {
+                            Log.e("로그", "응답 오류: ${e.message}")
+                        }
+                    }
 
                 } else {
 
