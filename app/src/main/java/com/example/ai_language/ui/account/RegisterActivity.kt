@@ -10,7 +10,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import android.provider.MediaStore
 import android.telephony.SmsManager
 import android.util.Base64
@@ -21,19 +20,19 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.ai_language.R
 import com.example.ai_language.Util.RetrofitClient
+import com.example.ai_language.base.BaseActivity
 import com.example.ai_language.data.remote.Service
+import com.example.ai_language.databinding.ActivityRegisterBinding
 import com.example.ai_language.domain.model.request.ConfirmDTO
 import com.example.ai_language.domain.model.request.ConfirmedDTO
 import com.example.ai_language.domain.model.request.LoginCheckDTO
@@ -75,12 +74,11 @@ data class LoginChecked(
 
 )
 
-class RegisterActivity : AppCompatActivity() {
+class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity_register) {
     lateinit var call: Call<LoginCheckDTO>
     lateinit var conf: Observable<ConfirmedDTO>
     lateinit var service: Service
     private val disposables = CompositeDisposable()
-    private lateinit var progressBar: ProgressBar
     private val STORAGE_PERMISSION_CODE = 1
     private val SMS_PERMISSION_CODE = 2
     private val ACCOUNT_SID = "${R.string.SID}"
@@ -88,6 +86,27 @@ class RegisterActivity : AppCompatActivity() {
     private val MESSAGIING_SERVICE = "${R.string.MS}"
     private var url: String = "https://cdn-icons-png.flaticon.com/128/149/149071.png"
     private lateinit var profile: ImageView
+
+    // 회원가입 로직에 쓰이는 변수들 -> 함수로 분리하기 위해 전역변수로 선언
+    private var nk = "nk"
+    private var pn = "pn"
+    private var phNum = ""
+
+    private lateinit var progressBar: ProgressBar
+    private lateinit var regName: EditText
+    private lateinit var regEmail: EditText
+    private lateinit var regPwd: EditText
+    private lateinit var regBirthdate: EditText
+    private lateinit var regNick: EditText
+    private lateinit var send_certification_et: EditText
+    private lateinit var send_certification_btn: Button
+    private lateinit var certification_et: EditText
+    private lateinit var certification_btn: Button
+    private var randomSixDigitNumber: Int = 0
+
+    //private var end = false
+    //var correct = 1
+
     private val loginChecked = LoginChecked(
         nameCheck = false,
         idCheck = false,
@@ -163,7 +182,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
-    fun sendSMS2(phoneNumber: String, message: String) {
+    private fun sendSMS2(phoneNumber: String, message: String) {
         val smsManager = SmsManager.getDefault()
         val sentIntent = PendingIntent.getBroadcast(
             applicationContext,
@@ -176,7 +195,6 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     // SMS를 보내는 함수
-
     private fun sendSMS(to: String, sms: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -213,7 +231,7 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    fun formatDate(originalDate: String): String {
+    private fun formatDate(originalDate: String): String {
         // 연도, 월, 일을 추출합니다.
         val year = originalDate.substring(0, 4)
         val month = originalDate.substring(4, 6)
@@ -241,29 +259,26 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
+    override fun setLayout() {
+        registerUser()
+    }
 
-        RetrofitClient.getInstance()
-        progressBar = findViewById(R.id.reg_progressbar)
-        service = RetrofitClient.getUserRetrofitInterface()
-        var end = false
-        var pn = "pn"
-        var correct = 1
-        val nick = intent.getStringExtra("nick")
-        val regName = findViewById<EditText>(R.id.reg_name)
-        val regEmail = findViewById<EditText>(R.id.reg_email)
-        val regPwd = findViewById<EditText>(R.id.reg_pwd)
-        val regBirthdate = findViewById<EditText>(R.id.reg_birthdate)
-        val regNick = findViewById<EditText>(R.id.reg_nick)
-        val send_certification_et = findViewById<EditText>(R.id.send_certification_et)
-        val send_certification_btn = findViewById<Button>(R.id.send_certification_btn)
-        val certification_et = findViewById<EditText>(R.id.certification_et)
-        val certification_btn = findViewById<Button>(R.id.certification_btn)
-        var randomSixDigitNumber = 0
-        var phNum = ""
+    // 회원가입 로직에 사용되는 변수 초기화
+    private fun initializeViews() {
+        progressBar = binding.regProgressbar
+        regName = binding.regName
+        regEmail = binding.regEmail
+        regPwd = binding.regPwd
+        regBirthdate = binding.regBirthdate
+        regNick = binding.regNick
+        send_certification_et = binding.sendCertificationEt
+        send_certification_btn = binding.sendCertificationBtn
+        certification_et = binding.certificationEt
+        certification_btn = binding.certificationBtn
+    }
 
+    // 핸드폰 번호로 인증번호 전송하는 함수
+    private fun sendCertificationNumber() {
         send_certification_btn.setOnClickListener {
             phNum = send_certification_et.text.toString()
             if (!isValidPhoneNumber(phNum)) {
@@ -292,6 +307,11 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
+
+    }
+
+    // 인증번호 인증하는 함수
+    private fun checkCertificationNumber() {
         certification_btn.setOnClickListener {
             if (randomSixDigitNumber.toString() == certification_et.text.toString()) {
                 certification_et.setTextColor(Color.GREEN)
@@ -305,11 +325,11 @@ class RegisterActivity : AppCompatActivity() {
                 certification_et.setText("")
             }
         }
+    }
 
-
-        regName.setText(nick)
-
-        profile = findViewById(R.id.reg_pro)
+    // 프로필 이미지를 설정하는 함수
+    private fun setProfileImage() {
+        profile = binding.regPro
         val uriString: String? = intent.getStringExtra("profile")
         if (uriString != null) {
             val profilePx = dpToPx(this, 90)
@@ -335,26 +355,13 @@ class RegisterActivity : AppCompatActivity() {
             } else {
                 openGallery()
             }
-
         }
 
+    }
 
-        val passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,16}$"
-        val patternPW = Pattern.compile(passwordPattern)
-        var birthday = "bd"
-        val birthdatePattern = "^\\d{8}$"
-        val patternBD = Pattern.compile(birthdatePattern)
-
-
-        var name = regName.text.toString()
-        var em = "em"
-        var nk = "nk"
-        var bd = "bd"
-        var pw = "pw"
-        val regNext = findViewById<TextView>(R.id.reg_next)
-
-        Log.d("RegisterActivity", "Showing ProgressBar")
-        val confirmedNicknameBtn = findViewById<Button>(R.id.confirm_nickname_btn)
+    // 닉네임 중복 확인 함수
+    private fun confirmNickname() {
+        val confirmedNicknameBtn = binding.confirmNicknameBtn
         confirmedNicknameBtn.setOnClickListener {
             nk = regNick.text.toString() // 닉네임
             if (regNick.text.toString().length in 2..6) {
@@ -408,9 +415,11 @@ class RegisterActivity : AppCompatActivity() {
 
             }
         }
+    }
 
-
-        val confirmedEmailBtn = findViewById<Button>(R.id.confirm_email_btn)
+    // 이메일 중복 확인 함수
+    private fun confirmEmail() {
+        val confirmedEmailBtn = binding.confirmEmailBtn
         confirmedEmailBtn.setOnClickListener {
             val em = regEmail.text.toString() // 이메일
             if (Patterns.EMAIL_ADDRESS.matcher(em).matches()) {
@@ -464,7 +473,35 @@ class RegisterActivity : AppCompatActivity() {
 
             }
         }
+    }
 
+    // 로그인 버튼 클릭시 로그인 화면으로 이동하는 함수
+    private fun startLoginActivity() {
+        val signInBtn = binding.signinButton
+        signInBtn.setOnClickListener {
+            val intent = Intent(this, MainLoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
+
+    // 회원가입 버튼 클릭시 회원가입 처리하는 함수
+    private fun onRegister() {
+        val nick = intent.getStringExtra("nick")
+        regName.setText(nick)
+
+        val passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,16}$"
+        val patternPW = Pattern.compile(passwordPattern)
+        var birthday = "bd"
+        val birthdatePattern = "^\\d{8}$"
+        val patternBD = Pattern.compile(birthdatePattern)
+
+        var name = regName.text.toString()
+        var em = "em"
+
+        var bd = "bd"
+        var pw = "pw"
+        val regNext = binding.regNext
 
         try {
 
@@ -586,21 +623,30 @@ class RegisterActivity : AppCompatActivity() {
         } catch (e: StringIndexOutOfBoundsException) {
             Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show()
         }
+    }
 
-        val signInBtn = findViewById<TextView>(R.id.signin_button)
-        signInBtn.setOnClickListener {
-            val intent = Intent(this, MainLoginActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
+    // 회원가입 로직 처리 함수
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun registerUser() {
 
+        RetrofitClient.getInstance()
+        service = RetrofitClient.getUserRetrofitInterface()
+
+        initializeViews() // 회원가입에 사용되는 변수 초기화
+        setProfileImage() // 프로필 이미지를 설정하는 함수
+        confirmEmail()    // 이메일 중복 확인하는 함수
+        confirmNickname() // 닉네임 중복 확인하는 함수
+        sendCertificationNumber() // 핸드폰 번호로 인증번호 전송 및 인증번호 확인하는 함수
+        checkCertificationNumber() // 인증번호 확인하는 함수
+        onRegister()          //회원가입 버튼 클릭시 회원가입 처리하는 함수
+        startLoginActivity() // 로그인 버튼 클릭시 로그인 화면으로 이동하는 함수
     }
 
     private fun dpToPx(context: Context, dp: Int): Int {
         return (dp * context.resources.displayMetrics.density).toInt()
     }
 
-    fun convertPhoneNumber(phoneNumber: String): String {
+    private fun convertPhoneNumber(phoneNumber: String): String {
         // 번호가 "010"으로 시작하고 11자리인 경우 "+82"를 추가
         if (phoneNumber.startsWith("010") && phoneNumber.length == 11) {
             return phoneNumber.replaceFirst("010", "+8210")
@@ -608,7 +654,7 @@ class RegisterActivity : AppCompatActivity() {
         return phoneNumber
     }
 
-    fun isValidPhoneNumber(phoneNumber: String): Boolean {
+    private fun isValidPhoneNumber(phoneNumber: String): Boolean {
         return phoneNumber.startsWith("010") && phoneNumber.length == 11
     }
 
