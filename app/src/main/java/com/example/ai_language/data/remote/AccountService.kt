@@ -17,7 +17,10 @@ import com.example.ai_language.domain.model.request.PhoneListDTO
 import com.example.ai_language.domain.model.request.PhoneNumberDTO
 import com.example.ai_language.domain.model.request.UserDTO
 import io.reactivex.rxjava3.core.Observable
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -35,8 +38,15 @@ interface AccountService {
     @POST("find-pwd") // 비밀번호 찾기
     fun findPwd(@Body data: FindPwdDTO): Call<FindPwdOk>
 
+//    @POST("login")
+//    suspend fun login(
+//        @Body data: LoginRequestDTO
+//    ): Call<LoginResponseDTO>
+
     @POST("login")
-    fun login(@Body data: LoginRequestDTO): Call<LoginResponseDTO>
+     fun login(
+        @Body requestBody: RequestBody
+    ): Response<ResponseBody>
 
     @POST("confirm-nick")
     fun confirmNick(@Body data: ConfirmDTO): Observable<ConfirmedDTO>

@@ -1,6 +1,5 @@
 package com.example.ai_language.data.remote
 
-import com.example.ai_language.domain.model.response.ResponseBodys
 import com.example.ai_language.domain.model.request.ChangeNickNameDTO
 import com.example.ai_language.domain.model.request.ChangeNickNameResultDTO
 import com.example.ai_language.domain.model.request.ChangePasswordRequestDTO
@@ -28,12 +27,21 @@ import io.reactivex.rxjava3.core.Observable
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Query
+
 
 interface Service {
 
+
+    @FormUrlEncoded
+    @POST("login")
+    fun login(
+        @Field("email") email: String?,
+        @Field("password") password: String?
+    ): Call<ResponseBody?>?
 
     @GET("user")
     fun getUSer(): Call<UserDTO>

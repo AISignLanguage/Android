@@ -1,5 +1,6 @@
 package com.example.ai_language.Util
 
+import androidx.multidex.BuildConfig
 import com.example.ai_language.data.remote.Service
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
@@ -14,7 +15,7 @@ class RetrofitClient private constructor() {
     companion object {
         @Volatile
         private var instance: RetrofitClient? = null
-        private const val baseUrl = "http://192.168.219.154:8080/api/mog/userentity/"
+        //private const val baseUrl = "http://223.194.137.68:8080/api/mog/userentity/"
         private const val baseUrl1 = "http://34.64.212.107:8080/api/mog/user/"
         private const val baseUrl2 = "http://api.kcisa.kr"
 
@@ -29,7 +30,7 @@ class RetrofitClient private constructor() {
         fun getUserRetrofitInterface(): Service {
             return getInstance().let { retrofitClient ->
                 val retrofit = Retrofit.Builder()
-                    .baseUrl(baseUrl)
+                    .baseUrl(baseUrl1)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava3CallAdapterFactory.create()) // RxJava 3 Call Adapter Factory 추가
                     .client(retrofitClient.createOkHttpClient())
@@ -53,10 +54,18 @@ class RetrofitClient private constructor() {
     }
 
     private fun createOkHttpClient(): OkHttpClient {
+        val interceptor = HttpLoggingInterceptor()
+        if (BuildConfig.DEBUG) {
+            interceptor.level = HttpLoggingInterceptor.Level.BODY
+        } else {
+            interceptor.level = HttpLoggingInterceptor.Level.NONE
+        }
+
         return OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
+            .addNetworkInterceptor(interceptor)
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
