@@ -12,7 +12,7 @@ import com.example.ai_language.domain.model.request.ChangePasswordResponseDTO
 import com.example.ai_language.domain.model.request.CheckPasswordRequestDTO
 import com.example.ai_language.domain.model.request.CheckPasswordResponseDTO
 import com.example.ai_language.Util.EncryptedSharedPreferencesManager
-import com.example.ai_language.ui.account.KaKaoLoginActivity
+import com.example.ai_language.ui.account.MainLoginActivity
 import com.example.ai_language.R
 import com.example.ai_language.Util.RetrofitClient
 import retrofit2.Call
@@ -151,7 +151,7 @@ class ChangePw : AppCompatActivity() {
         changePwDialog.setOnDismissListener(object : ChangePwDialog.DialogDismissListener {
 
             override fun onDialogDismiss() {
-                val intent = Intent(this@ChangePw, KaKaoLoginActivity::class.java)
+                val intent = Intent(this@ChangePw, MainLoginActivity::class.java)
                 startActivity(intent)
                 finish()
             }

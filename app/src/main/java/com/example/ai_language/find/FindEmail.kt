@@ -6,7 +6,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.ai_language.ui.account.KaKaoLoginActivity
+import com.example.ai_language.ui.account.MainLoginActivity
 import com.example.ai_language.R
 import java.util.regex.Pattern
 
@@ -33,7 +33,7 @@ class FindEmail : AppCompatActivity() {
         }
         checkButton = findViewById(R.id.checkButton)
         checkButton.setOnClickListener {
-            val intent = Intent(this, KaKaoLoginActivity::class.java)
+            val intent = Intent(this, MainLoginActivity::class.java)
             startActivity(intent)
         }
     }
