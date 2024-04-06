@@ -130,6 +130,6 @@ class SoundDetectionService : Service() {
     companion object {
         private const val TAG = "SoundDetectionService"
         private const val NOTIFICATION_ID = 1
-        private const val AMPLITUDE_THRESHOLD = 8000 // 소음 감지를 위한 임계값, 환경에 따라 조정 필요 //10000정도가적당
+        private const val AMPLITUDE_THRESHOLD = 10000 // 소음 감지를 위한 임계값, 환경에 따라 조정 필요 //10000정도가적당
     }
 }

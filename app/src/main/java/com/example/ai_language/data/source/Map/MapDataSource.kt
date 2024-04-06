@@ -1,10 +1,8 @@
 package com.example.ai_language.data.source.Map
 
 import android.util.Log
-import com.example.ai_language.data.remote.DictionaryService
 import com.example.ai_language.data.remote.MapService
 import com.example.ai_language.domain.model.response.ApiResponse
-import com.example.ai_language.domain.model.response.ResponseBodys
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
