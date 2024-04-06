@@ -490,131 +490,143 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
     }
 
     // 회원가입 버튼 클릭시 회원가입 처리하는 함수
-    private fun onRegister() {
+    private fun performRegistration() {
 
         val nick = intent.getStringExtra("nick")
         regName.setText(nick)
 
-        val passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,16}$"
-        val patternPW = Pattern.compile(passwordPattern)
-        var birthday = "bd"
-        val birthdatePattern = "^\\d{8}$"
-        val patternBD = Pattern.compile(birthdatePattern)
-
-        var name = regName.text.toString()
-        var em = "em"
-        var bd = "bd"
-        var pw = "pw"
         val regNext = binding.regNext
 
         try {
             regNext.setOnClickListener {
                 progressBar.visibility = View.VISIBLE
-                name = regName.text.toString() // 이름
-                em = regEmail.text.toString() // 이메일
-                pw = regPwd.text.toString() //비번
-                nk = regNick.text.toString() // 닉네임
-                birthday = regBirthdate.text.toString() //생일
 
-                try {
-                    val formattedDate = formatDate(birthday)
-                    bd = formattedDate
-                } catch (e: StringIndexOutOfBoundsException) {
-                    // 예외 발생 시 사용자에게 토스트 메시지를 보여주고 LoginActivity로 이동
-                    Toast.makeText(this, "올바르지 않은 필드가 존재합니다.", Toast.LENGTH_SHORT).show()
-                }
+                // 각 입력 필드의 값 가져오기
+                val name = binding.regName.text.toString()
+                val em = binding.regEmail.text.toString()
+                val pw = binding.regPwd.text.toString()
+                val nk = binding.regNick.text.toString()
+                val birthday = binding.regBirthdate.text.toString()
 
-                val userDTO = UserDTO(
-                    name, //이름 => 공백이 아니어야함
-                    bd, //생일 => xxxx-xx-xx 형태
-                    em, // => 이메일 xxx@xxx.xxx
-                    pw, // 비밀 번호 => 최소 8자, 최대 15자
-                    nk, // 닉네임
-                    pn, //핸드폰 번호 => 010-xxxx-xxxx
-                    // 정규식 =>  @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "휴대폰 번호 양식에 맞지 않습니다.")
-                    url //프로필 사진 url
-                )
-
-                if (loginChecked.finish) {
-
-                    if(accountViewModel.loginCheckDTO.value == null) {
-                        accountViewModel.sendData(userDTO)
-                    }
-
-                    lifecycleScope.launch {
-                        try {
-                            accountViewModel.loginCheckDTO.collect {  loginCheckDTO ->
-                                if (loginChecked != null) {
-                                    progressBar.visibility = View.GONE
-                                    Log.d("로그", "응답성공 : $loginCheckDTO")
-                                    Toast.makeText(
-                                        this@RegisterActivity,
-                                        "회원가입에 성공하셨습니다!",
-                                        Toast.LENGTH_SHORT).show()
-                                        val intent =
-                                            Intent(this@RegisterActivity, permissionActivity::class.java)
-                                        startActivity(intent)
-                                        finish()
-                                }
-                            }
-                        } catch ( e:Exception) {
-                            Log.e("로그", "응답 오류: ${e.message}")
-                        }
-                    }
-
-                } else {
-
-                    if (name.length <= 5) {
-                        loginChecked.nameCheck = true
-                    }
-
-                    if (patternPW.matcher(regPwd.text.toString()).matches()) {
-
-                        loginChecked.pwCheck = true
-                    }
-
-                    if (patternBD.matcher(birthday).matches()) {
-
-                        loginChecked.birthdayCheck = true
-                    }
-
-                    if (!loginChecked.nameCheck) {
-                        Toast.makeText(this, "이름을 확인해주세요${name}", Toast.LENGTH_SHORT).show()
-                        regName.setText("")
-                        progressBar.visibility = View.GONE
-                    } else if (!loginChecked.idCheck) {
-                        Toast.makeText(this, "아이디 형식이나, 인증여부를 확인해주세요.${em}", Toast.LENGTH_SHORT)
-                            .show()
-                        regEmail.setText("")
-                        progressBar.visibility = View.GONE
-
-                    } else if (!loginChecked.pwCheck) {
-                        Toast.makeText(this, "비밀 번호 형식을 확인해주세요", Toast.LENGTH_SHORT).show()
-                        regPwd.setText("")
-                        progressBar.visibility = View.GONE
-
-                    } else if (!loginChecked.nickCheck) {
-                        Toast.makeText(this, "닉네임을 확인해주세요", Toast.LENGTH_SHORT).show()
-                        regNick.setText("")
-                        progressBar.visibility = View.GONE
-
-                    } else if (!loginChecked.birthdayCheck) {
-                        Toast.makeText(this, "생년월일을 확인해주세요", Toast.LENGTH_SHORT).show()
-                        regBirthdate.setText("")
-                        progressBar.visibility = View.GONE
-                    } else if (!loginChecked.phoneCheck) {
-                        Toast.makeText(this, "휴대폰 인증을 확인해주세요", Toast.LENGTH_SHORT).show()
-                        send_certification_et.setText("")
-                        progressBar.visibility = View.GONE
-                    } else {
-                        loginChecked.finish = true
-                        progressBar.visibility = View.GONE
-                    }
-
-                }
+                // 유효성 검사 수행
+                validateAndRegister(name, em, pw, birthday, nk)
             }
         } catch (e: StringIndexOutOfBoundsException) {
             Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun validateAndRegister(name: String, em: String, pw: String, birthday: String, nk: String) {
+        // 유효성 검사를 위한 패턴 및 로직 설정
+        val passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,16}$"
+        val patternPW = Pattern.compile(passwordPattern)
+        val birthdatePattern = "^\\d{8}$"
+        val patternBD = Pattern.compile(birthdatePattern)
+        var bd = ""
+
+        try {
+            val formattedDate = formatDate(birthday)
+            bd = formattedDate
+        } catch (e: StringIndexOutOfBoundsException) {
+            // 예외 발생 시 사용자에게 토스트 메시지를 보여주고 LoginActivity로 이동
+            Toast.makeText(this, "올바르지 않은 필드가 존재합니다.", Toast.LENGTH_SHORT).show()
+        }
+
+        // 각 항목에 대한 유효성 검사 수행
+        val isNameValid = name.length <= 5
+        val isPasswordValid = patternPW.matcher(pw).matches()
+        val isBirthdayValid = patternBD.matcher(birthday).matches()
+        val isIdValid = loginChecked.idCheck
+        val isNickNameValid = loginChecked.nickCheck
+        val isPhoneValid = loginChecked.phoneCheck
+
+        if (name.length <= 5) {
+            loginChecked.nameCheck = true
+        }
+
+        if (patternPW.matcher(regPwd.text.toString()).matches()) {
+            loginChecked.pwCheck = true
+        }
+
+        if (patternBD.matcher(birthday).matches()) {
+            loginChecked.birthdayCheck = true
+        }
+
+
+        // 모든 항목의 유효성 검사가 통과
+        if (isNameValid && isPasswordValid && isBirthdayValid && isIdValid && isNickNameValid && isPhoneValid) {
+            loginChecked.finish = true
+
+            // 회원가입 처리 등 추가 작업 수행
+            lifecycleScope.launch {
+                try {
+                    val userDTO = UserDTO(
+                        name, //이름 => 공백이 아니어야함
+                        bd, //생일 => xxxx-xx-xx 형태
+                        em, // => 이메일 xxx@xxx.xxx
+                        pw, // 비밀 번호 => 최소 8자, 최대 15자
+                        nk, // 닉네임
+                        pn, //핸드폰 번호 => 010-xxxx-xxxx
+                        // 정규식 =>  @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "휴대폰 번호 양식에 맞지 않습니다.")
+                        url //프로필 사진 url
+                    )
+
+                    if (accountViewModel.loginCheckDTO.value == null) {
+                        accountViewModel.sendData(userDTO)
+                    }
+
+                    accountViewModel.loginCheckDTO.collect { loginCheckDTO ->
+                        if (loginChecked != null) {
+                            progressBar.visibility = View.GONE
+                            Log.d("로그", "응답성공 : $loginCheckDTO")
+                            Toast.makeText(
+                                this@RegisterActivity,
+                                "회원가입에 성공하셨습니다!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            val intent =
+                                Intent(this@RegisterActivity, permissionActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                    }
+                } catch (e: Exception) {
+                    Log.e("로그", "응답 오류: ${e.message}")
+                }
+            }
+        } else {
+            if (!loginChecked.nameCheck) {
+                Toast.makeText(this, "이름을 확인해주세요${name}", Toast.LENGTH_SHORT).show()
+                regName.setText("")
+                progressBar.visibility = View.GONE
+            } else if (!isIdValid) {
+                Toast.makeText(this, "아이디 형식이나, 인증여부를 확인해주세요.${em}", Toast.LENGTH_SHORT)
+                    .show()
+                regEmail.setText("")
+                progressBar.visibility = View.GONE
+
+            } else if (!loginChecked.pwCheck) {
+                Toast.makeText(this, "비밀 번호 형식을 확인해주세요", Toast.LENGTH_SHORT).show()
+                regPwd.setText("")
+                progressBar.visibility = View.GONE
+
+            } else if (!isNickNameValid) {
+                Toast.makeText(this, "닉네임을 확인해주세요", Toast.LENGTH_SHORT).show()
+                regNick.setText("")
+                progressBar.visibility = View.GONE
+
+            } else if (!loginChecked.birthdayCheck) {
+                Toast.makeText(this, "생년월일을 확인해주세요", Toast.LENGTH_SHORT).show()
+                regBirthdate.setText("")
+                progressBar.visibility = View.GONE
+            } else if (!isPhoneValid) {
+                Toast.makeText(this, "휴대폰 인증을 확인해주세요", Toast.LENGTH_SHORT).show()
+                send_certification_et.setText("")
+                progressBar.visibility = View.GONE
+            } else {
+                //loginChecked.finish = true
+                progressBar.visibility = View.GONE
+            }
         }
     }
 
@@ -631,7 +643,7 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
         confirmNickname() // 닉네임 중복 확인하는 함수
         sendCertificationNumber() // 핸드폰 번호로 인증번호 전송 및 인증번호 확인하는 함수
         checkCertificationNumber() // 인증번호 확인하는 함수
-        onRegister()          //회원가입 버튼 클릭시 회원가입 처리하는 함수
+        performRegistration()          //회원가입 수행 -> 필드 유효성 및 실제 회원가입 처리하는 함수 호출
         startLoginActivity() // 로그인 버튼 클릭시 로그인 화면으로 이동하는 함수
     }
 
