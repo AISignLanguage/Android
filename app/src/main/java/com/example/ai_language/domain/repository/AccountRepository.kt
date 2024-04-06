@@ -8,5 +8,4 @@ interface AccountRepository {
 
     // 회원가입
     suspend fun sendData(data: UserDTO): Flow<LoginCheckDTO>
-
 }
