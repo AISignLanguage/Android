@@ -1,5 +1,6 @@
 package com.example.ai_language.di.module
 
+import com.example.ai_language.data.remote.AccountService
 import com.example.ai_language.data.remote.CallListService
 import com.example.ai_language.data.remote.DictionaryService
 import com.example.ai_language.data.remote.MapService
@@ -8,7 +9,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
-import retrofit2.create
 import javax.inject.Singleton
 
 @Module
@@ -32,4 +32,10 @@ object ServiceModule {
     fun sendCorporationService(
         @NetworkModule.OpenApiRetrofit2 retrofit: Retrofit
     ) : MapService = retrofit.create(MapService::class.java)
+
+    @Provides
+    @Singleton
+    fun sendAccountService(
+        @NetworkModule.MogInterceptorOkHttpClient retrofit: Retrofit
+    ) : AccountService = retrofit.create(AccountService::class.java)
 }

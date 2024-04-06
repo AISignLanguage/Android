@@ -1,11 +1,14 @@
 package com.example.ai_language.di.module
 
-import com.example.ai_language.data.source.call.CallListDataSource
-import com.example.ai_language.data.source.call.CallRepositoryImpl
 import com.example.ai_language.data.source.Map.MapDataSource
 import com.example.ai_language.data.source.Map.MapRepositoryImpl
+import com.example.ai_language.data.source.account.AccountDataSource
+import com.example.ai_language.data.source.account.AccountRepositoryImpl
+import com.example.ai_language.data.source.call.CallListDataSource
+import com.example.ai_language.data.source.call.CallRepositoryImpl
 import com.example.ai_language.data.source.dictionary.DictionaryDataSource
 import com.example.ai_language.data.source.dictionary.DictionaryRepositoryImpl
+import com.example.ai_language.domain.repository.AccountRepository
 import com.example.ai_language.domain.repository.CallListRepository
 import com.example.ai_language.domain.repository.DictionaryRepository
 import com.example.ai_language.domain.repository.MapRepository
@@ -34,4 +37,8 @@ object RepositoryModule {
     fun provideCorporationRepository(mapDataSource: MapDataSource) : MapRepository =
         MapRepositoryImpl(mapDataSource)
 
+    @Singleton
+    @Provides
+    fun provideAccountRegisterRepository(accountDataSource: AccountDataSource) : AccountRepository =
+        AccountRepositoryImpl(accountDataSource)
 }
