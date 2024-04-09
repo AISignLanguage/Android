@@ -36,6 +36,14 @@ object NetworkModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class TMapRetrofit
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class TranslationRetrofit
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class YoutubePlayerRetrofit
+
     @Provides
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor =
@@ -123,6 +131,34 @@ object NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(Util.BASE_URL5)
+            .addConverterFactory(gsonConverterFactory)
+            .client(client)
+            .build()
+    }
+
+    @TranslationRetrofit
+    @Provides
+    @Singleton
+    fun provideTranslationRetrofit(
+        gsonConverterFactory: GsonConverterFactory,
+        @MogInterceptorOkHttpClient client: OkHttpClient  // 이 부분에서도 MogInterceptorOkHttpClient를 사용합니다.
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(Util.BASE_URL6)
+            .addConverterFactory(gsonConverterFactory)
+            .client(client)
+            .build()
+    }
+
+    @YoutubePlayerRetrofit
+    @Provides
+    @Singleton
+    fun provideYoutubePlayerRetrofit(
+        gsonConverterFactory: GsonConverterFactory,
+        @MogInterceptorOkHttpClient client: OkHttpClient  // 이 부분에서도 MogInterceptorOkHttpClient를 사용합니다.
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(Util.BASE_URL6)
             .addConverterFactory(gsonConverterFactory)
             .client(client)
             .build()
