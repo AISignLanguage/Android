@@ -12,6 +12,15 @@
         tools:context=".ui.account.MainLoginActivity">
 
         <Button
+            android:id="@+id/btn_test_speech_flow"
+            android:text="Youtube 이동"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <Button
             android:id="@+id/btn_vibaration"
             android:layout_marginTop="30dp"
             android:layout_width="100dp"
