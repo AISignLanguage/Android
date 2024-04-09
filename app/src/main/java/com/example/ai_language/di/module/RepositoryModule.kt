@@ -13,11 +13,17 @@ import com.example.ai_language.data.source.naver.NaverDataSource
 import com.example.ai_language.data.source.naver.NaverRepositoryImpl
 import com.example.ai_language.data.source.tmap.TMapDataSource
 import com.example.ai_language.data.source.tmap.TMapRepositoryImpl
+import com.example.ai_language.data.source.translation.TranslationDataSource
+import com.example.ai_language.data.source.translation.TranslationRepositoryImpl
+import com.example.ai_language.data.source.youtube.YoutubeDataSource
+import com.example.ai_language.data.source.youtube.YoutubeRepositoryImpl
 import com.example.ai_language.domain.repository.CallListRepository
 import com.example.ai_language.domain.repository.DictionaryRepository
 import com.example.ai_language.domain.repository.MapRepository
 import com.example.ai_language.domain.repository.NaverRepository
 import com.example.ai_language.domain.repository.TMapRepository
+import com.example.ai_language.domain.repository.TranslationRepository
+import com.example.ai_language.domain.repository.YoutubeRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -56,5 +62,17 @@ object RepositoryModule {
     @Provides
     fun provideTMapRepository(tMapDataSource: TMapDataSource) : TMapRepository =
         TMapRepositoryImpl(tMapDataSource)
+
+    @Singleton
+    @Provides
+    fun provideTranslationRepository(translationDataSource: TranslationDataSource) : TranslationRepository =
+        TranslationRepositoryImpl(translationDataSource)
+
+    @Singleton
+    @Provides
+    fun provideYoutubePlayerRepository(youtubeDataSource: YoutubeDataSource) : YoutubeRepository =
+        YoutubeRepositoryImpl(youtubeDataSource)
+
+
 
 }
