@@ -150,4 +150,8 @@ dependencies {
     implementation("com.naver.maps:map-sdk:3.18.0")
     implementation ("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2")
 
+    //Youtube View
+    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+
+
 }

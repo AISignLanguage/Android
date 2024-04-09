@@ -24,6 +24,7 @@ import com.example.ai_language.domain.model.request.LoginResponseDTO
 import com.example.ai_language.find.FindIdPwd
 import com.example.ai_language.ui.home.Home
 import com.example.ai_language.ui.map.MapActivity
+import com.example.ai_language.ui.translation.TranslationActivity
 import com.example.ai_language.ui.vibration.SoundDetectionService
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
@@ -120,6 +121,10 @@ class MainLoginActivity : BaseActivity<ActivityMainLoginBinding>(R.layout.activi
         val mapBtn = binding.btMap
         mapBtn.setOnClickListener {
             startActivity(Intent(this, MapActivity::class.java))
+        }
+        val speechFlowBtn = binding.btnTestSpeechFlow
+        speechFlowBtn.setOnClickListener {
+            startActivity(Intent(this,TranslationActivity::class.java))
         }
     }
 
