@@ -19,8 +19,6 @@ import com.example.ai_language.Util.RetrofitClient
 import com.example.ai_language.Util.extensions.datastore
 import com.example.ai_language.base.BaseActivity
 import com.example.ai_language.databinding.ActivityMainLoginBinding
-import com.example.ai_language.domain.model.request.LoginRequestDTO
-import com.example.ai_language.domain.model.request.LoginResponseDTO
 import com.example.ai_language.find.FindIdPwd
 import com.example.ai_language.ui.home.Home
 import com.example.ai_language.ui.map.MapActivity
@@ -31,7 +29,9 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -78,26 +78,33 @@ class MainLoginActivity : BaseActivity<ActivityMainLoginBinding>(R.layout.activi
         val encryptedSharedPreferencesManager = EncryptedSharedPreferencesManager(this)
         encryptedSharedPreferencesManager.saveUserEmail(inputUserEmail) //유저 정보 요청 목적
 
-        val call = service.login(LoginRequestDTO(inputUserEmail, inputUserPw))
+        val call = service.login(inputUserEmail, inputUserPw)
         val intent = Intent(this, Home::class.java)
-        call.enqueue(object : Callback<LoginResponseDTO> {
+        call!!.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(
-                call: Call<LoginResponseDTO>,
-                response: Response<LoginResponseDTO>
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
             ) {
                 progressBar.visibility = View.GONE
                 if (response.isSuccessful) {
-                    val loginResponseDTO = response.body()
-                    if (loginResponseDTO != null && loginResponseDTO.success) {
-                        Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT).show()
-                        Log.d("로그", "로그인 성공")
+                    val accessToken = response.headers()["access"]
+                    val refreshCookie = response.headers().get("Set-Cookie")
+                    val refreshRegex = "refresh=([^;]*)".toRegex()
+                    val matchResult = refreshCookie?.let { refreshRegex.find(it) }
+                    val refreshToken = matchResult?.groupValues?.getOrNull(1)
 
-                        encryptedSharedPreferencesManager.saveUserEmail(inputUserEmail)
+                    if (accessToken != null && refreshToken != null) {
+                        lifecycleScope.launch {
+                            MyApp.getInstance().tokenManager.saveJwtToken(accessToken, refreshToken)
 
-                        intent.flags =
-                            Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                        startActivity(intent)
-                        finish()
+                            Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT).show()
+                            Log.d("로그", "로그인 성공")
+                            encryptedSharedPreferencesManager.saveUserEmail(inputUserEmail)
+                            intent.flags =
+                                Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(intent)
+                            finish()
+                        }
                     } else {
                         Toast.makeText(applicationContext, "로그인 실패", Toast.LENGTH_SHORT).show()
                         Log.d("로그", "로그인 실패")
@@ -108,7 +115,7 @@ class MainLoginActivity : BaseActivity<ActivityMainLoginBinding>(R.layout.activi
                 }
             }
 
-            override fun onFailure(call: Call<LoginResponseDTO>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 progressBar.visibility = View.GONE
                 Toast.makeText(applicationContext, "통신 실패", Toast.LENGTH_SHORT).show()
                 Log.d("로그", "통신 실패")
