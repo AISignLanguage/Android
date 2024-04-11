@@ -6,13 +6,17 @@ import android.content.pm.PackageManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.ai_language.MyApp
 import com.example.ai_language.R
 import com.example.ai_language.base.BaseActivity
 import com.example.ai_language.databinding.ActivityHomeBinding
 import com.example.ai_language.ui.camera.CameraPage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class Home : BaseActivity<ActivityHomeBinding>(R.layout.activity_home) {
@@ -21,6 +25,7 @@ class Home : BaseActivity<ActivityHomeBinding>(R.layout.activity_home) {
         setBottomNavigation()
         checkPermissions()
         setOnClick()
+
     }
 
     private fun setBottomNavigation() {

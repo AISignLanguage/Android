@@ -18,6 +18,9 @@ data class LoginRequestDTO(
     @SerializedName("email") val email: String,
     @SerializedName("password") val password: String
 )
+class LoginResponse {
+    var token: String? = null
+}
 
 //IdFindFragment (아이디 찾기 - 이메일 인증)
 data class FindIdDTO(
@@ -37,10 +40,6 @@ data class FindPwdDTO(
 
 data class FindPwdOk(
     @SerializedName("success_find_pwd") val success_find_pwd: Boolean
-)
-
-data class LoginResponseDTO(
-    @SerializedName("success") val success: Boolean
 )
 
 //Check Password
