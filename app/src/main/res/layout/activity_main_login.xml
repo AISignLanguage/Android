@@ -1,5 +1,4 @@
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -13,113 +12,115 @@
 
         <Button
             android:id="@+id/btn_test_speech_flow"
-            android:text="Youtube 이동"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Youtube 이동"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/btn_vibaration"
-            android:layout_marginTop="30dp"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:layout_marginTop="30dp"
             android:text="..."
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <Button
             android:id="@+id/button3"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:text="Button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/bt_map"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:text="Button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/forgetPage"
             android:layout_width="100dp"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.02"
-            app:layout_constraintVertical_weight="1"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="40dp"
             android:background="@drawable/forget_password_"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userPw" />
+            app:layout_constraintHeight_percent="0.02"
+            app:layout_constraintTop_toBottomOf="@+id/userPw"
+            app:layout_constraintVertical_weight="1" />
 
         <TextView
             android:id="@+id/textView21"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.02"
-            app:layout_constraintVertical_weight="1"
-            android:layout_marginEnd="40dp"
             android:layout_marginStart="40dp"
             android:layout_marginTop="19dp"
+            android:layout_marginEnd="40dp"
             android:background="@drawable/or"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.02"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sign_in_button" />
+            app:layout_constraintTop_toBottomOf="@+id/sign_in_button"
+            app:layout_constraintVertical_weight="1" />
 
         <ImageView
             android:id="@+id/logo_login"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.05"
-            app:layout_constraintVertical_weight="1"
             android:layout_margin="20dp"
             android:src="@drawable/logo__1_"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.05"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_weight="1" />
 
         <EditText
             android:id="@+id/userEmail"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.05"
-            app:layout_constraintVertical_weight="1"
             android:layout_marginStart="40dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="40dp"
             android:background="@drawable/loginid"
-            android:hint="@string/id"
             android:gravity="center_vertical"
+            android:hint="@string/id"
             android:paddingStart="45dp"
             android:textSize="12dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.05"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView15" />
+            app:layout_constraintTop_toBottomOf="@+id/textView15"
+            app:layout_constraintVertical_weight="1" />
 
         <EditText
             android:id="@+id/userPw"
-            android:background="@drawable/loginpassword"
-            app:layout_constraintHeight_percent="0.05"
-            android:paddingStart="45dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintVertical_weight="1"
             android:layout_marginStart="40dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="40dp"
+            android:background="@drawable/loginpassword"
             android:hint="@string/passward"
             android:inputType="textPassword"
+            android:paddingStart="45dp"
             android:textSize="12dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.05"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView16" />
+            app:layout_constraintTop_toBottomOf="@+id/textView16"
+            app:layout_constraintVertical_weight="1" />
 
         <RadioButton
 
@@ -140,30 +141,30 @@
             android:id="@+id/sign_in_button"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.055"
-            app:layout_constraintVertical_weight="1"
-            android:layout_marginEnd="40dp"
-            android:layout_marginStart="40dp"
             android:layout_gravity="center"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="40dp"
+            android:layout_marginEnd="40dp"
             android:background="@drawable/loginbtn"
             android:fontFamily="@font/font_bd"
             android:gravity="center"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.055"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioButton" />
+            app:layout_constraintTop_toBottomOf="@+id/radioButton"
+            app:layout_constraintVertical_weight="1" />
 
         <ImageView
             android:id="@+id/kko_login_btn"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="40dp"
-            app:layout_constraintHeight_percent="0.06"
             android:layout_marginTop="19dp"
             android:layout_marginEnd="40dp"
             android:src="@drawable/kakao_login_large_wide"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.06"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView21"
             app:layout_constraintVertical_weight="1" />
@@ -197,37 +198,37 @@
             android:id="@+id/imageView9"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.2"
-            app:layout_constraintVertical_weight="1"
             android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/logo_login"
+            app:layout_constraintVertical_weight="1"
             app:srcCompat="@drawable/appicon" />
 
         <TextView
             android:id="@+id/textView16"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.03"
-            app:layout_constraintVertical_weight="1"
             android:layout_marginStart="40dp"
             android:layout_marginTop="10dp"
             android:text="Password"
+            app:layout_constraintHeight_percent="0.03"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userEmail" />
+            app:layout_constraintTop_toBottomOf="@+id/userEmail"
+            app:layout_constraintVertical_weight="1" />
 
         <TextView
             android:id="@+id/textView15"
-            android:layout_marginStart="40dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.03"
-            app:layout_constraintVertical_weight="1"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="20dp"
             android:text="Email Address"
+            app:layout_constraintHeight_percent="0.03"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView9" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView9"
+            app:layout_constraintVertical_weight="1" />
 
         <LinearLayout
             android:id="@+id/linearLayout7"
