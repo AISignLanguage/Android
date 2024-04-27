@@ -16,8 +16,6 @@ import com.example.ai_language.domain.model.request.FindPwdOk
 import com.example.ai_language.domain.model.request.GetIdDTO
 import com.example.ai_language.domain.model.request.GetProfileDTO
 import com.example.ai_language.domain.model.request.LoginCheckDTO
-import com.example.ai_language.domain.model.request.LoginRequestDTO
-import com.example.ai_language.domain.model.request.LoginResponseDTO
 import com.example.ai_language.domain.model.request.NewsDTO
 import com.example.ai_language.domain.model.request.PhoneListDTO
 import com.example.ai_language.domain.model.request.PhoneNumberDTO
@@ -35,13 +33,12 @@ import retrofit2.http.POST
 
 interface Service {
 
-
     @FormUrlEncoded
     @POST("login")
     fun login(
         @Field("email") email: String?,
         @Field("password") password: String?
-    ): Call<ResponseBody?>?
+    ): Call<ResponseBody>
 
     @GET("user")
     fun getUSer(): Call<UserDTO>
@@ -67,8 +64,8 @@ interface Service {
     @GET("get-news") //뉴스 정보 가져옴
     fun getNews(): Call<List<NewsDTO>>
 
-    @POST("login")
-    fun login(@Body data: LoginRequestDTO): Call<LoginResponseDTO>
+//    @POST("login")
+//    fun login(@Body data: LoginRequestDTO): Call<LoginResponseDTO>
 
     @POST("confirm-nick")
     fun confirmNick(@Body data: ConfirmDTO): Observable<ConfirmedDTO>

@@ -11,10 +11,6 @@ import com.example.ai_language.domain.model.request.FindPwdDTO
 import com.example.ai_language.domain.model.request.FindPwdOk
 import com.example.ai_language.domain.model.request.GetIdDTO
 import com.example.ai_language.domain.model.request.LoginCheckDTO
-import com.example.ai_language.domain.model.request.LoginRequestDTO
-import com.example.ai_language.domain.model.request.LoginResponseDTO
-import com.example.ai_language.domain.model.request.PhoneListDTO
-import com.example.ai_language.domain.model.request.PhoneNumberDTO
 import com.example.ai_language.domain.model.request.UserDTO
 import io.reactivex.rxjava3.core.Observable
 import okhttp3.RequestBody
