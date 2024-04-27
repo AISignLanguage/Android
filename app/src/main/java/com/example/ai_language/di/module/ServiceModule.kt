@@ -3,6 +3,7 @@ package com.example.ai_language.di.module
 import com.example.ai_language.data.remote.AccountService
 import com.example.ai_language.data.remote.CallListService
 import com.example.ai_language.data.remote.DictionaryService
+import com.example.ai_language.data.remote.FastApiService
 import com.example.ai_language.data.remote.MapService
 import com.example.ai_language.data.remote.NaverService
 import com.example.ai_language.data.remote.SpeechFlowService
@@ -67,6 +68,12 @@ object ServiceModule {
     fun sendYoutubePlayerService(
         @NetworkModule.YoutubePlayerRetrofit retrofit: Retrofit
     ): YoutubeService = retrofit.create(YoutubeService::class.java)
+
+    @Provides
+    @Singleton
+    fun sendFastApiService(
+        @NetworkModule.FastApiPlayerRetrofit retrofit: Retrofit
+    ): FastApiService = retrofit.create(FastApiService::class.java)
 
 }
 
