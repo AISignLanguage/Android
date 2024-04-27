@@ -19,7 +19,7 @@ import com.example.ai_language.ui.map.listener.DetailImWriteDialogInterface
 class CorporationDialog(
     private val detailImWriteDialogInterface: DetailImWriteDialogInterface,
     private val mapDialogData: MapDialogData
-    ) : DialogFragment() {
+) : DialogFragment() {
     override fun onStart() {
         super.onStart()
         val window = dialog?.window
@@ -28,8 +28,10 @@ class CorporationDialog(
         window?.setLayout(width, height) // 다이얼로그의 너비와 높이 설정
         window?.setGravity(Gravity.BOTTOM) // 필요한 경우 다이얼로그의 위치 조정
     }
+
     private var _binding: CorporationDialogBinding? = null
     private val binding get() = _binding!!
+
     //다이얼로그 바인딩
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +42,7 @@ class CorporationDialog(
         setupDialogWindow()
         return binding.root
     }
+
     private fun setupDialogWindow() {
         dialog?.apply {
             requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -59,12 +62,14 @@ class CorporationDialog(
             }
         }
     }
+
     //클릭리스너 등록
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setBind()
         setupClickListeners()
     }
+
     private fun setBind() {
         with(binding) {
             dialogData = mapDialogData
@@ -74,8 +79,6 @@ class CorporationDialog(
             dialogData?.state = mapDialogData.state
         }
     }
-
-
 
 
     private fun setupClickListeners() {
