@@ -1,20 +1,32 @@
 package com.example.ai_language.ui.translation
 
 import android.util.Log
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.ai_language.R
 import com.example.ai_language.base.BaseFragment
 import com.example.ai_language.databinding.FragmentYoutubeUrlBinding
+import com.example.ai_language.domain.model.response.WavUrlResponse
+import com.example.ai_language.ui.translation.viewmodel.TranslationViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+@AndroidEntryPoint
 class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.fragment_youtube_url) {
     private lateinit var youTubePlayerView: YouTubePlayerView
     private var isPlayerReady = false
+    private var link = ""
+    private val translationViewModel by viewModels<TranslationViewModel>()
 
     override fun setLayout() {
         initYouTubePlayerView()
+        viewModelScope()
     }
 
     private fun initYouTubePlayerView() {
@@ -30,6 +42,7 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
         binding.btnYoutubeLink.setOnClickListener {
             if (isPlayerReady) {
                 val url = binding.etYoutubeUrl.text.toString()
+                translationViewModel.getWavUrl(WavUrlResponse(url))
                 val videoId = extractYouTubeVideoId(url)
                 Log.d("youtube", "버튼, $videoId")
 
@@ -79,4 +92,63 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
             else -> null
         }
     }
+
+    private fun viewModelScope(){
+        sendRemote()
+        resultText()
+        onClickRemote()
+    }
+    private fun onClickRemote(){
+        binding.btnSendRemoteApi.setOnClickListener {
+            val txt = binding.etRemoteFileInfo.text.toString()
+            translationViewModel.postTextByRemoteFile("z45ijode90Uu2Z9R","NnYgsPwKxqAzNkIl","ko",txt)
+        }
+        binding.btnGo.setOnClickListener {
+            translationViewModel.getTextFileBySpeechFlowApi("z45ijode90Uu2Z9R","NnYgsPwKxqAzNkIl",link,4)
+        }
+    }
+    private fun sendRemote(){
+        lifecycleScope.launch{
+            repeatOnLifecycle(Lifecycle.State.CREATED){
+                translationViewModel.remote.collectLatest {
+                    Log.d("Remote","${it.code} : ${it.msg} , ${it.taskId}")
+                    binding.tvFileKey.text = it.taskId
+                    link = it.taskId
+                }
+            }
+        }
+        lifecycleScope.launch{
+            repeatOnLifecycle(Lifecycle.State.CREATED){
+                translationViewModel.wavUrl.collectLatest {
+                    val trUrl = it.url.replace("/static/static","/static")
+                    binding.etRemoteFileInfo.setText("http://34.64.212.107:8000"+trUrl)
+                    link = it.url
+                }
+            }
+        }
+    }
+
+    private fun resultText(){
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED){
+                translationViewModel.result.collectLatest {
+                    Log.d("Remote","${it.code} : ${it.msg}")
+                    if(it.code.toString() == "11001") {
+                        binding.tvResult.text = "서버에서 번역이 진행중 입니다. 잠시 후 다시 go 버튼을 눌러주세요"
+                    }
+                    else if(it.code.toString() == "11000"){
+                        binding.tvResult.text = it.result
+                    }
+                    else{
+                        binding.tvResult.text = "error code : ${it.code} : ${it.msg}"
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+
 }

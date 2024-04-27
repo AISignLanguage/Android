@@ -1,10 +1,14 @@
 package com.example.ai_language.ui.translation.viewmodel
 
 import android.util.Log
+import android.util.LogPrinter
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ai_language.domain.model.response.ResultTypeText
 import com.example.ai_language.domain.model.response.TaskId
+import com.example.ai_language.domain.model.response.WavUrlResponse
+import com.example.ai_language.domain.model.response.Wavresponse
+import com.example.ai_language.domain.repository.FastApiRepository
 import com.example.ai_language.domain.repository.TranslationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,11 +16,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.security.PrivateKey
 import javax.inject.Inject
 
 @HiltViewModel
 class TranslationViewModel @Inject constructor(
-    private val translationRepository: TranslationRepository
+    private val translationRepository: TranslationRepository,
+    private val fastApiRepository: FastApiRepository
 ) : ViewModel() {
     private var _remote = MutableStateFlow(TaskId())
     val remote: StateFlow<TaskId> = _remote
@@ -27,7 +33,10 @@ class TranslationViewModel @Inject constructor(
     private var _result = MutableStateFlow(ResultTypeText())
     val result: StateFlow<ResultTypeText> = _result
 
+    private var _wavUrl = MutableStateFlow(Wavresponse())
+    val wavUrl : StateFlow<Wavresponse> = _wavUrl
 
+    //wav -> 태스크 ID
     fun postTextByRemoteFile(keyId: String, keySecret: String, lang: String, remotePath: String) {
         viewModelScope.launch {
             try {
@@ -59,6 +68,7 @@ class TranslationViewModel @Inject constructor(
         }
     }
 
+    //
     fun getTextFileBySpeechFlowApi(
         keyId: String,
         keySecret: String,
@@ -77,6 +87,18 @@ class TranslationViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 Log.e("Result Error", e.message.toString())
+            }
+        }
+    }
+
+    fun getWavUrl(youtube_url : WavUrlResponse){
+        viewModelScope.launch {
+            try{
+                fastApiRepository.getWavUrl(youtube_url).collect{
+                    _wavUrl.value = it
+                }
+            }catch (e :Exception){
+                Log.e("Fast Api Error", e.message.toString())
             }
         }
     }

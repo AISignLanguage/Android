@@ -44,6 +44,12 @@ object NetworkModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class YoutubePlayerRetrofit
 
+
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class FastApiPlayerRetrofit
+
     @Provides
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor =
@@ -159,6 +165,20 @@ object NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(Util.BASE_URL6)
+            .addConverterFactory(gsonConverterFactory)
+            .client(client)
+            .build()
+    }
+
+    @FastApiPlayerRetrofit
+    @Provides
+    @Singleton
+    fun provideFastApiRetrofit(
+        gsonConverterFactory: GsonConverterFactory,
+        @MogInterceptorOkHttpClient client: OkHttpClient
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(Util.BASE_URL8)
             .addConverterFactory(gsonConverterFactory)
             .client(client)
             .build()
