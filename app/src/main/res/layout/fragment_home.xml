@@ -15,17 +15,6 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/logo_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@mipmap/ic_launcher_round" />
-        </com.google.android.material.appbar.MaterialToolbar>
 
 
         <FrameLayout

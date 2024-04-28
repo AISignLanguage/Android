@@ -7,128 +7,117 @@
 
     </data>
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/fr_home_menu"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        tools:context=".HomeMenuFragment"
-        android:orientation="vertical">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/logo_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@mipmap/ic_launcher_round" />
-        </com.google.android.material.appbar.MaterialToolbar>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@color/white">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:background="#F8FAFF"/>
-
-                <LinearLayout
-                    android:layout_width="350dp"
-                    android:layout_height="150dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="50dp"
-                    android:background="#F0F0F0" />
-
-        </FrameLayout>
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical"
+            tools:context=".HomeMenuFragment">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="200dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@color/white">
+
+                <ImageView
+                    android:id="@+id/iv_poster"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/rounded_square_20dp_width2dp" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white">
+
+                    <ImageView
+                        android:id="@+id/ib_map"
+                        android:layout_width="150dp"
+                        android:layout_height="220dp"
+                        android:layout_margin="20dp"
+                        android:src="@drawable/rounded_square_20dp_width2dp"
+                        app:layout_constraintStart_toStartOf="@id/cl_menu"
+                        app:layout_constraintTop_toTopOf="@id/cl_menu" />
+
+                    <ImageView
+                        android:id="@+id/ib_dic"
+                        android:layout_width="200dp"
+                        android:layout_height="105dp"
+                        android:layout_marginEnd="20dp"
+                        android:contentDescription="TODO"
+                        android:src="@drawable/rounded_square_20dp_width2dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/ib_map"
+                        app:layout_constraintTop_toTopOf="@+id/ib_map" />
+
+                    <ImageView
+                        android:id="@+id/ib_youtube"
+                        android:layout_width="200dp"
+                        android:layout_height="105dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:src="@drawable/rounded_square_20dp_width2dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/ib_map"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/ib_map"
+                        app:layout_constraintTop_toBottomOf="@+id/ib_dic" />
+
+                    <TextView
+                        android:id="@+id/ib_vib"
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:background="@drawable/rounded_square_20dp_width2dp"
+                        android:gravity="center_horizontal|bottom"
+                        android:paddingBottom="10dp"
+                        android:text="시작"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageButton6"
+                        app:layout_constraintStart_toStartOf="@id/ib_map"
+                        app:layout_constraintTop_toTopOf="@+id/imageButton6"
+                        app:srcCompat="@drawable/menu" />
+
+                    <ImageView
+                        android:id="@+id/imageButton5"
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:src="@drawable/rounded_square_20dp_width2dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageButton6"
+                        app:layout_constraintEnd_toEndOf="@+id/ib_youtube"
+                        app:layout_constraintTop_toTopOf="@+id/imageButton6" />
+
+                    <ImageView
+                        android:id="@+id/imageButton6"
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:layout_marginTop="20dp"
+                        android:src="@drawable/rounded_square_20dp_width2dp"
+                        app:layout_constraintEnd_toStartOf="@+id/imageButton5"
+                        app:layout_constraintStart_toEndOf="@+id/ib_vib"
+                        app:layout_constraintTop_toBottomOf="@+id/ib_map" />
 
 
-                <ImageButton
-                    android:id="@+id/imageButton"
-                    android:layout_width="150dp"
-                    android:layout_height="220dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.107"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.158"
-                    app:srcCompat="@drawable/menu" />
-
-                <ImageButton
-                    android:id="@+id/imageButton1"
-                    android:layout_width="194dp"
-                    android:layout_height="105dp"
-                    android:layout_marginEnd="28dp"
-                    android:contentDescription="TODO"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/imageButton"
-                    app:layout_constraintTop_toTopOf="@+id/imageButton"
-                    app:srcCompat="@drawable/menu" />
-
-                <ImageButton
-                    android:id="@+id/imageButton2"
-                    android:layout_width="194dp"
-                    android:layout_height="105dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="28dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/imageButton"
-                    app:layout_constraintTop_toBottomOf="@+id/imageButton1"
-                    app:srcCompat="@drawable/menu" />
-
-                <ImageButton
-                    android:id="@+id/imageButton4"
-                    android:layout_width="114dp"
-                    android:layout_height="120dp"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.094"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageButton"
-                    app:srcCompat="@drawable/menu" />
-
-                <ImageButton
-                    android:id="@+id/imageButton5"
-                    android:layout_width="114dp"
-                    android:layout_height="120dp"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.905"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageButton"
-                    app:srcCompat="@drawable/menu" />
-
-                <ImageButton
-                    android:id="@+id/imageButton6"
-                    android:layout_width="114dp"
-                    android:layout_height="120dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintEnd_toStartOf="@+id/imageButton5"
-                    app:layout_constraintHorizontal_bias="0.222"
-                    app:layout_constraintStart_toEndOf="@+id/imageButton4"
-                    app:layout_constraintTop_toBottomOf="@+id/imageButton"
-                    app:srcCompat="@drawable/menu" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
-
-
-
-    </LinearLayout>
+    </FrameLayout>
 </layout>

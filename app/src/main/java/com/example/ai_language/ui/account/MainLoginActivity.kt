@@ -163,7 +163,6 @@ class MainLoginActivity : BaseActivity<ActivityMainLoginBinding>(R.layout.activi
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), REQUEST_RECORD_AUDIO_PERMISSION)
         }
-        var st = true
         val startStopButton = binding.btnVibaration
         startStopButton.setOnClickListener {
             if (isServiceRunning) {
