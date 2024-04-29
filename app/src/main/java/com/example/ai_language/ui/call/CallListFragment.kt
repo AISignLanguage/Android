@@ -101,18 +101,18 @@ class CallListFragment : BaseFragment<ActivityCallListBinding>(R.layout.activity
 
 
     override fun setLayout() {
-        onClickedByNavi()
+//        onClickedByNavi()
         getContacts()
         callListRecyclerView()
         inviteRecyclerView()
     }
-
-    private fun onClickedByNavi() {
-        binding.logoIcon.setNavigationOnClickListener {
-            val navController = findNavController()
-            navController.navigate(R.id.action_callListFragment_to_homeFragment)
-        }
-    }
+//
+//    private fun onClickedByNavi() {
+//        binding.logoIcon.setNavigationOnClickListener {
+//            val navController = findNavController()
+//            navController.navigate(R.id.action_callListFragment_to_homeFragment)
+//        }
+//    }
 
     // callListRecyclerView 초기화 및 생명주기로 서버에서 뷰모델 값 받아오고 그 이후에는 뷰모델로 업데이트 하는 함수
     private fun callListRecyclerView() {

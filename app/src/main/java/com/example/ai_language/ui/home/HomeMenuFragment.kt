@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.ai_language.R
 import com.example.ai_language.base.BaseFragment
 import com.example.ai_language.databinding.FragmentHomeMenuBinding
+import com.example.ai_language.ui.extensions.setSrcVolunteerImage
 import com.example.ai_language.ui.map.MapActivity
 import com.example.ai_language.ui.translation.TranslationActivity
 import com.example.ai_language.ui.vibration.SoundDetectionService
@@ -28,6 +29,7 @@ class HomeMenuFragment : BaseFragment <FragmentHomeMenuBinding>(R.layout.fragmen
     }
     private fun setOnClickImageButton() {
         with(binding) {
+            ibVib.setImageResource(R.drawable.ic_vibration_vector_off)
             ivPoster.setOnClickListener {
                 findNavController().navigate(R.id.action_navigation_home_menu_to_home)
             }
@@ -43,10 +45,10 @@ class HomeMenuFragment : BaseFragment <FragmentHomeMenuBinding>(R.layout.fragmen
                 }
                     if (isServiceRunning) {
                         stopDetectionService()
-                        ibVib.text = "시작"
+                        ibVib.setImageResource(R.drawable.ic_vibration_vector_off)
                     } else {
                         startDetectionService()
-                        ibVib.text = "멈추기"
+                        ibVib.setImageResource(R.drawable.ic_vibration_vector)
                     }
 
             }

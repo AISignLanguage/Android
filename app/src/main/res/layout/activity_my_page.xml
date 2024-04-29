@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
@@ -12,51 +12,29 @@
         tools:context=".ui.mypage.MyPage">
 
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/tb_mypage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.05"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline3"
-            app:navigationIcon="@drawable/ic_arrow_back"
-
-            >
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@mipmap/ic_launcher_round"
-                android:contentDescription="TODO" />
-        </com.google.android.material.appbar.MaterialToolbar>
-
-
         <TextView
             android:id="@+id/ex"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="21dp"
             android:text="님, 안녕하세요!"
             android:textSize="12dp"
+            app:layout_constraintBottom_toBottomOf="@+id/myName_tv"
             app:layout_constraintHeight_percent="0.03"
             app:layout_constraintStart_toEndOf="@+id/myName_tv"
-            app:layout_constraintTop_toBottomOf="@+id/tb_mypage" />
+            app:layout_constraintTop_toTopOf="@+id/myName_tv" />
 
         <TextView
             android:id="@+id/myName_tv"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="15dp"
             android:text="박지원"
             android:textSize="17dp"
             android:textStyle="bold"
             app:layout_constraintHeight_percent="0.04"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tb_mypage" />
+            app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
         <LinearLayout
             android:id="@+id/linearLayout4"

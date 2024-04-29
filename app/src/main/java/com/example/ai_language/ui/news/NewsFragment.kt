@@ -24,11 +24,11 @@ class NewsFragment : BaseFragment<ActivityNewsBinding>(R.layout.activity_news) {
                 tab.text = tabTitles[position]
             }.attach()
 
-            backBtn.setOnClickListener {
-                val intent = Intent(requireActivity(), Home::class.java)
-                startActivity(intent)
-                requireActivity().finish()
-            }
+//            backBtn.setOnClickListener {
+//                val intent = Intent(requireActivity(), Home::class.java)
+//                startActivity(intent)
+//                requireActivity().finish()
+//            }
         }
     }
 }
