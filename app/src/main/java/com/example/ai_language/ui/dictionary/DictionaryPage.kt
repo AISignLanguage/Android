@@ -113,10 +113,10 @@ class DictionaryPage :
     }
 
     private fun onClickedByNavi() {
-        binding.linearLayout3.setNavigationOnClickListener {
-            val navController = findNavController()
-            navController.navigate(R.id.action_navigation_dictionary_to_navigation_home)
-        }
+//        binding.linearLayout3.setNavigationOnClickListener {
+//            val navController = findNavController()
+//            navController.navigate(R.id.action_navigation_dictionary_to_navigation_home)
+//        }
     }
 
 

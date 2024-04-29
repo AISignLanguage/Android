@@ -69,10 +69,10 @@ class MyPage : BaseFragment<ActivityMyPageBinding>(R.layout.activity_my_page) {
 
 
     private fun onClickedByNavi() {
-        binding.tbMypage.setNavigationOnClickListener {
-            val navController = findNavController()
-            navController.navigate(R.id.action_navigation_my_page_to_navigation_home)
-        }
+//        binding.tbMypage.setNavigationOnClickListener {
+//            val navController = findNavController()
+//            navController.navigate(R.id.action_navigation_my_page_to_navigation_home)
+//        }
     }
 
     fun disableAutoLogin() {
