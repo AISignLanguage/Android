@@ -431,7 +431,7 @@ class RegisterActivityApp : AppCompatActivity() {
         }
     }
 
-    fun formatDate(originalDate: String): String {
+    private fun formatDate(originalDate: String): String {
         // 연도, 월, 일을 추출합니다.
         val year = originalDate.substring(0, 4)
         val month = originalDate.substring(4, 6)

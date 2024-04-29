@@ -15,8 +15,6 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
-
-
         <FrameLayout
             android:id="@+id/fr_all"
             android:layout_width="match_parent"

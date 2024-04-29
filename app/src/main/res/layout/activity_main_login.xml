@@ -10,52 +10,26 @@
         android:orientation="vertical"
         tools:context=".ui.account.MainLoginActivity">
 
-        <Button
-            android:id="@+id/btn_test_speech_flow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Youtube 이동"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/btn_vibaration"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="30dp"
-            android:text="..."
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button3"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:text="Button"
+            android:textSize="10dp"
+            android:text="홈"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/bt_map"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="Button"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/forgetPage"
-            android:layout_width="100dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="40dp"
-            android:background="@drawable/forget_password_"
+            android:textSize="12dp"
+            android:text="forget password"
+            app:layout_constraintBottom_toBottomOf="@+id/radioButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.02"
-            app:layout_constraintTop_toBottomOf="@+id/userPw"
-            app:layout_constraintVertical_weight="1" />
+            app:layout_constraintTop_toTopOf="@+id/radioButton" />
 
         <TextView
             android:id="@+id/textView21"
@@ -89,7 +63,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="40dp"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="40dp"
             android:background="@drawable/loginid"
             android:gravity="center_vertical"
@@ -108,7 +81,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="40dp"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="40dp"
             android:background="@drawable/loginpassword"
             android:hint="@string/passward"
@@ -179,20 +151,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="40dp"
-            android:fontFamily="@font/font_eb"
-            android:gravity="center"
-            android:text="WelCome Back"
-            android:textSize="25dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/progressBar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/imageView9"

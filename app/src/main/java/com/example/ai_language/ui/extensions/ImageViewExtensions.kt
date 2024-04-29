@@ -27,6 +27,19 @@ fun ImageView.scale(url: String?) {
     }
 }
 
+
+@BindingAdapter("scaleImageUrlDrawable")
+fun ImageView.scale(url: Int?) {
+    if (url != 0) {
+        Glide.with(this)
+            .load(url)
+            .transform(RoundedCorners(dpToPx(this.context, 20)))
+            .centerCrop()
+            .into(this)
+    }
+}
+
+
 private fun dpToPx(context: Context, dp: Int): Int {
     return (dp * context.resources.displayMetrics.density).toInt()
 }
