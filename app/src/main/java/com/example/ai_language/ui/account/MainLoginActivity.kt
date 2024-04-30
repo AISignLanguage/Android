@@ -125,14 +125,14 @@ class MainLoginActivity : BaseActivity<ActivityMainLoginBinding>(R.layout.activi
 
 
     private fun setOnClickMapBtn() {
-        val mapBtn = binding.btMap
-        mapBtn.setOnClickListener {
-            startActivity(Intent(this, MapActivity::class.java))
-        }
-        val speechFlowBtn = binding.btnTestSpeechFlow
-        speechFlowBtn.setOnClickListener {
-            startActivity(Intent(this,TranslationActivity::class.java))
-        }
+//        val mapBtn = binding.btMap
+//        mapBtn.setOnClickListener {
+//            startActivity(Intent(this, MapActivity::class.java))
+//        }
+//        val speechFlowBtn = binding.btnTestSpeechFlow
+//        speechFlowBtn.setOnClickListener {
+//            startActivity(Intent(this,TranslationActivity::class.java))
+//        }
     }
 
     private fun startDetectionService() {
@@ -163,16 +163,16 @@ class MainLoginActivity : BaseActivity<ActivityMainLoginBinding>(R.layout.activi
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), REQUEST_RECORD_AUDIO_PERMISSION)
         }
-        val startStopButton = binding.btnVibaration
-        startStopButton.setOnClickListener {
-            if (isServiceRunning) {
-                stopDetectionService()
-                startStopButton.text = "시작"
-            } else {
-                startDetectionService()
-                startStopButton.text = "멈추기"
-            }
-        }
+//        val startStopButton = binding.btnVibaration
+//        startStopButton.setOnClickListener {
+//            if (isServiceRunning) {
+//                stopDetectionService()
+//                startStopButton.text = "시작"
+//            } else {
+//                startDetectionService()
+//                startStopButton.text = "멈추기"
+//            }
+//        }
 
         setOnClickMapBtn()
         //아이디 잃어버렸을 때
