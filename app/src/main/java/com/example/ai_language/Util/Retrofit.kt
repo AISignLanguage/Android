@@ -33,7 +33,7 @@ class RetrofitClient private constructor() {
         fun getUserRetrofitInterface(): Service {
             return getInstance().let { retrofitClient ->
                 val retrofit = Retrofit.Builder()
-                    .baseUrl(baseUrl)
+                    .baseUrl(baseUrl1)
                     .addConverterFactory(NullOnEmptyConverterFactory())
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava3CallAdapterFactory.create()) // RxJava 3 Call Adapter Factory 추가

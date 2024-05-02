@@ -23,6 +23,7 @@
         }
         buildFeatures {
             viewBinding = true
+            mlModelBinding = true
         }
         defaultConfig {
             applicationId = "com.example.ai_language"
@@ -73,6 +74,7 @@ dependencies {
 
     implementation ("com.google.dagger:hilt-android:2.50")
     implementation("androidx.activity:activity:1.8.0")
+    implementation("org.tensorflow:tensorflow-lite-metadata:0.1.0")
     kapt ("com.google.dagger:hilt-compiler:2.50")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
