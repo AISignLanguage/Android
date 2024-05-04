@@ -155,5 +155,8 @@ dependencies {
     //Youtube View
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
 
+    //MediaPipe
+    implementation ("com.google.mediapipe:solution-core:0.10.13")
+    implementation ("com.google.mediapipe:hands:0.10.13")
 
 }
