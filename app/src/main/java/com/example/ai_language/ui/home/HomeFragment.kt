@@ -5,7 +5,7 @@ import com.example.ai_language.R
 import com.example.ai_language.base.BaseFragment
 import com.example.ai_language.databinding.FragmentHomeBinding
 import com.example.ai_language.ui.home.adapter.PagerAdapter
-import me.relex.circleindicator.CircleIndicator3
+
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 

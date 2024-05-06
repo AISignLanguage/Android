@@ -5,6 +5,7 @@ import android.content.res.AssetFileDescriptor
 import android.graphics.Bitmap
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.Tensor
+import org.tensorflow.lite.flex.FlexDelegate
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.io.FileInputStream
@@ -37,6 +38,11 @@ class Classifier(context: Context) {
         // 모델 초기화
         val model: ByteBuffer? = loadModelFile(MODEL_NAME)
         model?.order(ByteOrder.nativeOrder())?:throw IOException()
+
+        val options = Interpreter.Options()
+        val flexDelegate = FlexDelegate()
+        options.addDelegate(flexDelegate)
+        interpreter = Interpreter(model, options)
 
         // Interpreter 생성 -> 모델에 데이터를 입력하고 추론 결과를 전달받을 수 있는 클래스
         interpreter = Interpreter(model)
@@ -88,32 +94,32 @@ class Classifier(context: Context) {
     // 모델 결과 추론 함수
     // 입력 이미지를 모델에 전달하기 전에 전처리를 수행하고, 모델을 실행하여 결과를 반환
     // 출력 클래스 수 이용하여 출력값 담을 배열 생성 후 interpreter의 run() 메서드에 전달하여 추론 수행
-    public fun classify(image: Bitmap): Pair<String, Float> {
-        // 전처리된 입력 이미지
-        val buffer = convertBitmapToGrayByteBuffer(resizeBitmap(image))
-        var result = FloatArray(modelOutputClasses) ///추론 결과를 담을 배열
-        interpreter.run(buffer, result) //추론 수행
-
-        // 확률이 가장 높은 클래스와 확률 반환
-        return argmax(result)
-    }
+//    public fun classify(image: Bitmap): Pair<String, Float> {
+//        // 전처리된 입력 이미지
+//        val buffer = convertBitmapToGrayByteBuffer(resizeBitmap(image))
+//        var result = FloatArray(modelOutputClasses) ///추론 결과를 담을 배열
+//        interpreter.run(buffer, result) //추론 수행
+//
+//        // 확률이 가장 높은 클래스와 확률 반환
+//        return argmax(result)
+//    }
 
     ////// 수정 필요 //////  ////// 수정 필요 //////
     // 추론 결과 해석 함수 -> 추론 결과값 확인하여 확률 가장 높은 클래스 반환
-    private fun argmax(array: FloatArray): Pair<String, Float> {
-        var argmaxIndex: Int = 0
-        var maxProbability: Float = array[0]
-
-        for (i in 1 until array.size) {
-            val probability = array[i]
-            if (probability > maxProbability) {
-                argmaxIndex = i
-                maxProbability = probability
-            }
-        }
-        //val className = classes[argmaxIndex]
-        return Pair(className, maxProbability)
-    }
+//    private fun argmax(array: FloatArray): Pair<String, Float> {
+//        var argmaxIndex: Int = 0
+//        var maxProbability: Float = array[0]
+//
+//        for (i in 1 until array.size) {
+//            val probability = array[i]
+//            if (probability > maxProbability) {
+//                argmaxIndex = i
+//                maxProbability = probability
+//            }
+//        }
+//        //val className = classes[argmaxIndex]
+//        return Pair(className, maxProbability)
+//    }
 
     // 입력 이미지 크기 변환 함수 (이미지 크기 조절)
     private fun resizeBitmap(bitmap: Bitmap): Bitmap {
