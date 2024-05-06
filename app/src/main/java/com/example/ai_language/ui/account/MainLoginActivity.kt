@@ -1,5 +1,6 @@
 package com.example.ai_language.ui.account
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,7 +12,6 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import android.Manifest
 import com.example.ai_language.MyApp
 import com.example.ai_language.R
 import com.example.ai_language.Util.EncryptedSharedPreferencesManager
@@ -21,15 +21,12 @@ import com.example.ai_language.base.BaseActivity
 import com.example.ai_language.databinding.ActivityMainLoginBinding
 import com.example.ai_language.find.FindIdPwd
 import com.example.ai_language.ui.home.Home
-import com.example.ai_language.ui.map.MapActivity
-import com.example.ai_language.ui.translation.TranslationActivity
 import com.example.ai_language.ui.vibration.SoundDetectionService
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -159,20 +156,56 @@ class MainLoginActivity : BaseActivity<ActivityMainLoginBinding>(R.layout.activi
         private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
     }
 
+
+//    // -> 모델 확인용 코드
+//    private val MODEL_NAME = "converted_model_raw.tflite"
+//    lateinit var interpreter: Interpreter
+//
+//    // -> 모델 확인용 코드
+//    fun init() {
+//        val model = loadModelFile(MODEL_NAME)
+//        model.order(ByteOrder.nativeOrder())
+//        interpreter = Interpreter(model)
+//        initModelShape()
+//    }
+//
+//    // 2. 모델 로드 하는 코드(2) -> 모델 확인용 코드
+//    private fun loadModelFile(modelName: String): ByteBuffer {
+//        val am = this.assets
+//        val afd = am.openFd(modelName)
+//        val fis = FileInputStream(afd.fileDescriptor)
+//        val fc = fis.channel
+//        val startOffset = afd.startOffset
+//        val declaredLength = afd.declaredLength
+//        return fc.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
+//    }
+//
+//    // 3. interpreter를 통하여 0 번째 인덱스의 Tensor 를 가져오는 코드 -> 모델 확인용 코드
+//    private fun initModelShape() {
+//        val inputTensor = interpreter.getInputTensor(0)
+//        val inputShape: IntArray = inputTensor.shape()
+//        val modelInputChannel = inputShape[0]
+//        val modelInputWidth = inputShape[1]
+//        val modelInputHeight = inputShape[2]
+//        val outputTensor = interpreter.getOutputTensor(0)
+//        val outputShape: IntArray = outputTensor.shape()
+//        val modelOutputClasses = outputShape[1]
+//
+//        // 입력 텐서 관련 로그
+//        Log.d("모델", "입력 텐서 채널 수: $modelInputChannel")
+//        Log.d("모델", "입력 텐서 너비: $modelInputWidth")
+//        Log.d("모델", "입력 텐서 높이: $modelInputHeight")
+//
+//        // 출력 텐서 관련 로그
+//        Log.d("모델", "출력 텐서 클래스 수: $modelOutputClasses")
+//    }
+
     override fun setLayout() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), REQUEST_RECORD_AUDIO_PERMISSION)
         }
-//        val startStopButton = binding.btnVibaration
-//        startStopButton.setOnClickListener {
-//            if (isServiceRunning) {
-//                stopDetectionService()
-//                startStopButton.text = "시작"
-//            } else {
-//                startDetectionService()
-//                startStopButton.text = "멈추기"
-//            }
-//        }
+
+        //init() // 모델 확인용 코드
 
         setOnClickMapBtn()
         //아이디 잃어버렸을 때
