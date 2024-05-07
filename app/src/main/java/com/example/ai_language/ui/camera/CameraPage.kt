@@ -20,6 +20,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
@@ -39,6 +40,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import com.example.ai_language.R
+import com.example.ai_language.base.BaseActivity
+import com.example.ai_language.databinding.ActivityCameraPageBinding
 import com.example.ai_language.ui.home.Home
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.task.vision.detector.ObjectDetector
@@ -51,8 +54,7 @@ import java.util.concurrent.Executors
 
 data class DetectionResult(val boundingBox: RectF, val text: String)
 
-
-class CameraPage : AppCompatActivity() {
+class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_camera_page) {
 
     companion object {
         private const val MAX_FONT_SIZE = 96F
@@ -78,37 +80,54 @@ class CameraPage : AppCompatActivity() {
     // 카메라 작업을 수행하기 위한 스레드 풀을 관리 (메인 스레드와 별도로 동작)
     private lateinit var cameraExecutor: ExecutorService
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_camera_page)
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            baseContext, it) == PackageManager.PERMISSION_GRANTED
+    }
 
-        val homeBtn = findViewById<ImageButton>(R.id.homeButton)
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults:
+        IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (allPermissionsGranted()) {
+                startCamera()
+            } else {
+                Toast.makeText(this,
+                    "Permissions not granted by the user.",
+                    Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+    }
+
+    override fun setLayout() {
+        val homeBtn = binding.homeButton
         homeBtn.setOnClickListener {
             val intent = Intent(this, Home::class.java)
             startActivity(intent)
             finish()
         }
 
-        // Request camera permissions (카메라 권한 요청)
-        if (allPermissionsGranted()) {
-            startCamera()
+        // 앱 시작 시 권한 확인 및 요청
+        if (!allPermissionsGranted()) {
+            requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         } else {
-            ActivityCompat.requestPermissions(
-                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
-            )
+            startCamera()
         }
 
-        //val videoBtn = findViewById<ImageButton>(R.id.CameraBtn)
-        //val btn = findViewById<Button>(R.id.button2)
-        //btn.setOnClickListener{ takePhoto() }
-        //videoBtn.setOnClickListener{ captureVideo(videoBtn) } 실시간 번역만 사용, 녹화 X
-
         cameraExecutor = Executors.newSingleThreadExecutor()
+
+//        val videoBtn = binding.cameraBtn
+//        val btn = binding.button2
+//        btn.setOnClickListener{ takePhoto() }
+        //videoBtn.setOnClickListener{ captureVideo(videoBtn) } 실시간 번역만 사용, 녹화 X
     }
 
     // 버튼 클릭해서 카메라 전면 후면 전환하는 함수
     private fun toggleCamera() {
-        val changeBtn = findViewById<ImageButton>(R.id.changeBtn)
+        val changeBtn = binding.changeBtn
         changeBtn.setOnClickListener {
             // CameraSelector 업데이트
             if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
@@ -173,12 +192,12 @@ class CameraPage : AppCompatActivity() {
     }
 
     // CameraX VideoCapture 기능 사용하여 비디오를 촬영하고 저장하는 함수
-    private fun captureVideo(VideoBtn: ImageButton) {
+    private fun captureVideo(videoBtn: ImageButton) {
         val videoCapture = this.videoCapture ?: return
-        val recImg = findViewById<ImageView>(R.id.recImg)
+        val recImg = binding.recImg
 
         //중복 녹화 방지
-        VideoBtn.isEnabled = false
+        videoBtn.isEnabled = false
         val curRecording = recording
 
         // 진행 중인 활성 녹화 세션 중지
@@ -227,7 +246,7 @@ class CameraPage : AppCompatActivity() {
                 // 새 녹음 시작, 리스너 등록
                 when(recordEvent) {
                     is VideoRecordEvent.Start -> {
-                        VideoBtn.apply {
+                        videoBtn.apply {
                             isEnabled = true
                         }
                         // 비디오 녹화가 시작되면 recImg를 VISIBLE로 설정
@@ -250,7 +269,7 @@ class CameraPage : AppCompatActivity() {
                                 TAG, "Video capture ends with error: " +
                                         "${recordEvent.error}")
                         }
-                        VideoBtn.apply {
+                        videoBtn.apply {
                             isEnabled = true
                         }
                         // 비디오 녹화가 완료되면 recImg를 INVISIBLE로 설정
@@ -267,7 +286,7 @@ class CameraPage : AppCompatActivity() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-            val viewFinder = findViewById<PreviewView>(R.id.viewFinder)
+            val viewFinder = binding.viewFinder
 
             // 카메라 설정 초기화 (Preview 사용 사례 초기화)
             val preview = Preview.Builder().build().also {
@@ -275,21 +294,33 @@ class CameraPage : AppCompatActivity() {
             }
 
             // ImageAnalysis 사용 사례 초기화 -> 각 프레임마다 이미지 분석, 결과를 화면에 표시
+            val imageAnalysis = ImageAnalysis.Builder().build()
+
             // 이미지 분석 작업 수행할 ImageAnalysis.Analyzer 설정
-            val imageAnalysis = ImageAnalysis.Builder().build().also {
-                it.setAnalyzer(cameraExecutor, ImageAnalysis.Analyzer { imageProxy ->
-                    val rotationDegrees = imageProxy.imageInfo.rotationDegrees
-                    val bitmap = imageProxy.toBitmap()?.rotate(rotationDegrees.toFloat()) // 이미지 회전 처리
-                    if (bitmap != null) {
-                        runOnUiThread {
-                            val detectionResults = runObjectDetection(bitmap) // 객체 감지 함수 실행
-                            val imgWithResult = drawDetectionResult(bitmap, detectionResults)
-                            val overlayView: ImageView = findViewById(R.id.overlayView)
-                            overlayView.setImageBitmap(imgWithResult)
+            imageAnalysis.setAnalyzer(cameraExecutor) { imageProxy ->
+                val rotationDegrees = imageProxy.imageInfo.rotationDegrees // 이미지 회전 각도
+                val bitmap = imageProxy.toBitmap()?.rotate(rotationDegrees.toFloat()) // 이미지 회전 처리
+                bitmap?.let { rotatedBitmap ->
+                    runOnUiThread {
+                        val detectionResults = runObjectDetection(rotatedBitmap) // 객체 감지 함수 실행
+                        val resultTextView = binding.tx1
+
+                        if (detectionResults.isNotEmpty()) {
+                            // 객체 감지 결과가 있는 경우 텍스트뷰에 표시
+                            val resultText = buildString {
+                                detectionResults.forEachIndexed { index, result ->
+                                    append("${index + 1}. ${result.text}\n") // 예시: "1. Person, 80%\n"
+                                }
+                            }
+                            resultTextView.text = resultText
+                            resultTextView.visibility = View.VISIBLE // 텍스트뷰 표시
+                        } else {
+                            // 객체 감지 결과가 없는 경우 텍스트뷰 숨김
+                            resultTextView.visibility = View.GONE
                         }
                     }
-                    imageProxy.close() // 처리가 끝나면 ImageProxy를 닫아야 합니다.
-                })
+                }
+                imageProxy.close() // 처리가 끝나면 ImageProxy를 닫아야 합니다.
             }
 
             // 버튼 클릭 시 카메라 전면 후면 전환
@@ -308,31 +339,10 @@ class CameraPage : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(
-            baseContext, it) == PackageManager.PERMISSION_GRANTED
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>, grantResults:
-        IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (allPermissionsGranted()) {
-                startCamera()
-            } else {
-                Toast.makeText(this,
-                    "Permissions not granted by the user.",
-                    Toast.LENGTH_SHORT).show()
-                finish()
-            }
-        }
-    }
-
     // 데이터 전처리
     // CameraX에서 제공되는 이미지를 일반적인 비트맵 형식으로 변환하여
     // 이미지 처리나 모델 추론 등의 작업을 수행하는 함수
-    fun ImageProxy.toBitmap(): Bitmap? {
+    private fun ImageProxy.toBitmap(): Bitmap? {
         // 플레인 및 버퍼 가져오기
         val yBuffer = planes[0].buffer // Y
         val uBuffer = planes[1].buffer // U
@@ -358,7 +368,7 @@ class CameraPage : AppCompatActivity() {
     }
 
     // 비트맵 이미지를 주어진 각도만큼 회전시키는 함수
-    fun Bitmap.rotate(degrees: Float): Bitmap {
+    private fun Bitmap.rotate(degrees: Float): Bitmap {
         val matrix = Matrix().apply { postRotate(degrees) }
         return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
     }
@@ -389,53 +399,6 @@ class CameraPage : AppCompatActivity() {
             val text = "${category.label}, ${category.score.times(100).toInt()}%"
             DetectionResult(detection.boundingBox, text)
         }.filterNotNull()
-    }
-
-    // 인자로 주어진 비트맵 이미지와 객체 감지 결과를 사용하여 감지된 객체에 대한
-    // 바운딩 박스와 텍스트를 그리고 결과를 포함하는 새로운 비트맵을 생성하는 함수
-    private fun drawDetectionResult(
-        bitmap: Bitmap,
-        detectionResults: List<DetectionResult>
-    ): Bitmap {
-        // 새로운 비트맵, 캔버스 생성, 펜 설정
-        val outputBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-        val canvas = Canvas(outputBitmap)
-        val pen = Paint()
-        pen.textAlign = Paint.Align.LEFT
-
-        // 객체 감지 결과 목록 반복하면서 각 객체에 대해 바운딩 박스와 텍스트 그림
-        detectionResults.forEach {
-            // draw bounding box
-            pen.color = Color.RED
-            pen.strokeWidth = 8F
-            pen.style = Paint.Style.STROKE
-            val box = it.boundingBox
-            canvas.drawRect(box, pen)   // 바운딩 박스 그리기
-
-            val tagSize = Rect(0, 0, 0, 0)
-
-            // calculate the right font size
-            pen.style = Paint.Style.FILL_AND_STROKE
-            pen.color = Color.YELLOW
-            pen.strokeWidth = 2F
-
-            pen.textSize = MAX_FONT_SIZE
-            pen.getTextBounds(it.text, 0, it.text.length, tagSize)
-            val fontSize: Float = pen.textSize * box.width() / tagSize.width()
-
-            // adjust the font size so texts are inside the bounding box
-            if (fontSize < pen.textSize) pen.textSize = fontSize
-
-            var margin = (box.width() - tagSize.width()) / 2.0F
-            if (margin < 0F) margin = 0F
-
-            // 텍스트 그리기
-            canvas.drawText(
-                it.text, box.left + margin,
-                box.top + tagSize.height().times(1F), pen
-            )
-        }
-        return outputBitmap
     }
 
 }

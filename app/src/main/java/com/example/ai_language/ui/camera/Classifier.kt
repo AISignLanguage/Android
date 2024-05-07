@@ -3,11 +3,17 @@ package com.example.ai_language.ui.camera
 import android.content.Context
 import android.content.res.AssetFileDescriptor
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ImageFormat
+import android.graphics.Rect
+import android.graphics.YuvImage
+import androidx.camera.core.ImageProxy
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.Tensor
 import org.tensorflow.lite.flex.FlexDelegate
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
+import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
 import java.io.IOException
 import java.nio.ByteBuffer
@@ -31,7 +37,7 @@ class Classifier(context: Context) {
     var modelOutputClasses: Int = 0
 
     companion object {
-        const val MODEL_NAME = "converted_model.tflite"
+        const val MODEL_NAME = "model.tflite"
     }
 
     init {
@@ -39,10 +45,10 @@ class Classifier(context: Context) {
         val model: ByteBuffer? = loadModelFile(MODEL_NAME)
         model?.order(ByteOrder.nativeOrder())?:throw IOException()
 
-        val options = Interpreter.Options()
-        val flexDelegate = FlexDelegate()
-        options.addDelegate(flexDelegate)
-        interpreter = Interpreter(model, options)
+        //val options = Interpreter.Options()
+        //val flexDelegate = FlexDelegate()
+        //options.addDelegate(flexDelegate)
+        //interpreter = Interpreter(model, options)
 
         // Interpreter 생성 -> 모델에 데이터를 입력하고 추론 결과를 전달받을 수 있는 클래스
         interpreter = Interpreter(model)
@@ -53,8 +59,8 @@ class Classifier(context: Context) {
     // assets 폴더에서 tflite 파일을 읽어오는 함수
     // tflite 파일명을 입력받아 ByteBuffer 클래스로 모델을 반환
     private fun loadModelFile(modelName: String): ByteBuffer? {
-        val assetManger = this.context.assets
 
+        val assetManger = this.context.assets
         val afd: AssetFileDescriptor? = assetManger.openFd(modelName)
         if (afd == null) {
             throw IOException() // 자신을 호출한 쪽에서 예외처리 요구
@@ -64,9 +70,13 @@ class Classifier(context: Context) {
         val fileInputStream = FileInputStream(afd.fileDescriptor)
         val fileChannel = fileInputStream.channel
 
+        // 파일디스크립터 오프셋과 길이
         val startOffset = afd.startOffset
         val declaredLength = afd.declaredLength
 
+        // FileChannel.map() 메서드로 ByteBuffer 클래스를 상속한 MappedByteBuffer 인스턴스 생성
+        // 파라미터: 참조모드, 오프셋, 길이
+        // 최종적으로 tflite 파일을 ByteBuffer 형으로 읽어오는데 성공!
         return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
     }
 
@@ -87,6 +97,8 @@ class Classifier(context: Context) {
 
         // 추론 -> 모델의 출력값 저장할 TensorBuffer 생성
         val outputTensor = interpreter.getOutputTensor(0)
+        val outputShape = outputTensor.shape()
+        modelOutputClasses = outputShape[1]
         outputBuffer = TensorBuffer.createFixedSize(outputTensor.shape(), outputTensor.dataType())
     }
 
@@ -94,9 +106,9 @@ class Classifier(context: Context) {
     // 모델 결과 추론 함수
     // 입력 이미지를 모델에 전달하기 전에 전처리를 수행하고, 모델을 실행하여 결과를 반환
     // 출력 클래스 수 이용하여 출력값 담을 배열 생성 후 interpreter의 run() 메서드에 전달하여 추론 수행
-//    public fun classify(image: Bitmap): Pair<String, Float> {
+//     fun classify(image: Bitmap): Pair<String, Float> {
 //        // 전처리된 입력 이미지
-//        val buffer = convertBitmapToGrayByteBuffer(resizeBitmap(image))
+//        val buffer = ImageProxy.t (resizeBitmap(image))
 //        var result = FloatArray(modelOutputClasses) ///추론 결과를 담을 배열
 //        interpreter.run(buffer, result) //추론 수행
 //
@@ -124,12 +136,38 @@ class Classifier(context: Context) {
     // 입력 이미지 크기 변환 함수 (이미지 크기 조절)
     private fun resizeBitmap(bitmap: Bitmap): Bitmap {
         // 파라미터: 비트맵 인스턴스, 새로운 너비, 새로운 높이, 이미지 보간법
-        // 이미지 늘릴 때 -> true로 설정, 양선형보간법 (이미지 품질)
-        // 이미지 줄일 때 -> false로 설정, 최근접 보간법 (성능)
+        // 이미지 늘릴 때 -> true로 설정, 양선형보간법 (이미지 품질) , 줄일 때 -> false로 설정, 최근접 보간법 (성능)
         return Bitmap.createScaledBitmap(bitmap, modelInputWidth, modelInputHeight, false)
     }
 
-    ////// 수정 필요 ////// ////// 수정 필요 //////
+    // 데이터 전처리
+    // CameraX에서 제공되는 이미지를 일반적인 비트맵 형식으로 변환하여
+    // 이미지 처리나 모델 추론 등의 작업을 수행하는 함수
+    fun ImageProxy.toBitmap(): Bitmap? {
+        // 플레인 및 버퍼 가져오기
+        val yBuffer = planes[0].buffer // Y
+        val uBuffer = planes[1].buffer // U
+        val vBuffer = planes[2].buffer // V
+
+        // 버퍼 크기 계산
+        val ySize = yBuffer.remaining()
+        val uSize = uBuffer.remaining()
+        val vSize = vBuffer.remaining()
+
+        // U and V are swapped (NV21 형식으로 이미지 데이터 병합)
+        val nv21 = ByteArray(ySize + uSize + vSize)
+        yBuffer.get(nv21, 0, ySize)
+        vBuffer.get(nv21, ySize, vSize)
+        uBuffer.get(nv21, ySize + vSize, uSize)
+
+        // YUVImage 생성 및 JPEG 압축
+        val yuvImage = YuvImage(nv21, ImageFormat.NV21, this.width, this.height, null)
+        val out = ByteArrayOutputStream()
+        yuvImage.compressToJpeg(Rect(0, 0, yuvImage.width, yuvImage.height), 100, out)
+        val imageBytes = out.toByteArray()
+        return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+    }
+
     // 입력 이미지 채널과 포맷 변환 함수
     // 입력 이미지를 정규화하고 ByteBuffer에 추가
     private fun convertBitmapToGrayByteBuffer(bitmap: Bitmap): ByteBuffer {
@@ -139,6 +177,19 @@ class Classifier(context: Context) {
         byteBuffer.order(ByteOrder.nativeOrder())
 
         // 수정 필요
+        val pixels = IntArray(bitmap.width * bitmap.height)
+        bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+
+        pixels.forEach { pixel ->
+            val r = pixel shr 16 and 0xFF
+            val g = pixel shr 8 and 0xFF
+            val b = pixel and 0xFF
+
+            val avgPixelValue = (r + g + b) / 3.0f
+            val normalizedPixelValue = avgPixelValue / 255.0f
+
+            byteBuffer.putFloat(normalizedPixelValue)
+        }
 
         return byteBuffer
     }
