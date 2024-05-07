@@ -2,50 +2,165 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:gravity="bottom"
+        app:umanoPanelHeight="200dp"
+        app:umanoDragView="@id/ll_route"
+        tools:context=".MainActivity">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/tb_map"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_1_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/ic_arrow_back">
+            android:layout_height="match_parent"
+            android:background="@color/white">
 
-
-            <ImageView
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/ftb_map_fragment_this_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@mipmap/ic_launcher_round"
-                android:contentDescription="TODO" />
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:backgroundTint="@color/blue_main"
+                app:layout_constraintBottom_toBottomOf="@id/map_fragment"
+                app:layout_constraintEnd_toEndOf="@id/map_fragment"/>
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/tb_map"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:navigationIcon="@drawable/ic_arrow_back">
 
-        </com.google.android.material.appbar.MaterialToolbar>
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/map_fragment"
-            android:name="com.naver.maps.map.MapFragment"
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@mipmap/ic_launcher_round"
+                    android:contentDescription="TODO" />
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_search_bar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@id/map_fragment"
+                app:layout_constraintStart_toStartOf="@id/map_fragment"
+                app:layout_constraintTop_toBottomOf="@id/tb_map">
+
+                <EditText
+                    android:maxLength="8"
+                    android:id="@+id/et_origin"
+                    android:layout_width="300dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rounded_square_20dp_width2dp"
+                    android:hint="출발지를 입력해주세요."
+                    android:paddingStart="20dp"
+                    app:layout_constraintStart_toStartOf="@id/cl_search_bar"
+                    app:layout_constraintTop_toTopOf="@id/cl_search_bar" />
+
+
+                <EditText
+                    android:maxLength="8"
+                    android:id="@+id/et_destination"
+                    android:layout_width="300dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rounded_square_20dp_width2dp"
+                    android:hint="도착지를 입력해주세요."
+                    android:paddingStart="20dp"
+                    app:layout_constraintStart_toStartOf="@id/et_origin"
+                    app:layout_constraintTop_toBottomOf="@id/et_origin" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/bt_search_route"
+                    android:layout_width="60dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/round_square_stroke_10dp"
+                    android:backgroundTint="@color/blue_main"
+                    android:text="검색"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/et_destination"
+                    app:layout_constraintEnd_toEndOf="@id/cl_search_bar"
+                    app:layout_constraintTop_toTopOf="@id/et_origin" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/map_fragment"
+                android:name="com.naver.maps.map.MapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_search_bar" />
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@color/white"
+            android:id="@+id/ll_route"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="20dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tb_map" />
+            app:layout_constraintStart_toStartOf="parent">
+            <TextView
+                android:id="@+id/sl_find_route"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:layout_margin="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="길찾기"
+                />
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tb_find_route"
+                app:tabIconTint="@null"
+                app:tabIconTintMode="add"
+                app:tabInlineLabel="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sl_find_route"
+                app:tabGravity="fill"
+                app:tabIndicatorColor="@color/blue_main"
+                app:tabIndicatorFullWidth="false"
+                app:tabRippleColor="@null"
+                app:tabSelectedTextColor="@color/blue_main" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/ftb_map_fragment_this_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@id/map_fragment"
-            app:layout_constraintBottom_toBottomOf="@id/map_fragment"
-            />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_direction_route"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tb_find_route" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
 </layout>
