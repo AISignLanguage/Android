@@ -1,6 +1,7 @@
 package com.example.ai_language.data.source.Map
 
 import com.example.ai_language.domain.model.response.ApiResponse
+import com.example.ai_language.domain.model.response.DirectionsResponse
 import com.example.ai_language.domain.repository.MapRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -15,4 +16,5 @@ class MapRepositoryImpl @Inject constructor(
         pIndex: Int,
         pSize: Int
     ): Flow<ApiResponse> = mapDataSource.getCorporationByOpenApi(KEY, Type, pIndex, pSize)
+
 }
