@@ -10,6 +10,8 @@ import com.example.ai_language.data.source.dictionary.DictionaryDataSource
 import com.example.ai_language.data.source.dictionary.DictionaryRepositoryImpl
 import com.example.ai_language.data.source.fastapi.FastApiDataSource
 import com.example.ai_language.data.source.fastapi.FastApiRepositoryImpl
+import com.example.ai_language.data.source.google.GoogleDataSource
+import com.example.ai_language.data.source.google.GoogleRepositoryImpl
 import com.example.ai_language.domain.repository.AccountRepository
 import com.example.ai_language.data.source.naver.NaverDataSource
 import com.example.ai_language.data.source.naver.NaverRepositoryImpl
@@ -22,6 +24,7 @@ import com.example.ai_language.data.source.youtube.YoutubeRepositoryImpl
 import com.example.ai_language.domain.repository.CallListRepository
 import com.example.ai_language.domain.repository.DictionaryRepository
 import com.example.ai_language.domain.repository.FastApiRepository
+import com.example.ai_language.domain.repository.GoogleRepository
 import com.example.ai_language.domain.repository.MapRepository
 import com.example.ai_language.domain.repository.NaverRepository
 import com.example.ai_language.domain.repository.TMapRepository
@@ -80,5 +83,10 @@ object RepositoryModule {
     @Provides
     fun provideFastApiRepository(fastApiDataSource: FastApiDataSource) : FastApiRepository =
         FastApiRepositoryImpl(fastApiDataSource)
+
+    @Singleton
+    @Provides
+    fun provideGoogleApiRepository(googleDataSource : GoogleDataSource) : GoogleRepository =
+        GoogleRepositoryImpl(googleDataSource)
 
 }
