@@ -71,7 +71,7 @@ class RetrofitClient private constructor() {
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .addNetworkInterceptor(interceptor)
-            .addInterceptor(tokenInterceptor) // 토큰 인터셉터 추가
+            .addInterceptor(tokenInterceptor)
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })

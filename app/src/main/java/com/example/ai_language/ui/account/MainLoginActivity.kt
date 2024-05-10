@@ -90,6 +90,9 @@ class MainLoginActivity : BaseActivity<ActivityMainLoginBinding>(R.layout.activi
                     val matchResult = refreshCookie?.let { refreshRegex.find(it) }
                     val refreshToken = matchResult?.groupValues?.getOrNull(1)
 
+                    MyApp.getInstance().tokenManager.accessToken = accessToken
+                    MyApp.getInstance().tokenManager.refreshToken = refreshToken
+
                     if (accessToken != null && refreshToken != null) {
                         lifecycleScope.launch {
                             MyApp.getInstance().tokenManager.saveJwtToken(accessToken, refreshToken)
