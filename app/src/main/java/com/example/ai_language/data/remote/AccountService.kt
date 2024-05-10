@@ -6,10 +6,9 @@ import com.example.ai_language.domain.model.request.CheckPasswordRequestDTO
 import com.example.ai_language.domain.model.request.CheckPasswordResponseDTO
 import com.example.ai_language.domain.model.request.ConfirmDTO
 import com.example.ai_language.domain.model.request.ConfirmedDTO
-import com.example.ai_language.domain.model.request.FindIdDTO
+import com.example.ai_language.domain.model.request.FindEmailRequestDTO
 import com.example.ai_language.domain.model.request.FindPwdDTO
 import com.example.ai_language.domain.model.request.FindPwdOk
-import com.example.ai_language.domain.model.request.GetIdDTO
 import com.example.ai_language.domain.model.request.LoginCheckDTO
 import com.example.ai_language.domain.model.request.UserDTO
 import io.reactivex.rxjava3.core.Observable
@@ -28,8 +27,8 @@ interface AccountService {
         @Body data: UserDTO
     ): LoginCheckDTO
 
-    @POST("find-id") // 아이디 찾기
-    fun findId(@Body data: FindIdDTO): Call<GetIdDTO>
+    @POST("findEmail") // 아이디 찾기
+    fun findId(@Body data: FindEmailRequestDTO): Call<ResponseBody>?
 
     @POST("find-pwd") // 비밀번호 찾기
     fun findPwd(@Body data: FindPwdDTO): Call<FindPwdOk>

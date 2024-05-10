@@ -1,30 +1,25 @@
 package com.example.ai_language.data.remote
 
-import com.example.ai_language.domain.model.request.ChangeNickNameDTO
-import com.example.ai_language.domain.model.request.ChangeNickNameResultDTO
+import com.example.ai_language.domain.model.request.ChangeNicknameRequestDTO
 import com.example.ai_language.domain.model.request.ChangePasswordRequestDTO
 import com.example.ai_language.domain.model.request.ChangePasswordResponseDTO
 import com.example.ai_language.domain.model.request.CheckPasswordRequestDTO
 import com.example.ai_language.domain.model.request.CheckPasswordResponseDTO
 import com.example.ai_language.domain.model.request.ConfirmDTO
 import com.example.ai_language.domain.model.request.ConfirmedDTO
-import com.example.ai_language.domain.model.request.DeleteUserRequestDTO
-import com.example.ai_language.domain.model.request.DeleteUserResponseDTO
-import com.example.ai_language.domain.model.request.FindIdDTO
+import com.example.ai_language.domain.model.request.FindEmailRequestDTO
 import com.example.ai_language.domain.model.request.FindPwdDTO
 import com.example.ai_language.domain.model.request.FindPwdOk
-import com.example.ai_language.domain.model.request.GetIdDTO
-import com.example.ai_language.domain.model.request.GetProfileDTO
 import com.example.ai_language.domain.model.request.LoginCheckDTO
 import com.example.ai_language.domain.model.request.NewsDTO
 import com.example.ai_language.domain.model.request.PhoneListDTO
 import com.example.ai_language.domain.model.request.PhoneNumberDTO
-import com.example.ai_language.domain.model.request.ProfileRequestDTO
 import com.example.ai_language.domain.model.request.UserDTO
 import io.reactivex.rxjava3.core.Observable
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -46,8 +41,8 @@ interface Service {
     @POST("save-user")
     fun saveUser(@Body jsonUser: UserDTO?): Call<ResponseBody?>?
 
-    @POST("find-id") // 아이디 찾기
-    fun findId(@Body data: FindIdDTO): Call<GetIdDTO>
+    @POST("findEmail") // 아이디 찾기
+    fun findEmail(@Body data: FindEmailRequestDTO): Call<ResponseBody>
 
     @POST("find-pwd") // 비밀번호 찾기
     fun findPwd(@Body data: FindPwdDTO): Call<FindPwdOk>
@@ -79,12 +74,12 @@ interface Service {
     @POST("changePassword")
     fun changePassword(@Body request: ChangePasswordRequestDTO): Call<ChangePasswordResponseDTO>
 
-    @POST("requestProfile") //유저 정보 불러오기
-    fun requestProfile(@Body data: ProfileRequestDTO): Call<GetProfileDTO>
+    @GET("userInfo") //유저 정보 불러오기
+    fun requestProfile(): Call<ResponseBody>
 
     @POST("changeNickName")
-    fun changeNickName(@Body data: ChangeNickNameDTO): Call<ChangeNickNameResultDTO>
+    fun changeNickName(@Body data: ChangeNicknameRequestDTO): Call<ResponseBody>
 
-    @POST("deleteUser")
-    fun deleteUser(@Body requestDTO: DeleteUserRequestDTO): Call<DeleteUserResponseDTO>
+    @DELETE ("deleteUser")
+    fun deleteUser(): Call<ResponseBody>
 }

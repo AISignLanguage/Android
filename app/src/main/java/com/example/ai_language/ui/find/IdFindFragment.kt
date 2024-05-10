@@ -1,4 +1,4 @@
-package com.example.ai_language.find
+package com.example.ai_language.ui.find
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,17 +11,18 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.ai_language.domain.model.request.FindIdDTO
-import com.example.ai_language.domain.model.request.GetIdDTO
 import com.example.ai_language.R
 import com.example.ai_language.Util.RetrofitClient
 import com.example.ai_language.data.remote.Service
+import com.example.ai_language.domain.model.request.FindEmailRequestDTO
+import com.example.ai_language.domain.model.request.GetIdDTO
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class IdFindFragment : Fragment() {
-    private lateinit var call: Call<GetIdDTO>
+    private lateinit var call: Call<ResponseBody>
     private lateinit var service: Service
     private lateinit var getIdDTO: GetIdDTO
 
@@ -70,14 +71,16 @@ class IdFindFragment : Fragment() {
         val phoneNumber = phoneNumberEditText!!.text.toString()
 
         // FindIdDTO 객체 생성
-        val findIdDTO = FindIdDTO(name, formatPhoneNumber(phoneNumber))
-        call = service.findId(findIdDTO)
+        val findEmailRequestDTO = FindEmailRequestDTO(name, formatPhoneNumber(phoneNumber))
+        call = service.findEmail(findEmailRequestDTO)!!
 
-        call.enqueue(object : Callback<GetIdDTO> {
-            override fun onResponse(call: Call<GetIdDTO>, response: Response<GetIdDTO>) {
+        call.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    getIdDTO = response.body()!!
-                    val email = getIdDTO.email
+                    val responseBody = response.body()?.string()
+
+                    val email = responseBody?.replace("Your email is: ", "")
+                    Log.d("로그인", "이메일: $email")
 
                     if (email == null) {
                         Toast.makeText(requireContext(), "잘못된 정보입니다", Toast.LENGTH_SHORT).show()
@@ -95,7 +98,7 @@ class IdFindFragment : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<GetIdDTO>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.d("로그", "아이디 찾기 서버 연결 실패")
             }
         })

@@ -1,6 +1,7 @@
 package com.example.ai_language.Util
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -18,6 +19,19 @@ class TokenManager @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
     private val dataStore: DataStore<Preferences> = context.datastore
+
+    private val prefsFilename = "token_prefs"
+    private val prefs: SharedPreferences = context.getSharedPreferences(prefsFilename,0)
+
+    private val key_accessToken = "accessToken"
+    private val key_refreshToken = "refreshToken"
+
+    var accessToken: String?
+        get() = prefs.getString(key_accessToken,"")
+        set(value) = prefs.edit().putString(key_accessToken,value).apply()
+    var refreshToken: String?
+        get() = prefs.getString(key_refreshToken,"")
+        set(value) = prefs.edit().putString(key_refreshToken,value).apply()
 
 
     //토큰만 걸러서 뽑아줌

@@ -76,13 +76,13 @@
             android:name=".ui.account.change.ChangeNicknameActivity"
             android:exported="false" />
         <activity
-            android:name=".find.FindEmail"
+            android:name=".ui.find.FindEmail"
             android:exported="false" />
         <activity
             android:name=".ui.account.change.ChangePw"
             android:exported="false" />
         <activity
-            android:name=".find.FindIdPwd"
+            android:name=".ui.find.FindIdPwd"
             android:exported="false" />
         <activity
             android:name=".ui.call.CallActivity"
