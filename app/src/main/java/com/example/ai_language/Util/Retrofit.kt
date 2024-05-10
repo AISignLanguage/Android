@@ -4,14 +4,14 @@ import androidx.multidex.BuildConfig
 import com.example.ai_language.data.remote.Service
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
-import okhttp3.ResponseBody
-import retrofit2.Converter
 import java.lang.reflect.Type
+import java.util.concurrent.TimeUnit
 
 class RetrofitClient private constructor() {
 
@@ -19,7 +19,7 @@ class RetrofitClient private constructor() {
         @Volatile
         private var instance: RetrofitClient? = null
         private const val baseUrl = "http://223.194.139.88:8080/"
-        private const val baseUrl1 = "http://34.64.212.107:8080/api/mog/user/"
+        private const val baseUrl1 = "http://34.64.202.194:8080/"
         private const val baseUrl2 = "http://api.kcisa.kr"
 
         fun getInstance(): RetrofitClient {
@@ -64,12 +64,14 @@ class RetrofitClient private constructor() {
         } else {
             interceptor.level = HttpLoggingInterceptor.Level.NONE
         }
+        val tokenInterceptor = XAccessTokenInterceptor()
 
         return OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .addNetworkInterceptor(interceptor)
+            .addInterceptor(tokenInterceptor) // 토큰 인터셉터 추가
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })

@@ -23,9 +23,9 @@ class LoginResponse {
 }
 
 //IdFindFragment (아이디 찾기 - 이메일 인증)
-data class FindIdDTO(
+data class FindEmailRequestDTO(
     @SerializedName("name") val name: String,
-    @SerializedName("phone_number") val phoneNumber: String
+    @SerializedName("phoneNum") val phoneNum: String
 )
 
 data class GetIdDTO(
