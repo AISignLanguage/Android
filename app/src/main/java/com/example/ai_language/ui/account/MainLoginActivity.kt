@@ -19,7 +19,7 @@ import com.example.ai_language.Util.RetrofitClient
 import com.example.ai_language.Util.extensions.datastore
 import com.example.ai_language.base.BaseActivity
 import com.example.ai_language.databinding.ActivityMainLoginBinding
-import com.example.ai_language.find.FindIdPwd
+import com.example.ai_language.ui.find.FindIdPwd
 import com.example.ai_language.ui.home.Home
 import com.example.ai_language.ui.vibration.SoundDetectionService
 import com.kakao.sdk.auth.model.OAuthToken
