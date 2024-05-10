@@ -9,4 +9,5 @@ object Util {
     const val BASE_URL6 = "https://api.speechflow.io/"
     const val BASE_URL7 = "https://www.googleapis.com/youtube/v3/"
     const val BASE_URL8 = "http://34.64.212.107:8000/"
+    const val BASE_URL9 = "https://maps.googleapis.com/"
 }

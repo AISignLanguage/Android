@@ -3,28 +3,31 @@ package com.example.ai_language.ui.map
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.os.health.PackageHealthStats
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.viewpager2.widget.ViewPager2
 import com.example.ai_language.R
+import com.example.ai_language.ui.map.MapFragment as mf
 import com.example.ai_language.base.BaseActivity
 import com.example.ai_language.databinding.ActivityMapBinding
 import com.example.ai_language.domain.model.request.TmapDTO
-import com.example.ai_language.domain.model.response.Feature
-import com.example.ai_language.domain.model.response.Geometry
+import com.example.ai_language.ui.map.adapter.RouteAdapter
 import com.example.ai_language.ui.map.data.MapDialogData
 import com.example.ai_language.ui.map.dialog.CorporationDialog
-import com.example.ai_language.ui.map.enums.GeoType
 import com.example.ai_language.ui.map.enums.SettingMapAction
 import com.example.ai_language.ui.map.listener.DetailImWriteDialogInterface
 import com.example.ai_language.ui.map.viewModel.MapViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.tabs.TabLayoutMediator
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
@@ -47,16 +50,38 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
     private lateinit var naverMap: com.naver.maps.map.NaverMap // Naver Map 객체
     private lateinit var fusedLocationClient: FusedLocationProviderClient // Google의 위치 정보 제공 클라이언트
     private lateinit var goal: LatLng
-    private var path : PathOverlay? = null
+    private var path: PathOverlay? = null
+    private val findRouteTab = arrayListOf("도보", "대중교통", "자동차")
+    private lateinit var routeAdapter: RouteAdapter
+
     override fun setLayout() {
+        Log.d("TransitFragment", "ViewModel instance: ${mapViewModel.hashCode()}")
+
         startMap()
+        setViewPager()
+        setTabLayout()
     }
 
+
+    //지도 시작
     private fun startMap() {
         getStartLocation() // 시작 위치를 가져오는 메서드를 호출
         initFragment() // MapFragment를 초기화하는 메서드를 호출
         getMapPoint() // 맵 데이터를 가져오는 메서드를 호출
         onClickedByMapResource()
+
+        mapViewModel.bothLocationsUpdated.observe(this) { (_, _) ->
+            mapViewModel.getRouteBytMapApi(
+                TmapDTO(
+                    startX = mapViewModel.startLatLng.longitude,
+                    startY = mapViewModel.startLatLng.latitude,
+                    endX = mapViewModel.endLatLng.longitude,
+                    endY = mapViewModel.endLatLng.latitude,
+                    startName = mapViewModel.startLoc.value,
+                    endName = mapViewModel.endLoc.value
+                )
+            )
+        }
     }
 
     //시작 위치 설정
@@ -64,6 +89,7 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
         fusedLocationClient =
             LocationServices.getFusedLocationProviderClient(this) // 위치 정보 제공 클라이언트 초기화
         locationSource = FusedLocationSource(this, PERMISSION_REQUEST_CODE) // 위치 정보 소스 초기화
+        mapViewModel.setLocationSource(locationSource)
     }
 
     // MapFragment를 초기화하고 맵이 준비되면 onMapReady 콜백을 받기 위해 호출
@@ -80,6 +106,7 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
         mapViewModel.getCorporationByOpenApi("4b7ecc6c16b1492db814d065c2e0e16f", "json", 1, 100)
     }
 
+    //네이버 드라이브 길찾기
     private fun startRoute(start: String, goal: String) {
         mapViewModel.getRouteByOpenApi(
             "wf7lge71wa",
@@ -88,6 +115,22 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
             goal
         )
     }
+
+
+    //구글 길찾기
+    private fun startDirection(or: String, dt: String) {
+        // 첫 번째 API 호출
+        val transitResponse = mapViewModel.getGoogleDirectionApi(
+            origin = or,
+            destination = dt,
+            mode = "transit",
+            apiKey = "AIzaSyCLamg5wXUjHFuF6i_8wka_ZtMCwONPdBY"
+        )
+
+
+
+    }
+
 
     private fun startRoute2(start: LatLng, end: LatLng, startName: String, endName: String) {
         mapViewModel.getRouteBytMapApi(
@@ -111,7 +154,7 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // 사용자가 위치 권한을 부여한 경우, 위치 추적 모드를 Follow로 설정
-                naverMap.locationTrackingMode = LocationTrackingMode.Follow
+                mapViewModel.naverMap.value?.locationTrackingMode = LocationTrackingMode.Follow
             } else {
                 // 권한이 거부되었다면, 사용자에게 필요성을 알리는 다이얼로그 등을 표시할 수 있습니다.
             }
@@ -130,19 +173,21 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
         }
     }
 
+    //다이얼로그 클릭
     override fun onClickButton(id: Int) {
         when (id) {
-            2 -> {
+            2 -> { //길찾기
                 Log.d("경로", "onClickButton called with id: $id")
                 lifecycleScope.launch {
                     thisLocation(SettingMapAction.LOCATION)
                     repeatOnLifecycle(Lifecycle.State.CREATED) {
-                        mapViewModel.tMapList.collectLatest { response ->
+                        mapViewModel.tMapList.collectLatest { response -> //t맵 경로그리기
                             path?.map = null
                             path = PathOverlay()
+                            mapViewModel.setPath(path!!)
                             val pathContainer: MutableList<LatLng> = mutableListOf()
                             for (feature in response.features) {
-                                Log.d("경로:패스","${feature.geometry}")
+                                Log.d("경로:패스", "${feature.geometry}")
                                 val coordinates = feature.geometry.coordinates
                                 when (feature.geometry.type) {
                                     "Point" -> {
@@ -153,11 +198,13 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
                                             pathContainer.add(point)
                                         }
                                     }
+
                                     "LineString" -> {
                                         if (coordinates is List<*>) {
                                             for (coordinate in coordinates) {
                                                 if (coordinate is List<*>) {
-                                                    val longitude = (coordinate[0] as? Double) ?: 0.0
+                                                    val longitude =
+                                                        (coordinate[0] as? Double) ?: 0.0
                                                     val latitude = (coordinate[1] as? Double) ?: 0.0
                                                     val point = LatLng(latitude, longitude)
                                                     pathContainer.add(point)
@@ -165,6 +212,7 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
                                             }
                                         }
                                     }
+
                                     else -> {
                                         // 기타 경우 처리
                                     }
@@ -172,6 +220,7 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
                             }
 
                             if (pathContainer.size >= 2) {
+                                mapViewModel.clearMap()
                                 path!!.coords = pathContainer
                                 path!!.color = Color.GREEN
                                 path!!.map = naverMap
@@ -196,11 +245,18 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
     }
 
 
-
     //플로팅 버튼 내위치로
     private fun onClickedByMapResource() {
         binding.ftbMapFragmentThisLocation.setOnClickListener {
+            Log.d("플로팅버튼", "클릭")
             thisLocation(SettingMapAction.CREATE)
+        }
+        binding.btSearchRoute.setOnClickListener {
+            startDirection(
+                binding.etOrigin.text.toString(),
+                binding.etDestination.text.toString()
+            )
+            //길찾기
         }
     }
 
@@ -224,7 +280,6 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
                 // 위치 정보를 사용한 로직
                 when (setting) {
                     SettingMapAction.CREATE -> {
-                        Log.d(" 경로1", "$location")
                         val currentLatLng = LatLng(location.latitude, location.longitude)
                         val cameraUpdate = CameraUpdate.scrollTo(currentLatLng)
                         naverMap.moveCamera(cameraUpdate)
@@ -235,7 +290,7 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
                         val cameraUpdate = CameraUpdate.scrollTo(currentLatLng)
                         naverMap.moveCamera(cameraUpdate)
                         val start = "${currentLatLng.latitude},${currentLatLng.longitude}"
-                        startRoute2(currentLatLng, goal, "출발지", "도착지")
+                        startRoute2(currentLatLng, goal, "출발지", "도착지") //T-Map, 길찾기
                     }
                 }
             } else {
@@ -256,7 +311,7 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
 
     override fun onMapReady(naverMap: com.naver.maps.map.NaverMap) {
         this.naverMap = naverMap
-        naverMap.locationSource = locationSource
+        mapViewModel.setNaverMap(naverMap) // ViewModel에 NaverMap 객체 저장        naverMap.locationSource = locationSource
         ActivityCompat.requestPermissions(
             this,
             arrayOf(
@@ -313,5 +368,29 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
 
 
     }
+
+    private fun setViewPager() {
+        routeAdapter = RouteAdapter(this)
+        routeAdapter.addFragment(WalkingFragment())
+        routeAdapter.addFragment(TransitFragment())
+        routeAdapter.addFragment(DrivingFragment())
+        binding.vpDirectionRoute.adapter = routeAdapter
+        binding.vpDirectionRoute.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
+    }
+
+    //탭 바 세팅
+    private fun setTabLayout() {
+        TabLayoutMediator(binding.tbFindRoute, binding.vpDirectionRoute) { tab, position ->
+            tab.text = findRouteTab[position]
+            when (tab.text) {
+                "도보" -> tab.setIcon(R.drawable.walk)
+                "대중교통" -> tab.setIcon(R.drawable.transit)
+                "자동차" -> tab.setIcon(R.drawable.driving)
+            }
+        }.attach()
+    }
+
+
 }
 

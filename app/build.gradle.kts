@@ -131,7 +131,7 @@ dependencies {
     // LiveData
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
     //KTX
-    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation("androidx.fragment:fragment-ktx:1.7.0")
     //WebRtc - 영상통화
     implementation(files("libs/autobanh.jar"))
     //Agora SDK
@@ -170,6 +170,7 @@ dependencies {
 
     //Youtube View
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+    implementation ("com.github.hannesa2:AndroidSlidingUpPanel:4.2.1")
 
     //MediaPipe
     implementation ("com.google.mediapipe:tasks-vision:0.10.0")

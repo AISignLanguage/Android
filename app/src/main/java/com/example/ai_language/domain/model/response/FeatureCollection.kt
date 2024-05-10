@@ -41,7 +41,7 @@ data class Properties(
     val index: Int = 0,
     val pointIndex: Int = 0,
     val name: String = "",
-    val description: String = "",
+    var description: String = "",
     val direction: String = "",
     val nearPoiName: String = "",
     val nearPoiX: String = "",
@@ -50,5 +50,7 @@ data class Properties(
     val facilityType: String = "",
     val facilityName: String = "",
     val turnType: Int = 0,
-    val pointType: String = ""
+    val pointType: String = "",
+    var time: String? = "",
+    var distance : String? = ""
 )
