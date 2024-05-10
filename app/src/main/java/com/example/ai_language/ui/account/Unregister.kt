@@ -19,9 +19,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.ai_language.R
 import com.example.ai_language.Util.EncryptedSharedPreferencesManager
 import com.example.ai_language.Util.RetrofitClient
-import com.example.ai_language.domain.model.request.DeleteUserRequestDTO
-import com.example.ai_language.domain.model.request.DeleteUserResponseDTO
+import com.example.ai_language.domain.model.request.DeleteResultDTO
 import com.example.ai_language.ui.home.Home
+import com.google.gson.Gson
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -143,8 +143,12 @@ class Unregister : AppCompatActivity() {
                 response: Response<ResponseBody>
             ) {
                 if (response.isSuccessful) {
-                    val deleteUserResponse = response.body()
-                    if (deleteUserResponse != null && deleteUserResponse.success) {
+                    val resBody = response.body()?.string() // 응답 본문을 문자열로 변환
+                    val gson = Gson()
+                    val deleteResultText = gson.fromJson(resBody, DeleteResultDTO::class.java) // JSON을 UserInfo 객체로 변환
+                    Log.d("로그", "$deleteResultText")
+
+                    if (deleteResultText.equals("User deleted successfully.")) {
                         Log.d("로그", "사용자 삭제 성공")
                     } else {
                         Log.d("로그", "사용자 삭제 실패")

@@ -152,6 +152,6 @@ data class ChangeNickNameResultDTO(
 )
 
 //Unregister
-data class DeleteDTO(
-    @SerializedName("id") val id: String,
+data class DeleteResultDTO(
+    @SerializedName("deleteResultText") val deleteResultText: String,
 )
