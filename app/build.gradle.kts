@@ -23,6 +23,7 @@
         }
         buildFeatures {
             viewBinding = true
+            mlModelBinding = true
         }
         defaultConfig {
             applicationId = "com.example.ai_language"
@@ -39,9 +40,9 @@
             packaging {
                 resources {
                     excludes.add("META-INF/INDEX.LIST")
+                    excludes.add("google/protobuf/field_mask.proto")
                 }
             }
-
 
         }
 
@@ -65,14 +66,28 @@
             noCompress("tflite")
         }
         buildToolsVersion = "34.0.0"
+
+        configurations.all {
+            exclude(module = "protobuf-java")
+        }
     }
 
 dependencies {
+
+    implementation ("com.google.cloud:google-cloud-storage:1.113.16") {
+        exclude(group = "com.google.protobuf", module="protobuf-java")
+        exclude(group = "com.google.protobuf", module="protobuf-javalite")
+    }
+    implementation ("com.google.mediapipe:tasks-vision:0.10.0")  {
+        exclude(group = "com.google.protobuf", module="protobuf-java")
+        exclude(group = "com.google.protobuf", module="protobuf-javalite")
+    }
 
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation ("com.google.dagger:hilt-android:2.50")
     implementation("androidx.activity:activity:1.8.0")
+    implementation("org.tensorflow:tensorflow-lite-metadata:0.1.0")
     kapt ("com.google.dagger:hilt-compiler:2.50")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
@@ -143,9 +158,12 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
 
     // tensorflow Lite
-    implementation ("org.tensorflow:tensorflow-lite:2.13.0")
+    implementation ("org.tensorflow:tensorflow-lite:2.16.1")
     implementation ("org.tensorflow:tensorflow-lite-support:0.4.4")
     implementation ("com.google.android.gms:play-services-location:21.2.0")
+    implementation ("org.tensorflow:tensorflow-lite-metadata:0.1.0")
+    implementation ("org.tensorflow:tensorflow-lite-select-tf-ops:2.16.1")
+
     //naver Map
     implementation("com.naver.maps:map-sdk:3.18.0")
     implementation ("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2")
@@ -154,5 +172,6 @@ dependencies {
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
     implementation ("com.github.hannesa2:AndroidSlidingUpPanel:4.2.1")
 
-
+    //MediaPipe
+    implementation ("com.google.mediapipe:tasks-vision:0.10.0")
 }
