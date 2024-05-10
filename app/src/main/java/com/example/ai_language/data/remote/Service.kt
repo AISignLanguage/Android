@@ -7,8 +7,6 @@ import com.example.ai_language.domain.model.request.CheckPasswordRequestDTO
 import com.example.ai_language.domain.model.request.CheckPasswordResponseDTO
 import com.example.ai_language.domain.model.request.ConfirmDTO
 import com.example.ai_language.domain.model.request.ConfirmedDTO
-import com.example.ai_language.domain.model.request.DeleteUserRequestDTO
-import com.example.ai_language.domain.model.request.DeleteUserResponseDTO
 import com.example.ai_language.domain.model.request.FindEmailRequestDTO
 import com.example.ai_language.domain.model.request.FindPwdDTO
 import com.example.ai_language.domain.model.request.FindPwdOk
@@ -21,6 +19,7 @@ import io.reactivex.rxjava3.core.Observable
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -81,6 +80,6 @@ interface Service {
     @POST("changeNickName")
     fun changeNickName(@Body data: ChangeNicknameRequestDTO): Call<ResponseBody>
 
-    @POST("deleteUser")
-    fun deleteUser(@Body requestDTO: DeleteUserRequestDTO): Call<DeleteUserResponseDTO>
+    @DELETE ("deleteUser")
+    fun deleteUser(): Call<ResponseBody>
 }

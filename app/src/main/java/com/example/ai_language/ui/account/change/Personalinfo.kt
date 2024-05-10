@@ -25,7 +25,6 @@ import com.example.ai_language.R
 import com.example.ai_language.Util.EncryptedSharedPreferencesManager
 import com.example.ai_language.Util.RetrofitClient
 import com.example.ai_language.data.remote.Service
-import com.example.ai_language.domain.model.request.GetProfileDTO
 import com.example.ai_language.domain.model.request.UserEntity
 import com.example.ai_language.ui.home.Home
 import com.google.gson.Gson
@@ -46,7 +45,6 @@ class PersonalInfo : AppCompatActivity() {
     private lateinit var encryptedSharedPreferencesManager: EncryptedSharedPreferencesManager
     private lateinit var service: Service
     private lateinit var call: Call<ResponseBody>
-    private lateinit var getProfileDTO: GetProfileDTO
 
     lateinit var name: TextView
     lateinit var nickName: TextView

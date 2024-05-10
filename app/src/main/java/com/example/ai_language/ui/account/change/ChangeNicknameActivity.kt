@@ -23,9 +23,7 @@ class ChangeNicknameActivity : AppCompatActivity() {
 
     private lateinit var call: Call<ResponseBody>
     private lateinit var service: Service
-    //private lateinit var changeNickNameResultDTO: ChangeNickNameResultDTO
 
-    private lateinit var originalNickname: String
     private lateinit var changeNicknameBtn: Button
     private lateinit var editNickname: EditText
     private lateinit var homeBtn: ImageButton
