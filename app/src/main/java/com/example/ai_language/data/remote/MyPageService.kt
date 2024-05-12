@@ -1,16 +1,15 @@
 package com.example.ai_language.data.remote
 
-import com.example.ai_language.domain.model.request.ChangeNickNameDTO
-import com.example.ai_language.domain.model.request.ChangeNickNameResultDTO
 import com.example.ai_language.domain.model.request.GetProfileDTO
 import com.example.ai_language.domain.model.request.ProfileRequestDTO
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.POST
+import retrofit2.http.GET
 
 interface MyPageService {
     fun requestProfile(@Body data: ProfileRequestDTO): Call<GetProfileDTO>
 
-    @POST("changeNickName")
-    fun changeNickName(@Body data: ChangeNickNameDTO): Call<ChangeNickNameResultDTO>
+    @GET("userInfo") //유저 정보 불러오기
+    fun requestProfile(): Call<ResponseBody>
 }

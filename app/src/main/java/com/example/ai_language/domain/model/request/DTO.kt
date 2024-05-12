@@ -23,9 +23,9 @@ class LoginResponse {
 }
 
 //IdFindFragment (아이디 찾기 - 이메일 인증)
-data class FindIdDTO(
+data class FindEmailRequestDTO(
     @SerializedName("name") val name: String,
-    @SerializedName("phone_number") val phoneNumber: String
+    @SerializedName("phoneNum") val phoneNum: String
 )
 
 data class GetIdDTO(
@@ -130,18 +130,28 @@ data class GetProfileDTO(
     @SerializedName("birthdate") val birthdate: String,
     @SerializedName("phone_number") val phoneNumber: String
 )
+data class UserEntity (
+    @SerializedName("email") val email: String,
+    @SerializedName("password") val password: String,
+    @SerializedName("name") val name: String,
+    @SerializedName("phoneNumber") val phoneNumber: String,
+    @SerializedName("birthdate") val birthdate: String,
+    @SerializedName("nickname") val nickname: String,
+    @SerializedName("profileImageUrl") val profileImageUrl: String,
+    @SerializedName("registeredAt") val registeredAt: String,
+    @SerializedName("role") val role: String
+)
 
 // ChangeNicknameActivity (닉네임 변경)
-data class ChangeNickNameDTO(
-    @SerializedName("originalNickname") val originalNickname: String,
-    @SerializedName("nickname") val nickname: String
+data class ChangeNicknameRequestDTO(
+    @SerializedName("newNickName") val newNickName: String
 )
 
 data class ChangeNickNameResultDTO(
-    @SerializedName("result") val result: Int
+    @SerializedName("resultText") val resultText: String
 )
 
 //Unregister
-data class DeleteDTO(
-    @SerializedName("id") val id: String,
+data class DeleteResultDTO(
+    @SerializedName("deleteResultText") val deleteResultText: String,
 )

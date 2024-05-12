@@ -8,22 +8,22 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.ai_language.domain.model.request.ChangeNickNameDTO
-import com.example.ai_language.domain.model.request.ChangeNickNameResultDTO
 import com.example.ai_language.R
 import com.example.ai_language.Util.RetrofitClient
 import com.example.ai_language.data.remote.Service
+import com.example.ai_language.domain.model.request.ChangeNickNameResultDTO
+import com.example.ai_language.domain.model.request.ChangeNicknameRequestDTO
+import com.google.gson.Gson
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class ChangeNicknameActivity : AppCompatActivity() {
 
-    private lateinit var call: Call<ChangeNickNameResultDTO>
+    private lateinit var call: Call<ResponseBody>
     private lateinit var service: Service
-    private lateinit var changeNickNameResultDTO: ChangeNickNameResultDTO
 
-    private lateinit var originalNickname: String
     private lateinit var changeNicknameBtn: Button
     private lateinit var editNickname: EditText
     private lateinit var homeBtn: ImageButton
@@ -64,47 +64,35 @@ class ChangeNicknameActivity : AppCompatActivity() {
     private fun changeNickName(changeNickname: String) {
 
         editNickname = findViewById<EditText>(R.id.edit_user_email)
-        originalNickname = intent.getStringExtra("originalNickname")!!
+        //originalNickname = intent.getStringExtra("originalNickname")!!
 
-        val changeNickNameDTO = ChangeNickNameDTO(originalNickname, changeNickname)
-        call = service.changeNickName(changeNickNameDTO)
+        val changeNicknameRequestDTO = ChangeNicknameRequestDTO(changeNickname)
+        call = service.changeNickName(changeNicknameRequestDTO)
 
-        call.enqueue(object : Callback<ChangeNickNameResultDTO> {
+        call.enqueue(object : Callback<ResponseBody> {
 
             override fun onResponse(
-                call: Call<ChangeNickNameResultDTO>,
-                response: Response<ChangeNickNameResultDTO>
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
             ) {
                 if (response.isSuccessful) {
-                    Log.d("로그", "isSuccessful")
-                    changeNickNameResultDTO = response.body()!!
-                    val result = changeNickNameResultDTO.result
+                    val resBody = response.body()?.toString()
+                    val gson = Gson()
+                    val resultText = gson.fromJson(resBody, ChangeNickNameResultDTO::class.java)
 
-                    when (result) {
-                        1 -> {
-                            editNickname.text = null
-                            makeToastMsg("변경할 닉네임이 존재하지 않습니다!")
-                        }
-
-                        2 -> {
-                            editNickname.text = null
-                            makeToastMsg("중복된 닉네임이 존재합니다!")
-                        }
-
-                        3 -> {
-                            makeToastMsg("닉네임이 변경되었습니다.")
-                            val intent = Intent(applicationContext, PersonalInfo::class.java)
-                            startActivity(intent)
-                        }
+                    if (resultText.equals("Nickname changed successfully.")) {
+                        makeToastMsg("닉네임이 변경되었습니다.")
+                        onBackPressed()
+                    } else {
+                        editNickname.text = null
+                        makeToastMsg("닉네임이 변경에 실패했습니다.")
                     }
                 }
             }
 
-            override fun onFailure(call: Call<ChangeNickNameResultDTO>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.d("로그", "changeNickName 서버 연결 실패")
             }
-
-
         })
     }
 }

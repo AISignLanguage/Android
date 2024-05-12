@@ -19,9 +19,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.ai_language.R
 import com.example.ai_language.Util.EncryptedSharedPreferencesManager
 import com.example.ai_language.Util.RetrofitClient
-import com.example.ai_language.domain.model.request.DeleteUserRequestDTO
-import com.example.ai_language.domain.model.request.DeleteUserResponseDTO
+import com.example.ai_language.domain.model.request.DeleteResultDTO
 import com.example.ai_language.ui.home.Home
+import com.google.gson.Gson
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -135,15 +136,19 @@ class Unregister : AppCompatActivity() {
         RetrofitClient.getInstance()
         val service = RetrofitClient.getUserRetrofitInterface()
 
-        val call = service.deleteUser(DeleteUserRequestDTO(userEmail))
-        call.enqueue(object : Callback<DeleteUserResponseDTO> {
+        val call = service.deleteUser()
+        call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(
-                call: Call<DeleteUserResponseDTO>,
-                response: Response<DeleteUserResponseDTO>
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
             ) {
                 if (response.isSuccessful) {
-                    val deleteUserResponse = response.body()
-                    if (deleteUserResponse != null && deleteUserResponse.success) {
+                    val resBody = response.body()?.string() // 응답 본문을 문자열로 변환
+                    val gson = Gson()
+                    val deleteResultText = gson.fromJson(resBody, DeleteResultDTO::class.java) // JSON을 UserInfo 객체로 변환
+                    Log.d("로그", "$deleteResultText")
+
+                    if (deleteResultText.equals("User deleted successfully.")) {
                         Log.d("로그", "사용자 삭제 성공")
                     } else {
                         Log.d("로그", "사용자 삭제 실패")
@@ -153,7 +158,7 @@ class Unregister : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<DeleteUserResponseDTO>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.d("로그", "서버 요청 실패")
             }
 

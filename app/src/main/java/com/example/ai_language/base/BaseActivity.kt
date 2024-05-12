@@ -16,5 +16,6 @@ abstract class BaseActivity<VB : ViewBinding>(@LayoutRes private val layoutRes: 
         setLayout()
     }
 
+
     abstract fun setLayout()
 }

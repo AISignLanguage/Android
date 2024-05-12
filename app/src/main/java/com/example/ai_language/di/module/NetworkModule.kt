@@ -44,7 +44,9 @@ object NetworkModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class YoutubePlayerRetrofit
 
-
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class GoogleApiRetrofit
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
@@ -179,6 +181,20 @@ object NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(Util.BASE_URL8)
+            .addConverterFactory(gsonConverterFactory)
+            .client(client)
+            .build()
+    }
+
+    @GoogleApiRetrofit
+    @Provides
+    @Singleton
+    fun provideGoogleApiRetrofit(
+        gsonConverterFactory: GsonConverterFactory,
+        @MogInterceptorOkHttpClient client: OkHttpClient
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(Util.BASE_URL9)
             .addConverterFactory(gsonConverterFactory)
             .client(client)
             .build()

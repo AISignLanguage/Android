@@ -1,4 +1,4 @@
-package com.example.ai_language.find
+package com.example.ai_language.ui.find
 
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope

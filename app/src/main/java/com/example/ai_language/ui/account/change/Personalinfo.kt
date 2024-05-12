@@ -22,15 +22,16 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.ai_language.R
+import com.example.ai_language.Util.EncryptedSharedPreferencesManager
 import com.example.ai_language.Util.RetrofitClient
 import com.example.ai_language.data.remote.Service
-import com.example.ai_language.Util.EncryptedSharedPreferencesManager
-import com.example.ai_language.domain.model.request.GetProfileDTO
-import com.example.ai_language.domain.model.request.ProfileRequestDTO
+import com.example.ai_language.domain.model.request.UserEntity
 import com.example.ai_language.ui.home.Home
+import com.google.gson.Gson
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,8 +44,7 @@ class PersonalInfo : AppCompatActivity() {
 
     private lateinit var encryptedSharedPreferencesManager: EncryptedSharedPreferencesManager
     private lateinit var service: Service
-    private lateinit var call: Call<GetProfileDTO>
-    private lateinit var getProfileDTO: GetProfileDTO
+    private lateinit var call: Call<ResponseBody>
 
     lateinit var name: TextView
     lateinit var nickName: TextView
@@ -80,28 +80,32 @@ class PersonalInfo : AppCompatActivity() {
         birthdate = findViewById(R.id.user_birthdate)
         phoneNumber = findViewById(R.id.user_phone_number)
 
-        val profileRequestDTO = ProfileRequestDTO(email.text.toString())
-        call = service.requestProfile(profileRequestDTO)
+        //val profileRequestDTO = ProfileRequestDTO(email.text.toString())
+        call = service.requestProfile()
 
-        call.enqueue(object : Callback<GetProfileDTO> {
+        call.enqueue(object : Callback<ResponseBody> {
 
-            override fun onResponse(call: Call<GetProfileDTO>, response: Response<GetProfileDTO>) {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
 
                 if (response.isSuccessful) {
-                    getProfileDTO = response.body()!!
+                    val resBody = response.body()?.string() // 응답 본문을 문자열로 변환
+                    val gson = Gson()
+                    val userInfo = gson.fromJson(resBody, UserEntity::class.java) // JSON을 UserInfo 객체로 변환
 
-                    val imageUrl = getProfileDTO.url.let { Uri.parse(it) }
-                    loadImage(imageUrl)
+                    Log.d("userInfo", " userInfo: $userInfo")
+//                    val imageUrl = getProfileDTO.url.let { Uri.parse(it) }
+//                    loadImage(imageUrl)
 
-                    name.text = getProfileDTO.name
-                    nickName.text = getProfileDTO.nickName
-                    password.text = getProfileDTO.password
-                    birthdate.text = getProfileDTO.birthdate
-                    phoneNumber.text = getProfileDTO.phoneNumber
+                    name.text = userInfo.name
+                    email.text = userInfo.email
+                    nickName.text = userInfo.nickname
+                    password.text = "********"
+                    birthdate.text = userInfo.birthdate
+                    phoneNumber.text = userInfo.phoneNumber
                 }
             }
 
-            override fun onFailure(call: Call<GetProfileDTO>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.d("로그", "PersonalInfo 서버 연결 실패")
             }
         })

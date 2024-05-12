@@ -7,7 +7,19 @@ import com.example.ai_language.R
 
 
 
-
+@BindingAdapter("setFormattedText", "wordLimit")
+fun setFormattedText(view: TextView, input: String?, wordLimit: Int) {
+    input?.let {
+        val words = it.split(" ")
+        val formattedText = if (words.size > wordLimit) {
+            words.chunked(wordLimit) { chunk -> chunk.joinToString(" ") }
+                .joinToString("\n")
+        } else {
+            it
+        }
+        view.text = formattedText
+    }
+}
 
 @BindingAdapter("setDateFormat")
 fun TextView.setDateFormat(input: String?) {
