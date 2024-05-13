@@ -7,4 +7,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface TMapRepository {
     suspend fun getRouteBytMapApi(tmapDTO: TmapDTO): Flow<FeatureCollection>
+    suspend fun getRouteBytMapDriveApi(tmapDTO: TmapDTO) : Flow<FeatureCollection>
 }

@@ -27,6 +27,7 @@ import com.example.ai_language.ui.map.listener.DetailImWriteDialogInterface
 import com.example.ai_language.ui.map.viewModel.MapViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
@@ -51,7 +52,7 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
     private lateinit var fusedLocationClient: FusedLocationProviderClient // Google의 위치 정보 제공 클라이언트
     private lateinit var goal: LatLng
     private var path: PathOverlay? = null
-    private val findRouteTab = arrayListOf("도보", "대중교통", "자동차")
+    private val findRouteTab = arrayListOf("대중교통", "자동차", "도보")
     private lateinit var routeAdapter: RouteAdapter
 
     override fun setLayout() {
@@ -69,19 +70,6 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
         initFragment() // MapFragment를 초기화하는 메서드를 호출
         getMapPoint() // 맵 데이터를 가져오는 메서드를 호출
         onClickedByMapResource()
-
-        mapViewModel.bothLocationsUpdated.observe(this) { (_, _) ->
-            mapViewModel.getRouteBytMapApi(
-                TmapDTO(
-                    startX = mapViewModel.startLatLng.longitude,
-                    startY = mapViewModel.startLatLng.latitude,
-                    endX = mapViewModel.endLatLng.longitude,
-                    endY = mapViewModel.endLatLng.latitude,
-                    startName = mapViewModel.startLoc.value,
-                    endName = mapViewModel.endLoc.value
-                )
-            )
-        }
     }
 
     //시작 위치 설정
@@ -252,10 +240,12 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
             thisLocation(SettingMapAction.CREATE)
         }
         binding.btSearchRoute.setOnClickListener {
-            startDirection(
-                binding.etOrigin.text.toString(),
-                binding.etDestination.text.toString()
-            )
+            mapViewModel.btnState = true
+            mapViewModel.setStartLoc(binding.etOrigin.text.toString(), LatLng(0.0,0.0))
+            mapViewModel.setEndLoc(binding.etDestination.text.toString(),LatLng(0.0,0.0))
+            startDirection(binding.etOrigin.text.toString(), binding.etDestination.text.toString())
+            binding.vpDirectionRoute.setCurrentItem(0,true)
+
             //길찾기
         }
     }
@@ -371,9 +361,9 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
 
     private fun setViewPager() {
         routeAdapter = RouteAdapter(this)
-        routeAdapter.addFragment(WalkingFragment())
         routeAdapter.addFragment(TransitFragment())
         routeAdapter.addFragment(DrivingFragment())
+        routeAdapter.addFragment(WalkingFragment())
         binding.vpDirectionRoute.adapter = routeAdapter
         binding.vpDirectionRoute.orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
@@ -389,6 +379,59 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
                 "자동차" -> tab.setIcon(R.drawable.driving)
             }
         }.attach()
+
+        binding.tbFindRoute.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                // 탭이 선택될 때 실행할 코드
+                Toast.makeText(applicationContext, "${tab.text} 선택됨", Toast.LENGTH_SHORT).show()
+                if(mapViewModel.btnState) {
+                    when (tab.text) {
+                        "대중교통"-> {
+                            mapViewModel.clearMap()
+                            startDirection(
+                                binding.etOrigin.text.toString(),
+                                binding.etDestination.text.toString()
+                            )
+                        }
+                        "도보" -> {
+                            mapViewModel.clearMap()
+                            mapViewModel.getRouteBytMapApi(
+                                TmapDTO(
+                                    startX = mapViewModel.startLatLng.longitude,
+                                    startY = mapViewModel.startLatLng.latitude,
+                                    endX = mapViewModel.endLatLng.longitude,
+                                    endY = mapViewModel.endLatLng.latitude,
+                                    startName = mapViewModel.startLoc.value,
+                                    endName = mapViewModel.endLoc.value
+                                )
+                            )
+                        }
+                        else -> {
+                            mapViewModel.clearMap()
+                            mapViewModel.getRouteBytMapDriveApi(
+                                TmapDTO(
+                                    startX = mapViewModel.startLatLng.longitude,
+                                    startY = mapViewModel.startLatLng.latitude,
+                                    endX = mapViewModel.endLatLng.longitude,
+                                    endY = mapViewModel.endLatLng.latitude,
+                                    startName = mapViewModel.startLoc.value,
+                                    endName = mapViewModel.endLoc.value
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+                // 탭이 선택 해제될 때 실행할 코드
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab) {
+                // 탭이 다시 선택될 때 실행할 코드
+            }
+        })
+
     }
 
 

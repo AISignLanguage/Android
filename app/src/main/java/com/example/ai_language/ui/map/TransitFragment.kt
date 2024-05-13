@@ -133,8 +133,8 @@ class TransitFragment : BaseFragment<FragmentTransitBinding>(R.layout.fragment_t
                         Log.d("리스트", adapter.itemCount.toString())
                         val lls = response.routes[0].legs[0].start_location
                         val lle = response.routes[0].legs[0].end_location
-                        mapViewModel.setStartLoc(response.routes[0].legs[0].start_address,LatLng(lls.lat,lls.lng))
-                        mapViewModel.setEndLoc(response.routes[0].legs[0].end_address,LatLng(lle.lat,lle.lng))
+                        mapViewModel.setStartLoc(mapViewModel.startLoc.value.toString(),LatLng(lls.lat,lls.lng))
+                        mapViewModel.setEndLoc(mapViewModel.endLoc.value.toString(),LatLng(lle.lat,lle.lng))
                     } else {
                         binding.clDetailDirection.visibility = View.GONE
                         binding.tvInfoDis.visibility = View.VISIBLE

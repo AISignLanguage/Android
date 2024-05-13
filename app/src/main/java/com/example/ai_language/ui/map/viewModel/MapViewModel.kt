@@ -40,6 +40,8 @@ class MapViewModel @Inject constructor(
     private val googleRepository: GoogleRepository
 ) : ViewModel() {
 
+    var btnState = false
+
     private val _markers = MutableLiveData<MutableList<Marker>>(mutableListOf())
     val markers: LiveData<MutableList<Marker>> = _markers
 
@@ -127,15 +129,11 @@ class MapViewModel @Inject constructor(
     private var _tMapList = MutableStateFlow(FeatureCollection())
     val tMapList: StateFlow<FeatureCollection> = _tMapList
 
+    private var _tMapDriveList = MutableStateFlow(FeatureCollection())
+    val tMapDriveList : StateFlow<FeatureCollection> = _tMapDriveList
 
     private var _directionList = MutableStateFlow(DirectionsResponse())
     val directionList: StateFlow<DirectionsResponse> = _directionList
-
-    private var _directionList2 = MutableStateFlow(DirectionsResponse())
-    val directionList2: StateFlow<DirectionsResponse> = _directionList2
-
-    private var _directionList3 = MutableStateFlow(DirectionsResponse())
-    val directionList3: StateFlow<DirectionsResponse> = _directionList3
 
     private val _naverMap = MutableLiveData<NaverMap>()
     val naverMap: LiveData<NaverMap> = _naverMap
@@ -196,6 +194,18 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    fun getRouteBytMapDriveApi(tmapDTO: TmapDTO) {
+        viewModelScope.launch {
+            try {
+                tMapRepository.getRouteBytMapDriveApi(tmapDTO).collect {
+                    _tMapDriveList.value = it
+                }
+            } catch (e: Exception) {
+                Log.e("TMap Error", e.message.toString())
+            }
+        }
+    }
+
     fun getGoogleDirectionApi(origin: String, destination: String, mode: String, apiKey: String) {
         viewModelScope.launch {
             try {
@@ -209,30 +219,6 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun getGoogleDirectionApi2(origin: String, destination: String, mode: String, apiKey: String) {
-        viewModelScope.launch {
-            try {
-                googleRepository.getDirectionByGoogleApi(origin, destination, mode, apiKey)
-                    .collect {
-                        _directionList2.value = it
-                    }
-            } catch (e: Exception) {
-                Log.e("Google Error", e.message.toString())
-            }
-        }
-    }
 
-    fun getGoogleDirectionApi3(origin: String, destination: String, mode: String, apiKey: String) {
-        viewModelScope.launch {
-            try {
-                googleRepository.getDirectionByGoogleApi(origin, destination, mode, apiKey)
-                    .collect {
-                        _directionList3.value = it
-                    }
-            } catch (e: Exception) {
-                Log.e("Google Error", e.message.toString())
-            }
-        }
-    }
 
 }
