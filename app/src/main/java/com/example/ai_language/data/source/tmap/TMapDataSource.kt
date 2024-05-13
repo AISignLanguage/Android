@@ -21,4 +21,11 @@ class TMapDataSource @Inject constructor(
     }.catch {
         Log.e("Get Route By OpenApi Failure", it.message.toString())
     }
+
+    fun getRouteBytMapDriveApi(tmapDTO: TmapDTO) : Flow<FeatureCollection> = flow{
+        val result = tmapService.getRouteBytMapDriveApi(tmapDTO)
+        emit(result)
+    }.catch {
+        Log.e("Get Route By tMapApi Failure", it.message.toString())
+    }
 }
