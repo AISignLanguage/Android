@@ -2,8 +2,8 @@ package com.example.ai_language.domain.model.request
 
 import com.google.gson.annotations.SerializedName
 
-//RegisterActivity
-data class UserDTO(
+//RegisterActivity (회원가입)
+data class JoinDTO(
     @SerializedName("name") val name: String,
     @SerializedName("birthdate") val birthdate: String,
     @SerializedName("email") val email: String,
@@ -12,15 +12,6 @@ data class UserDTO(
     @SerializedName("phone_number") val phoneNumber: String,
     @SerializedName("profile_image_url") val profileImageUrl: String,
 )
-
-//Login
-data class LoginRequestDTO(
-    @SerializedName("email") val email: String,
-    @SerializedName("password") val password: String
-)
-class LoginResponse {
-    var token: String? = null
-}
 
 //IdFindFragment (아이디 찾기 - 이메일 인증)
 data class FindEmailRequestDTO(
@@ -63,19 +54,14 @@ data class ChangePasswordResponseDTO(
     @SerializedName("success") val success: Boolean
 )
 
-//Delete User
-data class DeleteUserRequestDTO(
-    @SerializedName("email") val email: String
-)
-
-data class DeleteUserResponseDTO(
-    @SerializedName("success") val success: Boolean
-)
-
-
 //confirm
+data class ConfirmRequestDTO(
+    @SerializedName("email") val email: String,
+    @SerializedName("nickname") val nickname: String
+)
 data class ConfirmDTO(
-    @SerializedName("word") val word: String
+    //@SerializedName("word") val word: String
+    @SerializedName("resultText") val resultText: String
 )
 
 data class ConfirmedDTO(
@@ -130,6 +116,8 @@ data class GetProfileDTO(
     @SerializedName("birthdate") val birthdate: String,
     @SerializedName("phone_number") val phoneNumber: String
 )
+
+// UserInfo (개인정보 불러오기)
 data class UserEntity (
     @SerializedName("email") val email: String,
     @SerializedName("password") val password: String,

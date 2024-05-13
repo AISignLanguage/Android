@@ -9,8 +9,8 @@ import com.example.ai_language.domain.model.request.ConfirmedDTO
 import com.example.ai_language.domain.model.request.FindEmailRequestDTO
 import com.example.ai_language.domain.model.request.FindPwdDTO
 import com.example.ai_language.domain.model.request.FindPwdOk
+import com.example.ai_language.domain.model.request.JoinDTO
 import com.example.ai_language.domain.model.request.LoginCheckDTO
-import com.example.ai_language.domain.model.request.UserDTO
 import io.reactivex.rxjava3.core.Observable
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -22,9 +22,9 @@ import retrofit2.http.POST
 interface AccountService {
 
     // 회원가입
-    @POST("api/mog/user/send-data")
-    suspend fun sendData(
-        @Body data: UserDTO
+    @POST("join")
+    suspend fun regsiter(
+        @Body data: JoinDTO
     ): LoginCheckDTO
 
     @POST("findEmail") // 아이디 찾기

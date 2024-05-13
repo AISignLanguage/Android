@@ -3,8 +3,8 @@ package com.example.ai_language.ui.account.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.ai_language.domain.model.request.JoinDTO
 import com.example.ai_language.domain.model.request.LoginCheckDTO
-import com.example.ai_language.domain.model.request.UserDTO
 import com.example.ai_language.domain.repository.AccountRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,10 +20,10 @@ class AccountViewModel @Inject constructor(
     private val _loginCheckDTO = MutableStateFlow<LoginCheckDTO?>(null)
     val loginCheckDTO: StateFlow<LoginCheckDTO?> = _loginCheckDTO
 
-    fun sendData(userDTO: UserDTO) {
+    fun sendData(joinDTO: JoinDTO) {
         viewModelScope.launch {
             try {
-                accountRepository.sendData(userDTO).collect {
+                accountRepository.sendData(joinDTO).collect {
                     _loginCheckDTO.value = it
                 }
             } catch (e: Exception) {

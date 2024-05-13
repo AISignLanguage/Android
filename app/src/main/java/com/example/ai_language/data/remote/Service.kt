@@ -5,17 +5,15 @@ import com.example.ai_language.domain.model.request.ChangePasswordRequestDTO
 import com.example.ai_language.domain.model.request.ChangePasswordResponseDTO
 import com.example.ai_language.domain.model.request.CheckPasswordRequestDTO
 import com.example.ai_language.domain.model.request.CheckPasswordResponseDTO
-import com.example.ai_language.domain.model.request.ConfirmDTO
-import com.example.ai_language.domain.model.request.ConfirmedDTO
+import com.example.ai_language.domain.model.request.ConfirmRequestDTO
 import com.example.ai_language.domain.model.request.FindEmailRequestDTO
 import com.example.ai_language.domain.model.request.FindPwdDTO
 import com.example.ai_language.domain.model.request.FindPwdOk
+import com.example.ai_language.domain.model.request.JoinDTO
 import com.example.ai_language.domain.model.request.LoginCheckDTO
 import com.example.ai_language.domain.model.request.NewsDTO
 import com.example.ai_language.domain.model.request.PhoneListDTO
 import com.example.ai_language.domain.model.request.PhoneNumberDTO
-import com.example.ai_language.domain.model.request.UserDTO
-import io.reactivex.rxjava3.core.Observable
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -36,10 +34,10 @@ interface Service {
     ): Call<ResponseBody>
 
     @GET("user")
-    fun getUSer(): Call<UserDTO>
+    fun getUSer(): Call<JoinDTO>
 
     @POST("save-user")
-    fun saveUser(@Body jsonUser: UserDTO?): Call<ResponseBody?>?
+    fun saveUser(@Body jsonUser: JoinDTO?): Call<ResponseBody?>?
 
     @POST("findEmail") // 아이디 찾기
     fun findEmail(@Body data: FindEmailRequestDTO): Call<ResponseBody>
@@ -48,7 +46,7 @@ interface Service {
     fun findPwd(@Body data: FindPwdDTO): Call<FindPwdOk>
 
     @POST("send-data") // 서버의 엔드포인트
-    fun sendData(@Body data: UserDTO): Call<LoginCheckDTO> // 전송할 데이터와 응답 타입
+    fun sendData(@Body data: JoinDTO): Call<LoginCheckDTO> // 전송할 데이터와 응답 타입
 
     @POST("send-callList") // 전화번호부
     fun sendCallData(@Body contactsList: PhoneNumberDTO): Call<PhoneListDTO>
@@ -62,19 +60,11 @@ interface Service {
 //    @POST("login")
 //    fun login(@Body data: LoginRequestDTO): Call<LoginResponseDTO>
 
-    //@FormUrlEncoded
     @POST("confirm-nick") // 닉네임 중복 확인
-//    fun confirmNick(
-//        @Field("email") email: String?
-//    ) : Call<ResponseBody>
-    fun confirmNick(@Body data: ConfirmDTO): Observable<ConfirmedDTO>
+    fun confirmNick(@Body data: ConfirmRequestDTO) : Call<ResponseBody>
 
-    @FormUrlEncoded
     @POST("confirm-email") // 이메일(아이디) 중복 확인
-    fun confirmEmail(
-        @Field("email") email: String?
-    ) : Call<ResponseBody>
-    //fun confirmEmail(@Body data: ConfirmDTO): Observable<ConfirmedDTO>
+    fun confirmEmail(@Body data: ConfirmRequestDTO) : Call<ResponseBody>
 
     @POST("checkPassword")
     fun checkPassword(@Body request: CheckPasswordRequestDTO): Call<CheckPasswordResponseDTO>
