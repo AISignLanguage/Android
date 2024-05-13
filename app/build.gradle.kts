@@ -118,6 +118,7 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+
     //JetPack CameraX API
     var camerax_version = ("1.1.0-beta01")
     implementation("androidx.camera:camera-core:${camerax_version}")
@@ -126,20 +127,28 @@ dependencies {
     implementation("androidx.camera:camera-video:${camerax_version}")
     implementation("androidx.camera:camera-view:${camerax_version}")
     implementation("androidx.camera:camera-extensions:${camerax_version}")
+
     // ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+
     // LiveData
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+
     //KTX
     implementation("androidx.fragment:fragment-ktx:1.7.0")
+
     //WebRtc - 영상통화
     implementation(files("libs/autobanh.jar"))
+
     //Agora SDK
     implementation("io.agora.rtc:voice-sdk:4.2.6")
+
     //  MultiDex Libarary
     api("androidx.multidex:multidex:2.0.1")
+
     //Google Storage 버킷
     implementation("com.google.cloud:google-cloud-storage:1.113.16")
+    implementation ("com.google.android.gms:play-services-location:21.2.0")
 
     //RxJava
     implementation("io.reactivex.rxjava3:rxjava:3.0.3")
@@ -160,7 +169,7 @@ dependencies {
     // tensorflow Lite
     implementation ("org.tensorflow:tensorflow-lite:2.16.1")
     implementation ("org.tensorflow:tensorflow-lite-support:0.4.4")
-    implementation ("com.google.android.gms:play-services-location:21.2.0")
+    implementation ("org.tensorflow:tensorflow-lite-task-audio:0.4.4")
     implementation ("org.tensorflow:tensorflow-lite-metadata:0.1.0")
     implementation ("org.tensorflow:tensorflow-lite-select-tf-ops:2.16.1")
 

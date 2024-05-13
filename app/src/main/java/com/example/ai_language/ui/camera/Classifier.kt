@@ -10,7 +10,6 @@ import android.graphics.YuvImage
 import androidx.camera.core.ImageProxy
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.Tensor
-import org.tensorflow.lite.flex.FlexDelegate
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.io.ByteArrayOutputStream

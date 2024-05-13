@@ -29,9 +29,12 @@ import com.kakao.sdk.user.UserApiClient
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
+import org.tensorflow.lite.task.audio.classifier.AudioClassifier
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Timer
+import java.util.TimerTask
 import kotlin.random.Random
 
 class MainLoginActivity : BaseActivity<ActivityMainLoginBinding>(R.layout.activity_main_login) {
@@ -42,6 +45,7 @@ class MainLoginActivity : BaseActivity<ActivityMainLoginBinding>(R.layout.activi
     private val disposables = CompositeDisposable()
     private var isServiceRunning = false // 서비스 실행 여부를 추적하는 변수
     private var soundDetectionService: SoundDetectionService? = null // 서비스 인스턴스를 추적하는 변수
+
     override fun onDestroy() {
         super.onDestroy()
         disposables.clear()
@@ -208,6 +212,33 @@ class MainLoginActivity : BaseActivity<ActivityMainLoginBinding>(R.layout.activi
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), REQUEST_RECORD_AUDIO_PERMISSION)
         }
 
+        val modelPath = "yamnet.tflite"
+        var probabilityThreshold: Float = 0.3f // 모델 예측 수락 기준
+        val classifier = AudioClassifier.createFromFile(this, modelPath)
+
+        val tensor = classifier.createInputTensorAudio()
+        //
+        val format = classifier.requiredTensorAudioFormat
+        val recorderSpecs = "Number Of Channels: ${format.channels}\n" +
+                "Sample Rate: ${format.sampleRate}"
+
+        val timer = Timer()
+
+//        timer.scheduleAtFixedRate(object : TimerTask() {
+//            override fun run() {
+//                val record = classifier.createAudioRecord()
+//                record.startRecording()
+//
+//                tensor.load(record)
+//                val output = classifier.classify(tensor)
+//                val filteredModelOutput = output[0].categories.filter {
+//                    it.score > probabilityThreshold
+//                }
+//                val outputStr = filteredModelOutput.sortedBy { -it.score }
+//                    .joinToString(separator = "\n") { "${it.label} -> ${it.score} " }
+//                Log.d("소리", "${outputStr}")
+//            }
+//        }, 0L, 5000L) // 5초(5000 밀리초)마다 실행
         //init() // 모델 확인용 코드
 
         setOnClickMapBtn()
