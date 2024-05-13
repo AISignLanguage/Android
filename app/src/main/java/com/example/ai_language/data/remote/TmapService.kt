@@ -17,4 +17,21 @@ interface TmapService {
     suspend fun getRouteBytMapApi(
         @Body request: TmapDTO
     ): FeatureCollection
+
+
+    @POST
+        ("tmap/routes?version=1&callback=function")
+    @Headers(
+        "Accept: application/json",
+        "Content-Type: application/json",
+        "appKey: 0ui2FKinqU6geySHSex4K8RkPeClSvwF6TotgYNb"
+    )
+    suspend fun getRouteBytMapDriveApi(
+        @Body request: TmapDTO
+    ): FeatureCollection
+
+
+
+
+
 }
