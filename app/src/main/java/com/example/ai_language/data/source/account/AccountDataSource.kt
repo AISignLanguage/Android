@@ -3,7 +3,6 @@ package com.example.ai_language.data.source.account
 import android.util.Log
 import com.example.ai_language.data.remote.AccountService
 import com.example.ai_language.domain.model.request.JoinDTO
-import com.example.ai_language.domain.model.request.LoginCheckDTO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -13,8 +12,9 @@ class AccountDataSource @Inject constructor(
     private val accountService: AccountService
 ) {
     // 회원가입
-    fun sendData(data: JoinDTO): Flow<LoginCheckDTO> = flow {
-        val result = accountService.regsiter(data)
+    fun register(data: JoinDTO): Flow<String> = flow {
+        val result = accountService.register(data)
+        Log.e("Post Register By sendDta success", "result: $result")
         emit(result)
     } .catch {
         Log.e("Post Register By sendDta Failure", it.message.toString())

@@ -4,12 +4,12 @@ import com.google.gson.annotations.SerializedName
 
 //RegisterActivity (회원가입)
 data class JoinDTO(
-    @SerializedName("name") val name: String,
-    @SerializedName("birthdate") val birthdate: String,
     @SerializedName("email") val email: String,
     @SerializedName("password") val password: String,
-    @SerializedName("nickname") val nickName: String,
+    @SerializedName("name") val name: String,
     @SerializedName("phone_number") val phoneNumber: String,
+    @SerializedName("birthdate") val birthdate: String,
+    @SerializedName("nickname") val nickname: String,
     @SerializedName("profile_image_url") val profileImageUrl: String,
 )
 

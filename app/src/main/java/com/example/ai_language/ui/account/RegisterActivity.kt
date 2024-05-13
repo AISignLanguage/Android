@@ -672,24 +672,26 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
             lifecycleScope.launch {
                 try {
                     val joinDTO = JoinDTO(
-                        name, //이름 => 공백이 아니어야함
-                        bd, //생일 => xxxx-xx-xx 형태
                         em, // => 이메일 xxx@xxx.xxx
                         pw, // 비밀 번호 => 최소 8자, 최대 15자
-                        nk, // 닉네임
+                        name, //이름 => 공백이 아니어야함
                         pn, //핸드폰 번호 => 010-xxxx-xxxx
                         // 정규식 =>  @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "휴대폰 번호 양식에 맞지 않습니다.")
+                        bd, //생일 => xxxx-xx-xx 형태
+                        nk, // 닉네임
                         url //프로필 사진 url
                     )
 
-                    if (accountViewModel.loginCheckDTO.value == null) {
-                        accountViewModel.sendData(joinDTO)
+                    //  회원가입을 시도 (중복 가입 요청 방지)
+                    if (accountViewModel.loginCheck.value == null) {
+                        Log.d("로그", "회원가입 시도")
+                        accountViewModel.register(joinDTO)
                     }
 
-                    accountViewModel.loginCheckDTO.collect { loginCheckDTO ->
-                        if (loginChecked != null) {
+                    accountViewModel.loginCheck.collect { loginCheck ->
+                        if (loginCheck.equals("ok")) {
                             progressBar.visibility = View.GONE
-                            Log.d("로그", "응답성공 : $loginCheckDTO")
+                            Log.d("로그", "응답성공 : $loginCheck")
                             Toast.makeText(
                                 this@RegisterActivity,
                                 "회원가입에 성공하셨습니다!",

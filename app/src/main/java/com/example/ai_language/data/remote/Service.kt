@@ -48,6 +48,9 @@ interface Service {
     @POST("send-data") // 서버의 엔드포인트
     fun sendData(@Body data: JoinDTO): Call<LoginCheckDTO> // 전송할 데이터와 응답 타입
 
+    @POST("join") // 회원가입
+    suspend fun register(@Body data: JoinDTO): Call<String>
+
     @POST("send-callList") // 전화번호부
     fun sendCallData(@Body contactsList: PhoneNumberDTO): Call<PhoneListDTO>
 
