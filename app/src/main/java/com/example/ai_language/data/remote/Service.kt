@@ -62,11 +62,19 @@ interface Service {
 //    @POST("login")
 //    fun login(@Body data: LoginRequestDTO): Call<LoginResponseDTO>
 
-    @POST("confirm-nick")
+    //@FormUrlEncoded
+    @POST("confirm-nick") // 닉네임 중복 확인
+//    fun confirmNick(
+//        @Field("email") email: String?
+//    ) : Call<ResponseBody>
     fun confirmNick(@Body data: ConfirmDTO): Observable<ConfirmedDTO>
 
-    @POST("confirm-email")
-    fun confirmEmail(@Body data: ConfirmDTO): Observable<ConfirmedDTO>
+    @FormUrlEncoded
+    @POST("confirm-email") // 이메일(아이디) 중복 확인
+    fun confirmEmail(
+        @Field("email") email: String?
+    ) : Call<ResponseBody>
+    //fun confirmEmail(@Body data: ConfirmDTO): Observable<ConfirmedDTO>
 
     @POST("checkPassword")
     fun checkPassword(@Body request: CheckPasswordRequestDTO): Call<CheckPasswordResponseDTO>

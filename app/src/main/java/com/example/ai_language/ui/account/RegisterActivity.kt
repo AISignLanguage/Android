@@ -35,17 +35,20 @@ import com.example.ai_language.Util.RetrofitClient
 import com.example.ai_language.base.BaseActivity
 import com.example.ai_language.data.remote.Service
 import com.example.ai_language.databinding.ActivityRegisterBinding
+import com.example.ai_language.domain.model.request.ChangeNickNameResultDTO
 import com.example.ai_language.domain.model.request.ConfirmDTO
 import com.example.ai_language.domain.model.request.ConfirmedDTO
 import com.example.ai_language.domain.model.request.LoginCheckDTO
 import com.example.ai_language.domain.model.request.UserDTO
 import com.example.ai_language.ui.account.viewmodel.AccountViewModel
+import com.example.ai_language.ui.find.FindEmail
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.storage.Acl
 import com.google.cloud.storage.BlobId
 import com.google.cloud.storage.BlobInfo
 import com.google.cloud.storage.Storage
 import com.google.cloud.storage.StorageOptions
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
@@ -59,7 +62,10 @@ import kotlinx.coroutines.withContext
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.util.regex.Pattern
@@ -80,6 +86,7 @@ data class LoginChecked(
 class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity_register) {
     lateinit var call: Call<LoginCheckDTO>
     lateinit var conf: Observable<ConfirmedDTO>
+    lateinit var confNick: Observable<ResponseBody>
     lateinit var service: Service
     private val disposables = CompositeDisposable()
     private val STORAGE_PERMISSION_CODE = 1
@@ -423,60 +430,112 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
 
     // 이메일 중복 확인 함수
     private fun confirmEmail() {
+
         val confirmedEmailBtn = binding.confirmEmailBtn
         confirmedEmailBtn.setOnClickListener {
             val em = regEmail.text.toString() // 이메일
-            if (Patterns.EMAIL_ADDRESS.matcher(em).matches()) {
-                val conf = service.confirmEmail(ConfirmDTO(em))
-                progressBar.visibility = View.VISIBLE
-                disposables.add(
-                    conf.subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeWith(object : DisposableObserver<ConfirmedDTO>() {
-                            override fun onNext(confirmedDTO: ConfirmedDTO) {
-                                // onSuccess
-                                val responseOK = confirmedDTO.ok
-                                if (!responseOK) {
-                                    Log.d("서버로부터 받은 요청", "이메일 : $responseOK")
-                                    Toast.makeText(
-                                        this@RegisterActivity,
-                                        "중복확인 완료!",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    loginChecked.idCheck = true
-                                    regEmail.isEnabled = false
-                                    regEmail.setTextColor(Color.GREEN)
-                                } else {
-                                    Log.d("서버로부터 받은 요청", "이메일 : $responseOK")
-                                    Toast.makeText(
-                                        this@RegisterActivity,
-                                        "중복된 이메일이 존재합니다!",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    regEmail.setText("")
-                                }
-                            }
+            val call: Call<ResponseBody> = service.confirmEmail(em)
+            progressBar.visibility = View.VISIBLE
 
-                            override fun onError(e: Throwable) {
-                                // onError
-                                Log.d("RegisterActivity", "Showing ProgressBar")
-                                progressBar.visibility = View.GONE
-                                Log.e("retrofit 연동", "실패", e)
-                            }
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
 
-                            override fun onComplete() {
-                                // onComplete
-                                Log.d("RegisterActivity", "Showing ProgressBar")
-                                progressBar.visibility = View.GONE
-                            }
-                        })
-                )
-            } else {
-                Toast.makeText(this@RegisterActivity, "올바르지 않은 이메일 형식입니다.", Toast.LENGTH_SHORT)
-                    .show()
+                    if (response.isSuccessful) {
+                        Log.d("로그", "isSuccessful")
+                        val responseText = response.body().toString()
+                        val gson = Gson()
+                        val resText = gson.fromJson(responseText, ChangeNickNameResultDTO::class.java)
+                        Log.d("로그", "$responseText")
+                        if (resText.equals("Email is confirmed.")) {
+                            Log.d("서버로부터 받은 요청", "이메일 : $resText")
+                            Toast.makeText(
+                                this@RegisterActivity,
+                                "중복확인 완료!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            loginChecked.idCheck = true
+                            regEmail.isEnabled = false
+                            regEmail.setTextColor(Color.GREEN)
+                        } else {
+                            Log.d("서버로부터 받은 요청", "이메일 : $responseText")
+                            Toast.makeText(
+                                this@RegisterActivity,
+                                "중복된 이메일이 존재합니다!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            regEmail.setText("")
+                        }
+                    } else {
+                        val errorBody = response.errorBody()?.string()
+                        Log.d("로그", "서버 오류: ${response.code()}, 내용: $errorBody")
+                    }
+                }
 
-            }
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.d("로그", "아이디 찾기 서버 연결 실패")
+                }
+            })
         }
+
+//        val confirmedEmailBtn = binding.confirmEmailBtn
+//        confirmedEmailBtn.setOnClickListener {
+//            val em = regEmail.text.toString() // 이메일
+//            if (Patterns.EMAIL_ADDRESS.matcher(em).matches()) {
+//                confNick = service.confirmEmail(em)
+//                progressBar.visibility = View.VISIBLE
+//                disposables.add(
+//                    confNick.subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribeWith(object : DisposableObserver<ResponseBody>() {
+//                            override fun onNext(resBody: ResponseBody) {
+//                                // onSuccess
+//                                Log.d("responseText", "onSuccess")
+//                                val responseText = resBody.toString()
+//                                val gson = Gson()
+//                                val resText = gson.fromJson(responseText, ChangeNickNameResultDTO::class.java)
+//
+//                                Log.d("로그", "$responseText")
+//                                if (resText.equals("Email is confirmed.")) {
+//                                    Log.d("서버로부터 받은 요청", "이메일 : $resText")
+//                                    Toast.makeText(
+//                                        this@RegisterActivity,
+//                                        "중복확인 완료!",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                    loginChecked.idCheck = true
+//                                    regEmail.isEnabled = false
+//                                    regEmail.setTextColor(Color.GREEN)
+//                                } else {
+//                                    Log.d("서버로부터 받은 요청", "이메일 : $responseText")
+//                                    Toast.makeText(
+//                                        this@RegisterActivity,
+//                                        "중복된 이메일이 존재합니다!",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                    regEmail.setText("")
+//                                }
+//                            }
+//
+//                            override fun onError(e: Throwable) {
+//                                // onError
+//                                Log.d("RegisterActivity", "Showing ProgressBar")
+//                                progressBar.visibility = View.GONE
+//                                Log.e("retrofit 연동", "실패", e)
+//                            }
+//
+//                            override fun onComplete() {
+//                                // onComplete
+//                                Log.d("RegisterActivity", "Showing ProgressBar")
+//                                progressBar.visibility = View.GONE
+//                            }
+//                        })
+//                )
+//            } else {
+//                Toast.makeText(this@RegisterActivity, "올바르지 않은 이메일 형식입니다.", Toast.LENGTH_SHORT)
+//                    .show()
+//
+//            }
+//        }
     }
 
     // 로그인 버튼 클릭시 로그인 화면으로 이동하는 함수
