@@ -7,10 +7,13 @@ data class JoinDTO(
     @SerializedName("email") val email: String,
     @SerializedName("password") val password: String,
     @SerializedName("name") val name: String,
-    @SerializedName("phone_number") val phoneNumber: String,
+    @SerializedName("phoneNumber") val phoneNumber: String,
     @SerializedName("birthdate") val birthdate: String,
     @SerializedName("nickname") val nickname: String,
     @SerializedName("profile_image_url") val profileImageUrl: String,
+)
+data class JoinOKDTO(
+    @SerializedName("ok") val ok: String
 )
 
 //IdFindFragment (아이디 찾기 - 이메일 인증)

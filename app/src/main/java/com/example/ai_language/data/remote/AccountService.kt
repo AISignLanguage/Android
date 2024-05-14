@@ -10,6 +10,7 @@ import com.example.ai_language.domain.model.request.FindEmailRequestDTO
 import com.example.ai_language.domain.model.request.FindPwdDTO
 import com.example.ai_language.domain.model.request.FindPwdOk
 import com.example.ai_language.domain.model.request.JoinDTO
+import com.example.ai_language.domain.model.request.JoinOKDTO
 import io.reactivex.rxjava3.core.Observable
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -24,7 +25,7 @@ interface AccountService {
     @POST("join")
     suspend fun register(
         @Body data: JoinDTO
-    ): String
+    ): JoinOKDTO
 
     @POST("findEmail") // 아이디 찾기
     fun findId(@Body data: FindEmailRequestDTO): Call<ResponseBody>?

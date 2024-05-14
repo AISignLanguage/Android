@@ -45,11 +45,8 @@ interface Service {
     @POST("find-pwd") // 비밀번호 찾기
     fun findPwd(@Body data: FindPwdDTO): Call<FindPwdOk>
 
-    @POST("send-data") // 서버의 엔드포인트
-    fun sendData(@Body data: JoinDTO): Call<LoginCheckDTO> // 전송할 데이터와 응답 타입
-
-    @POST("join") // 회원가입
-    suspend fun register(@Body data: JoinDTO): Call<String>
+    @POST("send-data") // 회원가입
+    fun sendData(@Body data: JoinDTO): Call<LoginCheckDTO>
 
     @POST("send-callList") // 전화번호부
     fun sendCallData(@Body contactsList: PhoneNumberDTO): Call<PhoneListDTO>
@@ -60,27 +57,24 @@ interface Service {
     @GET("get-news") //뉴스 정보 가져옴
     fun getNews(): Call<List<NewsDTO>>
 
-//    @POST("login")
-//    fun login(@Body data: LoginRequestDTO): Call<LoginResponseDTO>
-
     @POST("confirm-nick") // 닉네임 중복 확인
     fun confirmNick(@Body data: ConfirmRequestDTO) : Call<ResponseBody>
 
     @POST("confirm-email") // 이메일(아이디) 중복 확인
     fun confirmEmail(@Body data: ConfirmRequestDTO) : Call<ResponseBody>
 
-    @POST("checkPassword")
+    @POST("checkPassword") // 비밀번호 체크
     fun checkPassword(@Body request: CheckPasswordRequestDTO): Call<CheckPasswordResponseDTO>
 
-    @POST("changePassword")
+    @POST("changePassword") // 비밀번호 변경
     fun changePassword(@Body request: ChangePasswordRequestDTO): Call<ChangePasswordResponseDTO>
 
-    @GET("userInfo") //유저 정보 불러오기
+    @GET("userInfo") // 유저 정보 불러오기
     fun requestProfile(): Call<ResponseBody>
 
-    @POST("changeNickName")
+    @POST("changeNickName") // 닉네임 변경
     fun changeNickName(@Body data: ChangeNicknameRequestDTO): Call<ResponseBody>
 
-    @DELETE ("deleteUser")
+    @DELETE ("deleteUser") // 회원 탈퇴
     fun deleteUser(): Call<ResponseBody>
 }

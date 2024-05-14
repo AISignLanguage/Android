@@ -144,11 +144,8 @@ class Unregister : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     val resBody = response.body()?.string() // 응답 본문을 문자열로 변환
-                    val gson = Gson()
-                    val deleteResultText = gson.fromJson(resBody, DeleteResultDTO::class.java) // JSON을 UserInfo 객체로 변환
-                    Log.d("로그", "$deleteResultText")
 
-                    if (deleteResultText.equals("User deleted successfully.")) {
+                    if (resBody.equals("User deleted successfully.")) {
                         Log.d("로그", "사용자 삭제 성공")
                     } else {
                         Log.d("로그", "사용자 삭제 실패")
