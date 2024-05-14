@@ -18,4 +18,8 @@ class TMapRepositoryImpl @Inject constructor(
     override suspend fun getRouteBytMapApi(
         tmapDTO: TmapDTO
     ): Flow<FeatureCollection> = tMapDataSource.getRouteBytMapApi(tmapDTO)
+
+    override suspend fun getRouteBytMapDriveApi(
+        tmapDTO: TmapDTO
+    ): Flow<FeatureCollection> = tMapDataSource.getRouteBytMapDriveApi(tmapDTO)
 }
