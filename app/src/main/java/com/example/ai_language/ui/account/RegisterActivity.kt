@@ -290,6 +290,7 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
                 // 전화번호가 "010"으로 시작하지 않거나 11자리가 아닌 경우 서버에서 false가 옴
                 Toast.makeText(this, "올바른 전화번호를 입력하세요.", Toast.LENGTH_SHORT).show()
             } else {
+                Toast.makeText(this, "인증번호가 전송되었습니다.", Toast.LENGTH_SHORT).show()
                 val random = Random.Default
                 randomSixDigitNumber =
                     random.nextInt(100000, 999999) // 범위를 100000부터 999999까지로 지정하여 6자리 랜덤 숫자 생성
