@@ -1,13 +1,18 @@
 package com.example.ai_language.ui.account
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -18,39 +23,28 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import com.kakao.sdk.talk.TalkApiClient
-import android.widget.Button as B
-import kotlin.random.Random
-import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import androidx.annotation.RequiresApi
 import com.example.ai_language.R
 import com.example.ai_language.Util.RetrofitClient
 import com.example.ai_language.data.remote.Service
-import com.example.ai_language.domain.model.request.ConfirmDTO
 import com.example.ai_language.domain.model.request.ConfirmedDTO
+import com.example.ai_language.domain.model.request.JoinDTO
 import com.example.ai_language.domain.model.request.LoginCheckDTO
-import com.example.ai_language.domain.model.request.UserDTO
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.storage.Acl
 import com.google.cloud.storage.BlobId
 import com.google.cloud.storage.BlobInfo
 import com.google.cloud.storage.Storage
 import com.google.cloud.storage.StorageOptions
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import com.kakao.sdk.talk.TalkApiClient
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.observers.DisposableObserver
-import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -60,6 +54,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.util.regex.Pattern
+import kotlin.random.Random
+import android.widget.Button as B
 
 data class LoginCheckedKaKao(
     var nameCheck: Boolean,
@@ -282,51 +278,51 @@ class RegisterActivityApp : AppCompatActivity() {
         confirmNickBtn.setOnClickListener {
             nickSpace = regNick.text.toString()
             if (nickSpace.length in 2..6) {
-                conf = service.confirmNick(ConfirmDTO(nickSpace))
-                //progressBar.visibility = View.VISIBLE
-                disposables.add(
-                    conf.subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeWith(object : DisposableObserver<ConfirmedDTO>() {
-                            override fun onNext(t: ConfirmedDTO) {
-                                val responseOK = t.ok
-                                if (!responseOK) {
-                                    Log.d("서버로부터 받은 요청", "닉네임 : $responseOK")
-                                    Toast.makeText(
-                                        this@RegisterActivityApp,
-                                        "중복확인 완료!",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    loginCheckedKaKao.nickCheck = true
-                                    regNick.isEnabled = false
-                                    regNick.setTextColor(Color.GREEN)
-                                } else {
-                                    Log.d("서버로부터 받은 요청", "닉네임 : $responseOK")
-                                    Toast.makeText(
-                                        this@RegisterActivityApp,
-                                        "중복된 닉네임이 존재합니다!",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    regNick.setText("")
-                                }
-                            }
-
-                            override fun onError(e: Throwable) {
-                                // onError
-                                Log.d("RegisterActivity", "Showing ProgressBar")
-                                //progressBar.visibility = View.GONE
-                                Log.e("retrofit 연동", "실패", e)
-                            }
-
-                            override fun onComplete() {
-                                // onComplete
-                                Log.d("RegisterActivity", "Showing ProgressBar")
-                                //progressBar.visibility = View.GONE
-                            }
-                        }
-
-                        )
-                )
+//                conf = service.confirmNick(ConfirmDTO(nickSpace))
+//                //progressBar.visibility = View.VISIBLE
+//                disposables.add(
+//                    conf.subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribeWith(object : DisposableObserver<ConfirmedDTO>() {
+//                            override fun onNext(t: ConfirmedDTO) {
+//                                val responseOK = t.ok
+//                                if (!responseOK) {
+//                                    Log.d("서버로부터 받은 요청", "닉네임 : $responseOK")
+//                                    Toast.makeText(
+//                                        this@RegisterActivityApp,
+//                                        "중복확인 완료!",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                    loginCheckedKaKao.nickCheck = true
+//                                    regNick.isEnabled = false
+//                                    regNick.setTextColor(Color.GREEN)
+//                                } else {
+//                                    Log.d("서버로부터 받은 요청", "닉네임 : $responseOK")
+//                                    Toast.makeText(
+//                                        this@RegisterActivityApp,
+//                                        "중복된 닉네임이 존재합니다!",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                    regNick.setText("")
+//                                }
+//                            }
+//
+//                            override fun onError(e: Throwable) {
+//                                // onError
+//                                Log.d("RegisterActivity", "Showing ProgressBar")
+//                                //progressBar.visibility = View.GONE
+//                                Log.e("retrofit 연동", "실패", e)
+//                            }
+//
+//                            override fun onComplete() {
+//                                // onComplete
+//                                Log.d("RegisterActivity", "Showing ProgressBar")
+//                                //progressBar.visibility = View.GONE
+//                            }
+//                        }
+//
+//                        )
+//                )
             } else {
                 Toast.makeText(this@RegisterActivityApp, "올바르지 않은 닉네임 형식입니다.", Toast.LENGTH_SHORT)
                     .show()
@@ -361,7 +357,7 @@ class RegisterActivityApp : AppCompatActivity() {
                 Toast.makeText(this, "올바르지 않은 필드가 존재합니다.", Toast.LENGTH_SHORT).show()
             }
             if (loginCheckedKaKao.finish) {
-                val userDTO = UserDTO(
+                val joinDTO = JoinDTO(
                     nameSpace,
                     bd,
                     "$nameSpace$birthSpace@kakao.com",
@@ -371,7 +367,7 @@ class RegisterActivityApp : AppCompatActivity() {
                     uriString.toString()
                 )
 
-                call = service.sendData(userDTO)
+                call = service.sendData(joinDTO)
                 call.clone().enqueue(object : Callback<LoginCheckDTO> {
                     override fun onResponse(
                         call: Call<LoginCheckDTO>,

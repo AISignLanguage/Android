@@ -35,26 +35,20 @@ import com.example.ai_language.Util.RetrofitClient
 import com.example.ai_language.base.BaseActivity
 import com.example.ai_language.data.remote.Service
 import com.example.ai_language.databinding.ActivityRegisterBinding
-import com.example.ai_language.domain.model.request.ChangeNickNameResultDTO
-import com.example.ai_language.domain.model.request.ConfirmDTO
+import com.example.ai_language.domain.model.request.ConfirmRequestDTO
 import com.example.ai_language.domain.model.request.ConfirmedDTO
+import com.example.ai_language.domain.model.request.JoinDTO
 import com.example.ai_language.domain.model.request.LoginCheckDTO
-import com.example.ai_language.domain.model.request.UserDTO
 import com.example.ai_language.ui.account.viewmodel.AccountViewModel
-import com.example.ai_language.ui.find.FindEmail
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.storage.Acl
 import com.google.cloud.storage.BlobId
 import com.google.cloud.storage.BlobInfo
 import com.google.cloud.storage.Storage
 import com.google.cloud.storage.StorageOptions
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.observers.DisposableObserver
-import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -376,105 +370,163 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
         confirmedNicknameBtn.setOnClickListener {
             nk = regNick.text.toString() // 닉네임
             if (regNick.text.toString().length in 2..6) {
-                conf = service.confirmNick(ConfirmDTO(nk))
+                val confirmRequestDTO = ConfirmRequestDTO("", regNick.text.toString())
+                val call: Call<ResponseBody> = service.confirmNick(confirmRequestDTO)
                 progressBar.visibility = View.VISIBLE
-                disposables.add(
-                    conf.subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeWith(object : DisposableObserver<ConfirmedDTO>() {
-                            override fun onNext(confirmedDTO: ConfirmedDTO) {
-                                // onSuccess
-                                val responseOK = confirmedDTO.ok
-                                if (!responseOK) {
-                                    Log.d("서버로부터 받은 요청", "닉네임 : $responseOK")
-                                    Toast.makeText(
-                                        this@RegisterActivity,
-                                        "중복확인 완료!",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    loginChecked.nickCheck = true
-                                    regNick.isEnabled = false
-                                    regNick.setTextColor(Color.GREEN)
-                                } else {
-                                    Log.d("서버로부터 받은 요청", "닉네임 : $responseOK")
-                                    Toast.makeText(
-                                        this@RegisterActivity,
-                                        "중복된 닉네임이 존재합니다!",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    regNick.setText("")
-                                }
-                            }
 
-                            override fun onError(e: Throwable) {
-                                // onError
-                                Log.d("RegisterActivity", "Showing ProgressBar")
+                call.enqueue(object : Callback<ResponseBody> {
+                    override fun onResponse(
+                        call: Call<ResponseBody>,
+                        response: Response<ResponseBody>
+                    ) {
+
+                        if (response.isSuccessful) {
+                            val responseText = response.body()?.string()
+                            Log.d("로그", "response.body(): ${responseText}")
+
+                            if (responseText.equals("Nickname available for use.")) {
+                                Toast.makeText(
+                                    this@RegisterActivity,
+                                    "중복확인 완료!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                loginChecked.nickCheck = true
+                                regNick.isEnabled = false
+                                regNick.setTextColor(Color.GREEN)
                                 progressBar.visibility = View.GONE
-                                Log.e("retrofit 연동", "실패", e)
-                            }
-
-                            override fun onComplete() {
-                                // onComplete
-                                Log.d("RegisterActivity", "Showing ProgressBar")
+                            } else {
+                                Toast.makeText(
+                                    this@RegisterActivity,
+                                    "중복된 닉네임이 존재합니다!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                regNick.setText("")
                                 progressBar.visibility = View.GONE
                             }
-                        })
-                )
-            } else {
-                Toast.makeText(this@RegisterActivity, "올바르지 않은 닉네임 형식입니다.", Toast.LENGTH_SHORT)
-                    .show()
+                        } else {
+                            val errorBody = response.errorBody()?.string()
+                            Log.d("로그", "서버 오류: ${response.code()}, 내용: $errorBody")
+                            progressBar.visibility = View.GONE
+                        }
+                    }
 
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        Log.d("로그", "닉네임 중복 서버 연결 실패")
+                        progressBar.visibility = View.GONE
+                    }
+                })
             }
         }
+
+
+//        confirmedNicknameBtn.setOnClickListener {
+//            nk = regNick.text.toString() // 닉네임
+//            if (regNick.text.toString().length in 2..6) {
+//                conf = service.confirmNick(ConfirmDTO(nk))
+//                progressBar.visibility = View.VISIBLE
+//                disposables.add(
+//                    conf.subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribeWith(object : DisposableObserver<ConfirmedDTO>() {
+//                            override fun onNext(confirmedDTO: ConfirmedDTO) {
+//                                // onSuccess
+//                                val responseOK = confirmedDTO.ok
+//                                if (!responseOK) {
+//                                    Log.d("서버로부터 받은 요청", "닉네임 : $responseOK")
+//                                    Toast.makeText(
+//                                        this@RegisterActivity,
+//                                        "중복확인 완료!",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                    loginChecked.nickCheck = true
+//                                    regNick.isEnabled = false
+//                                    regNick.setTextColor(Color.GREEN)
+//                                } else {
+//                                    Log.d("서버로부터 받은 요청", "닉네임 : $responseOK")
+//                                    Toast.makeText(
+//                                        this@RegisterActivity,
+//                                        "중복된 닉네임이 존재합니다!",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                    regNick.setText("")
+//                                }
+//                            }
+//
+//                            override fun onError(e: Throwable) {
+//                                // onError
+//                                Log.d("RegisterActivity", "Showing ProgressBar")
+//                                progressBar.visibility = View.GONE
+//                                Log.e("retrofit 연동", "실패", e)
+//                            }
+//
+//                            override fun onComplete() {
+//                                // onComplete
+//                                Log.d("RegisterActivity", "Showing ProgressBar")
+//                                progressBar.visibility = View.GONE
+//                            }
+//                        })
+//                )
+//            } else {
+//                Toast.makeText(this@RegisterActivity, "올바르지 않은 닉네임 형식입니다.", Toast.LENGTH_SHORT)
+//                    .show()
+//
+//            }
+//        }
     }
 
     // 이메일 중복 확인 함수
     private fun confirmEmail() {
-
         val confirmedEmailBtn = binding.confirmEmailBtn
         confirmedEmailBtn.setOnClickListener {
             val em = regEmail.text.toString() // 이메일
-            val call: Call<ResponseBody> = service.confirmEmail(em)
-            progressBar.visibility = View.VISIBLE
 
-            call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+            if (Patterns.EMAIL_ADDRESS.matcher(em).matches()) {
+                val confirmRequestDTO = ConfirmRequestDTO(em, "")
+                val call: Call<ResponseBody> = service.confirmEmail(confirmRequestDTO)
+                progressBar.visibility = View.VISIBLE
 
-                    if (response.isSuccessful) {
-                        Log.d("로그", "isSuccessful")
-                        val responseText = response.body().toString()
-                        val gson = Gson()
-                        val resText = gson.fromJson(responseText, ChangeNickNameResultDTO::class.java)
-                        Log.d("로그", "$responseText")
-                        if (resText.equals("Email is confirmed.")) {
-                            Log.d("서버로부터 받은 요청", "이메일 : $resText")
-                            Toast.makeText(
-                                this@RegisterActivity,
-                                "중복확인 완료!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            loginChecked.idCheck = true
-                            regEmail.isEnabled = false
-                            regEmail.setTextColor(Color.GREEN)
+                call.enqueue(object : Callback<ResponseBody> {
+                    override fun onResponse(
+                        call: Call<ResponseBody>,
+                        response: Response<ResponseBody>
+                    ) {
+
+                        if (response.isSuccessful) {
+                            val responseText = response.body()?.string()
+                            Log.d("로그", "response.body(): ${responseText}")
+
+                            if (responseText.equals("Email available for use.")) {
+                                Toast.makeText(
+                                    this@RegisterActivity,
+                                    "중복확인 완료!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                loginChecked.idCheck = true
+                                regEmail.isEnabled = false
+                                regEmail.setTextColor(Color.GREEN)
+                                progressBar.visibility = View.GONE
+                            } else {
+                                Toast.makeText(
+                                    this@RegisterActivity,
+                                    "중복된 이메일이 존재합니다!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                regEmail.setText("")
+                                progressBar.visibility = View.GONE
+                            }
                         } else {
-                            Log.d("서버로부터 받은 요청", "이메일 : $responseText")
-                            Toast.makeText(
-                                this@RegisterActivity,
-                                "중복된 이메일이 존재합니다!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            regEmail.setText("")
+                            val errorBody = response.errorBody()?.string()
+                            Log.d("로그", "서버 오류: ${response.code()}, 내용: $errorBody")
+                            progressBar.visibility = View.GONE
                         }
-                    } else {
-                        val errorBody = response.errorBody()?.string()
-                        Log.d("로그", "서버 오류: ${response.code()}, 내용: $errorBody")
                     }
-                }
 
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    Log.d("로그", "아이디 찾기 서버 연결 실패")
-                }
-            })
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        Log.d("로그", "아이디 중복 확인 서버 연결 실패")
+                        progressBar.visibility = View.GONE
+                    }
+                })
+            }
         }
 
 //        val confirmedEmailBtn = binding.confirmEmailBtn
@@ -616,28 +668,41 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
         if (isNameValid && isPasswordValid && isBirthdayValid && isIdValid && isNickNameValid && isPhoneValid) {
             loginChecked.finish = true
 
+            val joinDTO = JoinDTO(
+                em, // => 이메일 xxx@xxx.xxx
+                pw, // 비밀 번호 => 최소 8자, 최대 15자
+                name, //이름 => 공백이 아니어야함
+                pn, //핸드폰 번호 => 010-xxxx-xxxx
+                // 정규식 =>  @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "휴대폰 번호 양식에 맞지 않습니다.")
+                bd, //생일 => xxxx-xx-xx 형태
+                nk, // 닉네임
+                url //프로필 사진 url
+            )
+
             // 회원가입 처리 등 추가 작업 수행
             lifecycleScope.launch {
                 try {
-                    val userDTO = UserDTO(
-                        name, //이름 => 공백이 아니어야함
-                        bd, //생일 => xxxx-xx-xx 형태
+                    val joinDTO = JoinDTO(
                         em, // => 이메일 xxx@xxx.xxx
                         pw, // 비밀 번호 => 최소 8자, 최대 15자
-                        nk, // 닉네임
+                        name, //이름 => 공백이 아니어야함
                         pn, //핸드폰 번호 => 010-xxxx-xxxx
                         // 정규식 =>  @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "휴대폰 번호 양식에 맞지 않습니다.")
+                        bd, //생일 => xxxx-xx-xx 형태
+                        nk, // 닉네임
                         url //프로필 사진 url
                     )
 
-                    if (accountViewModel.loginCheckDTO.value == null) {
-                        accountViewModel.sendData(userDTO)
+                    //  회원가입을 시도 (중복 가입 요청 방지)
+                    if (accountViewModel.joinOKDTO.value == null) {
+                        Log.d("로그", "회원가입 시도")
+                        accountViewModel.register(joinDTO)
                     }
 
-                    accountViewModel.loginCheckDTO.collect { loginCheckDTO ->
-                        if (loginChecked != null) {
+                    accountViewModel.joinOKDTO.collect { joinOKDTO ->
+                        if (joinOKDTO?.ok.equals("ok")) {
                             progressBar.visibility = View.GONE
-                            Log.d("로그", "응답성공 : $loginCheckDTO")
+                            Log.d("로그", "응답성공 : $joinOKDTO")
                             Toast.makeText(
                                 this@RegisterActivity,
                                 "회원가입에 성공하셨습니다!",

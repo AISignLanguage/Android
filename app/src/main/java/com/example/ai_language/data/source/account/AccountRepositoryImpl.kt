@@ -1,7 +1,7 @@
 package com.example.ai_language.data.source.account
 
-import com.example.ai_language.domain.model.request.LoginCheckDTO
-import com.example.ai_language.domain.model.request.UserDTO
+import com.example.ai_language.domain.model.request.JoinDTO
+import com.example.ai_language.domain.model.request.JoinOKDTO
 import com.example.ai_language.domain.repository.AccountRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -12,7 +12,7 @@ class AccountRepositoryImpl @Inject constructor(
 ) : AccountRepository {
 
     // 회원가입
-    override suspend fun sendData(
-        data: UserDTO
-    ): Flow<LoginCheckDTO> = dataSource.sendData(data)
+    override suspend fun register(
+        data: JoinDTO
+    ): Flow<JoinOKDTO> = dataSource.register(data)
 }
