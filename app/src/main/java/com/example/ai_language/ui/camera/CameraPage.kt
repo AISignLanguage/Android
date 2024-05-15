@@ -1,44 +1,24 @@
 package com.example.ai_language.ui.camera
 
 import android.Manifest
-import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.ImageFormat
-import android.graphics.Matrix
-import android.graphics.Paint
-import android.graphics.Rect
 import android.graphics.RectF
-import android.graphics.YuvImage
-import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.ImageProxy
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.video.MediaStoreOutputOptions
 import androidx.camera.video.Recorder
 import androidx.camera.video.Recording
 import androidx.camera.video.VideoCapture
 import androidx.camera.video.VideoRecordEvent
-import androidx.camera.view.PreviewView
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import com.example.ai_language.R
@@ -51,24 +31,16 @@ import com.google.mediapipe.solutioncore.SolutionGlSurfaceView
 import com.google.mediapipe.solutions.hands.Hands
 import com.google.mediapipe.solutions.hands.HandsOptions
 import com.google.mediapipe.solutions.hands.HandsResult
-import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
-import org.tensorflow.lite.support.image.TensorImage
-import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
-import org.tensorflow.lite.task.vision.detector.ObjectDetector
-import java.io.ByteArrayOutputStream
-import java.io.FileInputStream
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.math.acos
-import kotlin.math.round
 import kotlin.math.sqrt
 
 
@@ -436,6 +408,7 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
         }
     }
 
+    // 입력 및 출력 텐서의 세부 정보를 로그로 보여주는 함수
     private fun logTensorDetails(interpreter: Interpreter) {
         val inputTensor = interpreter.getInputTensor(0)
         val inputShape = inputTensor.shape()
@@ -450,9 +423,11 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
         Log.d("TensorDetails", "Output Tensor DataType: $outputDataType")
     }
 
+    // 입력 및 출력 버퍼를 사용하여 TensorFlow Lite 모델을 실행 함수
     @Synchronized
     private fun runModel(interpreter: Interpreter, inputBuffer: ByteBuffer, outputBuffer: ByteBuffer) {
         interpreter.run(inputBuffer, outputBuffer)
+        Log.d("translate", "model is runnig")
     }
 
     private fun translate(result: HandsResult, context: Context) {
@@ -461,6 +436,7 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
             return
         }
 
+        // 손의 관절 데이터 가져와서  x, y, z 좌표를 추출하여 joint 배열에 저장
         val landmarkList = result.multiHandLandmarks()[0].landmarkList
         val joint = Array(21) { FloatArray(3) }
         for (i in 0..20) {
@@ -469,10 +445,13 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
             joint[i][2] = landmarkList[i].z
         }
 
+        // v1 -> 부모 관절에서 출발하는 벡터들
         val v1 = joint.slice(0..19).toMutableList()
         for (i in 4..16 step 4) {
             v1[i] = v1[0]
         }
+
+        // v2 -> 자식 관절로 향하는 벡터들
         val v2 = joint.slice(1..20)
         val v = Array(20) { FloatArray(3) }
 
@@ -502,18 +481,20 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
             }
         }
 
+        // 두 벡터의 내적을 계산하여 einsum 배열에 저장
         val einsum = FloatArray(15)
         for (i in 0..14) {
             einsum[i] = tmpv1[i][0] * tmpv2[i][0] + tmpv1[i][1] * tmpv2[i][1] + tmpv1[i][2] * tmpv2[i][2]
         }
 
+        // 라디안으로 계산된 값을 도 단위로 변환하여 angle 배열에 저장
         val angle = FloatArray(15)
         for (i in 0..14) {
             angle[i] = Math.toDegrees(acos(einsum[i]).toDouble()).toFloat()
         }
 
         // Check if the model is loaded correctly
-        val interpreter = getTfliteInterpreter("converted_model_raw.tflite", context)
+        val interpreter = getTfliteInterpreter("mog_f_model.tflite", context)
         if (interpreter == null) {
             Log.e("translate", "Failed to initialize TFLite interpreter.")
             return
@@ -524,35 +505,46 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
 
         // Check the model input tensor shape
         val inputShape = interpreter.getInputTensor(0).shape()
-        val inputSize = inputShape.reduce { acc, i -> acc * i }
+        val batchSize = inputShape[0] // 1
+        val seqLength = inputShape[1] // 30
+        val numFeatures = inputShape[2] // 99
+
+        val inputSize = 100 //= batchSize * seqLength * numFeatures     // 2970
+        //val inputSize = inputShape.reduce { acc, i -> acc * i }
 
         // Prepare the input buffer correctly
-        val inputBuffer = ByteBuffer.allocateDirect(inputSize * 4).order(ByteOrder.nativeOrder())
+        val inputBuffer = ByteBuffer.allocateDirect(inputSize * 4).order(ByteOrder.nativeOrder())   // 2970 * 4 = 11880 바이트 필요 **
 
         // Initialize input data with zeros and copy angle data
-        val inputData = FloatArray(inputSize) { 0f }
+        val inputData = FloatArray(inputSize) { 0.5f }
 
         // Copy angle data to the input buffer in a way that expands it to the correct size
-        for (i in angle.indices) {
-            for (j in 0 until 30) {
-                inputData[i + j * angle.size] = angle[i]
-            }
-        }
+//        for (i in angle.indices) {
+//            for (j in 0 until seqLength) {
+//                //inputData[i + j * angle.size] = angle[i]
+//                inputData[i * seqLength + j] = angle[i]
+//            }
+//        }
+
+//        Log.d("translate","angle.indices: ${angle.indices}")
 
         // Print inputData size and contents for debugging
         Log.d("translate", "Input Data Size: ${inputData.size}")
         Log.d("translate", "Input Data: ${inputData.joinToString()}")
 
         inputBuffer.asFloatBuffer().put(inputData)
-        inputBuffer.rewind()
+        inputBuffer.rewind()    // 버퍼의 위치가 0으로 재설정
+
+        Log.d("translate", "inputBuffer: ${inputBuffer}")
 
         // Prepare the output buffer
         val outputShape = interpreter.getOutputTensor(0).shape()
         val outputSize = outputShape.reduce { acc, i -> acc * i }
         val outputBuffer = ByteBuffer.allocateDirect(outputSize * 4).order(ByteOrder.nativeOrder())
-        outputBuffer.rewind()
+        outputBuffer.rewind()   // 버퍼의 위치가 0으로 재설정
 
-        // Run the model
+
+        // 모델 실행
         try {
             runModel(interpreter, inputBuffer, outputBuffer)
         } catch (e: Exception) {
