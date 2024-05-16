@@ -166,10 +166,22 @@ dependencies {
     implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
 
-    //mediapipe
+    // MediaPipe
     implementation ("com.google.mediapipe:hands:0.10.14")
     implementation ("com.google.mediapipe:solution-core:0.10.14")
 
+    // Pytorch
+    //implementation ("org.pytorch:pytorch_android:2.1.0")
+    implementation ("org.pytorch:pytorch_android_lite:2.1.0")
+    implementation ("org.pytorch:pytorch_android_torchvision:2.1.0")
+
+    implementation("com.google.guava:guava:31.0.1-android")
+
+    // To use CallbackToFutureAdapter
+    implementation("androidx.concurrent:concurrent-futures:1.1.0")
+
+    // Kotlin
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.0")
 
     // tensorflow Lite
     implementation ("org.tensorflow:tensorflow-lite:2.16.1")
