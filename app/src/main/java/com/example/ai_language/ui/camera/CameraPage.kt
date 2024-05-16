@@ -6,26 +6,20 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.ImageFormat
 import android.graphics.Matrix
-import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.YuvImage
-import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.util.Size
 import android.view.View
 import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.annotation.OptIn
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -37,8 +31,6 @@ import androidx.camera.video.Recorder
 import androidx.camera.video.Recording
 import androidx.camera.video.VideoCapture
 import androidx.camera.video.VideoRecordEvent
-import androidx.camera.view.PreviewView
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import com.example.ai_language.R
@@ -47,21 +39,22 @@ import com.example.ai_language.databinding.ActivityCameraPageBinding
 import com.example.ai_language.ui.home.Home
 import com.google.common.util.concurrent.ListenableFuture
 import org.pytorch.IValue
+import org.pytorch.Module
 import org.pytorch.torchvision.TensorImageUtils
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.task.vision.detector.ObjectDetector
+import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
+import java.io.InputStreamReader
 import java.text.SimpleDateFormat
 import java.util.Locale
-import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import org.pytorch.Module;
 
 data class DetectionResult(val boundingBox: RectF, val text: String)
 
@@ -83,14 +76,14 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
             }.toTypedArray()
     }
 
-    private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
-
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     private var imageCapture: ImageCapture? = null
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
 
+    private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     private lateinit var module: Module
+    private lateinit var imageNet_classes: List<String>
 
     // 카메라 작업을 수행하기 위한 스레드 풀을 관리 (메인 스레드와 별도로 동작)
     private lateinit var cameraExecutor: ExecutorService
@@ -137,6 +130,57 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
         }
     }
 
+    private fun loadClasses(fileName: String): List<String> {
+        val classes = mutableListOf<String>()
+        try {
+            val br = BufferedReader(InputStreamReader(assets.open(fileName)))
+            var line: String?
+            while (br.readLine().also { line = it } != null) {
+                // 파일에서 클래스 이름을 읽어와 리스트에 추가합니다.
+                classes.add(line!!)
+            }
+            br.close() // 파일을 다 읽었으면 BufferedReader를 닫아줍니다.
+        } catch (e: Exception) {
+            // 파일을 읽는 도중 오류가 발생한 경우 예외를 처리할 수 있습니다.
+            e.printStackTrace()
+        }
+        return classes
+    }
+
+    @OptIn(ExperimentalGetImage::class)
+    private fun analyzeImage(image: ImageProxy, rotation: Int) {
+
+        // 입력 준비
+//        val inputTensor = TensorImageUtils.bitmapToFloat32Tensor(
+//            bitmap,
+//            TensorImageUtils.TORCHVISION_NORM_MEAN_RGB,
+//            TensorImageUtils.TORCHVISION_NORM_STD_RGB)
+        val inputTensor = TensorImageUtils.imageYUV420CenterCropToFloat32Tensor(
+            image.image,
+            rotation,
+            224,
+            224,
+            TensorImageUtils.TORCHVISION_NORM_MEAN_RGB,
+            TensorImageUtils.TORCHVISION_NORM_STD_RGB
+        )
+
+        // 추론 실행
+        val outputTensor = module.forward(IValue.from(inputTensor)).toTensor()
+        val scores = outputTensor.dataAsFloatArray
+
+        // 처리 결과
+        var maxScore = -Float.MAX_VALUE
+        var maxScoreIdx = -1
+        for (i in scores.indices) {
+            if (scores[i] > maxScore) {
+                maxScore = scores[i]
+                maxScoreIdx = i
+            }
+        }
+        val className = imageNet_classes.get(maxScoreIdx)
+        Log.d("Torch", "Detected + ${className}")
+
+    }
 
     override fun setLayout() {
         val homeBtn = binding.homeButton
@@ -153,8 +197,8 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
             //startCamera()
         }
 
-        // 모듈 로딩
-        loadTorchModel("best.torchscript.ptl")
+        imageNet_classes = loadClasses("classes.txt")
+        loadTorchModel("best.torchscript.ptl") // 모듈 로딩
 
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProviderFuture.addListener(Runnable {
@@ -168,8 +212,6 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
                 // 예외 처리를 수행합니다.
             }
         }, ContextCompat.getMainExecutor(this))
-
-
 
         cameraExecutor = Executors.newSingleThreadExecutor()
 
@@ -192,6 +234,86 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
 //                startCamera() //바뀐 카메라 화면으로 카메라 재실행
 //            }
 //        }
+    }
+
+    // 카메라를 사용하여 미리보기 표시하고 객체 감지 수행하는 함수 (카메라 화면 제공)
+    private fun startCamera(cameraProvider: ProcessCameraProvider) {
+
+        val preview = Preview.Builder().build()
+        cameraSelector = CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
+        preview.setSurfaceProvider(binding.viewFinder.getSurfaceProvider())
+
+        val aspectRatio = AspectRatio.RATIO_16_9 // 예시: 16:9 비율
+        val imageAnalysis = ImageAnalysis.Builder()
+            .setTargetAspectRatio(aspectRatio)
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .build()
+
+        cameraExecutor = Executors.newSingleThreadExecutor()
+        imageAnalysis.setAnalyzer(cameraExecutor, ImageAnalysis.Analyzer { image ->
+            val rotation = image.imageInfo.rotationDegrees
+            analyzeImage(image, rotation)
+            image.close()
+        })
+
+        val camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview)
+
+
+        /* // 카메라 제공자 초기화, 리스너 등록
+         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+         cameraProviderFuture.addListener({
+             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+             val viewFinder = binding.viewFinder
+
+             // 카메라 설정 초기화 (Preview 사용 사례 초기화)
+             val preview = Preview.Builder().build().also {
+                 it.setSurfaceProvider(viewFinder.surfaceProvider) // 미리보기 제공
+             }
+
+             // ImageAnalysis 사용 사례 초기화 -> 각 프레임마다 이미지 분석, 결과를 화면에 표시
+             val imageAnalysis = ImageAnalysis.Builder().build()
+
+             // 이미지 분석 작업 수행할 ImageAnalysis.Analyzer 설정
+             imageAnalysis.setAnalyzer(cameraExecutor) { imageProxy ->
+                 val rotationDegrees = imageProxy.imageInfo.rotationDegrees // 이미지 회전 각도
+                 val bitmap = imageProxy.toBitmap()?.rotate(rotationDegrees.toFloat()) // 이미지 회전 처리
+                 bitmap?.let { rotatedBitmap ->
+                     runOnUiThread {
+                         val detectionResults = runObjectDetection(rotatedBitmap) // 객체 감지 함수 실행
+                         val resultTextView = binding.tx1
+
+                         if (detectionResults.isNotEmpty()) {
+                             // 객체 감지 결과가 있는 경우 텍스트뷰에 표시
+                             val resultText = buildString {
+                                 detectionResults.forEachIndexed { index, result ->
+                                     append("${index + 1}. ${result.text}\n") // 예시: "1. Person, 80%\n"
+                                 }
+                             }
+                             resultTextView.text = resultText
+                             resultTextView.visibility = View.VISIBLE // 텍스트뷰 표시
+                         } else {
+                             // 객체 감지 결과가 없는 경우 텍스트뷰 숨김
+                             resultTextView.visibility = View.GONE
+                         }
+                     }
+                 }
+                 imageProxy.close() // 처리가 끝나면 ImageProxy를 닫아야 합니다.
+             }
+
+             // 버튼 클릭 시 카메라 전면 후면 전환
+             toggleCamera()
+
+             try {
+                 // 기존에 바인딩된 사용 사례를 해제
+                 cameraProvider.unbindAll()
+
+                 // 카메라에 사용 사례 바인딩 (카메라를 사용하여 미리보기를 표시하고, 이미지 분석을 수행)
+                 cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis)
+
+             } catch (exc: Exception) {
+                 Log.e(TAG, "카메라 시작 실패", exc)
+             }
+         }, ContextCompat.getMainExecutor(this))*/
     }
 
     override fun onDestroy() {
@@ -333,110 +455,6 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
             }
     }
 
-    // 카메라를 사용하여 미리보기 표시하고 객체 감지 수행하는 함수 (카메라 화면 제공)
-    private fun startCamera(cameraProvider: ProcessCameraProvider) {
-
-        val preview = Preview.Builder().build()
-        cameraSelector = CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
-        preview.setSurfaceProvider(binding.viewFinder.getSurfaceProvider())
-
-        val aspectRatio = AspectRatio.RATIO_16_9 // 예시: 16:9 비율
-        val imageAnalysis = ImageAnalysis.Builder()
-            .setTargetAspectRatio(aspectRatio)
-            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-            .build()
-
-        cameraExecutor = Executors.newSingleThreadExecutor()
-        imageAnalysis.setAnalyzer(cameraExecutor, ImageAnalysis.Analyzer { image ->
-            val rotation = image.imageInfo.rotationDegrees
-            image.close()
-        })
-
-        val camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview)
-
-
-        /* // 카메라 제공자 초기화, 리스너 등록
-         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-         cameraProviderFuture.addListener({
-             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-             val viewFinder = binding.viewFinder
-
-             // 카메라 설정 초기화 (Preview 사용 사례 초기화)
-             val preview = Preview.Builder().build().also {
-                 it.setSurfaceProvider(viewFinder.surfaceProvider) // 미리보기 제공
-             }
-
-             // ImageAnalysis 사용 사례 초기화 -> 각 프레임마다 이미지 분석, 결과를 화면에 표시
-             val imageAnalysis = ImageAnalysis.Builder().build()
-
-             // 이미지 분석 작업 수행할 ImageAnalysis.Analyzer 설정
-             imageAnalysis.setAnalyzer(cameraExecutor) { imageProxy ->
-                 val rotationDegrees = imageProxy.imageInfo.rotationDegrees // 이미지 회전 각도
-                 val bitmap = imageProxy.toBitmap()?.rotate(rotationDegrees.toFloat()) // 이미지 회전 처리
-                 bitmap?.let { rotatedBitmap ->
-                     runOnUiThread {
-                         val detectionResults = runObjectDetection(rotatedBitmap) // 객체 감지 함수 실행
-                         val resultTextView = binding.tx1
-
-                         if (detectionResults.isNotEmpty()) {
-                             // 객체 감지 결과가 있는 경우 텍스트뷰에 표시
-                             val resultText = buildString {
-                                 detectionResults.forEachIndexed { index, result ->
-                                     append("${index + 1}. ${result.text}\n") // 예시: "1. Person, 80%\n"
-                                 }
-                             }
-                             resultTextView.text = resultText
-                             resultTextView.visibility = View.VISIBLE // 텍스트뷰 표시
-                         } else {
-                             // 객체 감지 결과가 없는 경우 텍스트뷰 숨김
-                             resultTextView.visibility = View.GONE
-                         }
-                     }
-                 }
-                 imageProxy.close() // 처리가 끝나면 ImageProxy를 닫아야 합니다.
-             }
-
-             // 버튼 클릭 시 카메라 전면 후면 전환
-             toggleCamera()
-
-             try {
-                 // 기존에 바인딩된 사용 사례를 해제
-                 cameraProvider.unbindAll()
-
-                 // 카메라에 사용 사례 바인딩 (카메라를 사용하여 미리보기를 표시하고, 이미지 분석을 수행)
-                 cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis)
-
-             } catch (exc: Exception) {
-                 Log.e(TAG, "카메라 시작 실패", exc)
-             }
-         }, ContextCompat.getMainExecutor(this))*/
-    }
-
-    fun analyzeImage(image: ImageProxy, rotation: Int) {
-
-        // 입력 준비
-        val inputTensor = TensorImageUtils.bitmapToFloat32Tensor(
-            bitmap,
-            TensorImageUtils.TORCHVISION_NORM_MEAN_RGB,
-            TensorImageUtils.TORCHVISION_NORM_STD_RGB)
-
-        // 추론 실행
-        val outputTensor = module.forward(IValue.from(inputTensor)).toTensor()
-        val scores = outputTensor.dataAsFloatArray
-
-        // 처리 결과
-        var maxScore = -Float.MAX_VALUE
-        var maxScoreIdx = -1
-        for (i in scores.indices) {
-            if (scores[i] > maxScore) {
-                maxScore = scores[i]
-                maxScoreIdx = i
-            }
-        }
-        val className = ImageNetClasses.IMAGENET_CLASSES[maxScoreIdx]
-
-
-    }
 
     // 데이터 전처리
     // CameraX에서 제공되는 이미지를 일반적인 비트맵 형식으로 변환하여

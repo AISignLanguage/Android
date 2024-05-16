@@ -171,7 +171,6 @@ dependencies {
     implementation ("com.google.mediapipe:solution-core:0.10.14")
 
     // Pytorch
-    //implementation ("org.pytorch:pytorch_android:2.1.0")
     implementation ("org.pytorch:pytorch_android_lite:2.1.0")
     implementation ("org.pytorch:pytorch_android_torchvision:2.1.0")
 
