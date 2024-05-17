@@ -49,8 +49,8 @@ data class CheckPasswordResponseDTO(
 
 //Change Password
 data class ChangePasswordRequestDTO(
-    @SerializedName("email") val email: String,
-    @SerializedName("newPassword") val currentPassword: String
+    @SerializedName("currentPassword") val currentPassword: String,
+    @SerializedName("newPassword") val newPassword: String
 )
 
 data class ChangePasswordResponseDTO(
