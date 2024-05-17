@@ -167,21 +167,6 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
             requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
 
-
-//        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-//        cameraProviderFuture.addListener(Runnable {
-//            try {
-//                val cameraProvider = cameraProviderFuture.get()
-//                startCamera()
-//                // cameraProvider를 사용하여 작업을 수행합니다.
-//            } catch (e: ExecutionException) {
-//                // 예외 처리를 수행합니다.
-//            } catch (e: InterruptedException) {
-//                // 예외 처리를 수행합니다.
-//            }
-//        }, ContextCompat.getMainExecutor(this))
-
-
 //        val videoBtn = binding.cameraBtn
 //        val btn = binding.button2
 //        btn.setOnClickListener{ takePhoto() }
@@ -334,7 +319,7 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
             // UI 업데이트
             runOnUiThread {
                 val className = if (maxClassIndex != -1) imageNet_classes[maxClassIndex] else "Unknown"
-                binding.tx1.text = "Class: $className - Score: $maxScore"
+                binding.tx1.text = "Class: $className - 확률: $maxScore"
             }
 
             imageProxy.close()
