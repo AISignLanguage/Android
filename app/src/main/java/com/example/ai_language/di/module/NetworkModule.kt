@@ -1,6 +1,7 @@
 package com.example.ai_language.di.module
 
 import com.example.ai_language.Util.Util
+import com.example.ai_language.Util.XAccessTokenInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -57,14 +58,22 @@ object NetworkModule {
     fun provideLoggingInterceptor(): HttpLoggingInterceptor =
         HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
 
+    @Provides
+    @Singleton
+    fun provideTokenInterceptor(): XAccessTokenInterceptor {
+        return XAccessTokenInterceptor()
+    }
+
     @MogInterceptorOkHttpClient
     @Provides
     @Singleton
     fun provideMogOkHttpClient(
-        interceptor: HttpLoggingInterceptor
+        interceptor: HttpLoggingInterceptor,
+        tokenInterceptor: XAccessTokenInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(interceptor)
+            .addInterceptor(tokenInterceptor)
             .build()
     }
 
