@@ -71,15 +71,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@color/white"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="@id/viewFinder"
-            app:layout_constraintStart_toStartOf="@id/viewFinder"
-            app:layout_constraintTop_toTopOf="@id/viewFinder" />
-
-        <TextView
             android:id="@+id/tx1"
             android:textSize="20dp"
             android:layout_width="match_parent"

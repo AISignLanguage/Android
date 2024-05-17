@@ -78,10 +78,10 @@ dependencies {
         exclude(group = "com.google.protobuf", module="protobuf-java")
         exclude(group = "com.google.protobuf", module="protobuf-javalite")
     }
-    implementation ("com.google.mediapipe:tasks-vision:0.10.0")  {
-        exclude(group = "com.google.protobuf", module="protobuf-java")
-        exclude(group = "com.google.protobuf", module="protobuf-javalite")
-    }
+//    implementation ("com.google.mediapipe:tasks-vision:0.10.0")  {
+//        exclude(group = "com.google.protobuf", module="protobuf-java")
+//        exclude(group = "com.google.protobuf", module="protobuf-javalite")
+//    }
 
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
@@ -166,12 +166,41 @@ dependencies {
     implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
 
+    // MediaPipe
+    implementation ("com.google.mediapipe:hands:0.10.14")
+    implementation ("com.google.mediapipe:solution-core:0.10.14")
+
+    // Pytorch
+    //implementation ("org.pytorch:pytorch_android:2.1.0")
+
+    implementation ("org.pytorch:pytorch_android_lite:2.1.0") {
+        exclude(group = "org.pytorch", module="pytorch_android")
+        //exclude(group = "com.google.protobuf", module="protobuf-javalite")
+    }
+    implementation ("org.pytorch:pytorch_android_torchvision:2.1.0") {
+        exclude(group = "org.pytorch", module="pytorch_android")
+        //exclude(group = "com.google.protobuf", module="protobuf-javalite")
+    }
+
+    implementation("com.google.guava:guava:31.0.1-android")
+
+    // To use CallbackToFutureAdapter
+    implementation("androidx.concurrent:concurrent-futures:1.1.0")
+
+    // Kotlin
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.0")
+
     // tensorflow Lite
     implementation ("org.tensorflow:tensorflow-lite:2.16.1")
     implementation ("org.tensorflow:tensorflow-lite-support:0.4.4")
     implementation ("org.tensorflow:tensorflow-lite-task-audio:0.4.4")
     implementation ("org.tensorflow:tensorflow-lite-metadata:0.1.0")
     implementation ("org.tensorflow:tensorflow-lite-select-tf-ops:2.16.1")
+
+    implementation ("org.tensorflow:tensorflow-lite-task-vision-play-services:0.4.2")
+    implementation ("com.google.android.gms:play-services-tflite-gpu:16.2.0")
+    implementation  ("org.tensorflow:tensorflow-lite-task-vision:0.4.0")
+
 
     //naver Map
     implementation("com.naver.maps:map-sdk:3.18.0")
@@ -181,6 +210,4 @@ dependencies {
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
     implementation ("com.github.hannesa2:AndroidSlidingUpPanel:4.2.1")
 
-    //MediaPipe
-    implementation ("com.google.mediapipe:tasks-vision:0.10.0")
 }
