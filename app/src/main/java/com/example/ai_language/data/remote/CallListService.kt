@@ -6,7 +6,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface CallListService {
-    @POST("api/mog/user/send-callList") // 전화번호부
+    @POST("send-callList") // 전화번호부
     suspend fun sendPhoneNumbers(
         @Body phoneNumberDTO: PhoneNumberDTO
     ): PhoneListDTO
