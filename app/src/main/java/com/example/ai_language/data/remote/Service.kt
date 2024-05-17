@@ -67,7 +67,7 @@ interface Service {
     fun checkPassword(@Body request: CheckPasswordRequestDTO): Call<CheckPasswordResponseDTO>
 
     @POST("changePassword") // 비밀번호 변경
-    fun changePassword(@Body request: ChangePasswordRequestDTO): Call<ChangePasswordResponseDTO>
+    fun changePassword(@Body request: ChangePasswordRequestDTO): Call<ResponseBody>
 
     @GET("userInfo") // 유저 정보 불러오기
     fun requestProfile(): Call<ResponseBody>
