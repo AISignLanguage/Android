@@ -155,9 +155,9 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
             finish()
         }
 
-        imageNet_classes = loadClasses("classes.txt")
+        imageNet_classes = loadClasses("classes2.txt")
 
-        modelModule = LiteModuleLoader.load(loadTorchModel("best.torchscript.ptl")) // 모듈 로딩
+        modelModule = LiteModuleLoader.load(loadTorchModel("best0519.torchscript.ptl")) // 모듈 로딩
         cameraExecutor = Executors.newSingleThreadExecutor()
 
         // 앱 시작 시 권한 확인 및 요청
@@ -270,7 +270,7 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
         override fun analyze(imageProxy: ImageProxy) {
             val image = imageProxy.image ?: return
             val rotationDegrees = imageProxy.imageInfo.rotationDegrees // 이미지 회전 각도
-            // val bitmap = imageProxy.toBitmap()?.rotate(rotationDegrees.toFloat())
+            //val bitmap = imageProxy.toBitmap()?.rotate(rotationDegrees.toFloat())
 
             // 이미지 전처리
             val bitmap = imageProxy.toBitmap()
@@ -288,37 +288,54 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
                 TensorImageUtils.TORCHVISION_NORM_MEAN_RGB,
                 TensorImageUtils.TORCHVISION_NORM_STD_RGB
             )
+            Log.d("로그", "inputTensor ${inputTensor.shape()[0]}")
+            Log.d("로그", "inputTensor ${inputTensor.shape()[1]}")
+            Log.d("로그", "inputTensor ${inputTensor.shape()[2]}")
 
             // 모델 추론 실행
             val outputTuple = modelModule.forward(IValue.from(inputTensor)).toTuple()
             val outputTensor = outputTuple[0].toTensor()
             val scores = outputTensor.dataAsFloatArray
+            Log.d("로그", "outputTensor ${outputTensor}")
 
             // 가장 높은 점수를 가진 클래스 찾기
             val numClasses = imageNet_classes.size
             var maxScore = Float.NEGATIVE_INFINITY
             var maxClassIndex = -1
 
-//            for (i in 0 until numClasses) {
-//                if (scores[i] > maxScore) {
-//                    maxScore = scores[i]
-//                    maxClassIndex = i
-//                }
-//            }
-
-            for (i in scores.indices step (5 + numClasses)) {
-                val classScores = scores.sliceArray((i + 5) until (i + 5 + numClasses))
-                for ((index, score) in classScores.withIndex()) {
-                    if (score > maxScore) {
-                        maxScore = score
-                        maxClassIndex = index
-                    }
+            for (i in 0 until numClasses) {
+                Log.d("로그", "${scores[i]}")
+                if (scores[i] > maxScore) {
+                    maxScore = scores[i]
+                    maxClassIndex = i
                 }
             }
 
+//            for (i in scores.indices step (5 + numClasses)) {
+//                val classScores = scores.sliceArray((i + 5) until (i + 5 + numClasses))
+//                for ((index, score) in classScores.withIndex()) {
+//                    if (score > maxScore) {
+//                        maxScore = score
+//                        maxClassIndex = index
+//                    }
+//                }
+//            }
+
+            val valueList = mutableListOf<String>("사랑", "사랑해", "웃다", "최고", "살아", "무엇", "좋아")
+            var valText: String? = ""
             // UI 업데이트
             runOnUiThread {
                 val className = if (maxClassIndex != -1) imageNet_classes[maxClassIndex] else "Unknown"
+//                when(className) {
+//                    "heart" -> valText = valueList[0]
+//                    "iloveyou" -> valText = valueList[1]
+//                    "smile" -> valText = valueList[2]
+//                    "best" -> valText = valueList[3]
+//                    "live" -> valText = valueList[4]
+//                    "what" -> valText = valueList[5]
+//                    "fine" -> valText = valueList[6]
+//
+//                }
                 binding.tx1.text = "Class: $className - 확률: $maxScore"
             }
 
