@@ -17,6 +17,8 @@ import android.graphics.YuvImage
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.util.Size
+import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -24,6 +26,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.FocusMeteringAction
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -43,6 +46,7 @@ import com.example.ai_language.R
 import com.example.ai_language.base.BaseActivity
 import com.example.ai_language.databinding.ActivityCameraPageBinding
 import com.example.ai_language.ui.home.Home
+import org.pytorch.Module
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.task.vision.detector.ObjectDetector
 import java.io.ByteArrayOutputStream
@@ -77,6 +81,12 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
 
+    private lateinit var viewFinder: PreviewView
+    private lateinit var detectionInfo: TextView
+    private lateinit var model: Module
+
+    private lateinit var classNames: List<String>
+
     // 카메라 작업을 수행하기 위한 스레드 풀을 관리 (메인 스레드와 별도로 동작)
     private lateinit var cameraExecutor: ExecutorService
 
@@ -110,6 +120,13 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
             finish()
         }
 
+        val modelLoader = ModelLoader(this)
+        model = modelLoader.loadModel()
+        classNames = modelLoader.loadClassNames()
+        viewFinder = binding.viewFinder
+        detectionInfo = binding.detectionInfo
+        cameraExecutor = Executors.newSingleThreadExecutor()
+
         // 앱 시작 시 권한 확인 및 요청
         if (!allPermissionsGranted()) {
             requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
@@ -117,12 +134,7 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
             startCamera()
         }
 
-        cameraExecutor = Executors.newSingleThreadExecutor()
 
-//        val videoBtn = binding.cameraBtn
-//        val btn = binding.button2
-//        btn.setOnClickListener{ takePhoto() }
-        //videoBtn.setOnClickListener{ captureVideo(videoBtn) } 실시간 번역만 사용, 녹화 X
     }
 
     // 버튼 클릭해서 카메라 전면 후면 전환하는 함수
@@ -286,42 +298,19 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-            val viewFinder = binding.viewFinder
 
             // 카메라 설정 초기화 (Preview 사용 사례 초기화)
             val preview = Preview.Builder().build().also {
                 it.setSurfaceProvider(viewFinder.surfaceProvider) // 미리보기 제공
             }
 
-            // ImageAnalysis 사용 사례 초기화 -> 각 프레임마다 이미지 분석, 결과를 화면에 표시
-            val imageAnalysis = ImageAnalysis.Builder().build()
-
-            // 이미지 분석 작업 수행할 ImageAnalysis.Analyzer 설정
-            imageAnalysis.setAnalyzer(cameraExecutor) { imageProxy ->
-                val rotationDegrees = imageProxy.imageInfo.rotationDegrees // 이미지 회전 각도
-                val bitmap = imageProxy.toBitmap()?.rotate(rotationDegrees.toFloat()) // 이미지 회전 처리
-                bitmap?.let { rotatedBitmap ->
-                    runOnUiThread {
-                        val detectionResults = runObjectDetection(rotatedBitmap) // 객체 감지 함수 실행
-                        val resultTextView = binding.tx1
-
-                        if (detectionResults.isNotEmpty()) {
-                            // 객체 감지 결과가 있는 경우 텍스트뷰에 표시
-                            val resultText = buildString {
-                                detectionResults.forEachIndexed { index, result ->
-                                    append("${index + 1}. ${result.text}\n") // 예시: "1. Person, 80%\n"
-                                }
-                            }
-                            resultTextView.text = resultText
-                            resultTextView.visibility = View.VISIBLE // 텍스트뷰 표시
-                        } else {
-                            // 객체 감지 결과가 없는 경우 텍스트뷰 숨김
-                            resultTextView.visibility = View.GONE
-                        }
-                    }
+            // ImageAnalysis -> 각 프레임마다 이미지 분석, 결과를 화면에 표시
+            val imageAnalysis = ImageAnalysis.Builder()
+                .setTargetResolution(Size(640, 640))
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build().also {
+                    it.setAnalyzer(cameraExecutor, ImageAnalyzer(model, classNames, detectionInfo, this))
                 }
-                imageProxy.close() // 처리가 끝나면 ImageProxy를 닫아야 합니다.
-            }
 
             // 버튼 클릭 시 카메라 전면 후면 전환
             toggleCamera()
@@ -331,74 +320,32 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
                 cameraProvider.unbindAll()
 
                 // 카메라에 사용 사례 바인딩 (카메라를 사용하여 미리보기를 표시하고, 이미지 분석을 수행)
-                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis)
+                val camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis)
+                val cameraController = camera.cameraControl
 
+                // 터치 이벤트를 통한 초점 맞추기
+                binding.viewFinder.setOnTouchListener { v : View, event : MotionEvent ->
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            v.performClick()
+                            return@setOnTouchListener true
+                        }
+                        MotionEvent.ACTION_UP -> {
+
+                            val factory = binding.viewFinder.meteringPointFactory
+                            val point = factory.createPoint(event.x, event.y)
+                            val action = FocusMeteringAction.Builder(point).build()
+                            cameraController?.startFocusAndMetering(action)
+                            v.performClick()
+                            return@setOnTouchListener true
+                        }
+                        else -> return@setOnTouchListener false
+                    }
+                }
             } catch (exc: Exception) {
                 Log.e(TAG, "카메라 시작 실패", exc)
             }
-        }, ContextCompat.getMainExecutor(this))
-    }
-
-    // 데이터 전처리
-    // CameraX에서 제공되는 이미지를 일반적인 비트맵 형식으로 변환하여
-    // 이미지 처리나 모델 추론 등의 작업을 수행하는 함수
-    private fun ImageProxy.toBitmap(): Bitmap? {
-        // 플레인 및 버퍼 가져오기
-        val yBuffer = planes[0].buffer // Y
-        val uBuffer = planes[1].buffer // U
-        val vBuffer = planes[2].buffer // V
-
-        // 버퍼 크기 계산
-        val ySize = yBuffer.remaining()
-        val uSize = uBuffer.remaining()
-        val vSize = vBuffer.remaining()
-
-        // U and V are swapped (NV21 형식으로 이미지 데이터 병합)
-        val nv21 = ByteArray(ySize + uSize + vSize)
-        yBuffer.get(nv21, 0, ySize)
-        vBuffer.get(nv21, ySize, vSize)
-        uBuffer.get(nv21, ySize + vSize, uSize)
-
-        // YUVImage 생성 및 JPEG 압축
-        val yuvImage = YuvImage(nv21, ImageFormat.NV21, this.width, this.height, null)
-        val out = ByteArrayOutputStream()
-        yuvImage.compressToJpeg(Rect(0, 0, yuvImage.width, yuvImage.height), 100, out)
-        val imageBytes = out.toByteArray()
-        return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-    }
-
-    // 비트맵 이미지를 주어진 각도만큼 회전시키는 함수
-    private fun Bitmap.rotate(degrees: Float): Bitmap {
-        val matrix = Matrix().apply { postRotate(degrees) }
-        return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
-    }
-
-    // 비트맵 이미지를 입력으로 받아 해당 이미지를 모델로 감지하여 위치와 확률 포함하는 목록 반환하는 함수
-    private fun runObjectDetection(bitmap: Bitmap): List<DetectionResult> {
-
-        // Step 1: Create TFLite's TensorImage object (TensorImage 객체 생성)
-        val image = TensorImage.fromBitmap(bitmap)
-
-        // Step 2: Initialize the detector object (감지기 객체 초기화)
-        val options = ObjectDetector.ObjectDetectorOptions.builder()
-            .setMaxResults(5)           // 최대 결과수
-            .setScoreThreshold(0.3f)    // 점수 임계값
-            .build()
-        val detector = ObjectDetector.createFromFileAndOptions(
-            this,
-            "model.tflite",   // 모델 파일 이용해서 객체 감지기 초기화(활성화)
-            options
-        )
-
-        // Step 3: Feed given image to the detector
-        val results = detector.detect(image)  // 주어진 이미지 객체 감지 -> 모델로 추론 -> 결과반환
-
-        // 결과 처리
-        return results.map { detection ->
-            val category = detection.categories.firstOrNull() ?: return@map null
-            val text = "${category.label}, ${category.score.times(100).toInt()}%"
-            DetectionResult(detection.boundingBox, text)
-        }.filterNotNull()
+        }, ContextCompat.getMainExecutor(this)) // 메인 스레드에서 실행
     }
 
 }

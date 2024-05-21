@@ -7,6 +7,7 @@ import org.pytorch.Module
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+
 class ModelLoader(private val context: Context) {
     companion object {
         private const val MODEL_FILE = "best0519.torchscript.ptl"
