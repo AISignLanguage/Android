@@ -25,7 +25,7 @@ class MyApp : Application() {
         super.onCreate()
         application = this
         // 카카오 SDK 초기화
-        KakaoSdk.init(this, "ddef2e841959182411eab6098da996e5")
+        KakaoSdk.init(this, BuildConfig.Kakao_app_key)
         // 해시키 로깅
         val keyHash = Utility.getKeyHash(this)
         Log.d("해시키", keyHash)

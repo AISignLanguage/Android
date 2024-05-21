@@ -43,7 +43,15 @@ plugins {
             buildConfigField("String", "gmail_sender_pwd", properties.getProperty("gmail_sender_pwd"))
             buildConfigField("String", "Main_Server", properties.getProperty("Main_Server"))
             buildConfigField("String", "Main_Server_8000", properties.getProperty("Main_Server_8000"))
-
+            buildConfigField("String", "Google_Map_key", properties.getProperty("Google_Map_key"))
+            buildConfigField("String", "Naver_Api_key_id", properties.getProperty("Naver_Api_key_id"))
+            buildConfigField("String", "Naver_Api_key", properties.getProperty("Naver_Api_key"))
+            buildConfigField("String", "Tmap_App_key", properties.getProperty("Tmap_App_key"))
+            buildConfigField("String", "Tmap_Drive_App_key", properties.getProperty("Tmap_Drive_App_key"))
+            buildConfigField("String", "Youtube_Api_key", properties.getProperty("Youtube_Api_key"))
+            buildConfigField("String", "Kakao_app_key", properties.getProperty("Kakao_app_key"))
+            buildConfigField("String", "Speech_to_Text_key_id", properties.getProperty("Speech_to_Text_key_id"))
+            buildConfigField("String", "Speech_to_Text_key_secret", properties.getProperty("Speech_to_Text_key_secret"))
 
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
