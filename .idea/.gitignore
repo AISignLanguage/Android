@@ -2,3 +2,5 @@
 /shelf/
 /workspace.xml
 /deploymenttargetdropdown.xml
+# local.properties should not be shared
+local.properties
