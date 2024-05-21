@@ -66,7 +66,7 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS =
-            mutableListOf (
+            mutableListOf(
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO
             ).apply {
@@ -95,7 +95,6 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
             baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
 
-
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults:
         IntArray) {
@@ -104,9 +103,11 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
             if (allPermissionsGranted()) {
                 startCamera()
             } else {
-                Toast.makeText(this,
+                Toast.makeText(
+                    this,
                     "Permissions not granted by the user.",
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
                 finish()
             }
         }
