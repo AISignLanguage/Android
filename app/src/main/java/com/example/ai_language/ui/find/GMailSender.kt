@@ -1,6 +1,7 @@
 package com.example.ai_language.ui.find
 
 import android.util.Log
+import com.example.ai_language.BuildConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,8 +15,8 @@ import javax.mail.internet.InternetAddress
 import javax.mail.internet.MimeMessage
 
 class GMailSender : Authenticator() {
-    private val host = "arcn987@gmail.com"
-    private val password = "bkml ucgv zumo cfyw"
+    private var host = ""
+    private var password = ""
     private val passwordLength = 8 // 기본 길이는 8
 
     private lateinit var user: String
@@ -33,6 +34,11 @@ class GMailSender : Authenticator() {
             .joinToString("")    //문자열로 합침
     }
 
+    private fun setHost() {
+        host = BuildConfig.gmail_sender_id
+        password = BuildConfig.gmail_sender_pwd
+    }
+
     fun getEmailCode(): String {
         return emailCode
     }
@@ -43,7 +49,9 @@ class GMailSender : Authenticator() {
         return code == emailCode
     }
 
-    fun sendEmali(toUser: String) {
+    fun sendEmail(toUser: String) {
+        setHost()
+
         CoroutineScope(Dispatchers.IO).launch {
             user = toUser
             emailCode = createRandom_CertificationNumber()
