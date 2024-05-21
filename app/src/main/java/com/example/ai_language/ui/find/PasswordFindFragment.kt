@@ -84,7 +84,7 @@ class PasswordFindFragment : Fragment() {
                         CoroutineScope(Dispatchers.Main).launch {
                             // 이메일 보내기
                             gMailSender = GMailSender()
-                            gMailSender.sendEmali(email)
+                            gMailSender.sendEmail(email)
 
 
                             // 이메일 코드를 가져오기 위해 잠시 대기

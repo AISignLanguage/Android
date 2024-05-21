@@ -1,4 +1,7 @@
-    plugins {
+import java.io.FileInputStream
+import java.util.Properties
+
+plugins {
         id("com.android.application")
         id("org.jetbrains.kotlin.android")
         id ("dagger.hilt.android.plugin")
@@ -7,6 +10,9 @@
 
         id("kotlin-kapt") // 'kotlin-kapt' 플러그인 추가
     }
+
+    val properties = Properties()
+    properties.load(FileInputStream("local.properties"))
 
     hilt {
         enableAggregatingTask = false
@@ -24,6 +30,7 @@
         buildFeatures {
             viewBinding = true
             mlModelBinding = true
+            buildConfig = true
         }
         defaultConfig {
             applicationId = "com.example.ai_language"
@@ -31,6 +38,10 @@
             targetSdk = 33
             versionCode = 1
             versionName = "1.0"
+
+            buildConfigField("String", "gmail_sender_id", properties.getProperty("gmail_sender_id"))
+            buildConfigField("String", "gmail_sender_pwd", properties.getProperty("gmail_sender_pwd"))
+
 
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
