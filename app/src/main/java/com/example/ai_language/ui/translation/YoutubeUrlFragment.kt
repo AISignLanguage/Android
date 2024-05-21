@@ -5,6 +5,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.ai_language.BuildConfig
 import com.example.ai_language.R
 import com.example.ai_language.base.BaseFragment
 import com.example.ai_language.databinding.FragmentYoutubeUrlBinding
@@ -101,10 +102,10 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
     private fun onClickRemote(){
         binding.btnSendRemoteApi.setOnClickListener {
             val txt = binding.etRemoteFileInfo.text.toString()
-            translationViewModel.postTextByRemoteFile("z45ijode90Uu2Z9R","NnYgsPwKxqAzNkIl","ko",txt)
+            translationViewModel.postTextByRemoteFile(BuildConfig.Speech_to_Text_key_id, BuildConfig.Speech_to_Text_key_secret,"ko",txt)
         }
         binding.btnGo.setOnClickListener {
-            translationViewModel.getTextFileBySpeechFlowApi("z45ijode90Uu2Z9R","NnYgsPwKxqAzNkIl",link,4)
+            translationViewModel.getTextFileBySpeechFlowApi(BuildConfig.Speech_to_Text_key_id,BuildConfig.Speech_to_Text_key_secret,link,4)
         }
     }
     private fun sendRemote(){
