@@ -710,7 +710,7 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
                                 Toast.LENGTH_SHORT
                             ).show()
                             val intent =
-                                Intent(this@RegisterActivity, permissionActivity::class.java)
+                                Intent(this@RegisterActivity, MainLoginActivity::class.java)
                             startActivity(intent)
                             finish()
                         }
