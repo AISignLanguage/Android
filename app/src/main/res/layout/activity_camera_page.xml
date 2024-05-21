@@ -56,22 +56,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/overlayView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="60dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginBottom="30dp"
-            android:background="@android:color/transparent"
-            app:layout_constraintBottom_toTopOf="@+id/cameraBtn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
-            android:id="@+id/tx1"
+            android:id="@+id/detectionInfo"
             android:textSize="20dp"
             android:layout_width="match_parent"
             android:layout_height="100dp"
