@@ -56,8 +56,6 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 
-data class DetectionResult(val boundingBox: RectF, val text: String)
-
 class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_camera_page) {
 
     companion object {
