@@ -18,9 +18,7 @@ class RetrofitClient private constructor() {
     companion object {
         @Volatile
         private var instance: RetrofitClient? = null
-        private const val baseUrl = "http://223.194.139.88:8080/"
-        private const val baseUrl1 = "http://34.64.202.194:8080/"
-        private const val baseUrl2 = "http://api.kcisa.kr"
+        private const val baseUrl1 = com.example.ai_language.BuildConfig.Main_Server
 
         fun getInstance(): RetrofitClient {
             return instance ?: synchronized(this) {
@@ -44,17 +42,6 @@ class RetrofitClient private constructor() {
             }
         }
 
-        fun getUserRetrofitInterface2(): Service {
-            return getInstance().let { retrofitClient ->
-                val retrofit = Retrofit.Builder()
-                    .baseUrl(baseUrl2)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .client(retrofitClient.createOkHttpClient())
-                    .build()
-
-                retrofit.create(Service::class.java)
-            }
-        }
     }
 
     private fun createOkHttpClient(): OkHttpClient {

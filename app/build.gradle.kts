@@ -41,6 +41,8 @@ plugins {
 
             buildConfigField("String", "gmail_sender_id", properties.getProperty("gmail_sender_id"))
             buildConfigField("String", "gmail_sender_pwd", properties.getProperty("gmail_sender_pwd"))
+            buildConfigField("String", "Main_Server", properties.getProperty("Main_Server"))
+            buildConfigField("String", "Main_Server_8000", properties.getProperty("Main_Server_8000"))
 
 
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
