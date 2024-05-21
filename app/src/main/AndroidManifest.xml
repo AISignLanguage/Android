@@ -53,6 +53,9 @@
         android:theme="@style/Theme.AI_Language"
         tools:targetApi="31">
         <activity
+            android:name=".ui.camera.StreamingActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.translation.TranslationActivity"
             android:exported="false" />
 
