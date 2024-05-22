@@ -10,11 +10,13 @@ import androidx.navigation.fragment.findNavController
 import com.example.ai_language.R
 import com.example.ai_language.base.BaseFragment
 import com.example.ai_language.databinding.FragmentHomeMenuBinding
+import com.example.ai_language.ui.camera.StreamingActivity
 import com.example.ai_language.ui.extensions.setSrcVolunteerImage
 import com.example.ai_language.ui.map.MapActivity
 import com.example.ai_language.ui.translation.TranslationActivity
 import com.example.ai_language.ui.vibration.SoundDetectionService
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import java.util.stream.Stream
 
 class HomeMenuFragment : BaseFragment <FragmentHomeMenuBinding>(R.layout.fragment_home_menu) {
     private var isServiceRunning = false // 서비스 실행 여부를 추적하는 변수
@@ -29,9 +31,12 @@ class HomeMenuFragment : BaseFragment <FragmentHomeMenuBinding>(R.layout.fragmen
     }
     private fun setOnClickImageButton() {
         with(binding) {
-            ibVib.setImageResource(R.drawable.ic_vibration_vector_off)
+            ibVib.setImageResource(R.drawable.main_vib)
             ivPoster.setOnClickListener {
                 findNavController().navigate(R.id.action_navigation_home_menu_to_home)
+            }
+            imageButton6.setOnClickListener {
+                startActivity(Intent(requireActivity(),StreamingActivity::class.java))
             }
             ibMap.setOnClickListener {
                 startActivity(Intent(requireActivity(), MapActivity::class.java))
@@ -45,10 +50,10 @@ class HomeMenuFragment : BaseFragment <FragmentHomeMenuBinding>(R.layout.fragmen
                 }
                     if (isServiceRunning) {
                         stopDetectionService()
-                        ibVib.setImageResource(R.drawable.ic_vibration_vector_off)
+                        ibVib.setImageResource(R.drawable.main_vib)
                     } else {
                         startDetectionService()
-                        ibVib.setImageResource(R.drawable.ic_vibration_vector)
+                        ibVib.setImageResource(R.drawable.main_vib2)
                     }
 
             }

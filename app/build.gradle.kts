@@ -126,6 +126,7 @@ dependencies {
     implementation(files("libs/mail.jar"))
     testImplementation("junit:junit:4.13.2")
     implementation ("io.socket:socket.io-client:2.0.1")
+    implementation ("com.google.android.exoplayer:exoplayer:2.19.1") // 'X.X.X'를 최신 버전으로 교체하세요
 
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

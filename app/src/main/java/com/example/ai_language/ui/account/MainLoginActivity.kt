@@ -19,6 +19,7 @@ import com.example.ai_language.Util.RetrofitClient
 import com.example.ai_language.Util.extensions.datastore
 import com.example.ai_language.base.BaseActivity
 import com.example.ai_language.databinding.ActivityMainLoginBinding
+import com.example.ai_language.ui.camera.VideoActivity
 import com.example.ai_language.ui.find.FindIdPwd
 import com.example.ai_language.ui.home.Home
 import com.example.ai_language.ui.vibration.SoundDetectionService
@@ -208,6 +209,12 @@ class MainLoginActivity : BaseActivity<ActivityMainLoginBinding>(R.layout.activi
 //    }
 
     override fun setLayout() {
+
+        binding.mm.setOnClickListener{
+            startActivity(Intent(this,VideoActivity::class.java))
+        }
+
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), REQUEST_RECORD_AUDIO_PERMISSION)
         }

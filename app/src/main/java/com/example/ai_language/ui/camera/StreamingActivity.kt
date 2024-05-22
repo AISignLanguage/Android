@@ -5,12 +5,10 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Base64
 import android.util.Log
-import android.widget.Button
-import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -26,7 +24,6 @@ import com.example.ai_language.databinding.ActivityStreamingBinding
 import com.google.common.util.concurrent.ListenableFuture
 import io.socket.client.IO
 import io.socket.client.Socket
-import android.util.Base64
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.net.URISyntaxException
@@ -41,23 +38,19 @@ class StreamingActivity : BaseActivity<ActivityStreamingBinding>(R.layout.activi
     private val handler = Handler(Looper.getMainLooper())
     private var isStreaming = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-
-        // Initialize Socket.IO
-        try {
-            socket = IO.socket("http://34.64.202.194:5000")
-        } catch (e: URISyntaxException) {
-            e.printStackTrace()
-        }
-
+    override fun onStart() {
+        super.onStart()
+        socket = IO.socket("http://34.64.202.194:5000")
         socket.connect()
         socket.on(Socket.EVENT_CONNECT) {
             Log.d("MainActivity", "Connected to server")
         }
-
+    }
+    override fun setLayout() {
+        try {
+        } catch (e: URISyntaxException) {
+            e.printStackTrace()
+        }
         val requestPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
@@ -68,7 +61,11 @@ class StreamingActivity : BaseActivity<ActivityStreamingBinding>(R.layout.activi
             }
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             startCamera()
         } else {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
@@ -91,9 +88,6 @@ class StreamingActivity : BaseActivity<ActivityStreamingBinding>(R.layout.activi
         }
     }
 
-    override fun setLayout() {
-        TODO("Not yet implemented")
-    }
 
     private fun startCamera() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
@@ -132,19 +126,21 @@ class StreamingActivity : BaseActivity<ActivityStreamingBinding>(R.layout.activi
             return
         }
 
-        imageCapture.takePicture(ContextCompat.getMainExecutor(this), object : ImageCapture.OnImageCapturedCallback() {
-            override fun onCaptureSuccess(image: ImageProxy) {
-                var bitmap = imageToBitmap(image)
-                bitmap = rotateBitmapIfNeeded(bitmap, image)
-                Log.d("MainActivity", "Photo captured")
-                uploadFrame(bitmap)
-                image.close()
-            }
+        imageCapture.takePicture(
+            ContextCompat.getMainExecutor(this),
+            object : ImageCapture.OnImageCapturedCallback() {
+                override fun onCaptureSuccess(image: ImageProxy) {
+                    var bitmap = imageToBitmap(image)
+                    bitmap = rotateBitmapIfNeeded(bitmap, image)
+                    Log.d("MainActivity", "Photo captured")
+                    uploadFrame(bitmap)
+                    image.close()
+                }
 
-            override fun onError(exception: ImageCaptureException) {
-                Log.e("MainActivity", "Photo capture failed: ${exception.message}", exception)
-            }
-        })
+                override fun onError(exception: ImageCaptureException) {
+                    Log.e("MainActivity", "Photo capture failed: ${exception.message}", exception)
+                }
+            })
     }
 
     private fun imageToBitmap(image: ImageProxy): Bitmap {
@@ -152,7 +148,12 @@ class StreamingActivity : BaseActivity<ActivityStreamingBinding>(R.layout.activi
         val bytes = ByteArray(buffer.remaining())
         buffer.get(bytes)
         val originalBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-        return Bitmap.createScaledBitmap(originalBitmap, originalBitmap.width / 4, originalBitmap.height / 4, true) // 이미지 크기 줄이기
+        return Bitmap.createScaledBitmap(
+            originalBitmap,
+            originalBitmap.width / 4,
+            originalBitmap.height / 4,
+            true
+        ) // 이미지 크기 줄이기
     }
 
     private fun rotateBitmapIfNeeded(bitmap: Bitmap, image: ImageProxy): Bitmap {
@@ -173,18 +174,24 @@ class StreamingActivity : BaseActivity<ActivityStreamingBinding>(R.layout.activi
         handler.post(object : Runnable {
             override fun run() {
                 if (isStreaming) {
-                    imageCapture.takePicture(ContextCompat.getMainExecutor(this@StreamingActivity), object : ImageCapture.OnImageCapturedCallback() {
-                        override fun onCaptureSuccess(image: ImageProxy) {
-                            var bitmap = imageToBitmap(image)
-                            bitmap = rotateBitmapIfNeeded(bitmap, image)
-                            uploadFrame(bitmap)
-                            image.close()
-                        }
+                               imageCapture.takePicture(
+                        ContextCompat.getMainExecutor(this@StreamingActivity),
+                        object : ImageCapture.OnImageCapturedCallback() {
+                            override fun onCaptureSuccess(image: ImageProxy) {
+                                var bitmap = imageToBitmap(image)
+                                bitmap = rotateBitmapIfNeeded(bitmap, image)
+                                uploadFrame(bitmap)
+                                image.close()
+                            }
 
-                        override fun onError(exception: ImageCaptureException) {
-                            Log.e("MainActivity", "Frame capture failed: ${exception.message}", exception)
-                        }
-                    })
+                            override fun onError(exception: ImageCaptureException) {
+                                Log.e(
+                                    "MainActivity",
+                                    "Frame capture failed: ${exception.message}",
+                                    exception
+                                )
+                            }
+                        })
                     handler.postDelayed(this, 200) // 100ms 간격으로 프레임 캡처 (프레임 레이트 조정)
                 }
             }
