@@ -23,7 +23,6 @@ class VideoActivity : BaseActivity<ActivityVideoBinding>(R.layout.activity_video
         binding.webview.settings.domStorageEnabled = true
 
         // 로컬 네트워크의 서버 주소와 포트 번호, 방 번호를 확인하세요
-        val roomNumber = "1"
         val serverUrl = "http://34.64.202.194:5000/"
         binding.webview.loadUrl(serverUrl)
     }

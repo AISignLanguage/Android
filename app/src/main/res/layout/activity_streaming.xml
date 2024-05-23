@@ -65,6 +65,19 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
             android:text="Result" />
+
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="20dp"
+            android:text="room ID "
+            android:textColor="@color/white"
+            android:id="@+id/tv_room_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
