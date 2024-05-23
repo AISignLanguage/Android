@@ -53,6 +53,7 @@ plugins {
             buildConfigField("String", "Speech_to_Text_key_id", properties.getProperty("Speech_to_Text_key_id"))
             buildConfigField("String", "Speech_to_Text_key_secret", properties.getProperty("Speech_to_Text_key_secret"))
             buildConfigField("String", "Dictionary_Api_key", properties.getProperty("Dictionary_Api_key"))
+            buildConfigField("String", "Dictionary_Api_key2", properties.getProperty("Dictionary_Api_key2"))
 
 
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
