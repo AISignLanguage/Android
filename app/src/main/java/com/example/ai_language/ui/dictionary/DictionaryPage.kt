@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.ai_language.BuildConfig
 import com.example.ai_language.ui.home.Home
 import com.example.ai_language.R
 import com.example.ai_language.Util.RetrofitClient
@@ -62,7 +63,7 @@ class DictionaryPage :
 
     private fun startServer() {
         dicViewModel.getDictionaryByOpenApi(
-            "73de7874-baa6-4268-8909-f5eb6d3decb6",
+            BuildConfig.Dictionary_Api_key,
             "100",
             "1"
         )
