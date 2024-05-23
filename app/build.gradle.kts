@@ -52,6 +52,8 @@ plugins {
             buildConfigField("String", "Kakao_app_key", properties.getProperty("Kakao_app_key"))
             buildConfigField("String", "Speech_to_Text_key_id", properties.getProperty("Speech_to_Text_key_id"))
             buildConfigField("String", "Speech_to_Text_key_secret", properties.getProperty("Speech_to_Text_key_secret"))
+            buildConfigField("String", "Dictionary_Api_key", properties.getProperty("Dictionary_Api_key"))
+
 
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
