@@ -79,6 +79,8 @@ class ChangePw : BaseActivity<ActivityChangePwBinding>(R.layout.activity_change_
                                         "비밀번호가 성공적으로 변경되었습니다.",
                                         Toast.LENGTH_SHORT
                                     ).show()
+
+                                    disableAutoLogin()
                                     showChangeDialog()
                                 } else {
                                     Log.d("로그", "현재 비밀번호가 일치하지 않습니다.")
@@ -97,6 +99,12 @@ class ChangePw : BaseActivity<ActivityChangePwBinding>(R.layout.activity_change_
                 })
             }
         }
+    }
+
+    // 자동 로그인 해제 (EncryptedSharedPreferences에서 정보 삭제)
+    private fun disableAutoLogin() {
+        val sharedPreferencesManager = EncryptedSharedPreferencesManager(this)
+        sharedPreferencesManager.clearPreferences()
     }
 
     private fun showChangeDialog() {
