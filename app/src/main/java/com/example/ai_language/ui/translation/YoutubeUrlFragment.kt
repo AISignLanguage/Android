@@ -122,7 +122,7 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
             repeatOnLifecycle(Lifecycle.State.CREATED){
                 translationViewModel.wavUrl.collectLatest {
                     val trUrl = it.url.replace("/static/static","/static")
-                    binding.etRemoteFileInfo.setText("http://34.64.212.107:8000"+trUrl)
+                    binding.etRemoteFileInfo.setText("http://34.64.202.194:8000"+trUrl)
                     link = it.url
                 }
             }
