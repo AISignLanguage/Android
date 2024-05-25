@@ -82,6 +82,13 @@ class MapViewModel @Inject constructor(
     private val _startLoc = MutableLiveData<String>()
     var startLoc: LiveData<String> = _startLoc
 
+    private val _dest = MutableLiveData<Pair<String, String>>()
+    var dest : LiveData<Pair<String,String>> = _dest
+
+    fun setDestData(a : String, b : String){
+        _dest.value = Pair(a,b)
+    }
+
     var startLatLng = com.naver.maps.geometry.LatLng(0.0, 0.0)
     var endLatLng = com.naver.maps.geometry.LatLng(0.0, 0.0)
 
