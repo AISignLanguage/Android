@@ -78,7 +78,7 @@
                     android:layout_marginTop="20dp"
                     android:text="@{@string/formatted_address(directionInfoData.startAddress, directionInfoData.endAddress)}"
                     android:textColor="@color/white"
-                    android:textSize="30dp"
+                    android:textSize="20dp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@id/tv_arrive_time"
@@ -112,11 +112,13 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="10dp"
                 android:id="@+id/rv_direction_detail"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 tools:listitem="@layout/item_walking_detail"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lo_info" />
