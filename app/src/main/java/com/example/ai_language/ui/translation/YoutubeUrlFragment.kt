@@ -1,6 +1,5 @@
 package com.example.ai_language.ui.translation
 
-import android.graphics.Bitmap.Config
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -31,6 +30,7 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
     private var link = ""
     private val translationViewModel by viewModels<TranslationViewModel>()
 
+    // *** 추가 여기부터
     private lateinit var remoteUrl: String
 
     private lateinit var languageCodeKorName: Array<String>
@@ -38,31 +38,35 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
     private lateinit var languageMap: Map<String, String>
     private lateinit var spinnerAdapter: SpinnerAdapter
     private lateinit var languageSpinner: Spinner
+    // *** 까지
 
     override fun setLayout() {
         setMap()
+       // setSpinner()
 
         initYouTubePlayerView()
         viewModelScope()
     }
 
+    // 스피너에 사용할 맵 초기화 및 스피너 초기화, 스피너 어댑터 설정
     private fun setMap() {
         languageCodeKorName = resources.getStringArray(R.array.language_code_kor)
         languageCodeValue = resources.getStringArray(R.array.language_code)
         languageMap = languageCodeKorName.zip(languageCodeValue).toMap()
-    }
-
-    private fun setSpinner() {
 
         languageSpinner = binding.languageSpinner
         spinnerAdapter = SpinnerAdapter(requireContext(), languageCodeKorName, languageMap)
         languageSpinner.adapter = spinnerAdapter
+    }
+
+    private fun setSpinner() {
 
         // 스피너 선택 이벤트 리스너 설정
         languageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
 
                 val selectedLanguageCode = spinnerAdapter.getLanguageCode(position) // 선택된 항목의 언어 코드 가져오기
+                Log.d("로그", "selectedLanguageCode: $selectedLanguageCode")
                 onClickRemote(selectedLanguageCode)
             }
 
@@ -103,7 +107,7 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
                             youTubePlayer.loadVideo(videoId, 0f)
                         }
                     })
-                    setSpinner()
+                    setSpinner()     // *** 추가 ***
                 } else {
                     binding.etYoutubeUrl.setText("URL 주소 오류")
                 }
@@ -145,7 +149,7 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
     }
 
     private fun viewModelScope(){
-        //setSpinner()
+        //setSpinner()      // *** 추가 ***
         sendRemote()
         resultText()
         //onClickRemote()
@@ -172,7 +176,7 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
                 translationViewModel.remote.collectLatest {
                     Log.d("Remote","${it.code} : ${it.msg} , ${it.taskId}")
                     //binding.tvFileKey.text = it.taskId
-                    binding.etRemoteFileInfo.setText(it.taskId)
+                    binding.etRemoteFileInfo.setText(it.taskId)     // *** 추가 ***
                     link = it.taskId
                 }
             }
@@ -183,7 +187,8 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
             repeatOnLifecycle(Lifecycle.State.CREATED){
                 translationViewModel.wavUrl.collectLatest {
                     val trUrl = it.url.replace("/static/static","static")
-                    binding.etRemoteFileInfo.setText(BuildConfig.Main_Server_8000+trUrl)
+                    remoteUrl=BuildConfig.Main_Server_8000+trUrl    // *** 추가 ***
+                    //binding.etRemoteFileInfo.setText(BuildConfig.Main_Server_8000+trUrl)
                     link = it.url
                 }
             }
