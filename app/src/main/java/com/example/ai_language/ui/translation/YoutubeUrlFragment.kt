@@ -1,6 +1,8 @@
 package com.example.ai_language.ui.translation
 
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -10,6 +12,7 @@ import com.example.ai_language.R
 import com.example.ai_language.base.BaseFragment
 import com.example.ai_language.databinding.FragmentYoutubeUrlBinding
 import com.example.ai_language.domain.model.response.WavUrlResponse
+import com.example.ai_language.ui.translation.adapter.SpinnerAdapter
 import com.example.ai_language.ui.translation.viewmodel.TranslationViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -18,6 +21,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+
 @AndroidEntryPoint
 class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.fragment_youtube_url) {
     private lateinit var youTubePlayerView: YouTubePlayerView
@@ -25,12 +29,48 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
     private var link = ""
     private val translationViewModel by viewModels<TranslationViewModel>()
 
+    private lateinit var remoteUrl: String
+
+    private lateinit var languageCodeKorName: Array<String>
+    private lateinit var languageCodeValue: Array<String>
+    private lateinit var languageMap: Map<String, String>
+    private lateinit var spinnerAdapter: SpinnerAdapter
+
     override fun setLayout() {
+        setMap()
         initYouTubePlayerView()
         viewModelScope()
     }
 
+    private fun setMap() {
+        languageCodeKorName = resources.getStringArray(R.array.language_code_kor)
+        languageCodeValue = resources.getStringArray(R.array.language_code)
+        languageMap = languageCodeKorName.zip(languageCodeValue).toMap()
+    }
+
+    private fun setSpinner() {
+
+        spinnerAdapter = SpinnerAdapter(requireContext(), languageCodeKorName, languageMap)
+        binding.languageSpinner.adapter = spinnerAdapter
+
+        // 스피너 선택 이벤트 리스너 설정
+        binding.languageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+
+                val selectedLanguageCode = spinnerAdapter.getLanguageCode(position) // 선택된 항목의 언어 코드 가져오기
+                onClickRemote(selectedLanguageCode)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // 아무 작업도 수행하지 않음
+            }
+        }
+
+    }
+
     private fun initYouTubePlayerView() {
+
+        // youTubePlayerView 초기화 및 라이프사이클 옵저버 추가
         youTubePlayerView = binding.yvYoutubePlay
         lifecycle.addObserver(youTubePlayerView)
         youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
@@ -40,13 +80,17 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
             }
         })
 
+        // 전송 버튼 클릭
         binding.btnYoutubeLink.setOnClickListener {
             if (isPlayerReady) {
+
+                // URL로부터 동영상 ID를 추출하여 videoId에 저장
                 val url = binding.etYoutubeUrl.text.toString()
                 translationViewModel.getWavUrl(WavUrlResponse(url))
                 val videoId = extractYouTubeVideoId(url)
                 Log.d("youtube", "버튼, $videoId")
 
+                // 동영상 재생
                 if (videoId != null) {
                     // YouTubePlayerCallback 인터페이스를 명시적으로 구현
                     youTubePlayerView.getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
@@ -95,34 +139,46 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
     }
 
     private fun viewModelScope(){
+        setSpinner()
         sendRemote()
         resultText()
-        onClickRemote()
+        //onClickRemote()
     }
-    private fun onClickRemote(){
+    private fun onClickRemote(languageCode: String){
+        Log.d("로그", "languageCode: $languageCode")
+
+        // Task Id 생성 버튼 클릭
         binding.btnSendRemoteApi.setOnClickListener {
             val txt = binding.etRemoteFileInfo.text.toString()
-            translationViewModel.postTextByRemoteFile(BuildConfig.Speech_to_Text_key_id, BuildConfig.Speech_to_Text_key_secret,"ko",txt)
+            translationViewModel.postTextByRemoteFile(BuildConfig.Speech_to_Text_key_id, BuildConfig.Speech_to_Text_key_secret,languageCode,remoteUrl)
         }
         binding.btnGo.setOnClickListener {
             translationViewModel.getTextFileBySpeechFlowApi(BuildConfig.Speech_to_Text_key_id,BuildConfig.Speech_to_Text_key_secret,link,4)
         }
     }
+
     private fun sendRemote(){
+
+        // Task ID를 etRemoteFileInfo에 setText
         lifecycleScope.launch{
             repeatOnLifecycle(Lifecycle.State.CREATED){
                 translationViewModel.remote.collectLatest {
                     Log.d("Remote","${it.code} : ${it.msg} , ${it.taskId}")
-                    binding.tvFileKey.text = it.taskId
+                    //binding.tvFileKey.text = it.taskId
+                    binding.etRemoteFileInfo.setText(it.taskId)
                     link = it.taskId
                 }
             }
         }
+
+        // url 전송
         lifecycleScope.launch{
             repeatOnLifecycle(Lifecycle.State.CREATED){
                 translationViewModel.wavUrl.collectLatest {
                     val trUrl = it.url.replace("/static/static","/static")
-                    binding.etRemoteFileInfo.setText("http://34.64.202.194:8000"+trUrl)
+                    remoteUrl = "http://34.64.202.194:8000"+trUrl
+                    Log.d("remoteUrl", "remoteUrl : $remoteUrl")
+                    //binding.etRemoteFileInfo.setText("http://34.64.202.194:8000"+trUrl)
                     link = it.url
                 }
             }
@@ -147,9 +203,6 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
             }
         }
     }
-
-
-
 
 
 }

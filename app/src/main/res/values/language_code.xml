@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="language_code">
+        <item>ko</item>
+        <item>en</item>
+        <item>fr</item>
+        <item>de</item>
+        <item>id</item>
+        <item>it</item>
+        <item>ja</item>
+        <item>zh</item>
+        <item>pt</item>
+        <item>ru</item>
+        <item>es</item>
+        <item>zht</item>
+        <item>tr</item>
+        <item>vi</item>
+    </string-array>
+
+    <string-array name="language_code_kor">
+        <item>한국어</item>
+        <item>영어</item>
+        <item>프랑스어</item>
+        <item>독일어</item>
+        <item>인도네시아어</item>
+        <item>이탈리아어</item>
+        <item>일본어</item>
+        <item>중국어(간체)</item>
+        <item>포르투갈어</item>
+        <item>러시아어</item>
+        <item>스페인어</item>
+        <item>중국어(번체)</item>
+        <item>튀르키예어</item>
+        <item>베트남어</item>
+    </string-array>
+</resources>
