@@ -3,6 +3,7 @@ package com.example.ai_language.ui.translation
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Spinner
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -35,9 +36,11 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
     private lateinit var languageCodeValue: Array<String>
     private lateinit var languageMap: Map<String, String>
     private lateinit var spinnerAdapter: SpinnerAdapter
+    private lateinit var languageSpinner: Spinner
 
     override fun setLayout() {
         setMap()
+
         initYouTubePlayerView()
         viewModelScope()
     }
@@ -50,11 +53,12 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
 
     private fun setSpinner() {
 
+        languageSpinner = binding.languageSpinner
         spinnerAdapter = SpinnerAdapter(requireContext(), languageCodeKorName, languageMap)
-        binding.languageSpinner.adapter = spinnerAdapter
+        languageSpinner.adapter = spinnerAdapter
 
         // 스피너 선택 이벤트 리스너 설정
-        binding.languageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        languageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
 
                 val selectedLanguageCode = spinnerAdapter.getLanguageCode(position) // 선택된 항목의 언어 코드 가져오기
@@ -98,6 +102,7 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
                             youTubePlayer.loadVideo(videoId, 0f)
                         }
                     })
+                    setSpinner()
                 } else {
                     binding.etYoutubeUrl.setText("URL 주소 오류")
                 }
@@ -139,13 +144,14 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
     }
 
     private fun viewModelScope(){
-        setSpinner()
+        //setSpinner()
         sendRemote()
         resultText()
         //onClickRemote()
     }
     private fun onClickRemote(languageCode: String){
         Log.d("로그", "languageCode: $languageCode")
+        translationViewModel.postTextByRemoteFile(BuildConfig.Speech_to_Text_key_id, BuildConfig.Speech_to_Text_key_secret,languageCode,remoteUrl)
 
         // Task Id 생성 버튼 클릭
         binding.btnSendRemoteApi.setOnClickListener {
