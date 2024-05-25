@@ -55,7 +55,7 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
     private var path: PathOverlay? = null
     private val findRouteTab = arrayListOf("대중교통", "자동차", "도보")
     private lateinit var routeAdapter: RouteAdapter
-
+    private var startTitle = ""
     override fun setLayout() {
         Log.d("TransitFragment", "ViewModel instance: ${mapViewModel.hashCode()}")
         initBottomSheet()
@@ -95,8 +95,8 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
                         "대중교통" -> {
                             mapViewModel.clearMap()
                             startDirection(
-                                binding.etOrigin.text.toString(),
-                                binding.etDestination.text.toString() //view모델 옵저버로
+                                "${mapViewModel.startLatLng.latitude},${mapViewModel.startLatLng.longitude}",
+                                "${mapViewModel.endLatLng.latitude},${mapViewModel.endLatLng.longitude}"
                             )
                         }
 
@@ -221,8 +221,6 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
             mode = "transit",
             apiKey = "AIzaSyCLamg5wXUjHFuF6i_8wka_ZtMCwONPdBY"
         )
-
-
     }
 
 
@@ -268,68 +266,13 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
     }
 
     //다이얼로그 클릭
-    override fun onClickButton(id: Int) {
+    override fun onClickButton(id: Int, title : String) {
         when (id) {
             2 -> { //길찾기
-                Log.d("경로", "onClickButton called with id: $id")
-                lifecycleScope.launch {
-                    thisLocation(SettingMapAction.LOCATION)
-                    repeatOnLifecycle(Lifecycle.State.CREATED) {
-                        mapViewModel.tMapList.collectLatest { response -> //t맵 경로그리기
-                            path?.map = null
-                            path = PathOverlay()
-                            mapViewModel.setPath(path!!)
-                            val pathContainer: MutableList<LatLng> = mutableListOf()
-                            for (feature in response.features) {
-                                Log.d("경로:패스", "${feature.geometry}")
-                                val coordinates = feature.geometry.coordinates
-                                when (feature.geometry.type) {
-                                    "Point" -> {
-                                        if (coordinates is List<*>) {
-                                            val longitude = (coordinates[0] as? Double) ?: 0.0
-                                            val latitude = (coordinates[1] as? Double) ?: 0.0
-                                            val point = LatLng(latitude, longitude)
-                                            pathContainer.add(point)
-                                        }
-                                    }
-
-                                    "LineString" -> {
-                                        if (coordinates is List<*>) {
-                                            for (coordinate in coordinates) {
-                                                if (coordinate is List<*>) {
-                                                    val longitude =
-                                                        (coordinate[0] as? Double) ?: 0.0
-                                                    val latitude = (coordinate[1] as? Double) ?: 0.0
-                                                    val point = LatLng(latitude, longitude)
-                                                    pathContainer.add(point)
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    else -> {
-                                        // 기타 경우 처리
-                                    }
-                                }
-                            }
-
-                            if (pathContainer.size >= 2) {
-                                mapViewModel.clearMap()
-                                path!!.coords = pathContainer
-                                path!!.color = Color.GREEN
-                                path!!.map = naverMap
-                                val cameraUpdate = CameraUpdate.scrollTo(path!!.coords[0])
-                                    .animate(CameraAnimation.Fly, 3000)
-                                naverMap.moveCamera(cameraUpdate)
-                                Toast.makeText(this@MapActivity, "경로안내 시작", Toast.LENGTH_SHORT)
-                                    .show()
-                            } else {
-                                Log.d("MapActivity", "경로를 구성하는 좌표가 2개 미만입니다: ${pathContainer.size}")
-                                // 적절한 오류 처리 또는 사용자 알림
-                            }
-                        }
-                    }
-                }
+                binding.etOrigin.setText("내 위치")
+                startTitle = title
+                binding.etDestination.setText(title)
+                thisLocation(SettingMapAction.LOCATION)
             }
 
             1 -> {
@@ -378,6 +321,18 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
                         val currentLatLng = LatLng(location.latitude, location.longitude)
                         val cameraUpdate = CameraUpdate.scrollTo(currentLatLng)
                         naverMap.moveCamera(cameraUpdate)
+                        val marker = Marker().apply { //마커 세팅
+                            position = currentLatLng
+                            map = naverMap
+                        }
+                        // 마커를 클릭했을 때 해당 위치의 사업자명을 표시하는 다이얼로그 표시
+                        marker.setOnClickListener { overlay ->
+                            overlay as Marker
+                            val cameraUpdate = CameraUpdate.scrollTo(currentLatLng)
+                            naverMap.moveCamera(cameraUpdate) // 마커클릭시 그 위치로 카메라 이동
+                            goal = overlay.position
+                            true
+                        }
                     }
 
                     SettingMapAction.LOCATION -> {
@@ -385,7 +340,11 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
                         val cameraUpdate = CameraUpdate.scrollTo(currentLatLng)
                         naverMap.moveCamera(cameraUpdate)
                         val start = "${currentLatLng.latitude},${currentLatLng.longitude}"
-                        startRoute2(currentLatLng, goal, "출발지", "도착지") //T-Map, 길찾기
+                        mapViewModel.btnState = true
+                        mapViewModel.setStartLoc("내 위치", currentLatLng)
+                        mapViewModel.setEndLoc(startTitle, LatLng(0.0,0.0))
+                        startDirection(start, startTitle)
+                        binding.vpDirectionRoute.setCurrentItem(0, true)
                     }
                 }
             } else {
