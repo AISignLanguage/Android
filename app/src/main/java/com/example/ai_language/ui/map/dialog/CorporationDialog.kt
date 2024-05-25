@@ -94,7 +94,7 @@ class CorporationDialog(
 
     //버튼 클릭시 이벤트
     private fun onButtonClicked(buttonId: Int) {
-        detailImWriteDialogInterface.onClickButton(buttonId)
+        detailImWriteDialogInterface.onClickButton(buttonId,mapDialogData.title)
         dismiss()
     }
 
