@@ -1,5 +1,6 @@
 package com.example.ai_language.ui.translation
 
+import android.graphics.Bitmap.Config
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -181,10 +182,8 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
         lifecycleScope.launch{
             repeatOnLifecycle(Lifecycle.State.CREATED){
                 translationViewModel.wavUrl.collectLatest {
-                    val trUrl = it.url.replace("/static/static","/static")
-                    remoteUrl = "http://34.64.202.194:8000"+trUrl
-                    Log.d("remoteUrl", "remoteUrl : $remoteUrl")
-                    //binding.etRemoteFileInfo.setText("http://34.64.202.194:8000"+trUrl)
+                    val trUrl = it.url.replace("/static/static","static")
+                    binding.etRemoteFileInfo.setText(BuildConfig.Main_Server_8000+trUrl)
                     link = it.url
                 }
             }
@@ -209,6 +208,9 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
             }
         }
     }
+
+
+
 
 
 }

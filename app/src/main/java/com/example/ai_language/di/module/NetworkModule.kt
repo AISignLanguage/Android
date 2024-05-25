@@ -10,6 +10,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -72,6 +73,9 @@ object NetworkModule {
         tokenInterceptor: XAccessTokenInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS) // 연결 타임아웃 설정 (15초)
+            .readTimeout(60, TimeUnit.SECONDS)     // 읽기 타임아웃 설정 (15초)
+            .writeTimeout(60, TimeUnit.SECONDS)    // 쓰기 타임아웃 설정 (15초)
             .addInterceptor(interceptor)
             .addInterceptor(tokenInterceptor)
             .build()
