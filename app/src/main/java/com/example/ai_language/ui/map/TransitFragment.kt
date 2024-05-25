@@ -33,6 +33,8 @@ import com.naver.maps.map.overlay.PathOverlay
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
 class TransitFragment : BaseFragment<FragmentTransitBinding>(R.layout.fragment_transit) {
@@ -52,6 +54,16 @@ class TransitFragment : BaseFragment<FragmentTransitBinding>(R.layout.fragment_t
     }
 
 
+    private fun formatCurrentTimeWithAddedTime(hour: Long, min: Long): String {
+        // 시간 포맷터 생성
+        val timeFormatter = DateTimeFormatter.ofPattern("h:mm a")
+        // 현재 시각 가져오기
+        val currentTime = LocalDateTime.now()
+        // 시간 추가
+        val newTime = currentTime.plusHours(hour).plusMinutes(min)
+        // 포맷된 시간 문자열 반환
+        return newTime.format(timeFormatter)
+    }
     private fun initObservers() {
         adapter = DirectionDetailAdapter()
         lifecycleScope.launch {

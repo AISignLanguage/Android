@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -20,23 +19,18 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.ai_language.R
 import com.example.ai_language.base.BaseFragment
 import com.example.ai_language.databinding.FragmentWalkingBinding
-import com.example.ai_language.domain.model.request.TmapDTO
 import com.example.ai_language.domain.model.response.Feature
-import com.example.ai_language.domain.model.response.Leg
-import com.example.ai_language.domain.model.response.Location
-import com.example.ai_language.ui.map.adapter.DirectionDetailAdapter
 import com.example.ai_language.ui.map.adapter.WalkDirectionAdapter
-import com.example.ai_language.ui.map.data.DirectionInfoData
 import com.example.ai_language.ui.map.viewModel.MapViewModel
 import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.CameraAnimation
-import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.overlay.PathOverlay
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
 class WalkingFragment : BaseFragment<FragmentWalkingBinding>(R.layout.fragment_walking) {
@@ -52,15 +46,40 @@ class WalkingFragment : BaseFragment<FragmentWalkingBinding>(R.layout.fragment_w
         Log.d("시간", time)
         val fTime = time.toInt()
         return if (fTime > 60) {
-            if (fTime > 3600)
-                "${fTime / 3600}시간 ${fTime / 60}분"
-            else
+            if (fTime > 3600) {
+                "${fTime / 3600}시간 ${fTime % 60}분"
+            } else
                 "${fTime / 60}분"
         } else {
             "0분"
         }
+
     }
 
+    private fun formatTimeDis(time: String) {
+        val fTime = time.toInt()
+        val timeFormatter = DateTimeFormatter.ofPattern("h:mm a")
+        binding.tvDepartureTime.text = "출발 시간 :"+LocalDateTime.now().format(timeFormatter)
+        if (fTime > 60) {
+            if (fTime > 3600) {
+                binding.tvArriveTime.text="도착 시간 :"+formatCurrentTimeWithAddedTime((fTime / 3600).toLong(), (fTime / 60).toLong()).replace("오후" , "PM").replace("오전","AM")
+            } else
+                binding.tvArriveTime.text="도착 시간 :"+formatCurrentTimeWithAddedTime(0, (fTime / 60).toLong()).replace("오후" , "PM").replace("오전","AM")
+        } else {
+            "0분"
+        }
+
+    }
+    private fun formatCurrentTimeWithAddedTime(hour: Long, min: Long): String {
+        // 시간 포맷터 생성
+        val timeFormatter = DateTimeFormatter.ofPattern("h:mm a")
+        // 현재 시각 가져오기
+        val currentTime = LocalDateTime.now()
+        // 시간 추가
+        val newTime = currentTime.plusHours(hour).plusMinutes(min)
+        // 포맷된 시간 문자열 반환
+        return newTime.format(timeFormatter)
+    }
     private fun formatDistance(distance: String): String {
         val fDis = distance.toInt()
         return if (fDis > 1000)
@@ -68,6 +87,8 @@ class WalkingFragment : BaseFragment<FragmentWalkingBinding>(R.layout.fragment_w
         else
             "${fDis}m"
     }
+
+
 
     private fun initObservers() {
         adapter = WalkDirectionAdapter()
@@ -77,13 +98,14 @@ class WalkingFragment : BaseFragment<FragmentWalkingBinding>(R.layout.fragment_w
                     val fet = response.features
                     if (response.features.isNotEmpty()) {
                         binding.tvAddress.text =
-                            "${mapViewModel.startLoc.value}\n<->${mapViewModel.endLoc.value}"
+                            "${mapViewModel.startLoc.value}\n<->\n${mapViewModel.endLoc.value}"
                         val adapterList = mutableListOf<Feature>()
                         val lineList = mutableListOf<Feature>()
                         val pathOverlay = PathOverlay() // 각 단계별로 새 PathOverlay 생성
                         val pathContainer: MutableList<LatLng> = mutableListOf()
                         val totalInfo = fet.find { it.properties.totalDistance > 0 }
                         val time = formatTime(totalInfo?.properties?.totalTime.toString())
+                        formatTimeDis(totalInfo?.properties?.totalTime.toString())
                         val distance =
                             formatDistance(totalInfo?.properties?.totalDistance.toString())
                         binding.tvDuration.text = time
@@ -101,11 +123,12 @@ class WalkingFragment : BaseFragment<FragmentWalkingBinding>(R.layout.fragment_w
                                             var mc = false
                                             coordinates.forEach { coordinate ->
                                                 if (coordinate is List<*>) {
-                                                    val longitude = (coordinate[0] as? Double) ?: 0.0
+                                                    val longitude =
+                                                        (coordinate[0] as? Double) ?: 0.0
                                                     val latitude = (coordinate[1] as? Double) ?: 0.0
                                                     val point = LatLng(latitude, longitude)
                                                     pathContainer.add(point)
-                                                    if(!mc) {
+                                                    if (!mc) {
                                                         val desc =
                                                             adapterList[adapterList.size - 1].properties.description
                                                         marker = Marker().apply {
@@ -135,13 +158,15 @@ class WalkingFragment : BaseFragment<FragmentWalkingBinding>(R.layout.fragment_w
                                             mapViewModel.pathOverlays.value?.add(pathOverlay)
                                         }
 
-                                        if(fet[i].geometry.type == fet[i-1].geometry.type){
-                                            fet[i].properties.description = "${formatDistance(fet[i].properties.distance.toString())} 만큼 이동"
-                                            fet[i].properties.time = formatTime(fet[i].properties.time.toString())
-                                            fet[i].properties.distance = formatDistance(fet[i].properties.distance.toString())
+                                        if (fet[i].geometry.type == fet[i - 1].geometry.type) {
+                                            fet[i].properties.description =
+                                                "${formatDistance(fet[i].properties.distance.toString())} 만큼 이동"
+                                            fet[i].properties.time =
+                                                formatTime(fet[i].properties.time.toString())
+                                            fet[i].properties.distance =
+                                                formatDistance(fet[i].properties.distance.toString())
                                             adapterList.add(fet[i])
-                                        }
-                                        else {
+                                        } else {
                                             adapterList[adapterList.size - 1].properties.time =
                                                 formatTime(fet[i].properties.time.toString())
                                             adapterList[adapterList.size - 1].properties.distance =
@@ -151,9 +176,15 @@ class WalkingFragment : BaseFragment<FragmentWalkingBinding>(R.layout.fragment_w
                                                 "${adapterList[adapterList.size - 1].properties.time}"
                                             )
                                         }
-                                    }catch (e : NumberFormatException){
-                                        Log.e("에러","${e.message} , ${formatTime(fet[i].properties.time.toString())}")
-                                        Log.e("에러","${e.message} , ${formatTime(fet[i].properties.distance.toString())}")
+                                    } catch (e: NumberFormatException) {
+                                        Log.e(
+                                            "에러",
+                                            "${e.message} , ${formatTime(fet[i].properties.time.toString())}"
+                                        )
+                                        Log.e(
+                                            "에러",
+                                            "${e.message} , ${formatTime(fet[i].properties.distance.toString())}"
+                                        )
                                     }
                                 }
                             } else {
@@ -163,11 +194,11 @@ class WalkingFragment : BaseFragment<FragmentWalkingBinding>(R.layout.fragment_w
                         }
                         binding.clDetailDirection.visibility = View.VISIBLE
                         binding.tvInfoDis.visibility = View.GONE
-                        for(i in 0..<adapterList.size) {
+                        for (i in 0..<adapterList.size) {
                             Log.d("시간", "${adapterList[i].properties.time}")
                         }
                         adapter.update(adapterList)
-                        Log.d("사이즈","${adapterList.size}")
+                        Log.d("사이즈", "${adapterList.size}")
                         binding.rvDirectionDetail.adapter = adapter
                     } else {
                         binding.clDetailDirection.visibility = View.GONE
