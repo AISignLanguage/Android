@@ -29,6 +29,9 @@ import com.naver.maps.map.overlay.PathOverlay
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
 @AndroidEntryPoint
 class DrivingFragment : BaseFragment<FragmentDrivingBinding> (R.layout.fragment_driving){
     private val mapViewModel by activityViewModels<MapViewModel>()
@@ -50,7 +53,33 @@ class DrivingFragment : BaseFragment<FragmentDrivingBinding> (R.layout.fragment_
             "0분"
         }
     }
+    private fun formatTimeDis(time: String) {
+        val fTime = time.toInt()
+        val timeFormatter = DateTimeFormatter.ofPattern("h:mm a")
+        binding.tvDepartureTime.text = "출발 시간 :"+LocalDateTime.now().format(timeFormatter)
+        if (fTime > 60) {
+            if (fTime > 3600) {
+                binding.tvArriveTime.text="도착 시간 :"+formatCurrentTimeWithAddedTime((fTime / 3600).toLong(), (fTime / 60).toLong()).replace("오후" , "PM").replace("오전","AM")
+            } else
+                binding.tvArriveTime.text="도착 시간 :"+formatCurrentTimeWithAddedTime(0, (fTime / 60).toLong()).replace("오후" , "PM").replace("오전","AM")
+        } else {
+            "0분"
+        }
 
+    }
+    private fun formatCurrentTimeWithAddedTime(hour: Long, min: Long): String {
+        // 시간 포맷터 생성
+        val timeFormatter = DateTimeFormatter.ofPattern("h:mm a")
+
+        // 현재 시각 가져오기
+        val currentTime = LocalDateTime.now()
+
+        // 시간 추가
+        val newTime = currentTime.plusHours(hour).plusMinutes(min)
+
+        // 포맷된 시간 문자열 반환
+        return newTime.format(timeFormatter)
+    }
     private fun formatDistance(distance: String): String {
         val fDis = distance.toInt()
         return if (fDis > 1000)
@@ -67,13 +96,14 @@ class DrivingFragment : BaseFragment<FragmentDrivingBinding> (R.layout.fragment_
                     val fet = response.features
                     if (response.features.isNotEmpty()) {
                         binding.tvAddress.text =
-                            "${mapViewModel.startLoc.value}\n<->${mapViewModel.endLoc.value}"
+                            "${mapViewModel.startLoc.value}\n<->\n${mapViewModel.endLoc.value}"
                         val adapterList = mutableListOf<Feature>()
                         val lineList = mutableListOf<Feature>()
                         val pathOverlay = PathOverlay() // 각 단계별로 새 PathOverlay 생성
                         val pathContainer: MutableList<LatLng> = mutableListOf()
                         val totalInfo = fet.find { it.properties.totalDistance > 0 }
                         val time = formatTime(totalInfo?.properties?.totalTime.toString())
+                        formatTimeDis(totalInfo?.properties?.totalTime.toString())
                         val distance =
                             formatDistance(totalInfo?.properties?.totalDistance.toString())
                         binding.tvDuration.text = time
