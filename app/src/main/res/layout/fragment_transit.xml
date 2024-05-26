@@ -76,6 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
                     android:text="@{@string/formatted_address(directionInfoData.startAddress, directionInfoData.endAddress)}"
                     android:textColor="@color/white"
                     android:textSize="20dp"
@@ -91,23 +92,22 @@
                 android:layout_marginEnd="20dp"
                 android:text="@{directionInfoData.duration}"
                 android:textColor="@color/white"
-                android:textSize="40dp"
+                android:textSize="30dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/tv_arrive_time"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tv_departure_time" />
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="0dp"
-                android:layout_height="52dp"
-                android:text="@{directionInfoData.distance}"
-                android:textColor="@color/white"
-                android:textSize="40dp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/tv_address"
-                app:layout_constraintEnd_toEndOf="@id/tv_duration"
-                app:layout_constraintTop_toTopOf="@+id/tv_address" />
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@{directionInfoData.distance}"
+                    android:textColor="@color/white"
+                    android:textSize="30dp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_address"
+                    app:layout_constraintEnd_toEndOf="@id/tv_duration" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
