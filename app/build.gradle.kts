@@ -235,4 +235,8 @@ dependencies {
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
     implementation ("com.github.hannesa2:AndroidSlidingUpPanel:4.2.1")
 
+
+    //QR code
+    implementation ("com.google.zxing:core:3.4.1")
+    implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
 }
