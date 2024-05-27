@@ -81,17 +81,17 @@ class NewsViewModel : ViewModel() {
 
     private fun createNumberList(): List<NewsViewModelItem> {
         return listOf(
-            NewsViewModelItem("0", "컨텐츠 1", R.drawable.zero),
-            NewsViewModelItem("1", "컨텐츠 1", R.drawable.one),
-            NewsViewModelItem("2", "컨텐츠 2", R.drawable.two),
-            NewsViewModelItem("3", "컨텐츠 3", R.drawable.three),
-            NewsViewModelItem("4", "컨텐츠 1", R.drawable.four),
-            NewsViewModelItem("5", "컨텐츠 2", R.drawable.five),
-            NewsViewModelItem("6", "컨텐츠 3", R.drawable.six),
-            NewsViewModelItem("7", "컨텐츠 1", R.drawable.seven),
-            NewsViewModelItem("8", "컨텐츠 2", R.drawable.eight),
-            NewsViewModelItem("9", "컨텐츠 3", R.drawable.nine),
-            NewsViewModelItem("10", "컨텐츠 3", R.drawable.ten)
+            NewsViewModelItem("0", "", R.drawable.zero),
+            NewsViewModelItem("1", "", R.drawable.one),
+            NewsViewModelItem("2", "", R.drawable.two),
+            NewsViewModelItem("3", "", R.drawable.three),
+            NewsViewModelItem("4", "", R.drawable.four),
+            NewsViewModelItem("5", "", R.drawable.five),
+            NewsViewModelItem("6", "", R.drawable.six),
+            NewsViewModelItem("7", "", R.drawable.seven),
+            NewsViewModelItem("8", "", R.drawable.eight),
+            NewsViewModelItem("9", "", R.drawable.nine),
+            NewsViewModelItem("10", "", R.drawable.ten)
         )
     }
 
