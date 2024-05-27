@@ -23,6 +23,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.ai_language.BuildConfig
 import com.example.ai_language.R
 import com.example.ai_language.base.BaseActivity
 import com.example.ai_language.databinding.ActivityStreamingBinding
@@ -155,7 +156,7 @@ class StreamingActivity : BaseActivity<ActivityStreamingBinding>(R.layout.activi
             Log.d("번호","$pushNum")
             sendSMS2(
                 pushNum,
-                "[손짓의 순간] \n$name 님이 초대되셨습니다! \n초대링크는 34.64.202.194:5000/video_feed/$roomId 입니다.")
+                "[손짓의 순간] \n$name 님이 초대되셨습니다! \n초대링크는 ${BuildConfig.Main_Server_5000}/video_feed/$roomId 입니다.")
         } else {
             ActivityCompat.requestPermissions(
                 this,
@@ -210,7 +211,7 @@ class StreamingActivity : BaseActivity<ActivityStreamingBinding>(R.layout.activi
                 reconnectionAttempts = 5
                 reconnectionDelay = 2000 // 2초
             }
-            socket = IO.socket("http://34.64.202.194:5000", opts)
+            socket = IO.socket(BuildConfig.Main_Server_5000, opts)
             socket.connect()
         } catch (e: URISyntaxException) {
             e.printStackTrace()
@@ -220,7 +221,7 @@ class StreamingActivity : BaseActivity<ActivityStreamingBinding>(R.layout.activi
     // 방 생성
     private fun createRoom() {
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://34.64.202.194:5000")
+            .baseUrl(BuildConfig.Main_Server_5000)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
