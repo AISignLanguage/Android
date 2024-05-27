@@ -10,6 +10,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Point
+import android.net.Uri
 import android.os.Build
 import android.provider.ContactsContract
 import android.telephony.SmsManager
@@ -39,6 +40,7 @@ import com.example.ai_language.ui.call.adapter.InviteListAdapter
 import com.example.ai_language.ui.call.viewmodel.CallListViewModel
 import com.example.ai_language.ui.call.viewmodel.InviteListItem
 import com.example.ai_language.ui.call.viewmodel.InviteViewModel
+import com.example.ai_language.ui.camera.StreamingActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -148,8 +150,13 @@ class CallListFragment : BaseFragment<ActivityCallListBinding>(R.layout.activity
 
         callListAdapter.setOnItemClickListener(object : CallListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-                Toast.makeText(requireContext(), "전화하기", Toast.LENGTH_SHORT).show()
-                val intent = Intent(requireContext(), CallActivity::class.java)
+                val phoneListDTO = callViewModel.getItem(position)
+                val pn = phoneListDTO?.let { editPhoneNumber(it.phoneNumbers.toString()) }
+                Log.d("번호","${pn.toString()}, ${phoneListDTO.name.toString()}")
+                val intent = Intent(requireActivity(),StreamingActivity::class.java).apply {
+                    putExtra("name",phoneListDTO.name.toString())
+                    putExtra("phoneNum",pn.toString())
+                }
                 startActivity(intent)
             }
         })
@@ -178,31 +185,12 @@ class CallListFragment : BaseFragment<ActivityCallListBinding>(R.layout.activity
     }
 
     private fun sendSMS2(phoneNumber: String, message: String) {
-
-        Log.e("번호", "$phoneNumber")
-        val smsManager = SmsManager.getDefault()
-        val sentIntent = PendingIntent.getBroadcast(
-            requireContext().applicationContext,
-            0,
-            Intent("SMS_SENT"),
-            PendingIntent.FLAG_IMMUTABLE // FLAG_IMMUTABLE 사용
-        )
-        smsManager.sendTextMessage("01099410785", null, message, sentIntent, null)
-        smsManager.sendTextMessage("+821099410785", null, message, sentIntent, null)
-        smsManager.sendTextMessage("010-9941-0785", null, message, sentIntent, null)
-        smsManager.sendTextMessage("821099410785", null, message, sentIntent, null)
-
-        requireContext().registerReceiver(object : BroadcastReceiver() {
-            override fun onReceive(arg0: Context, arg1: Intent) {
-                when (resultCode) {
-                    Activity.RESULT_OK -> Log.e("번호", "ok")
-                    SmsManager.RESULT_ERROR_GENERIC_FAILURE -> Log.e("번호", "RESULT_ERROR_GENERIC_FAILURE")
-                    SmsManager.RESULT_ERROR_NO_SERVICE -> Log.e("번호", "RESULT_ERROR_NO_SERVICE")
-                    SmsManager.RESULT_ERROR_NULL_PDU -> Log.e("번호", "RESULT_ERROR_NULL_PDU")
-                    SmsManager.RESULT_ERROR_RADIO_OFF -> Log.e("번호", "RESULT_ERROR_RADIO_OFF")
-                }
-            }
-        }, IntentFilter("SMS_SENT"))
+        Log.e("번호", phoneNumber)
+        val smsUri = Uri.parse("smsto:" + phoneNumber) //phonNumber에는 01012345678과 같은 구성.
+        val intent = Intent(Intent.ACTION_SENDTO)
+        intent.setData(smsUri)
+        intent.putExtra("sms_body", message) //해당 값에 전달하고자 하는 문자메시지 전달
+        startActivity(intent)
     }
 
     private fun editPhoneNumber(num: String) = num.replace("-", "")
