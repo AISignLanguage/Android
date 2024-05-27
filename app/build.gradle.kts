@@ -38,7 +38,7 @@ plugins {
             targetSdk = 33
             versionCode = 1
             versionName = "1.0"
-
+            buildConfigField("String", "Main_Server_5000", properties.getProperty("Main_Server_5000"))
             buildConfigField("String", "gmail_sender_id", properties.getProperty("gmail_sender_id"))
             buildConfigField("String", "gmail_sender_pwd", properties.getProperty("gmail_sender_pwd"))
             buildConfigField("String", "Main_Server", properties.getProperty("Main_Server"))
