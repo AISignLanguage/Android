@@ -1,15 +1,18 @@
 package com.example.ai_language.ui.camera
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.net.Uri
 import android.os.AsyncTask
 import android.os.Handler
 import android.os.Looper
 import android.util.Base64
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -18,10 +21,12 @@ import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.ai_language.R
 import com.example.ai_language.base.BaseActivity
 import com.example.ai_language.databinding.ActivityStreamingBinding
+import com.example.ai_language.ui.call.CallListFragment
 import com.google.common.util.concurrent.ListenableFuture
 import io.socket.client.IO
 import io.socket.client.Socket
@@ -64,9 +69,9 @@ class StreamingActivity : BaseActivity<ActivityStreamingBinding>(R.layout.activi
             startStreaming()
         }
 
-        binding.stopStreamingButton.setOnClickListener {
-            isStreaming = false
-        }
+//        binding.stopStreamingButton.setOnClickListener {
+//            isStreaming = false
+//        }
     }
 
     private fun requestPermissions() {
@@ -137,6 +142,35 @@ class StreamingActivity : BaseActivity<ActivityStreamingBinding>(R.layout.activi
             }
         })
     }
+    private fun permissionMessage(num: String, name: String) {
+        val pushNum = num.replaceFirst("010", "+8210")
+        Log.d("dkk번호","$name, $pushNum")
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.SEND_SMS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            Log.d("번호","$pushNum")
+            sendSMS2(
+                pushNum,
+                "[손짓의 순간] \n$name 님이 초대되셨습니다! \n초대링크는 34.64.202.194:5000/video_feed/$roomId 입니다.")
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.SEND_SMS),
+                CallListFragment.SMS_PERMISSION_CODE // 권한 요청 코드를 정의해야 함
+            )
+        }
+    }
+
+    private fun sendSMS2(phoneNumber: String, message: String) {
+        Log.e("번호", phoneNumber)
+        val smsUri = Uri.parse("smsto:" + phoneNumber) //phonNumber에는 01012345678과 같은 구성.
+        val intent = Intent(Intent.ACTION_SENDTO)
+        intent.setData(smsUri)
+        intent.putExtra("sms_body", message) //해당 값에 전달하고자 하는 문자메시지 전달
+        startActivity(intent)
+    }
 
     private fun imageProxyToBitmap(image: ImageProxy): Bitmap {
         val buffer: ByteBuffer = image.planes[0].buffer
@@ -192,6 +226,15 @@ class StreamingActivity : BaseActivity<ActivityStreamingBinding>(R.layout.activi
                 if (response.isSuccessful) {
                     roomId = response.body()?.room_id ?: 0
                     binding.tvRoomId.text = "Room ID: $roomId"
+                    val name = intent.getStringExtra("name")
+                    val num = intent.getStringExtra("phoneNum")
+                    if(name != null && num != null) {
+                        permissionMessage(num,name)
+                        Log.d("dd번호","$name $num")
+                    }
+                    else{
+                        Toast.makeText(this@StreamingActivity,"없는 번호이거나, 잘못된 번호입니다.",Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
 

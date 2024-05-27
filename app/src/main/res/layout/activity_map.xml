@@ -21,7 +21,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="140dp"
                 android:layout_marginEnd="20dp"
-                android:backgroundTint="@color/blue_main"
+                android:backgroundTint="@android:color/transparent"
+                android:foreground="@drawable/group_128"
+                android:src="@drawable/group_128"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/map_fragment" />
 
@@ -56,26 +58,30 @@
 
                 <EditText
                     android:id="@+id/et_origin"
-                    android:layout_width="300dp"
-                    android:layout_height="50dp"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/rounded_square_20dp_width2dp"
                     android:hint="출발지를 입력해주세요."
                     android:maxLength="8"
                     android:paddingStart="20dp"
+                    app:layout_constraintEnd_toStartOf="@+id/bt_search_route"
                     app:layout_constraintStart_toStartOf="@id/cl_search_bar"
                     app:layout_constraintTop_toTopOf="@id/cl_search_bar" />
 
 
                 <EditText
                     android:id="@+id/et_destination"
-                    android:layout_width="300dp"
-                    android:layout_height="50dp"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/rounded_square_20dp_width2dp"
                     android:hint="도착지를 입력해주세요."
                     android:maxLength="8"
                     android:paddingStart="20dp"
+                    app:layout_constraintEnd_toStartOf="@+id/bt_search_route"
                     app:layout_constraintStart_toStartOf="@id/et_origin"
                     app:layout_constraintTop_toBottomOf="@id/et_origin" />
 
