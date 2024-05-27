@@ -81,13 +81,16 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
 
+    // 모델 관련
     private lateinit var viewFinder: PreviewView
     private lateinit var detectionInfo: TextView
     private lateinit var model: Module
-
     private lateinit var classNames: List<String>
 
+    // Speech to Text
+    private lateinit var recordBtn: ImageButton
     private lateinit var speechRecognizer: SpeechRecognizer
+    private var isRecording = false
 
     // 카메라 작업을 수행하기 위한 스레드 풀을 관리 (메인 스레드와 별도로 동작)
     private lateinit var cameraExecutor: ExecutorService
@@ -95,7 +98,6 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
     private val recognitionListener: RecognitionListener = object : RecognitionListener {
         // 말하기 시작할 준비가되면 호출
         override fun onReadyForSpeech(params: Bundle) {
-            Toast.makeText(applicationContext, "음성인식 시작", Toast.LENGTH_SHORT).show()
             //binding.tvState.text = "이제 말씀하세요!"
             Log.d("로그", "이제 말씀하세요!")
         }
@@ -133,7 +135,8 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
         override fun onResults(results: Bundle) {
             // 말을 하면 ArrayList에 단어를 넣고 textView에 단어를 이어줌
             val matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-            for (i in matches!!.indices) binding.test.text = matches[i]
+            for (i in matches!!.indices) binding.ttsTextTv.text = matches[i]
+            speechRecognizer.startListening(intent)
         }
         // 부분 인식 결과를 사용할 수 있을 때 호출
         override fun onPartialResults(partialResults: Bundle) {}
@@ -164,28 +167,29 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
         }
     }
 
+    // 녹음 시작
+    private fun startRecord() {
+        isRecording = true
+
+        recordBtn.setImageResource(R.drawable.mike_on_orignal)
+        Toast.makeText(this, "음성 녹음 시작", Toast.LENGTH_SHORT).show()
+
+        speechRecognizer=SpeechRecognizer.createSpeechRecognizer(this@CameraPage)
+        speechRecognizer.setRecognitionListener(recognitionListener)    // 리스너 설정
+        speechRecognizer.startListening(intent)                         // 듣기 시작
+    }
+
+    // 녹음 중지
+    private fun stopRecord() {
+        isRecording = false
+
+        recordBtn.setImageResource(R.drawable.mike_off_original)
+        speechRecognizer.stopListening()
+        Toast.makeText(this, "음성 녹음 중지", Toast.LENGTH_SHORT).show()
+        binding.ttsTextTv.text = ""
+    }
+
     override fun setLayout() {
-        val homeBtn = binding.homeButton
-        homeBtn.setOnClickListener {
-            val intent = Intent(this, Home::class.java)
-            startActivity(intent)
-            finish()
-        }
-
-        // <말하기> 버튼 눌러서 음성인식 시작
-        binding.cameraBtn.setOnClickListener {
-            // 새 SpeechRecognizer 를 만드는 팩토리 메서드
-            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this@CameraPage)
-            speechRecognizer.setRecognitionListener(recognitionListener)    // 리스너 설정
-            speechRecognizer.startListening(intent)                         // 듣기 시작
-        }
-
-        val modelLoader = ModelLoader(this)
-        model = modelLoader.loadModel()
-        classNames = modelLoader.loadClassNames()
-        viewFinder = binding.viewFinder
-        detectionInfo = binding.detectionInfo
-        cameraExecutor = Executors.newSingleThreadExecutor()
 
         // 앱 시작 시 권한 확인 및 요청
         if (!allPermissionsGranted()) {
@@ -194,6 +198,23 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
             startCamera()
         }
 
+        recordBtn = binding.recordBtn
+
+        // 녹음 버튼 눌러서 음성인식 시작
+        binding.recordBtn.setOnClickListener {
+            if (!isRecording) {
+                startRecord()
+            } else {
+                stopRecord()
+            }
+        }
+
+        val modelLoader = ModelLoader(this)
+        model = modelLoader.loadModel()
+        classNames = modelLoader.loadClassNames()
+        viewFinder = binding.viewFinder
+        detectionInfo = binding.detectionInfo
+        cameraExecutor = Executors.newSingleThreadExecutor()
 
     }
 
@@ -215,6 +236,7 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
+        speechRecognizer.stopListening()
     }
 
     // 카메로부터 이미지를 촬영하고 저장하는 함수

@@ -208,7 +208,7 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
                         binding.tvResult.text = it.result
                     }
                     else{
-                        binding.tvResult.text = "error code : ${it.code} : ${it.msg}"
+                        Log.d("Remote", "error code : ${it.code} : ${it.msg}")
                     }
                 }
             }
