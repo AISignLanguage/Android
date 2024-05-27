@@ -16,6 +16,8 @@ import android.graphics.RectF
 import android.graphics.YuvImage
 import android.os.Bundle
 import android.provider.MediaStore
+import android.speech.RecognitionListener
+import android.speech.SpeechRecognizer
 import android.util.Log
 import android.util.Size
 import android.view.MotionEvent
@@ -85,8 +87,59 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
 
     private lateinit var classNames: List<String>
 
+    private lateinit var speechRecognizer: SpeechRecognizer
+
     // 카메라 작업을 수행하기 위한 스레드 풀을 관리 (메인 스레드와 별도로 동작)
     private lateinit var cameraExecutor: ExecutorService
+
+    private val recognitionListener: RecognitionListener = object : RecognitionListener {
+        // 말하기 시작할 준비가되면 호출
+        override fun onReadyForSpeech(params: Bundle) {
+            Toast.makeText(applicationContext, "음성인식 시작", Toast.LENGTH_SHORT).show()
+            //binding.tvState.text = "이제 말씀하세요!"
+            Log.d("로그", "이제 말씀하세요!")
+        }
+        // 말하기 시작했을 때 호출
+        override fun onBeginningOfSpeech() {
+            //binding.tvState.text = "잘 듣고 있어요."
+            Log.d("로그", "잘 듣고 있어요")
+        }
+        // 입력받는 소리의 크기를 알려줌
+        override fun onRmsChanged(rmsdB: Float) {}
+        // 말을 시작하고 인식이 된 단어를 buffer에 담음
+        override fun onBufferReceived(buffer: ByteArray) {}
+        // 말하기를 중지하면 호출
+        override fun onEndOfSpeech() {
+            Log.d("로그", "끝")
+        }
+        // 오류 발생했을 때 호출
+        override fun onError(error: Int) {
+            val message = when (error) {
+                SpeechRecognizer.ERROR_AUDIO -> "오디오 에러"
+                SpeechRecognizer.ERROR_CLIENT -> "클라이언트 에러"
+                SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> "퍼미션 없음"
+                SpeechRecognizer.ERROR_NETWORK -> "네트워크 에러"
+                SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> "네트웍 타임아웃"
+                SpeechRecognizer.ERROR_NO_MATCH -> "찾을 수 없음"
+                SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> "RECOGNIZER 가 바쁨"
+                SpeechRecognizer.ERROR_SERVER -> "서버가 이상함"
+                SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "말하는 시간초과"
+                else -> "알 수 없는 오류임"
+            }
+            //binding.tvState.text = "에러 발생: $message"
+            Log.d("로그", "에러 : $message")
+        }
+        // 인식 결과가 준비되면 호출
+        override fun onResults(results: Bundle) {
+            // 말을 하면 ArrayList에 단어를 넣고 textView에 단어를 이어줌
+            val matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+            for (i in matches!!.indices) binding.test.text = matches[i]
+        }
+        // 부분 인식 결과를 사용할 수 있을 때 호출
+        override fun onPartialResults(partialResults: Bundle) {}
+        // 향후 이벤트를 추가하기 위해 예약
+        override fun onEvent(eventType: Int, params: Bundle) {}
+    }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
@@ -117,6 +170,14 @@ class CameraPage : BaseActivity<ActivityCameraPageBinding>(R.layout.activity_cam
             val intent = Intent(this, Home::class.java)
             startActivity(intent)
             finish()
+        }
+
+        // <말하기> 버튼 눌러서 음성인식 시작
+        binding.cameraBtn.setOnClickListener {
+            // 새 SpeechRecognizer 를 만드는 팩토리 메서드
+            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this@CameraPage)
+            speechRecognizer.setRecognitionListener(recognitionListener)    // 리스너 설정
+            speechRecognizer.startListening(intent)                         // 듣기 시작
         }
 
         val modelLoader = ModelLoader(this)
