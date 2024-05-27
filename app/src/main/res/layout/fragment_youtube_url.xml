@@ -50,6 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+
         <EditText
             android:id="@+id/et_youtube_url"
             android:layout_width="match_parent"
@@ -70,29 +71,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/yv_youtube_play" />
 
-        <EditText
-            android:id="@+id/et_remote_file_info"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:focusable="false"
-            android:background="@drawable/rounded_square_20dp_width2dp"
-            android:ems="10"
-            android:hint="Task ID"
-            android:inputType="text"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:text=""
-            android:textColorHint="#CFCFCF"
-            android:textSize="15dp" />
-
         <Spinner
             android:id="@+id/language_spinner"
             android:layout_width="120dp"
             android:layout_height="30dp"
-            android:textSize="15dp"
+            android:textSize="13dp"
             android:background="@drawable/rounded_square_20dp_width2dp"
             android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"
@@ -146,7 +129,7 @@
                 android:layout_margin="30dp"
                 android:paddingTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

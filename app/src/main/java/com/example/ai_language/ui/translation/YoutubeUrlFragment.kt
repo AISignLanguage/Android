@@ -14,6 +14,7 @@ import com.example.ai_language.base.BaseFragment
 import com.example.ai_language.databinding.FragmentYoutubeUrlBinding
 import com.example.ai_language.domain.model.response.WavUrlResponse
 import com.example.ai_language.ui.translation.adapter.SpinnerAdapter
+import com.example.ai_language.ui.translation.dialog.ProgressDialog
 import com.example.ai_language.ui.translation.viewmodel.TranslationViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -30,7 +31,8 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
     private var link = ""
     private val translationViewModel by viewModels<TranslationViewModel>()
 
-    // *** 추가 여기부터
+    private lateinit var progressBarDialog: ProgressDialog
+
     private lateinit var remoteUrl: String
 
     private lateinit var languageCodeKorName: Array<String>
@@ -38,22 +40,23 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
     private lateinit var languageMap: Map<String, String>
     private lateinit var spinnerAdapter: SpinnerAdapter
     private lateinit var languageSpinner: Spinner
-    // *** 까지
 
     override fun setLayout() {
-        setMap()
-       // setSpinner()
-
+        setupUIComponents()
         initYouTubePlayerView()
         viewModelScope()
     }
 
-    // 스피너에 사용할 맵 초기화 및 스피너 초기화, 스피너 어댑터 설정
-    private fun setMap() {
+    // 스피너에 사용할 맵 초기화 및 스피너 초기화, 스피너 어댑터 설정, 프로그래스바 초기화
+    private fun setupUIComponents() {
+        progressBarDialog = ProgressDialog(requireContext())
+
+        // 배열, 맵 초기화
         languageCodeKorName = resources.getStringArray(R.array.language_code_kor)
         languageCodeValue = resources.getStringArray(R.array.language_code)
         languageMap = languageCodeKorName.zip(languageCodeValue).toMap()
 
+        // 스피너 초기화, 어댑터 설정
         languageSpinner = binding.languageSpinner
         spinnerAdapter = SpinnerAdapter(requireContext(), languageCodeKorName, languageMap)
         languageSpinner.adapter = spinnerAdapter
@@ -64,9 +67,7 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
         // 스피너 선택 이벤트 리스너 설정
         languageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-
                 val selectedLanguageCode = spinnerAdapter.getLanguageCode(position) // 선택된 항목의 언어 코드 가져오기
-                Log.d("로그", "selectedLanguageCode: $selectedLanguageCode")
                 onClickRemote(selectedLanguageCode)
             }
 
@@ -92,7 +93,7 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
         // 전송 버튼 클릭
         binding.btnYoutubeLink.setOnClickListener {
             if (isPlayerReady) {
-
+                progressBarDialog.show()
                 // URL로부터 동영상 ID를 추출하여 videoId에 저장
                 val url = binding.etYoutubeUrl.text.toString()
                 translationViewModel.getWavUrl(WavUrlResponse(url))
@@ -107,11 +108,12 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
                             youTubePlayer.loadVideo(videoId, 0f)
                         }
                     })
-                    setSpinner()     // *** 추가 ***
                 } else {
+                    progressBarDialog.dismiss()
                     binding.etYoutubeUrl.setText("URL 주소 오류")
                 }
             } else {
+                progressBarDialog.dismiss()
                 Log.d("youtube", "Player not ready")
             }
         }
@@ -149,18 +151,16 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
     }
 
     private fun viewModelScope(){
-        //setSpinner()      // *** 추가 ***
+        setSpinner()
         sendRemote()
         resultText()
         //onClickRemote()
     }
     private fun onClickRemote(languageCode: String){
-        Log.d("로그", "languageCode: $languageCode")
-        translationViewModel.postTextByRemoteFile(BuildConfig.Speech_to_Text_key_id, BuildConfig.Speech_to_Text_key_secret,languageCode,remoteUrl)
 
         // Task Id 생성 버튼 클릭
         binding.btnSendRemoteApi.setOnClickListener {
-            val txt = binding.etRemoteFileInfo.text.toString()
+            progressBarDialog.show()
             translationViewModel.postTextByRemoteFile(BuildConfig.Speech_to_Text_key_id, BuildConfig.Speech_to_Text_key_secret,languageCode,remoteUrl)
         }
         binding.btnGo.setOnClickListener {
@@ -170,25 +170,26 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
 
     private fun sendRemote(){
 
-        // Task ID를 etRemoteFileInfo에 setText
+        // Task ID 수신
         lifecycleScope.launch{
             repeatOnLifecycle(Lifecycle.State.CREATED){
                 translationViewModel.remote.collectLatest {
+                    progressBarDialog.dismiss()
                     Log.d("Remote","${it.code} : ${it.msg} , ${it.taskId}")
-                    //binding.tvFileKey.text = it.taskId
-                    binding.etRemoteFileInfo.setText(it.taskId)     // *** 추가 ***
                     link = it.taskId
+                    Log.d("remote", "taskID: $link")
                 }
             }
         }
 
-        // url 전송
+        // url 수신
         lifecycleScope.launch{
             repeatOnLifecycle(Lifecycle.State.CREATED){
                 translationViewModel.wavUrl.collectLatest {
+                    progressBarDialog.dismiss()
                     val trUrl = it.url.replace("/static/static","static")
-                    remoteUrl=BuildConfig.Main_Server_8000+trUrl    // *** 추가 ***
-                    //binding.etRemoteFileInfo.setText(BuildConfig.Main_Server_8000+trUrl)
+                    remoteUrl=BuildConfig.Main_Server_8000+trUrl
+                    Log.d("로그", "remoteUrl: $remoteUrl")
                     link = it.url
                 }
             }
@@ -201,7 +202,7 @@ class YoutubeUrlFragment : BaseFragment<FragmentYoutubeUrlBinding>(R.layout.frag
                 translationViewModel.result.collectLatest {
                     Log.d("Remote","${it.code} : ${it.msg}")
                     if(it.code.toString() == "11001") {
-                        binding.tvResult.text = "서버에서 번역이 진행중 입니다. 잠시 후 다시 go 버튼을 눌러주세요"
+                        binding.tvResult.text = "서버에서 번역이 진행중 입니다.\n 잠시 후 다시 전송 버튼을 눌러주세요"
                     }
                     else if(it.code.toString() == "11000"){
                         binding.tvResult.text = it.result
