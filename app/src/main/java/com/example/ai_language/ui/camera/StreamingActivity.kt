@@ -74,6 +74,7 @@ class StreamingActivity : BaseActivity<ActivityStreamingBinding>(R.layout.activi
 //        }
     }
 
+    // 권한 요청 및 확인 함수
     private fun requestPermissions() {
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -123,6 +124,7 @@ class StreamingActivity : BaseActivity<ActivityStreamingBinding>(R.layout.activi
         }, ContextCompat.getMainExecutor(this))
     }
 
+    // 현재 프레임을 캡처하고 서버로 업로드하는 함수
     private fun captureAndUploadFrame() {
         val imageCapture = imageCapture ?: return
 
@@ -184,6 +186,7 @@ class StreamingActivity : BaseActivity<ActivityStreamingBinding>(R.layout.activi
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
 
+    // 비트맵 객체 JPEG 포맷으로 압축하고, Base64로 인코딩하여 서버에 업로드하는 함수
     private fun uploadFrame(bitmap: Bitmap) {
         val outputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 20, outputStream) // 압축 품질을 50으로 변경
@@ -199,6 +202,7 @@ class StreamingActivity : BaseActivity<ActivityStreamingBinding>(R.layout.activi
         socket.emit("stream_frame", jsonRequest)
     }
 
+    // 서버에 소켓 연결을 설정 및 연결하는 함수
     private fun connectToServer() {
         try {
             val opts = IO.Options().apply {
@@ -213,14 +217,17 @@ class StreamingActivity : BaseActivity<ActivityStreamingBinding>(R.layout.activi
         }
     }
 
+    // 방 생성
     private fun createRoom() {
         val retrofit = Retrofit.Builder()
             .baseUrl("http://34.64.202.194:5000")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
+        // api 구현 객체 생성
         val apiService = retrofit.create(ApiService::class.java)
 
+        // 방 생성 요청 서버에 보냄
         apiService.createRoom().enqueue(object : Callback<RoomResponse> {
             override fun onResponse(call: Call<RoomResponse>, response: Response<RoomResponse>) {
                 if (response.isSuccessful) {
