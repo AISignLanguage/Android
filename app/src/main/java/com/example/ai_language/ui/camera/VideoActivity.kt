@@ -1,17 +1,12 @@
 package com.example.ai_language.ui.camera
 
 
-import android.os.Bundle
 import android.util.Log
 import android.webkit.WebViewClient
-import androidx.appcompat.app.AppCompatActivity
 import com.example.ai_language.BuildConfig
 import com.example.ai_language.R
 import com.example.ai_language.base.BaseActivity
 import com.example.ai_language.databinding.ActivityVideoBinding
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.ui.PlayerView
 
 class VideoActivity : BaseActivity<ActivityVideoBinding>(R.layout.activity_video) {
     override fun setLayout() {
@@ -27,9 +22,8 @@ class VideoActivity : BaseActivity<ActivityVideoBinding>(R.layout.activity_video
     private fun initButton() {
         binding.btnInputLink.setOnClickListener {
             val serverUrl = binding.editText2.text.toString()
-            binding.webview.loadUrl(BuildConfig.Main_Server_5000+"video_feed/"+serverUrl)
-            Log.d("링크","${BuildConfig.Main_Server+"video_feed/"+serverUrl}")
+            binding.webview.loadUrl(BuildConfig.Main_Server_5000 + "video_feed/" + serverUrl)
+            Log.d("링크", "${BuildConfig.Main_Server + "video_feed/" + serverUrl}")
         }
     }
-
 }
