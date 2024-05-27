@@ -24,13 +24,14 @@ class CallListViewModel @Inject constructor(
     // CallListViewModel에 플로우 적용
     private var _callDataList = MutableStateFlow(PhoneListDTO(emptyList()))
     val callDataList: StateFlow<PhoneListDTO> = _callDataList
-
+    fun getItem(pos : Int) = callDataList.value.phones[0][pos]
     fun sendPhoneNumbers(phoneNumbers: PhoneNumberDTO){
         viewModelScope.launch {
             try {
                 callListRepository.sendPhoneNumbers(phoneNumbers).collect {
-                    Log.d("로그", "sendPhoneNumbers 호출 ${_callDataList.value}")
                     _callDataList.value = it
+                    Log.d("로그", "sendPhoneNumbers 호출 ${_callDataList.value}")
+
                 }
             } catch (e: Exception) {
                 Log.e("CallListViewModel Error", e.message.toString())
