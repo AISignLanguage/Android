@@ -4,6 +4,7 @@ package com.example.ai_language.ui.camera
 import android.os.Bundle
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
+import com.example.ai_language.BuildConfig
 import com.example.ai_language.R
 import com.example.ai_language.base.BaseActivity
 import com.example.ai_language.databinding.ActivityVideoBinding
@@ -25,7 +26,7 @@ class VideoActivity : BaseActivity<ActivityVideoBinding>(R.layout.activity_video
     private fun initButton() {
         binding.btnInputLink.setOnClickListener {
             val serverUrl = binding.editText2.text.toString()
-            binding.webview.loadUrl(serverUrl)
+            binding.webview.loadUrl(BuildConfig.Main_Server+"video_feed/"+serverUrl)
         }
     }
 
