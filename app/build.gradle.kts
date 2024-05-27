@@ -105,6 +105,7 @@ dependencies {
 //        exclude(group = "com.google.protobuf", module="protobuf-javalite")
 //    }
 
+    // DataStore
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation ("com.google.dagger:hilt-android:2.50")
@@ -196,8 +197,6 @@ dependencies {
     implementation ("com.google.mediapipe:solution-core:0.10.14")
 
     // Pytorch
-    //implementation ("org.pytorch:pytorch_android:2.1.0")
-
     implementation ("org.pytorch:pytorch_android_lite:2.1.0") {
         exclude(group = "org.pytorch", module="pytorch_android")
         //exclude(group = "com.google.protobuf", module="protobuf-javalite")
