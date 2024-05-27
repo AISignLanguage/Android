@@ -87,8 +87,9 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 app:layout_constraintWidth_percent="0.9"
+                app:layout_constraintHeight_percent="0.2"
                 android:layout_margin="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -96,8 +97,9 @@
 
                 <ImageView
                     android:id="@+id/ib_vib"
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:clipToOutline="true"
                     android:background="@drawable/rounded_square_20dp_width2dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/main_vib"
@@ -107,8 +109,9 @@
 
                 <ImageView
                     android:id="@+id/imageButton5"
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:clipToOutline="true"
                     android:background="@drawable/rounded_square_20dp_width2dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/main_qr"
@@ -119,9 +122,11 @@
 
                 <ImageView
                     android:id="@+id/imageButton6"
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
-                    android:src="@drawable/rounded_square_20dp_width2dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:clipToOutline="true"
+                    android:src="@drawable/streaming"
+                    android:background="@drawable/rounded_square_20dp_width2dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
