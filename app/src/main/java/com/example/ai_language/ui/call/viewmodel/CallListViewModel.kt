@@ -45,6 +45,8 @@ class InviteViewModel : ViewModel() {
     val inviteDataList: LiveData<List<InviteListItem>>
         get() = _inviteDataList
 
+    fun getListItem(position: Int) = inviteDataList.value?.get(position)
+
     fun addListItem(item: InviteListItem) {
         //liveData가 비었으면 빈 mutableList 생성후 넣음, 아니면 그냥 넣음
         val currentList = inviteDataList.value?.toMutableList() ?: mutableListOf()
