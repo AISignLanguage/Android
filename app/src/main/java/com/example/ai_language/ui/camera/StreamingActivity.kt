@@ -64,9 +64,9 @@ class StreamingActivity : BaseActivity<ActivityStreamingBinding>(R.layout.activi
             startStreaming()
         }
 
-        binding.stopStreamingButton.setOnClickListener {
-            isStreaming = false
-        }
+//        binding.stopStreamingButton.setOnClickListener {
+//            isStreaming = false
+//        }
     }
 
     private fun requestPermissions() {
