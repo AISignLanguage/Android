@@ -30,12 +30,9 @@ import com.kakao.sdk.user.UserApiClient
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
-import org.tensorflow.lite.task.audio.classifier.AudioClassifier
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Timer
-import java.util.TimerTask
 import kotlin.random.Random
 
 class MainLoginActivity : BaseActivity<ActivityMainLoginBinding>(R.layout.activity_main_login) {
@@ -128,18 +125,6 @@ class MainLoginActivity : BaseActivity<ActivityMainLoginBinding>(R.layout.activi
         })
     }
 
-
-    private fun setOnClickMapBtn() {
-//        val mapBtn = binding.btMap
-//        mapBtn.setOnClickListener {
-//            startActivity(Intent(this, MapActivity::class.java))
-//        }
-//        val speechFlowBtn = binding.btnTestSpeechFlow
-//        speechFlowBtn.setOnClickListener {
-//            startActivity(Intent(this,TranslationActivity::class.java))
-//        }
-    }
-
     private fun startDetectionService() {
         val serviceIntent = Intent(this, SoundDetectionService::class.java)
         if (!isServiceRunning) {
@@ -164,62 +149,16 @@ class MainLoginActivity : BaseActivity<ActivityMainLoginBinding>(R.layout.activi
         private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
     }
 
-
-//    // -> 모델 확인용 코드
-//    private val MODEL_NAME = "converted_model_raw.tflite"
-//    lateinit var interpreter: Interpreter
-//
-//    // -> 모델 확인용 코드
-//    fun init() {
-//        val model = loadModelFile(MODEL_NAME)
-//        model.order(ByteOrder.nativeOrder())
-//        interpreter = Interpreter(model)
-//        initModelShape()
-//    }
-//
-//    // 2. 모델 로드 하는 코드(2) -> 모델 확인용 코드
-//    private fun loadModelFile(modelName: String): ByteBuffer {
-//        val am = this.assets
-//        val afd = am.openFd(modelName)
-//        val fis = FileInputStream(afd.fileDescriptor)
-//        val fc = fis.channel
-//        val startOffset = afd.startOffset
-//        val declaredLength = afd.declaredLength
-//        return fc.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
-//    }
-//
-//    // 3. interpreter를 통하여 0 번째 인덱스의 Tensor 를 가져오는 코드 -> 모델 확인용 코드
-//    private fun initModelShape() {
-//        val inputTensor = interpreter.getInputTensor(0)
-//        val inputShape: IntArray = inputTensor.shape()
-//        val modelInputChannel = inputShape[0]
-//        val modelInputWidth = inputShape[1]
-//        val modelInputHeight = inputShape[2]
-//        val outputTensor = interpreter.getOutputTensor(0)
-//        val outputShape: IntArray = outputTensor.shape()
-//        val modelOutputClasses = outputShape[1]
-//
-//        // 입력 텐서 관련 로그
-//        Log.d("모델", "입력 텐서 채널 수: $modelInputChannel")
-//        Log.d("모델", "입력 텐서 너비: $modelInputWidth")
-//        Log.d("모델", "입력 텐서 높이: $modelInputHeight")
-//
-//        // 출력 텐서 관련 로그
-//        Log.d("모델", "출력 텐서 클래스 수: $modelOutputClasses")
-//    }
-
     override fun setLayout() {
 
         binding.mm.setOnClickListener{
             startActivity(Intent(this,VideoActivity::class.java))
         }
 
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), REQUEST_RECORD_AUDIO_PERMISSION)
         }
 
-        setOnClickMapBtn()
         //아이디 잃어버렸을 때
         val forgetPage = binding.forgetPage
         forgetPage.setOnClickListener {

@@ -14,6 +14,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -31,6 +32,7 @@ import com.example.ai_language.BuildConfig
 import com.example.ai_language.ui.home.Home
 import com.example.ai_language.R
 import com.example.ai_language.Util.RetrofitClient
+import com.example.ai_language.base.BaseActivity
 import com.example.ai_language.base.BaseFragment
 import com.example.ai_language.databinding.ActivityDictionaryPageBinding
 import com.example.ai_language.ui.dictionary.adapter.DicAdapter
@@ -44,7 +46,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DictionaryPage :
-    BaseFragment<ActivityDictionaryPageBinding>(R.layout.activity_dictionary_page) {
+    BaseActivity<ActivityDictionaryPageBinding>(R.layout.activity_dictionary_page) {
     private val dicViewModel by viewModels<DictionaryViewModel>()
     private val dicAdapter = DicAdapter()
 
@@ -72,12 +74,12 @@ class DictionaryPage :
     private fun setTagRecyclerView() {
         with(binding) {
             val layoutManager2 =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                LinearLayoutManager(this@DictionaryPage, LinearLayoutManager.HORIZONTAL, false)
             recyclerTag.layoutManager = layoutManager2
 
             val adapter2 = dicViewModel.tag_data.value?.let { TagAdapter(it) }
             recyclerTag.adapter = adapter2
-            dicViewModel.tag_data.observe(requireActivity()) {
+            dicViewModel.tag_data.observe(this@DictionaryPage) {
                 adapter2?.notifyDataSetChanged()
             }
             if (dicViewModel.tag_data.value?.isEmpty() == true) {
@@ -96,7 +98,7 @@ class DictionaryPage :
             )
         )
         // GridLayoutManager를 사용하여 2열 그리드로 설정
-        val layoutManager = GridLayoutManager(requireContext(), 2)
+        val layoutManager = GridLayoutManager(this@DictionaryPage, 2)
         binding.recyclerGridView.layoutManager = layoutManager
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.CREATED) {
@@ -120,9 +122,9 @@ class DictionaryPage :
 //        }
     }
 
-
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
         lifecycleScope.cancel()
     }
+
 }

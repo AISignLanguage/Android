@@ -60,6 +60,11 @@
         android:theme="@style/Theme.AI_Language"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <activity
+            android:name=".ui.dictionary.DictionaryPage"
+            android:exported="true"/>
+
         <activity
             android:name=".ui.qrcode.QrCodeActivity"
             android:exported="false" />

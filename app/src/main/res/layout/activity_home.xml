@@ -60,6 +60,7 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation_main"
             style="@style/BottomNavigationStyle"
+            android:background="@color/white"
             app:itemPaddingTop="25dp"
             app:itemPaddingBottom="15dp"
             android:layout_width="0dp"
