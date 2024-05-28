@@ -9,11 +9,21 @@
         android:id="@+id/navigation_home_menu"
         android:name="com.example.ai_language.ui.home.HomeMenuFragment"
         tools:layout="@layout/fragment_home_menu"
-        android:label="HomeMenuFragment"
-        >
+        android:label="HomeMenuFragment">
         <action
             android:id="@+id/action_navigation_home_menu_to_home"
             app:destination="@id/home" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_audio"
+        android:name="com.example.ai_language.ui.audioclassification.AudioFragment"
+        tools:layout="@layout/fragment_audio"
+        android:label="AudioFragment" >
+
+        <action
+            android:id="@+id/action_navigation_audio_to_navigation_home"
+            app:destination="@id/navigation_home_menu" />
     </fragment>
 
     <fragment
@@ -32,15 +42,7 @@
         tools:layout="@layout/activity_call"
         android:label="CallFragment"/>
 
-    <fragment
-        android:id="@+id/navigation_dictionary"
-        android:name="com.example.ai_language.ui.dictionary.DictionaryPage"
-        tools:layout="@layout/activity_dictionary_page"
-        android:label="DictionaryFragment">
-        <action
-            android:id="@+id/action_navigation_dictionary_to_navigation_home"
-            app:destination="@id/navigation_home_menu" />
-    </fragment>
+
     <fragment
         android:id="@+id/navigation_word_page"
         android:name="com.example.ai_language.ui.news.NewsFragment"
