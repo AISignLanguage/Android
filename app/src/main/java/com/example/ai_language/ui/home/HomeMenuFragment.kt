@@ -12,6 +12,7 @@ import com.example.ai_language.base.BaseFragment
 import com.example.ai_language.databinding.FragmentHomeMenuBinding
 import com.example.ai_language.ui.camera.StreamingActivity
 import com.example.ai_language.ui.camera.VideoActivity
+import com.example.ai_language.ui.dictionary.DictionaryPage
 import com.example.ai_language.ui.extensions.setSrcVolunteerImage
 import com.example.ai_language.ui.map.MapActivity
 import com.example.ai_language.ui.translation.TranslationActivity
@@ -43,7 +44,7 @@ class HomeMenuFragment : BaseFragment <FragmentHomeMenuBinding>(R.layout.fragmen
                 startActivity(Intent(requireActivity(), MapActivity::class.java))
             }
             ibDic.setOnClickListener {
-                //사전
+                startActivity(Intent(requireContext(), DictionaryPage::class.java))
             }
             ibVib.setOnClickListener {
                 if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {

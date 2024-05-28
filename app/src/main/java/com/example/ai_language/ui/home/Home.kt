@@ -57,49 +57,4 @@ class Home : BaseActivity<ActivityHomeBinding>(R.layout.activity_home) {
         }
     }
 
-
-//    private fun setButtonClickListeners() {
-//        findViewById<ImageButton>(R.id.dic_btn).setOnClickListener {
-//            startNewActivity(DictionaryPage::class.java)
-//        }
-//
-//        findViewById<ImageButton>(R.id.my_page_btn).setOnClickListener {
-//            startNewActivity(MyPage::class.java)
-//        }
-//
-//        findViewById<ImageButton>(R.id.news_btn).setOnClickListener {
-//            startNewActivity(NewsActivity::class.java)
-//        }
-//
-//        findViewById<ImageButton>(R.id.callList_btn).setOnClickListener {
-//            checkAndRequestPermission(
-//                android.Manifest.permission.READ_CONTACTS,
-//                READ_CONTACTS_PERMISSION_REQUEST,
-//                CallListPage::class.java
-//            )
-//        }
-//
-//        findViewById<ImageButton>(R.id.CameraBtn).setOnClickListener {
-//            checkAndRequestPermission(
-//                android.Manifest.permission.CAMERA,
-//                CAMERA_PERMISSION_CODE,
-//                com.example.ai_language.ui.camera.com.example.ai_language.ui.camera.CameraPage::class.java
-//            )
-//        }
-//    }
-//
-//
-//    private fun checkAndRequestPermission(permission: String, requestCode: Int, activityClass: Class<*>) {
-//        val permissionStatus = ContextCompat.checkSelfPermission(this, permission)
-//        if (permissionStatus != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(
-//                this,
-//                arrayOf(permission),
-//                requestCode
-//            )
-//        } else {
-//            startNewActivity(activityClass)
-//        }
-//    }
-
 }

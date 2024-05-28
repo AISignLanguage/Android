@@ -25,4 +25,9 @@
         <item name="android:windowEnterAnimation">@anim/dialog_slide_in</item>
         <item name="android:windowExitAnimation">@anim/dialog_slide_out</item>
     </style>
+
+    <!--  오디오 분류-->
+    <style name="BottomSheetSpinnerItemStyle" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
+        <item name="android:textSize">20sp</item>
+    </style>
 </resources>

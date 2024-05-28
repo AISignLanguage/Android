@@ -49,4 +49,34 @@
         <item>기타</item>
 
     </string-array>
+
+    <!-- 오디오 분류 -->
+    <string name="audio_classification">TFL Audio Classification</string>
+
+    <string name="alt_threshold_button_plus">Increasing threshold of detected sound
+        results button</string>
+    <string name="alt_threshold_button_minus">Decreasing threshold of detected sound
+        results button</string>
+    <string name="alt_bottom_sheet_chevron">Bottom sheet expandable indicator</string>
+    <string name="alt_bottom_sheet_thread_button_minus">Decrease the number of threads used</string>
+    <string name="alt_bottom_sheet_thread_button_plus">Increase the number of threads used</string>
+
+    <string name="label_interence_time">Inference Time</string>
+    <string name="label_confidence_threshold">임계치</string>
+    <string name="label_delegate">하드웨어</string>
+    <string name="label_max_results">반환 결과</string>
+    <string name="label_overlap">음성 겹침</string>
+    <string name="label_threads">스레드</string>
+
+    <string-array name="overlap_spinner_titles">
+        <item>0%</item>
+        <item>25%</item>
+        <item>50%</item>
+        <item>75%</item>
+    </string-array>
+
+    <string-array name="delegate_spinner_titles">
+        <item>CPU</item>
+        <item>NNAPI</item>
+    </string-array>
 </resources>
