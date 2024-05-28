@@ -186,7 +186,7 @@ class StreamingActivity : BaseActivity<ActivityStreamingBinding>(R.layout.activi
 
     private fun uploadFrame(bitmap: Bitmap) {
         val outputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 20, outputStream) // 압축 품질을 50으로 변경
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream) // 압축 품질을 50으로 변경
         val imageBytes = outputStream.toByteArray()
         val encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT)
 

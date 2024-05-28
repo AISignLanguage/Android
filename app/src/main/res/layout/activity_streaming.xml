@@ -51,6 +51,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/previewView" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/stopStreamingButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/btn_camera"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/startStreamingButton"
+            app:layout_constraintTop_toBottomOf="@+id/previewView" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
