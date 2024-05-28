@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewpager2.widget.ViewPager2
+import com.example.ai_language.BuildConfig
 import com.example.ai_language.R
 import com.example.ai_language.ui.map.MapFragment as mf
 import com.example.ai_language.base.BaseActivity
@@ -198,14 +199,14 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
 
     //맵 Api가져옴(경기도 수화 통역 센터) (키, 타입, 페이지, 사이즈)
     private fun getMapPoint() {
-        mapViewModel.getCorporationByOpenApi("4b7ecc6c16b1492db814d065c2e0e16f", "json", 1, 100)
+        mapViewModel.getCorporationByOpenApi(BuildConfig.Google_Map_key, "json", 1, 100)
     }
 
     //네이버 드라이브 길찾기
     private fun startRoute(start: String, goal: String) {
         mapViewModel.getRouteByOpenApi(
-            "wf7lge71wa",
-            "S2xrrmnpETvuzVH4QolG12oY050t1GntJ8uxrl23",
+            BuildConfig.Naver_Api_key_id,
+            BuildConfig.Naver_Api_key,
             start,
             goal
         )
@@ -219,7 +220,7 @@ class MapActivity : BaseActivity<ActivityMapBinding>(R.layout.activity_map),
             origin = or,
             destination = dt,
             mode = "transit",
-            apiKey = "AIzaSyCLamg5wXUjHFuF6i_8wka_ZtMCwONPdBY"
+            apiKey = BuildConfig.Google_Directions_key
         )
     }
 
