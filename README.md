@@ -2,7 +2,7 @@
 > 간략한 프로젝트 소개 문구를 작성합니다.
 
 [![NPM Version][npm-image]][npm-url]
- <img src="https://img.shields.io/badge/kotlin-3178C6?style=flat&logo=kotlin&logoColor=white"/>
+ <img src="https://img.shields.io/badge/kotlin-3178C6?style=flat&logo=kotlin&logoColor=#7F52FF"/>
 [![Downloads Stats][npm-downloads]][npm-url]
 
 한 두 문단으로 프로젝트 소개 글을 작성합니다.
