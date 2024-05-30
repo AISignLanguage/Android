@@ -1,9 +1,9 @@
 # Android
 > 간략한 프로젝트 소개 문구를 작성합니다.
 
-[![NPM Version][npm-image]][npm-url]
+ <img src="https://img.shields.io/badge/android-white?style=flat&logo=android&logoColor=#34A853"/>
  <img src="https://img.shields.io/badge/kotlin-white?style=flat&logo=kotlin&logoColor=#7F52FF"/>
-[![Downloads Stats][npm-downloads]][npm-url]
+ ```AAC```
 
 한 두 문단으로 프로젝트 소개 글을 작성합니다.
 
