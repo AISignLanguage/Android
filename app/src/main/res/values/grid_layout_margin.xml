@@ -1,3 +1,0 @@
-<resources>
-    <dimen name="grid_layout_margin">10dp</dimen> <!-- 여기서 16dp는 예시이며, 원하는 마진 값으로 설정하세요 -->
-</resources>
