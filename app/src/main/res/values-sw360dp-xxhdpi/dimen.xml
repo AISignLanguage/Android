@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <dimen name="margin10">10dp</dimen>
+    <dimen name="line">340dp</dimen>
+    <dimen name="width">60dp</dimen>
+    <dimen name="height">60dp</dimen>
+    <dimen name="fabsize">70dp</dimen>
+    <dimen name="fabimg">50dp</dimen>
+</resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="margin10">10dp</dimen>
+    <dimen name="line">340dp</dimen>
+    <dimen name="width">0dp</dimen>
+    <dimen name="height">0dp</dimen>
+    <dimen name="fheight">80dp</dimen>
+    <dimen name="fwidth">80dp</dimen>
+    <dimen name="fabsize">0dp</dimen>
+    <dimen name="fabimg">0dp</dimen>
+    <dimen name="design_fab_size_normal" tools:override="true"> 80dp</dimen>
+    <dimen name="design_fab_image_size" tools:override="true">80dp</dimen>
+
+    <!-- 오디오 분류 -->
+    <dimen name="label_text_size">16sp</dimen>
+    <dimen name="label_width">92dp</dimen>
+    <dimen name="margin_default">16dp</dimen>
+    <dimen name="progress_bar_margin_start">12dp</dimen>
+    <dimen name="progress_bar_height">20dp</dimen>
+    <dimen name="control_btn_size">48dp</dimen>
+    <dimen name="spinner_min_width">160dp</dimen>
+    <dimen name="bottom_sheet_peek_height">50dp</dimen>
+</resources>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.ai_language">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
+    <queries>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+    </queries>
+
+    <application
+        android:name=".MyApp"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AI_Language"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+
+        <activity
+            android:name=".ui.dictionary.DictionaryPage"
+            android:exported="true"/>
+
+        <activity
+            android:name=".ui.qrcode.QrCodeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.camera.VideoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.camera.StreamingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.translation.TranslationActivity"
+            android:exported="false" />
+
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="${Naver_Api_key_id_mani}" />
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_SECRET"
+            android:value="${Naver_Api_key_mani}" />
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.1" />
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.1" />
+
+        <activity
+            android:name=".ui.map.MapActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.account.change.ChangeNicknameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.find.FindEmail"
+            android:exported="false" />
+        <activity
+            android:name=".ui.account.change.ChangePw"
+            android:exported="false" />
+        <activity
+            android:name=".ui.find.FindIdPwd"
+            android:exported="false" />
+        <activity
+            android:name=".ui.call.CallActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.account.permissionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.account.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.account.RegisterActivityApp"
+            android:exported="false" />
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="oauth"
+                    android:scheme="${kakao_app_key_mani}" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.account.MainLoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.camera.CameraPage"
+            android:exported="false" />
+        <activity
+            android:name=".ui.mypage.VersionCheck"
+            android:exported="false" />
+        <activity
+            android:name=".ui.mypage.FaqPage"
+            android:exported="false" />
+        <activity
+            android:name=".ui.news.News_item"
+            android:exported="false" />
+        <activity
+            android:name=".ui.account.Unregister"
+            android:exported="false" />
+        <activity
+            android:name=".ui.mypage.TermsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.home.Poster"
+            android:exported="false" />
+        <activity
+            android:name=".ui.account.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.dictionary.TagItem"
+            android:exported="false" />
+        <activity
+            android:name=".ui.dictionary.Dic_item"
+            android:exported="false" />
+        <activity
+            android:name=".ui.home.Home"
+            android:exported="false" />
+        <activity
+            android:name=".ui.account.change.PersonalInfo"
+            android:exported="false" />
+
+        <service android:name=".ui.vibration.SoundDetectionService" />
+
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity" />
+    </application>
+
+</manifest>

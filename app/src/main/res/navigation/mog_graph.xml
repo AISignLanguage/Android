@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/navigation_home_menu"
+    android:id="@+id/mog_graph">
+
+    <fragment
+        android:id="@+id/navigation_home_menu"
+        android:name="com.example.ai_language.ui.home.HomeMenuFragment"
+        tools:layout="@layout/fragment_home_menu"
+        android:label="HomeMenuFragment">
+        <action
+            android:id="@+id/action_navigation_home_menu_to_home"
+            app:destination="@id/home" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_audio"
+        android:name="com.example.ai_language.ui.audioclassification.AudioFragment"
+        tools:layout="@layout/fragment_audio"
+        android:label="AudioFragment" >
+
+        <action
+            android:id="@+id/action_navigation_audio_to_navigation_home"
+            app:destination="@id/navigation_home_menu" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_my_page"
+        android:name="com.example.ai_language.ui.mypage.MyPage"
+        tools:layout="@layout/activity_my_page"
+        android:label="MyPageFragment">
+        <action
+            android:id="@+id/action_navigation_my_page_to_navigation_home"
+            app:destination="@id/navigation_home_menu" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_call"
+        android:name="com.example.ai_language.ui.call.CallListFragment"
+        tools:layout="@layout/activity_call"
+        android:label="CallFragment"/>
+
+
+    <fragment
+        android:id="@+id/navigation_word_page"
+        android:name="com.example.ai_language.ui.news.NewsFragment"
+        tools:layout="@layout/activity_news"
+        android:label="NewsFragment">
+        <action
+            android:id="@+id/action_navigation_word_page_to_navigation_home"
+            app:destination="@id/navigation_home_menu" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_call_list_page"
+        android:name="com.example.ai_language.ui.call.CallListFragment"
+        tools:layout="@layout/activity_call_list"
+        android:label="CallList">
+        <action
+            android:id="@+id/action_callListFragment_to_homeFragment"
+            app:destination="@id/navigation_home_menu" />
+    </fragment>
+    <fragment
+        android:id="@+id/home"
+        android:name="com.example.ai_language.ui.home.HomeFragment"
+        tools:layout="@layout/fragment_home"
+        android:label="HomeFragment"
+        >
+        <action
+            android:id="@+id/action_home_to_navigation_home_menu"
+            app:destination="@id/navigation_home_menu" />
+    </fragment>
+
+
+</navigation>

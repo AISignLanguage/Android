@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 자음 -->
+    <string-array name="consonants">
+        <item>ㄱ</item>
+        <item>ㄴ</item>
+        <item>ㄷ</item>
+        <item>ㄹ</item>
+        <item>ㅁ</item>
+        <item>ㅂ</item>
+        <item>ㅅ</item>
+        <item>ㅇ</item>
+        <item>ㅈ</item>
+        <item>ㅊ</item>
+        <item>ㅋ</item>
+        <item>ㅌ</item>
+        <item>ㅍ</item>
+        <item>ㅎ</item>
+    </string-array>
+
+    <string-array name="consonant_contents">
+        <item>ㄱ 설명</item>
+        <item>ㄴ 설명</item>
+        <item>ㄷ 설명</item>
+        <item>ㄹ 설명</item>
+        <item>ㅁ 설명</item>
+        <item>ㅂ 설명</item>
+        <item>ㅅ 설명</item>
+        <item>ㅇ 설명</item>
+        <item>ㅈ 설명</item>
+        <item>ㅊ 설명</item>
+        <item>ㅋ 설명</item>
+        <item>ㅌ 설명</item>
+        <item>ㅍ 설명</item>
+        <item>ㅎ 설명</item>
+    </string-array>
+
+    <integer-array name="consonant_images">
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+    </integer-array>
+
+    <!-- 모음 -->
+    <string-array name="vowels">
+        <item>ㅏ</item>
+        <item>ㅑ</item>
+        <item>ㅓ</item>
+        <item>ㅕ</item>
+        <item>ㅗ</item>
+        <item>ㅛ</item>
+        <item>ㅜ</item>
+        <item>ㅠ</item>
+        <item>ㅡ</item>
+        <item>ㅣ</item>
+    </string-array>
+
+    <string-array name="vowel_contents">
+        <item>ㅏ 컨텐츠</item>
+        <item>ㅑ 컨텐츠</item>
+        <item>ㅓ 컨텐츠</item>
+        <item>ㅕ 컨텐츠</item>
+        <item>ㅗ 컨텐츠</item>
+        <item>ㅛ 컨텐츠</item>
+        <item>ㅜ 컨텐츠</item>
+        <item>ㅠ 컨텐츠</item>
+        <item>ㅡ 컨텐츠</item>
+        <item>ㅣ 컨텐츠</item>
+    </string-array>
+
+    <integer-array name="vowel_images">
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+    </integer-array>
+
+    <!-- 숫자 -->
+    <string-array name="numbers">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>0</item>
+    </string-array>
+
+    <string-array name="number_contents">
+        <item>1 컨텐츠</item>
+        <item>2 컨텐츠</item>
+        <item>3 컨텐츠</item>
+        <item>4 컨텐츠</item>
+        <item>5 컨텐츠</item>
+        <item>6 컨텐츠</item>
+        <item>7 컨텐츠</item>
+        <item>8 컨텐츠</item>
+        <item>9 컨텐츠</item>
+        <item>0 컨텐츠</item>
+    </string-array>
+
+    <integer-array name="number_images">
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+        <item>@drawable/newitem</item>
+    </integer-array>
+
+
+</resources>
