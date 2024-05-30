@@ -25,7 +25,7 @@
                     android:background="@drawable/rounded_square_20dp_width2dp"
                     android:clipToOutline="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/viewpager1"
+                    android:src="@drawable/main_logo_img"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
