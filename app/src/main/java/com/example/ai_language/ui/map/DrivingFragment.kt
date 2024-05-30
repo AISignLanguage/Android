@@ -20,6 +20,7 @@ import com.example.ai_language.R
 import com.example.ai_language.base.BaseFragment
 import com.example.ai_language.databinding.FragmentDrivingBinding
 import com.example.ai_language.domain.model.response.Feature
+import com.example.ai_language.ui.map.adapter.DrivingDirectionAdapter
 import com.example.ai_language.ui.map.adapter.WalkDirectionAdapter
 import com.example.ai_language.ui.map.viewModel.MapViewModel
 import com.naver.maps.geometry.LatLng
@@ -35,7 +36,7 @@ import java.time.format.DateTimeFormatter
 @AndroidEntryPoint
 class DrivingFragment : BaseFragment<FragmentDrivingBinding> (R.layout.fragment_driving){
     private val mapViewModel by activityViewModels<MapViewModel>()
-    lateinit var adapter: WalkDirectionAdapter
+    lateinit var adapter: DrivingDirectionAdapter
     private var marker = Marker()
     override fun setLayout() {
         initObservers()
@@ -56,12 +57,12 @@ class DrivingFragment : BaseFragment<FragmentDrivingBinding> (R.layout.fragment_
     private fun formatTimeDis(time: String) {
         val fTime = time.toInt()
         val timeFormatter = DateTimeFormatter.ofPattern("h:mm a")
-        binding.tvDepartureTime.text = "출발 시간 :"+LocalDateTime.now().format(timeFormatter)
+        binding.tvDepartureTime.text = "출발 시간 : "+ LocalDateTime.now().format(timeFormatter)
         if (fTime > 60) {
             if (fTime > 3600) {
-                binding.tvArriveTime.text="도착 시간 :"+formatCurrentTimeWithAddedTime((fTime / 3600).toLong(), (fTime / 60).toLong()).replace("오후" , "PM").replace("오전","AM")
+                binding.tvArriveTime.text="도착 시간 : "+formatCurrentTimeWithAddedTime((fTime / 3600).toLong(), (fTime / 60).toLong())
             } else
-                binding.tvArriveTime.text="도착 시간 :"+formatCurrentTimeWithAddedTime(0, (fTime / 60).toLong()).replace("오후" , "PM").replace("오전","AM")
+                binding.tvArriveTime.text="도착 시간 : "+formatCurrentTimeWithAddedTime(0, (fTime / 60).toLong())
         } else {
             "0분"
         }
@@ -89,14 +90,16 @@ class DrivingFragment : BaseFragment<FragmentDrivingBinding> (R.layout.fragment_
     }
 
     private fun initObservers() {
-        adapter = WalkDirectionAdapter()
+        adapter = DrivingDirectionAdapter()
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 mapViewModel.tMapDriveList.collectLatest { response ->
                     val fet = response.features
                     if (response.features.isNotEmpty()) {
                         binding.tvAddress.text =
-                            "${mapViewModel.startLoc.value}\n<->\n${mapViewModel.endLoc.value}"
+                            "${mapViewModel.startLoc.value}"
+                        binding.tvAddress2.text =
+                            "${mapViewModel.endLoc.value}"
                         val adapterList = mutableListOf<Feature>()
                         val lineList = mutableListOf<Feature>()
                         val pathOverlay = PathOverlay() // 각 단계별로 새 PathOverlay 생성
