@@ -80,10 +80,10 @@
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="wf7lge71wa" />
+            android:value="${Naver_Api_key_id_mani}" />
         <meta-data
             android:name="com.naver.maps.map.CLIENT_SECRET"
-            android:value="S2xrrmnpETvuzVH4QolG12oY050t1GntJ8uxrl23" />
+            android:value="${Naver_Api_key_mani}" />
         <meta-data
             android:name="android.max_aspect"
             android:value="2.1" />
@@ -129,7 +129,7 @@
 
                 <data
                     android:host="oauth"
-                    android:scheme="kakaoddef2e841959182411eab6098da996e5" />
+                    android:scheme="${kakao_app_key_mani}" />
             </intent-filter>
         </activity>
         <activity

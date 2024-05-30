@@ -14,6 +14,10 @@ plugins {
     val properties = Properties()
     properties.load(FileInputStream("local.properties"))
 
+    val Naver_Api_key_id_mani = properties.getProperty("Naver_Api_key_id_mani")
+    val Naver_Api_key_mani = properties.getProperty("Naver_Api_key_mani")
+    val kakao_app_key_mani = properties.getProperty("kakao_app_key_mani")
+
     hilt {
         enableAggregatingTask = false
     }
@@ -38,6 +42,12 @@ plugins {
             targetSdk = 33
             versionCode = 1
             versionName = "1.0"
+
+            manifestPlaceholders["Naver_Api_key_id_mani"] = properties["Naver_Api_key_id_mani"] as String
+            manifestPlaceholders["Naver_Api_key_mani"] = properties["Naver_Api_key_mani"] as String
+            manifestPlaceholders["kakao_app_key_mani"] = properties["kakao_app_key_mani"] as String
+
+
             buildConfigField("String", "Main_Server_5000", properties.getProperty("Main_Server_5000"))
             buildConfigField("String", "gmail_sender_id", properties.getProperty("gmail_sender_id"))
             buildConfigField("String", "gmail_sender_pwd", properties.getProperty("gmail_sender_pwd"))
