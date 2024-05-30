@@ -70,13 +70,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="YAMNET"/>
+                android:text="오디오 분류"/>
 
             <RadioButton
                 android:id="@+id/speech_command"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Speech Command"/>
+                android:text="단어 인식"/>
         </RadioGroup>
 
         <!-- Delegate selection row -->
