@@ -89,9 +89,7 @@
                     android:id="@+id/bt_search_route"
                     android:layout_width="60dp"
                     android:layout_height="0dp"
-                    android:background="@drawable/round_square_stroke_10dp"
-                    android:backgroundTint="@color/blue_main"
-                    android:text="검색"
+                    android:background="@drawable/bt_find_route"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@id/et_destination"
                     app:layout_constraintEnd_toEndOf="@id/cl_search_bar"
@@ -122,6 +120,14 @@
                 app:behavior_hideable="false"
                 app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="75dp"
+                    android:background="@color/white"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/sl_find_route" />
                 <TextView
                     android:id="@+id/sl_find_route"
                     android:layout_width="match_parent"
