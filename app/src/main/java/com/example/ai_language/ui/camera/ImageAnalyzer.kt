@@ -51,12 +51,28 @@ class ImageAnalyzer(
         val annotatedBitmap = drawBoundingBoxes(resizedBitmap, boundingBoxes)
 
         (context as Activity).runOnUiThread {
-            val className = if (bestClassIndex in classNames.indices) {
+            var className = if (bestClassIndex in classNames.indices) {
                 classNames[bestClassIndex]
             } else {
-                "Unknown"
+                ""
             }
-            detectionInfo.text = "Class: $className, Prob: %.4f".format(maxProb)
+            when(className) {
+            "best" -> className = "최고야"
+            "call" -> className = "전화"
+            "fine" -> className = "괜찮아"
+            "happy" -> className = "행복해"
+            "heart" -> className = "하트"
+            "hello" -> className = "안녕"
+            "iloveyou" -> className = "사랑해"
+            "me" -> className = "나"
+            "meet" -> className = "만나다"
+            "peace" -> className = "평화"
+            "see" -> className = "보다"
+            "smile" -> className = "웃다"
+            "what" -> className = "무엇"
+            }
+
+            detectionInfo.text = "$className"
             //detectionInfo.setCompoundDrawablesWithIntrinsicBounds(null, null, null, BitmapDrawable(context.resources, annotatedBitmap))
             Log.d("ImageAnalyzer", "Class: $className - Score: $maxProb")
         }
