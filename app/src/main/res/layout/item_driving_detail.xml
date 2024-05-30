@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="walking_detail"
+            type="com.example.ai_language.domain.model.response.Properties" />
+        <variable
+            name="mapViewModel"
+            type="com.example.ai_language.ui.map.viewModel.MapViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_walk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/round_square_sel_dark_10dp">
+
+        <ImageView
+            android:id="@+id/ic_rt_walk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_rt_car"
+            app:layout_constraintTop_toTopOf="@id/cl_walk"
+            app:layout_constraintStart_toStartOf="@id/tv_walk_mode"
+            app:layout_constraintEnd_toEndOf="@id/tv_walk_mode"/>
+
+        <TextView
+            android:id="@+id/tv_walk_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="자동차"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="@id/cl_walk"
+            app:layout_constraintTop_toBottomOf="@id/ic_rt_walk"
+            app:layout_constraintStart_toStartOf="@id/cl_walk"
+            />
+
+        <TextView
+            android:id="@+id/tv_html_instruction"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            app:layout_constraintEnd_toEndOf="@id/tv_duration_step"
+            app:layout_constraintStart_toEndOf="@id/ic_rt_walk"
+            app:layout_constraintTop_toTopOf="@id/ic_rt_walk"
+            app:setFormattedText="@{walking_detail.description}"
+            app:wordLimit="@{10}" />
+
+        <TextView
+            android:id="@+id/tv_distance_step"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:text="@{walking_detail.distance}"
+            app:layout_constraintEnd_toStartOf="@id/tv_duration_step"
+            app:layout_constraintTop_toTopOf="@id/tv_duration_step"
+            app:layout_constraintBottom_toBottomOf="@id/tv_duration_step"
+            />
+
+        <TextView
+            android:id="@+id/tv_duration_step"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="@{walking_detail.time}"
+            android:textSize="20dp"
+            android:layout_marginEnd="30dp"
+            app:layout_constraintEnd_toEndOf="@id/cl_walk"
+            app:layout_constraintBottom_toBottomOf="@id/cl_walk"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
