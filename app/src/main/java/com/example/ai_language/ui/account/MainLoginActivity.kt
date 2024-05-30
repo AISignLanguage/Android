@@ -151,6 +151,10 @@ class MainLoginActivity : BaseActivity<ActivityMainLoginBinding>(R.layout.activi
 
     override fun setLayout() {
 
+        binding.mm.setOnClickListener{
+            startActivity(Intent(this,VideoActivity::class.java))
+        }
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), REQUEST_RECORD_AUDIO_PERMISSION)
         }
@@ -160,6 +164,14 @@ class MainLoginActivity : BaseActivity<ActivityMainLoginBinding>(R.layout.activi
         forgetPage.setOnClickListener {
             val intent = Intent(this, FindIdPwd::class.java)
             startActivity(intent)
+        }
+
+        //테스트 용 홈 화면 이동
+        val button3 = binding.button3
+        button3.setOnClickListener {
+            val intent = Intent(this, Home::class.java)
+            startActivity(intent)
+            finish()
         }
 
         //로그인 비동기 처리 - retrofit
