@@ -82,12 +82,14 @@ class TransitFragment : BaseFragment<FragmentTransitBinding>(R.layout.fragment_t
                             with(step) {
                                 when (travel_mode) {
                                     "WALKING" -> {
+                                        step.img =  R.drawable.ic_rt_walk
                                         step.travel_mode = "도보"
                                         lineColor = Color.GREEN
                                         lineIcon = R.drawable.walk // 아이콘 설정
                                     }
 
                                     "TRANSIT" -> {
+                                        step.img =  R.drawable.ic_rt_trans
                                         step.travel_mode = "대중교통"
                                         lineColor = Color.BLUE
                                         lineIcon = R.drawable.transit // 아이콘 설정
@@ -95,6 +97,7 @@ class TransitFragment : BaseFragment<FragmentTransitBinding>(R.layout.fragment_t
                                     }
 
                                     else -> {
+                                        step.img =  R.drawable.ic_rt_car
                                         step.travel_mode = "자동차"
                                         lineColor = Color.RED
                                         lineIcon = R.drawable.driving // 아이콘 설정
