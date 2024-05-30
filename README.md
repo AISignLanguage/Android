@@ -3,7 +3,9 @@
 
  <img src="https://img.shields.io/badge/android-white?style=flat&logo=android&logoColor=#34A853"/>
  <img src="https://img.shields.io/badge/kotlin-white?style=flat&logo=kotlin&logoColor=#7F52FF"/>
- ```AAC```
+```
+AAC
+```
 
 한 두 문단으로 프로젝트 소개 글을 작성합니다.
 
