@@ -41,9 +41,8 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:background="@drawable/round_square_stroke_10dp"
+                android:background="@drawable/round_square_sel_dark_10dp"
                 android:layout_margin="10dp"
-                android:backgroundTint="@color/orange_main"
                 android:id="@+id/lo_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -56,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="@id/lo_info"
                     app:layout_constraintTop_toTopOf="@+id/lo_info" />
 
@@ -65,16 +64,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="@id/tv_departure_time"
                     app:layout_constraintTop_toBottomOf="@+id/tv_departure_time" />
 
                 <TextView
-                    android:id="@+id/tv_address"
+                    android:id="@+id/tv_duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="20dp"
                     android:layout_marginBottom="20dp"
                     android:textStyle="bold"
@@ -83,26 +82,62 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_arrive_time" />
 
                 <TextView
-                    android:id="@+id/tv_duration"
+                    android:id="@+id/tv_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
-                    android:textColor="@color/white"
-                    android:textSize="30dp"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_arrive_time"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/tv_departure_time" />
 
+
+                <TextView
+                    android:id="@+id/tv_address2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_duration"
+                    app:layout_constraintEnd_toEndOf="parent" />
+                <ImageView
+                    android:id="@+id/marker2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/mdi_place_outline"
+                    app:layout_constraintTop_toTopOf="@id/tv_address"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_address"
+                    app:layout_constraintEnd_toStartOf="@id/tv_address"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ph_dots_three_thin"
+                    app:layout_constraintTop_toBottomOf="@id/marker2"
+                    app:layout_constraintBottom_toTopOf="@id/marker"
+                    app:layout_constraintStart_toStartOf="@id/marker"
+                    app:layout_constraintEnd_toEndOf="@id/marker"/>
+                <ImageView
+                    android:id="@+id/marker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/mdi_place_outline"
+                    app:layout_constraintTop_toTopOf="@id/tv_address2"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_address2"
+                    app:layout_constraintEnd_toStartOf="@id/tv_address2"/>
                 <TextView
                     android:id="@+id/textView3"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textSize="30dp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_address"
-                    app:layout_constraintEnd_toEndOf="@id/tv_duration" />
+                    android:textColor="@color/black"
+                    app:layout_constraintTop_toTopOf="@id/tv_address"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_address2"
+                    app:layout_constraintEnd_toStartOf="@id/marker"
+                    android:layout_marginEnd="10dp"
+                    android:textStyle="bold" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
