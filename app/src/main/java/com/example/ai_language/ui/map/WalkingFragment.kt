@@ -62,9 +62,9 @@ class WalkingFragment : BaseFragment<FragmentWalkingBinding>(R.layout.fragment_w
         binding.tvDepartureTime.text = "출발 시간 :"+LocalDateTime.now().format(timeFormatter)
         if (fTime > 60) {
             if (fTime > 3600) {
-                binding.tvArriveTime.text="도착 시간 :"+formatCurrentTimeWithAddedTime((fTime / 3600).toLong(), (fTime / 60).toLong()).replace("오후" , "PM").replace("오전","AM")
+                binding.tvArriveTime.text="도착 시간 : "+formatCurrentTimeWithAddedTime((fTime / 3600).toLong(), (fTime / 60).toLong())
             } else
-                binding.tvArriveTime.text="도착 시간 :"+formatCurrentTimeWithAddedTime(0, (fTime / 60).toLong()).replace("오후" , "PM").replace("오전","AM")
+                binding.tvArriveTime.text="도착 시간 : "+formatCurrentTimeWithAddedTime(0, (fTime / 60).toLong())
         } else {
             "0분"
         }
@@ -98,7 +98,9 @@ class WalkingFragment : BaseFragment<FragmentWalkingBinding>(R.layout.fragment_w
                     val fet = response.features
                     if (response.features.isNotEmpty()) {
                         binding.tvAddress.text =
-                            "${mapViewModel.startLoc.value}\n<->\n${mapViewModel.endLoc.value}"
+                            "${mapViewModel.startLoc.value}"
+                        binding.tvAddress2.text =
+                            "${mapViewModel.endLoc.value}"
                         val adapterList = mutableListOf<Feature>()
                         val lineList = mutableListOf<Feature>()
                         val pathOverlay = PathOverlay() // 각 단계별로 새 PathOverlay 생성
