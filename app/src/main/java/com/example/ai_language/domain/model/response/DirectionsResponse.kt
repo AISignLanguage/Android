@@ -52,7 +52,8 @@ data class Step(
     val start_location: Location = Location(),
     var travel_mode: String = "",
     val transit_details: TransitDetails = TransitDetails(),
-    val steps: List<Step> = emptyList()
+    val steps: List<Step> = emptyList(),
+    var img:Int = 0
 )
 
 data class Time(
