@@ -213,6 +213,7 @@ hs_err_pid*
 atlassian-ide-plugin.xml
 
 # Mongo Explorer plugin
+
 .idea/mongoSettings.xml
 
 # Crashlytics plugin (for Android Studio and IntelliJ)
