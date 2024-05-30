@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ai_language.databinding.ItemDirectionDetailBinding
-import com.example.ai_language.domain.model.response.DirectionsResponse
 import com.example.ai_language.domain.model.response.Step
 
 class DirectionDetailAdapter : RecyclerView.Adapter<DirectionDetailAdapter.DirectionViewHolder>() {
@@ -13,10 +12,12 @@ class DirectionDetailAdapter : RecyclerView.Adapter<DirectionDetailAdapter.Direc
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DirectionViewHolder {
         return DirectionViewHolder.from(parent)
     }
+
     override fun getItemCount(): Int = items.size
     override fun onBindViewHolder(holder: DirectionViewHolder, position: Int) {
         holder.bind(items[position])
     }
+
     fun update(newItems: List<Step>) {
         val diffUtil = PostListDiffUtil(items, newItems)
         val result = DiffUtil.calculateDiff(diffUtil)
@@ -25,6 +26,7 @@ class DirectionDetailAdapter : RecyclerView.Adapter<DirectionDetailAdapter.Direc
         result.dispatchUpdatesTo(this)
 
     }
+
     class PostListDiffUtil(
         private val oldItems: List<Step>,
         private val newItems: List<Step>
@@ -36,10 +38,12 @@ class DirectionDetailAdapter : RecyclerView.Adapter<DirectionDetailAdapter.Direc
             val newItem = newItems[newItemPosition]
             return oldItem.steps == newItem.steps
         }
+
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             return oldItems[oldItemPosition] == newItems[newItemPosition]
         }
     }
+
     class DirectionViewHolder(
         private val binding: ItemDirectionDetailBinding
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -47,7 +51,9 @@ class DirectionDetailAdapter : RecyclerView.Adapter<DirectionDetailAdapter.Direc
             binding.directionDetail = item
             binding.duration = item.duration
             binding.distance = item.distance
+            binding.icRtWalk.setImageResource(item.img)
         }
+
         companion object {
             fun from(parent: ViewGroup): DirectionViewHolder {
                 return DirectionViewHolder(
