@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:aandroid="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="direction_detail"
             type="com.example.ai_language.domain.model.response.Step" />
@@ -16,58 +19,65 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:background="@drawable/round_square_stroke_10dp"
-        android:layout_margin="10dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_walk"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/round_square_sel_dark_10dp">
 
-        <TextView
-            android:text="@{direction_detail.travel_mode}"
-            android:id="@+id/tv_travel_mode"
+        <ImageView
+            android:id="@+id/ic_rt_walk"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            app:setFormattedText="@{direction_detail.html_instructions}"
-            app:wordLimit="@{10}"
-            android:id="@+id/tv_html_instruction"
+            android:id="@+id/tv_travel_mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="@id/tv_duration_step"
-            app:layout_constraintStart_toStartOf="@id/tv_travel_mode"
-            app:layout_constraintTop_toBottomOf="@id/tv_travel_mode" />
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:text="@{direction_detail.travel_mode}"
+            app:layout_constraintBottom_toBottomOf="@id/cl_walk"
+            app:layout_constraintEnd_toEndOf="@id/ic_rt_walk"
+            app:layout_constraintStart_toStartOf="@id/ic_rt_walk"
+            app:layout_constraintTop_toBottomOf="@id/ic_rt_walk" />
 
         <TextView
-            android:text="@{distance.text}"
+            android:id="@+id/tv_html_instruction"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_duration_step"
+            app:layout_constraintStart_toEndOf="@id/ic_rt_walk"
+            app:layout_constraintTop_toTopOf="@id/ic_rt_walk"
+            app:setFormattedText="@{direction_detail.html_instructions}"
+            app:wordLimit="@{10}" />
+
+        <TextView
             android:id="@+id/tv_distance_step"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_travel_mode" />
+            android:text="@{distance.text}"
+            app:layout_constraintEnd_toStartOf="@id/tv_duration_step"
+            app:layout_constraintTop_toTopOf="@id/tv_duration_step"
+            app:layout_constraintBottom_toBottomOf="@id/tv_duration_step"/>
 
         <TextView
-            android:text="@{duration.text}"
             android:id="@+id/tv_duration_step"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:textColor="@color/white"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/tv_distance_step"
-            app:layout_constraintTop_toTopOf="@id/tv_html_instruction" />
+            android:text="@{duration.text}"
+            aandroid:textSize="20dp"
+            android:layout_marginEnd="30dp"
+            app:layout_constraintEnd_toEndOf="@id/cl_walk"
+            app:layout_constraintBottom_toBottomOf="@id/cl_walk"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
