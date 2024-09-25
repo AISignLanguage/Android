@@ -1,6 +1,6 @@
 ## 손짓의 순간
 <p align="center">
-  <img src="[https://github.com/user-attachments/assets/ce26efda-b9ec-4add-ad2b-1413257446b6](https://github.com/user-attachments/assets/a3f1bf93-2e05-4f9f-a4f0-8d2dcb813488)" alt="손짓의 순간"/>
+  <img src="https://github.com/user-attachments/assets/ce26efda-b9ec-4add-ad2b-1413257446b6](https://github.com/user-attachments/assets/a3f1bf93-2e05-4f9f-a4f0-8d2dcb813488" alt="손짓의 순간"/>
 </p> 
 <div align="center">
  농인을 위한 수화 번역 앱 손짓의 순간 안드로이드 파트
@@ -10,9 +10,9 @@
   - [개요](#개요)
   - [내용](#내용)
   - [화면](#화면)
-  - [개발 환경](#개발 환경)
-  - [인프라 구조](#인프라 구조)
-  - [기술 스택](#기술 스택)
+  - [개발 환경](#개발환경)
+  - [인프라 구조](#인프라구조)
+  - [기술 스택](#기술스택)
 
 ## 개요
 - 프로젝트 이름: 손짓의 순간 (2024 한성대학교 캡스톤 디자인 우수상 수상작)
