@@ -57,7 +57,7 @@
 ### **🤖** 안드로이드
 | **Category** | **TechStack** |
 | --- | --- |
-| Architecture | Clean Architecture, MVVM |
+| Architecture | Repository Pattern, MVVM |
 | DI | Hilt |
 | Network | Retrofit, OkHttp, Gson |
 | Service | Service |
